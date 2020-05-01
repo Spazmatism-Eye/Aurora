@@ -102,10 +102,8 @@ namespace Aurora.Profiles.Witcher3
             _game_state = new GameState_Witcher3();
         }
 
-        public override void UpdateLights(EffectFrame frame)
+        public override void UpdateTick()
         {
-            Queue<EffectLayer> layers = new Queue<EffectLayer>();
-
             if (File.Exists(configFile))
             {
                 if (configContent != null && isGameStateDirty)
@@ -122,7 +120,7 @@ namespace Aurora.Profiles.Witcher3
                             player.MaximumHealth = GetInt(data, "MaxHealth");
                             player.CurrentHealth = GetInt(data, "CurrHealth");
                             if (Enum.TryParse(data.FirstOrDefault(d => d.Contains("ActiveSign")).Split('=').Last().Replace("ST_", ""), out WitcherSign sign)) ;
-                                player.ActiveSign = sign;//tries to parse the sign text into the enum
+                            player.ActiveSign = sign;//tries to parse the sign text into the enum
 
                             isGameStateDirty = false;
                         }
@@ -131,17 +129,6 @@ namespace Aurora.Profiles.Witcher3
                     { }
                 }
             }
-
-            foreach (var layer in this.Application.Profile.Layers.Reverse().ToArray())
-            {
-                if (layer.Enabled)
-                    layers.Enqueue(layer.Render(_game_state));
-            }
-
-            //Scripts
-            this.Application.UpdateEffectScripts(layers);
-
-            frame.AddLayers(layers.ToArray());
         }
     }
 }

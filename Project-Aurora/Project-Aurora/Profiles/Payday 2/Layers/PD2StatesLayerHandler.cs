@@ -106,7 +106,7 @@ namespace Aurora.Profiles.Payday_2.Layers
 
                         EffectLayer swansong_layer = new EffectLayer("Payday 2 - Swansong", swansongColor).Set(Devices.DeviceKeys.Peripheral, swansongColor);
 
-                        states_layer += swansong_layer;
+                        states_layer.Add(swansong_layer);
                     }
                 }
             }

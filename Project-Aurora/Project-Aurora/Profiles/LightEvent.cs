@@ -62,19 +62,14 @@ namespace Aurora.Profiles
         /// <param name="frame">EffectFrame instance to which layers will be added</param>
         public virtual void UpdateLights(EffectFrame frame) {
             UpdateTick();
-
-            var layers = new Queue<EffectLayer>(Application.Profile.Layers.Where(l => l.Enabled).Reverse().Select(l => l.Render(_game_state)));
-            Application.UpdateEffectScripts(layers);
-            frame.AddLayers(layers.ToArray());
+            frame.AddLayers(Application.Profile.Layers.Where(l => l.Enabled).Reverse().Select(l => l.Render(_game_state)));
         }
 
         /// <summary>
         /// Adds new layers to the overlay of the passed EffectFrame.
         /// </summary>
         public virtual void UpdateOverlayLights(EffectFrame frame) {
-            var overlayLayers = new Queue<EffectLayer>(Application.Profile.OverlayLayers.Where(l => l.Enabled).Reverse().Select(l => l.Render(_game_state)));
-            Application.UpdateEffectScripts(overlayLayers);
-            frame.AddOverlayLayers(overlayLayers.ToArray());
+            frame.AddOverlayLayers(Application.Profile.OverlayLayers.Where(l => l.Enabled).Reverse().Select(l => l.Render(_game_state)));
         }
 
         /// <summary>

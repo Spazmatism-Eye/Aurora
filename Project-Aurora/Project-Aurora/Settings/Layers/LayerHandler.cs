@@ -210,6 +210,10 @@ namespace Aurora.Settings.Layers
 
         public EffectLayer PostRenderFX(EffectLayer rendered_layer)
         {
+            if (!EnableExclusionMask && !EnableSmoothing)
+                return rendered_layer;
+
+
             EffectLayer returnLayer = new EffectLayer(rendered_layer);
 
             if (EnableSmoothing)
@@ -217,7 +221,8 @@ namespace Aurora.Settings.Layers
                 EffectLayer previousLayer = new EffectLayer(_PreviousRender);
                 EffectLayer previousSecondLayer = new EffectLayer(_PreviousSecondRender);
 
-                returnLayer = returnLayer + (previousLayer * 0.50) + (previousSecondLayer * 0.25);
+                returnLayer.Add(previousLayer * 0.50);
+                returnLayer.Add(previousSecondLayer * 0.25);
 
                 //Update previous layers
                 _PreviousSecondRender = _PreviousRender;

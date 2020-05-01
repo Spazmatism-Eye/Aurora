@@ -170,7 +170,7 @@ namespace Aurora.Settings.Layers
             EffectLayer[] layersArray = layers.ToArray();
             EffectLayer finalLayer = layersArray[0];
             for (int i = 1; i < layersArray.Length; i++)
-                finalLayer += layersArray[i];
+                finalLayer.Add(layersArray[i]);
 
             return finalLayer;
         }

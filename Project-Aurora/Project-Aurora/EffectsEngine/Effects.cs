@@ -284,20 +284,18 @@ namespace Aurora
 
         public void PushFrame(EffectFrame frame)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-
             lock (bitmap_lock)
             {
                 EffectLayer background = new EffectLayer("Global Background", Color.FromArgb(0, 0, 0));
 
-                EffectLayer[] over_layers_array = frame.GetOverlayLayers().ToArray();
-                EffectLayer[] layers_array = frame.GetLayers().ToArray();
+                var over_layers_array = frame.GetOverlayLayers();
+                var layers_array = frame.GetLayers();
 
                 foreach (EffectLayer layer in layers_array)
-                    background += layer;
+                    background.Add(layer);
 
                 foreach (EffectLayer layer in over_layers_array)
-                    background += layer;
+                    background.Add(layer);
 
                 //Apply Brightness
                 Dictionary<DeviceKeys, Color> peripehralColors = new Dictionary<DeviceKeys, Color>();
@@ -315,6 +313,7 @@ namespace Aurora
 
 
                 //if (Global.Configuration.UseVolumeAsBrightness)
+                if(Global.Configuration.GlobalBrightness != 1.0f)
                     background *= Global.Configuration.GlobalBrightness;
 
                 if (_forcedFrame != null)
@@ -328,7 +327,7 @@ namespace Aurora
                 }
 
                 Dictionary<DeviceKeys, Color> keyColors = new Dictionary<DeviceKeys, Color>();
-                Devices.DeviceKeys[] allKeys = bitmap_map.Keys.ToArray();
+                var allKeys = bitmap_map.Keys;
 
                 foreach (Devices.DeviceKeys key in allKeys)
                     keyColors[key] = background.Get(key);
@@ -367,9 +366,6 @@ namespace Aurora
 
                 frame.Dispose();
             }
-
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
         }
 
         public Dictionary<DeviceKeys, Color> GetKeyboardLights()

@@ -84,7 +84,7 @@ namespace Aurora.Settings.Layers
                         EffectLayer[] layers = (EffectLayer[])script_layers;
                         layer = layers.First();
                         for (int i = 1; i < layers.Length; i++)
-                            layer = layer + layers[i];
+                            layer.Add(layers[i]);
                         //foreach (var layer in (script_layers as EffectLayer[]))
                         //  layers.Enqueue(layer);
                     }

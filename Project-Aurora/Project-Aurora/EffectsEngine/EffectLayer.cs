@@ -727,6 +727,17 @@ namespace Aurora.EffectsEngine
             return added;
         }
 
+        public void Add(EffectLayer otherLayer)
+        {
+            using (Graphics g = this.GetGraphics())
+            {
+                lock (otherLayer.bufferLock)
+                    g.DrawImage(otherLayer.colormap, 0, 0);
+            }
+
+            this.peripheral = Utils.ColorUtils.AddColors(this.peripheral, otherLayer.peripheral);
+        }
+
         /// <summary>
         /// * Operator, Multiplies an EffectLayer by a double, adjusting opacity and color of the layer bitmap.
         /// </summary>

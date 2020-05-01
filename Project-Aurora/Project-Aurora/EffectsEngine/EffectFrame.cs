@@ -23,7 +23,7 @@ namespace Aurora.EffectsEngine
         /// Adds layers into the frame
         /// </summary>
         /// <param name="effectLayers">Array of layers to be added</param>
-        public void AddLayers(EffectLayer[] effectLayers)
+        public void AddLayers(IEnumerable<EffectLayer> effectLayers)
         {
             foreach (EffectLayer layer in effectLayers)
                 layers.Enqueue(layer);
@@ -33,7 +33,7 @@ namespace Aurora.EffectsEngine
         /// Add overlay layers into the frame
         /// </summary>
         /// <param name="effectLayers">Array of layers to be added</param>
-        public void AddOverlayLayers(EffectLayer[] effectLayers)
+        public void AddOverlayLayers(IEnumerable<EffectLayer> effectLayers)
         {
             foreach(EffectLayer layer in effectLayers)
                 over_layers.Enqueue(layer);
@@ -45,7 +45,8 @@ namespace Aurora.EffectsEngine
         /// <returns>Queue of layers</returns>
         public Queue<EffectLayer> GetLayers()
         {
-            return new Queue<EffectLayer>(layers);
+            return layers;
+            //return new Queue<EffectLayer>(layers);
         }
 
         /// <summary>
@@ -54,7 +55,8 @@ namespace Aurora.EffectsEngine
         /// <returns>Queue of overlay layers</returns>
         public Queue<EffectLayer> GetOverlayLayers()
         {
-            return new Queue<EffectLayer>(over_layers);
+            return over_layers;
+            //return new Queue<EffectLayer>(over_layers);
         }
 
         #region IDisposable Support
