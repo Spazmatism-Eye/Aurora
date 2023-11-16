@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
 
+env:
+  Configuration: Release
+
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [ Release ]
 
     runs-on: windows-2019  # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -44,8 +44,6 @@ jobs:
         # Restore the application to populate the obj folder with RuntimeIdentifiers
       - name: Restore the application
         run: dotnet restore $env:Solution_Name
-        env:
-          Configuration: ${{ matrix.configuration }}
 
       - name: Build
         run: dotnet build $env:Solution_Name --configuration $env:Configuration --no-restore
@@ -53,7 +51,6 @@ jobs:
           APPVEYOR_BUILD_VERSION: v${{steps.buildnumber.outputs.build_number}}
           OWNER: ${{ steps.split.outputs._0 }}
           REPOSITORY: ${{ steps.split.outputs._1 }}
-          Configuration: ${{ matrix.configuration }}
       
       # Decode the base 64 encoded pfx and save the Signing_Certificate
       #- name: Decode the pfx
