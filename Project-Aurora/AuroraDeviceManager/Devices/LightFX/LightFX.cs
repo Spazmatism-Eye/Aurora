@@ -13,7 +13,7 @@ namespace AuroraDeviceManager.Devices.LightFX
 
         private readonly object action_lock = new object();
 
-        public override string DeviceName => "LightFX";
+        public override string DeviceName => "LightFX & Alienware";
 
         private int DeviceStatus()
         {
