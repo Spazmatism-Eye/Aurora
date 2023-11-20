@@ -140,21 +140,21 @@ public class UpdateManager
             // Starts the download
             await client.DownloadFileTaskAsync(new Uri(url), Path.Combine(Program.ExePath, "update.zip"));
 
-            foreach (var pluginDll in assets.Where(a => a.Name.EndsWith(".dll")))
+            var releaseAssets = assets.Where(a => a.Name.EndsWith(".dll")).ToList();
+            if (releaseAssets.Any())
             {
-                var address = new Uri(pluginDll.BrowserDownloadUrl);
-                var installDirPlugin = Path.Combine(Program.ExePath, "Plugins", pluginDll.Name);
-                if (File.Exists(installDirPlugin))
-                {
-                    _log.Enqueue(new LogEntry("Updating " + pluginDll.Name));
-                    await client.DownloadFileTaskAsync(address, installDirPlugin);
-                }
+                var installDirPlugin = Path.Combine(Program.ExePath, "Plugins");
+                var userDirPlugin = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "Plugins");
 
-                var userDirPlugin = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "Plugin");
-                if (File.Exists(userDirPlugin))
+                foreach (var pluginDll in releaseAssets)
                 {
-                    _log.Enqueue(new LogEntry("Updating " + pluginDll.Name));
-                    await client.DownloadFileTaskAsync(address, userDirPlugin);
+                    var address = new Uri(pluginDll.BrowserDownloadUrl);
+                    var pluginUpdater = new PluginUpdater(pluginDll, client, address, _log);
+
+                    await pluginUpdater.UpdatePlugin(installDirPlugin);
+                    await pluginUpdater.UpdatePlugin(userDirPlugin);
+                
+                    //TODO add DeviceManager plugins
                 }
             }
 
@@ -172,6 +172,31 @@ public class UpdateManager
         catch (Exception exc)
         {
             _log.Enqueue(new LogEntry(exc.Message, Color.Red));
+        }
+    }
+
+    private class PluginUpdater
+    {
+        private readonly Queue<LogEntry> _log;
+        private readonly ReleaseAsset _pluginDll;
+        private readonly WebClient _client;
+        private readonly Uri _address;
+
+        public PluginUpdater(ReleaseAsset pluginDll, WebClient client, Uri address, Queue<LogEntry> log)
+        {
+            _pluginDll = pluginDll;
+            _client = client;
+            _address = address;
+            _log = log;
+        }
+
+        internal async Task UpdatePlugin(string installDirPlugin)
+        {
+            if (File.Exists(installDirPlugin))
+            {
+                _log.Enqueue(new LogEntry("Updating " + _pluginDll.Name));
+                await _client.DownloadFileTaskAsync(_address, installDirPlugin);
+            }
         }
     }
 
@@ -246,22 +271,23 @@ public class UpdateManager
                     _log.Enqueue(new LogEntry($"[{Math.Truncate(percentage * 100)}%] Updating: {fileEntry.FullName}"));
                     _extractProgress = (float)(Math.Truncate(percentage * 100) / 100.0f);
 
+                    if (Path.EndsInDirectorySeparator(fileEntry.FullName))
+                        continue;
+
                     if (_ignoreFiles.Contains(fileEntry.FullName))
                         continue;
 
                     try
                     {
                         var filePath = Path.Combine(Program.ExePath, fileEntry.FullName);
-                        if (File.Exists(filePath))
-                            File.Move(filePath, $"{filePath}.updateremove");
                         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                        fileEntry.ExtractToFile(filePath);
+                        fileEntry.ExtractToFile(filePath, true);
                     }
                     catch (IOException e)
                     {
                         _log.Enqueue(new LogEntry($"{fileEntry.FullName} is inaccessible.", Color.Red));
 
-                        MessageBox.Show($"{fileEntry.FullName} is inaccessible.\r\nPlease close Aurora.\r\n\r\n {e.Message}");
+                        MessageBox.Show($"{fileEntry.FullName} is inaccessible.\r\nPlease close Aurora.\r\n\r\n {e.StackTrace}");
                         i--;
                     }
                 }
@@ -290,20 +316,6 @@ public class UpdateManager
 
     private void PerformCleanup()
     {
-        var messyFiles = Directory.GetFiles(Program.ExePath, "*.updateremove", SearchOption.AllDirectories);
-
-        foreach (var file in messyFiles)
-        {
-            try
-            {
-                File.Delete(file);
-            }
-            catch
-            {
-                _log.Enqueue(new LogEntry("Unable to delete file - " + file, Color.Red));
-            }
-        }
-
         if (File.Exists(Path.Combine(Program.ExePath, "update.zip")))
             File.Delete(Path.Combine(Program.ExePath, "update.zip"));
     }
