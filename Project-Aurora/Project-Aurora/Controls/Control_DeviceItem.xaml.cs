@@ -39,15 +39,17 @@ public partial class Control_DeviceItem
     {
         if (IsVisible)
         {
-            Dispatcher.Invoke(() =>
-            {
-                var memorySharedDevice = Device.Device;
-                Task.Run(() =>
-                {
-                    memorySharedDevice.RequestUpdate();
-                });
-            });
+            RequestUpdate();
         }
+    }
+
+    private void RequestUpdate()
+    {
+        Dispatcher.Invoke(() =>
+        {
+            var memorySharedDevice = Device.Device;
+            Task.Run(() => { memorySharedDevice.RequestUpdate(); });
+        });
     }
 
     private void btnToggleOnOff_Click(object? sender, EventArgs e)
@@ -70,7 +72,8 @@ public partial class Control_DeviceItem
 
     private void btnToggleEnableDisable_Click(object? sender, EventArgs e)
     {
-        if (!Global.DeviceConfigration.EnabledDevices.Contains(Device.Device.DeviceName))
+        var deviceEnabled = !Global.DeviceConfigration.EnabledDevices.Contains(Device.Device.DeviceName);
+        if (deviceEnabled)
         {
             Global.DeviceConfigration.EnabledDevices.Add(Device.Device.DeviceName);
         }
@@ -85,7 +88,7 @@ public partial class Control_DeviceItem
         var device = Device;
         Task.Run(async () =>
         {
-            if (device.Device.IsInitialized)
+            if (deviceEnabled)
             {
                 await device.DisableDevice();
             }
@@ -115,6 +118,7 @@ public partial class Control_DeviceItem
                 Global.logger.Warning(ex, "DeviceItem update error:");
             }
         });
+        RequestUpdate();
     }
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
@@ -129,7 +133,7 @@ public partial class Control_DeviceItem
         {
             try
             {
-                if (IsVisible) UpdateDynamic();
+                UpdateDynamic();
             }
             catch (Exception ex)
             {
@@ -178,6 +182,7 @@ public partial class Control_DeviceItem
             btnStart.Content = "Working...";
             btnStart.IsEnabled = false;
             btnEnable.IsEnabled = false;
+            _updateControlsTimer.Start();
         }
         else if (Device.Device.IsInitialized)
         {

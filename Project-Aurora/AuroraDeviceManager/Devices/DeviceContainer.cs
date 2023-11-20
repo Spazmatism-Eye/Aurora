@@ -80,7 +80,7 @@ public sealed class DeviceContainer : IDisposable
                 convert(item.Min),
                 convert(item.Max),
                 item.Title, item.Remark, (int)item.Flags, vt,
-                vt == VariableType.String ? (string)item.Value : ""
+                vt == VariableType.String ? item.Value as string ?? "" : ""
             );
             deviceVariables.Add(variable);
         }
@@ -139,10 +139,9 @@ public sealed class DeviceContainer : IDisposable
             else
             {
                 Global.Logger.Information("[Device][{DeviceName}] Failed to initialize", Device.DeviceName);
-            }
+            } 
+            UpdateSharedMemory();
         }
-
-        UpdateSharedMemory();
     }
 
     public async Task DisableDevice()
@@ -153,9 +152,8 @@ public sealed class DeviceContainer : IDisposable
             UpdateSharedMemory();
             await shutdownTask;
             Global.Logger.Information("[Device][{DeviceName}] Shutdown", Device.DeviceName);
+            UpdateSharedMemory();
         }
-
-        UpdateSharedMemory();
     }
 
     public void UpdateVariables()

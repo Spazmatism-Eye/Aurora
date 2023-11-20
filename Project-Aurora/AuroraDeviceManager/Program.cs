@@ -56,6 +56,8 @@ return;
 
 void Stop()
 {
+    App.Closing = true;
+
     Global.DeviceManager.ShutdownDevices().Wait(5000);
     Global.DeviceManager.Dispose();
 

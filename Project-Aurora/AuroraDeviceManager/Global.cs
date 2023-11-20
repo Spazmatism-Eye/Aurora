@@ -25,9 +25,6 @@ public static class Global
 
     public static void Initialize()
     {
-#if DEBUG
-        isDebug = true;
-#endif
         var logFile = $"Devices-{DateTime.Now:yyyy-MM-dd HH.mm.ss}.log";
         var logPath = Path.Combine(AppDataDirectory, "Logs", logFile);
         Logger = new LoggerConfiguration()

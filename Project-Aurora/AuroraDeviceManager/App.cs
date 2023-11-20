@@ -1,6 +1,6 @@
 ﻿namespace AuroraDeviceManager;
 
-public class App
+public static class App
 {
     public static bool Closing { get; set; }
 }

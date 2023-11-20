@@ -26,7 +26,7 @@ public abstract class AuroraModule : IDisposable
         _taskSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         ModuleThreadPool.QueueWorkItem(WorkItemCallback, null, PostExecuteWorkItemCallback);
-        if (ModuleThreadPool.IsIdle)
+        if (ModuleThreadPool.IsIdle || ModuleThreadPool.ActiveThreads == 0)
         {
             ModuleThreadPool.Start();
         }

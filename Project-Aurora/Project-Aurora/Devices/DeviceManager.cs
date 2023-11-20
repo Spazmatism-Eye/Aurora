@@ -27,14 +27,14 @@ public sealed class DeviceManager : IDisposable
 
     public event EventHandler? DevicesUpdated;
 
-    public IEnumerable<DeviceContainer> DeviceContainers { get; private set; } = Enumerable.Empty<DeviceContainer>();
+    public List<DeviceContainer> DeviceContainers { get; private set; } = new();
 
     private readonly CancellationTokenSource _cancel = new();
 
     private readonly Task<ChromaReader?> _rzSdkManager;
     private readonly MemorySharedArray<SimpleColor> _sharedDeviceColor;
 
-    private readonly MemorySharedStruct<DeviceManagerInfo> _dimma;
+    private readonly MemorySharedStruct<DeviceManagerInfo> _deviceManagerInfo;
     private Process? _process;
 
     private readonly byte[] _end = "\n"u8.ToArray();
@@ -44,8 +44,8 @@ public sealed class DeviceManager : IDisposable
         _rzSdkManager = rzSdkManager;
         _sharedDeviceColor = new MemorySharedArray<SimpleColor>(Constants.DeviceLedMap, Constants.MaxKeyId);
 
-        _dimma = new MemorySharedStruct<DeviceManagerInfo>(Constants.DeviceInformations);
-        _dimma.Updated += OnDimmaOnUpdated;
+        _deviceManagerInfo = new MemorySharedStruct<DeviceManagerInfo>(Constants.DeviceInformations);
+        _deviceManagerInfo.Updated += OnDeviceManagerInfoOnUpdated;
     }
 
     public async Task InitializeDevices()
@@ -64,17 +64,18 @@ public sealed class DeviceManager : IDisposable
         }
     }
 
-    private void OnDimmaOnUpdated(object? o, EventArgs eventArgs)
+    private void OnDeviceManagerInfoOnUpdated(object? o, EventArgs eventArgs)
     {
         UpdateDevices();
     }
 
     private void UpdateDevices()
     {
-        var deviceManagerInfo = _dimma.ReadElement();
+        var deviceManagerInfo = _deviceManagerInfo.ReadElement();
         var deviceNames = deviceManagerInfo.DeviceNames.Split(Constants.StringSplit);
-        var deviceContainers = new List<DeviceContainer>(deviceNames.Length);
-        deviceContainers.AddRange(deviceNames.Select(deviceName =>
+
+        DeviceContainers.Clear();
+        DeviceContainers.AddRange(deviceNames.Select(deviceName =>
         {
             var device = new MemorySharedDevice(deviceName, Global.DeviceConfigration.VarRegistry);
             if (OnlineSettings.DeviceTooltips.TryGetValue(deviceName, out var tooltips))
@@ -85,8 +86,6 @@ public sealed class DeviceManager : IDisposable
             return new DeviceContainer(device, this);
         }));
 
-        //TODO reuse
-        DeviceContainers = deviceContainers;
         DevicesUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -155,7 +154,7 @@ public sealed class DeviceManager : IDisposable
             return;
         }
         _disposed = true;
-        _dimma.Dispose();
+        _deviceManagerInfo.Dispose();
         _sharedDeviceColor.Dispose();
     }
 

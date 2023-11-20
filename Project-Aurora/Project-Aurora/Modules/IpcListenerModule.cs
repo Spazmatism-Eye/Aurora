@@ -12,13 +12,13 @@ public sealed class IpcListenerModule : AuroraModule
 
     public Task<IpcListener?> IpcListener => _taskSource.Task;
 
-    protected override async Task Initialize()
+    protected override Task Initialize()
     {
         if (!Global.Configuration.EnableIpcListener)
         {
             Global.logger.Information("IpcListener is disabled");
             _taskSource.SetResult(null);
-            return;
+            return Task.CompletedTask;
         }
         Global.logger.Information("Starting IpcListener");
         try
@@ -32,7 +32,7 @@ public sealed class IpcListenerModule : AuroraModule
                             "Ipc pipe could not be created. Wrapper integrations won't work." +
                             "\r\n" + exc);
             _taskSource.SetResult(null);
-            return;
+            return Task.CompletedTask;
         }
 
         if (!_listener.Start())
@@ -41,11 +41,12 @@ public sealed class IpcListenerModule : AuroraModule
             MessageBox.Show("IpcListener could not start. Try running this program as Administrator.\r\n" +
                             "Wrapper integrations won't work.");
             _taskSource.SetResult(null);
-            return;
+            return Task.CompletedTask;
         }
 
         Global.logger.Information("Listening for wrapper integration calls...");
         _taskSource.SetResult(_listener);
+        return Task.CompletedTask;
     }
 
     public override void Dispose()

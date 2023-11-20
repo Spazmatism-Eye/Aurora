@@ -68,17 +68,19 @@ public abstract class RgbNetDevice : DefaultDevice
             catch (DeviceProviderException e)
             {
                 Global.Logger.Error(e, "Device {DeviceProvider} init threw exception", DeviceName);
-                ErrorMessage = e.Message;
+                remainingMillis -= 1000;
 
-                if (e.IsCritical)
+                if (e.IsCritical || remainingMillis <= 0)
                 {
+                    ErrorMessage = $"{e.Message}";
                     break;
                 }
 
+                ErrorMessage = $"{e.Message} ({(remainingMillis / 1000).ToString()})";
+
                 await Task.Delay(1000);
-                remainingMillis -= 1000;
             }
-        } while (remainingMillis > 0);
+        } while (true);
 
         if (!IsInitialized)
         {
