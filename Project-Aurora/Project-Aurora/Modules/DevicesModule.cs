@@ -24,11 +24,8 @@ public sealed class DevicesModule : AuroraModule
         _deviceManager = new DeviceManager(_rzSdkManager);
         _taskSource.SetResult(_deviceManager);
 
-        await Task.Run(() =>
-        {
-            _deviceManager.InitializeDevices().ContinueWith(_ =>
-                Global.logger.Information("Loaded Device Manager"));
-        });
+        await _deviceManager.InitializeDevices();
+        Global.logger.Information("Loaded Device Manager");
     }
 
     public override async Task DisposeAsync()

@@ -81,14 +81,18 @@ public class VariableRegistryItem
         Min = variableRegistryItem.Min;
         Max = variableRegistryItem.Max;
         var typ = Value.GetType();
-        var defaultType = variableRegistryItem.Default.GetType();
+        if (variableRegistryItem.Default != null)
+        {
+            var defaultType = variableRegistryItem.Default.GetType();
 
-        if (defaultType != typ && typ == typeof(long) && defaultType.IsEnum)
-            Value = Enum.ToObject(defaultType, Value);
-        else if (defaultType != typ && Value is long && TypeUtils.IsNumericType(defaultType))
-            Value = Convert.ChangeType(Value, defaultType);
-        else if (Value == null && defaultType != typ)
-            Value = variableRegistryItem.Default;
+            if (defaultType != typ && typ == typeof(long) && defaultType.IsEnum)
+                Value = Enum.ToObject(defaultType, Value);
+            else if (defaultType != typ && Value is long && TypeUtils.IsNumericType(defaultType))
+                Value = Convert.ChangeType(Value, defaultType);
+            else if (Value == null && defaultType != typ)
+                Value = variableRegistryItem.Default;
+        }
+
         Flags = variableRegistryItem.Flags;
     }
 }

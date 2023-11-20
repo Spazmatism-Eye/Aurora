@@ -87,6 +87,8 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
                 typeof(DeviceKeys),
             "Aurora.Settings.VariableRegistry" =>
                 typeof(VariableRegistry),
+            "Aurora.Settings.VariableRegistryItem" =>
+                typeof(VariableRegistryItem),
             _ => base.BindToType(assemblyName, convertedTypeName),
         };
         typeMap[typeName] = boundType;

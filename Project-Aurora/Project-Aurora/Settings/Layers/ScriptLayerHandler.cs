@@ -88,9 +88,6 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
 
     public void OnScriptChanged()
     {
-        var varRegistry = GetScriptPropertyRegistry();
-        if (varRegistry != null)
-            Properties.ScriptProperties.Combine(varRegistry, true);
     }
 
     [JsonIgnore]
