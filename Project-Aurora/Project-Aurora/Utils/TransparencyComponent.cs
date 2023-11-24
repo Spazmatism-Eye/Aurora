@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -9,26 +10,52 @@ using static Aurora.Utils.Win32Transparency;
 
 namespace Aurora.Utils;
 
-public class TransparencyComponent
+public sealed class TransparencyComponent : IDisposable
 {
     public static bool UseMica { get; } = Environment.OSVersion.Version.Build >= 22000;
 
     private readonly AcrylicWindow _window;
-    private readonly Panel _bg;
+    private readonly Panel? _bg;
     private readonly RegistryWatcher _lightThemeRegistryWatcher;
 
     private HwndSource? _hwHandle;
+    private readonly Action _setBackground;
+    private EffectColor _color = EffectColor.FromRGBA(0, 0, 0, 0);
 
-    public TransparencyComponent(AcrylicWindow window, Panel bg)
+    public TransparencyComponent(AcrylicWindow window, Panel? bg)
     {
         _window = window;
         _bg = bg;
         _lightThemeRegistryWatcher = new RegistryWatcher(RegistryHiveOpt.CurrentUser,
             @"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
             "AppsUseLightTheme");
+        
+        _window.ContentRendered += Window_ContentRendered;
+        _window.Loaded += WindowOnLoaded;
+        _setBackground = SetBackground;
+
+        _window.WindowStyle = WindowStyle.None;
+        _window.AllowsTransparency = true;
+        _window.TintColor = Colors.Transparent;
+        _window.TintOpacity = 1;
+        _window.NoiseOpacity = 0;
     }
 
-    public void UpdateStyleAttributes()
+    private void WindowOnLoaded(object sender, RoutedEventArgs e)
+    {
+        // Get PresentationSource
+        var presentationSource = PresentationSource.FromVisual((Visual)sender);
+
+        // Subscribe to PresentationSource's ContentRendered event
+        if (presentationSource != null) presentationSource.ContentRendered += Window_ContentRendered;
+    }
+
+    private void Window_ContentRendered(object? sender, EventArgs e)
+    {
+        UpdateStyleAttributes();
+    }
+
+    private void UpdateStyleAttributes()
     {
         _lightThemeRegistryWatcher.RegistryChanged += LightThemeRegistryWatcherOnRegistryChanged;
         _lightThemeRegistryWatcher.StartWatching();
@@ -36,13 +63,12 @@ public class TransparencyComponent
 
     private void LightThemeRegistryWatcherOnRegistryChanged(object? sender, RegistryChangedEventArgs e)
     {
-        
-        if (e.Data is not int lightThemeEnabled)
+        if (e.Data is not int)
         {
             return;
         }
 
-        _window.Dispatcher.Invoke(() => { SetTransparencyEffect(lightThemeEnabled); });
+        _window.Dispatcher.Invoke(() => { SetTransparencyEffect(0); });
     }
 
     private void SetTransparencyEffect(int lightThemeEnabled)
@@ -89,19 +115,36 @@ public class TransparencyComponent
 
     public void SetBackgroundColor(EffectColor a)
     {
+        _color = a;
+        _window.Dispatcher.Invoke(_setBackground);
+    }
+
+    private void SetBackground()
+    {
+        if (_bg == null)
+        {
+            return;
+        }
+        SolidColorBrush brush;
         if (Global.Configuration.AllowTransparency && UseMica)
         {
-            var brush = new SolidColorBrush(Color.FromArgb((byte)(a.Alpha * 64 / 255), a.Red, a.Green, a.Blue));
-            brush.Freeze();
-            _bg.Background = brush;
+            brush = new SolidColorBrush(Color.FromArgb((byte)(_color.Alpha * 64 / 255), _color.Red, _color.Green, _color.Blue));
         }
         else
         {
-            _window.FallbackColor = Colors.Black;
-            _window.TintColor = Colors.Transparent;
-            var brush = new SolidColorBrush(Color.FromArgb(255, a.Red, a.Green, a.Blue));
-            brush.Freeze();
-            _bg.Background = brush;
+            brush = new SolidColorBrush(Color.FromArgb(255, _color.Red, _color.Green, _color.Blue));
         }
+
+        brush.Freeze();
+        _bg.Background = brush;
+    }
+
+    public void Dispose()
+    {
+        _window.ContentRendered -= Window_ContentRendered;
+        _window.Loaded -= WindowOnLoaded;
+        
+        _lightThemeRegistryWatcher.Dispose();
+        _hwHandle?.Dispose();
     }
 }

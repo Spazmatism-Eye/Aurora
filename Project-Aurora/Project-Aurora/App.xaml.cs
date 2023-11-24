@@ -87,7 +87,7 @@ public partial class App
         //Load config
         Global.logger.Information("Loading Configuration");
         Global.Configuration = ConfigManager.Load();
-        Global.DeviceConfigration = ConfigManager.LoadDeviceConfig();
+        Global.DeviceConfiguration = ConfigManager.LoadDeviceConfig();
 
         Global.effengine = new Effects(DevicesModule.DeviceManager);
 

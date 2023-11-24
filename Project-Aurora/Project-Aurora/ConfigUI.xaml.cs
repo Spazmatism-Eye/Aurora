@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Aurora.Controls;
@@ -95,24 +94,6 @@ partial class ConfigUI : INotifyPropertyChanged
         }
     }
 
-    #region Mica
-
-    private void Window_ContentRendered(object? sender, EventArgs e)
-    {
-        _transparencyComponent.UpdateStyleAttributes();
-    }
-
-    private void Window_Loaded_Mica(object? sender, RoutedEventArgs e)
-    {
-        // Get PresentationSource
-        PresentationSource presentationSource = PresentationSource.FromVisual((Visual)sender);
-
-        // Subscribe to PresentationSource's ContentRendered event
-        presentationSource.ContentRendered += Window_ContentRendered;
-    }
-
-    #endregion
-
     public ConfigUI(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager,
         Task<KeyboardLayoutManager> layoutManager, Task<AuroraHttpListener?> httpListener,
         Task<IpcListener?> ipcListener, Task<DeviceManager> deviceManager, Task<LightingStateManager> lightingStateManager)
@@ -128,7 +109,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
         _transparencyComponent = new TransparencyComponent(this, bg_grid);
 
-        ContentRendered += Window_ContentRendered;
         ctrlProfileManager.ProfileSelected += CtrlProfileManager_ProfileSelected;
 
         _settingsControl.DataContext = this;
@@ -285,7 +265,6 @@ partial class ConfigUI : INotifyPropertyChanged
         KeyboardRecordMessage.Visibility = Visibility.Hidden;
 
         _currentColor = _desktopColorScheme;
-        bg_grid.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
 
         _virtualKb = (await _layoutManager).VirtualKeyboard;
 
@@ -313,16 +292,13 @@ partial class ConfigUI : INotifyPropertyChanged
             ProfileImage_MouseDown(child, null);
             break;
         }
-        
-        Window_Loaded_Mica(sender, e);
-
     }
 
     private readonly Stopwatch _keyboardTimer = Stopwatch.StartNew();
     private void virtual_keyboard_timer_Tick(object? sender, EventArgs e)
     {
         if (Visibility != Visibility.Visible) return;
-        Dispatcher.Invoke(_keyboardTimerCallback);
+        _keyboardTimerCallback.Invoke();
         _keyboardTimer.Restart();
     }
 
@@ -362,11 +338,6 @@ partial class ConfigUI : INotifyPropertyChanged
     private async Task ShutdownDevices()
     {
         await (await _deviceManager).ShutdownDevices();
-    }
-
-    private void Window_Initialized(object? sender, EventArgs e)
-    {
-        //unused
     }
 
     private void Window_Closing(object? sender, CancelEventArgs e)

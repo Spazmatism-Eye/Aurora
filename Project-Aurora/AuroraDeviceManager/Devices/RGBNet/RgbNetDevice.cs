@@ -300,7 +300,7 @@ public abstract class RgbNetDevice : DefaultDevice
         );
     }
 
-    private static void UpdateLedCalibrated(Led led, Color color, Color calibration)
+    private static void UpdateLedCalibrated(Led led, Color color, SimpleColor calibration)
     {
         led.Color = new RGB.NET.Core.Color(
             (byte)(color.A * calibration.A / 255),
@@ -319,7 +319,8 @@ public abstract class RgbNetDevice : DefaultDevice
 
     private static string CalibrationName(IRGBDevice device)
     {
-        return device.DeviceInfo.Model;
+        //deviceSummary = $"[{device.DeviceInfo.DeviceType}] ({device.DeviceInfo.DeviceName})"
+        return device.DeviceInfo.DeviceName;
     }
 
     protected override void Dispose(bool disposing)

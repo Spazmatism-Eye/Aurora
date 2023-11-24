@@ -1,38 +1,28 @@
-﻿<Window x:Class="Aurora.Controls.Control_DeviceCalibration"
+﻿<fluentWpf:AcrylicWindow x:Class="Aurora.Controls.Control_DeviceCalibration"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Aurora.Controls"
         xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
-        xmlns:aurora="clr-namespace:Aurora"
+        xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+        AcrylicWindowStyle="NoIcon"
+        FallbackColor="#09000000"
         mc:Ignorable="d"
         Loaded="Control_DeviceCalibration_OnLoaded"
-        Title="Control_DeviceCalibration" Height="800" Width="600">
+        Unloaded="Control_DeviceCalibration_OnUnloaded"
+        Title="Device Calibrations" Height="800" Width="800">
 
     <ScrollViewer>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <ComboBox Name="ComboBox" MinWidth="50" MaxWidth="Infinity" />
-                <Button Grid.Column="1" Width="30" Height="30" Click="ButtonBase_OnClick">+</Button>
-            </Grid>
-            <ListView
-                Name="DeviceList" Grid.Row="1"
-                ItemsSource="{Binding Source={x:Static aurora:Global.Configuration}, Path=DeviceCalibrations, Mode=OneWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate DataType="{x:Type generic:KeyValuePair}">
-                        <local:Control_DeviceCalibrationItem ItemRemoved="Control_DeviceCalibrationItem_OnItemRemoved"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
+        <ListView
+            Name="DeviceList"
+            ItemsSource="{Binding DeviceCalibrations, Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type generic:KeyValuePair}">
+                    <local:Control_DeviceCalibrationItem
+                        DeviceManager="{Binding DeviceManager, RelativeSource={RelativeSource AncestorType=local:Control_DeviceCalibration}}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </ScrollViewer>
-</Window>
+</fluentWpf:AcrylicWindow>

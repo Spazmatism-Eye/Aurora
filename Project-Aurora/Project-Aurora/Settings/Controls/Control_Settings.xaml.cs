@@ -45,7 +45,7 @@ public partial class Control_Settings
         LnkContributors.NavigateUri = new Uri($"https://github.com/{o}/{r}#contributors-");
 
         _devicesAndWrappers = new Control_SettingsDevicesAndWrappers(rzSdkManager, layoutManager, deviceManager);
-        _controlDeviceManager = new Control_DeviceManager(deviceManager);
+        _controlDeviceManager = new Control_DeviceManager(deviceManager, ipcListener);
         _deviceMapping = new DeviceMapping(deviceManager, ipcListener);
         
         DevicesAndWrappersTab.Content = _devicesAndWrappers;

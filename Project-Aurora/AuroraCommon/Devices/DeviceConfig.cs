@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
 using Newtonsoft.Json;
 
 namespace Common.Devices;
@@ -15,7 +14,7 @@ public class DeviceConfig : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public Dictionary<string, Color> DeviceCalibrations { get; set; } = new();
+    public Dictionary<string, SimpleColor> DeviceCalibrations { get; set; } = new();
 
     [JsonProperty("allow_peripheral_devices")]
     public bool AllowPeripheralDevices { get; set; } = true;

@@ -77,12 +77,12 @@ public sealed class DeviceManager : IDisposable
         DeviceContainers.Clear();
         DeviceContainers.AddRange(deviceNames.Select(deviceName =>
         {
-            var device = new MemorySharedDevice(deviceName, Global.DeviceConfigration.VarRegistry);
+            var device = new MemorySharedDevice(deviceName, Global.DeviceConfiguration.VarRegistry);
             if (OnlineSettings.DeviceTooltips.TryGetValue(deviceName, out var tooltips))
             {
                 device.Tooltips = tooltips;
             }
-            Global.DeviceConfigration.VarRegistry.Combine(device.RegisteredVariables);
+            Global.DeviceConfiguration.VarRegistry.Combine(device.RegisteredVariables);
             return new DeviceContainer(device, this);
         }));
 
@@ -207,6 +207,12 @@ public sealed class DeviceManager : IDisposable
     public async Task DisableDevice(string deviceDeviceName)
     {
         var command = DeviceCommands.Disable + Constants.StringSplit + deviceDeviceName;
+        await SendCommand( command);
+    }
+
+    public async Task Recalibrate(string deviceName, SimpleColor color)
+    {
+        var command = DeviceCommands.Recalibrate + Constants.StringSplit + deviceName + Constants.StringSplit + color.ToArgb();
         await SendCommand( command);
     }
 

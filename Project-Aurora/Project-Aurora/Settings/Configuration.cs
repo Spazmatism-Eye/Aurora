@@ -163,7 +163,7 @@ public class Configuration : INotifyPropertyChanged
     public int HardwareMonitorCPUTemperature { get; set; }
     public int HardwareMonitorCPULoad { get; set; }
 
-    public double Width { get; set; } = 656;
+    public double Width { get; set; } = 1200;
     public double Height { get; set; } = 800;
     public double Top { get; set; } = 50;
     public double Left { get; set; } = 50;

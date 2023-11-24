@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using Aurora.Devices;
+using Aurora.Modules.GameStateListen;
 
 namespace Aurora.Controls;
 
@@ -10,10 +11,12 @@ namespace Aurora.Controls;
 public partial class Control_DeviceManager
 {
     private readonly Task<DeviceManager> _deviceManager;
+    private readonly Task<IpcListener?> _ipcListener;
 
-    public Control_DeviceManager(Task<DeviceManager> deviceManager)
+    public Control_DeviceManager(Task<DeviceManager> deviceManager, Task<IpcListener?> ipcListener)
     {
         _deviceManager = deviceManager;
+        _ipcListener = ipcListener;
 
         InitializeComponent();
     }
@@ -51,8 +54,10 @@ public partial class Control_DeviceManager
         await UpdateControls();
     }
 
-    private void btnCalibrate_Click(object? sender, RoutedEventArgs e)
+    private async void btnCalibrate_Click(object? sender, RoutedEventArgs e)
     {
-        new Control_DeviceCalibration(_deviceManager).Show();
+        var calibration = new Control_DeviceCalibration(_deviceManager, _ipcListener);
+        await calibration.Initialize();
+        calibration.Show();
     }
 }

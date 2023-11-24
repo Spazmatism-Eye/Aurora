@@ -58,6 +58,10 @@ public class SignaledMemoryObject : IDisposable
 
     protected void WaitForUpdate()
     {
+#if DEBUG
+        ObjectUpdatedHandle.WaitOne();
+#else
         ObjectUpdatedHandle.WaitOne(TimeSpan.FromSeconds(5));
+#endif
     }
 }

@@ -8,17 +8,14 @@ namespace Aurora.Controls;
 /// <summary>
 /// Interaction logic for Window_VariableRegistryEditor.xaml
 /// </summary>
-public partial class Control_VariableRegistryEditor : UserControl
+public partial class Control_VariableRegistryEditor
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty RegisteredVariablesProperty = DependencyProperty.Register("RegisteredVariables", typeof(VariableRegistry), typeof(Control_VariableRegistryEditor));
+    public static readonly DependencyProperty RegisteredVariablesProperty = DependencyProperty.Register(nameof(RegisteredVariables), typeof(VariableRegistry), typeof(Control_VariableRegistryEditor));
 
     public VariableRegistry RegisteredVariables
     {
-        get
-        {
-            return (VariableRegistry)GetValue(RegisteredVariablesProperty);
-        }
+        get => (VariableRegistry)GetValue(RegisteredVariablesProperty);
         set
         {
             SetValue(RegisteredVariablesProperty, value);
@@ -27,18 +24,13 @@ public partial class Control_VariableRegistryEditor : UserControl
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty VarRegistrySourceProperty = DependencyProperty.Register("VarRegistrySource", typeof(VariableRegistry), typeof(Control_VariableRegistryEditor), new PropertyMetadata { PropertyChangedCallback = new PropertyChangedCallback(VarRegistrySourceChanged) });
+    public static readonly DependencyProperty VarRegistrySourceProperty = DependencyProperty.Register(nameof(VarRegistrySource), typeof(VariableRegistry), typeof(Control_VariableRegistryEditor),
+        new PropertyMetadata { PropertyChangedCallback = VarRegistrySourceChanged });
 
     public VariableRegistry VarRegistrySource
     {
-        get
-        {
-            return GetValue(VarRegistrySourceProperty) as VariableRegistry ?? Global.DeviceConfigration.VarRegistry;
-        }
-        set
-        {
-            SetValue(VarRegistrySourceProperty, value);
-        }
+        get => GetValue(VarRegistrySourceProperty) as VariableRegistry ?? Global.DeviceConfiguration.VarRegistry;
+        set => SetValue(VarRegistrySourceProperty, value);
     }
 
     private void UpdateControls()
@@ -49,11 +41,9 @@ public partial class Control_VariableRegistryEditor : UserControl
 
         foreach (var variablename in RegisteredVariables.GetRegisteredVariableKeys())
         {
-            Control_VariableRegistryItem varItem = new Control_VariableRegistryItem {
+            var varItem = new Control_VariableRegistryItem {
                 VariableName = variablename,
                 VarRegistry = VarRegistrySource,
-                //HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                //VerticalContentAlignment = VerticalAlignment.Stretch
             };
                 
 
@@ -64,16 +54,16 @@ public partial class Control_VariableRegistryEditor : UserControl
 
     private static void VarRegistrySourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-        Control_VariableRegistryEditor self = (Control_VariableRegistryEditor)obj;
+        var self = (Control_VariableRegistryEditor)obj;
 
         if (e.OldValue == e.NewValue || self.stack_Options.Children.Count == 0)
             return;
 
-        VariableRegistry newRegistry = (VariableRegistry)e.NewValue;
+        var newRegistry = (VariableRegistry)e.NewValue;
         foreach (UIElement child in self.stack_Options.Children)
         {
-            if (child is Control_VariableRegistryItem)
-                ((Control_VariableRegistryItem)child).VarRegistry = newRegistry;
+            if (child is Control_VariableRegistryItem item)
+                item.VarRegistry = newRegistry;
         }
     }
 

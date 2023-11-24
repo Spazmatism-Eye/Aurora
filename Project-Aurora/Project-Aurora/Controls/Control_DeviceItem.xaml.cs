@@ -72,14 +72,14 @@ public partial class Control_DeviceItem
 
     private void btnToggleEnableDisable_Click(object? sender, EventArgs e)
     {
-        var deviceEnabled = !Global.DeviceConfigration.EnabledDevices.Contains(Device.Device.DeviceName);
+        var deviceEnabled = !Global.DeviceConfiguration.EnabledDevices.Contains(Device.Device.DeviceName);
         if (deviceEnabled)
         {
-            Global.DeviceConfigration.EnabledDevices.Add(Device.Device.DeviceName);
+            Global.DeviceConfiguration.EnabledDevices.Add(Device.Device.DeviceName);
         }
         else
         {
-            Global.DeviceConfigration.EnabledDevices.Remove(Device.Device.DeviceName);
+            Global.DeviceConfiguration.EnabledDevices.Remove(Device.Device.DeviceName);
         }
         btnStart.Content = "Working...";
         btnStart.IsEnabled = false;
@@ -96,7 +96,7 @@ public partial class Control_DeviceItem
             {
                 await device.EnableDevice();
             }
-            ConfigManager.Save(Global.DeviceConfigration, DeviceConfig.ConfigFile);
+            ConfigManager.Save(Global.DeviceConfiguration, DeviceConfig.ConfigFile);
         });
     }
 
@@ -202,7 +202,7 @@ public partial class Control_DeviceItem
         deviceDetails.Text = Device.Device.DeviceDetails;
         devicePerformance.Text = Device.Device.DeviceUpdatePerformance;
 
-        if (!Global.DeviceConfigration.EnabledDevices.Contains(Device.Device.DeviceName))
+        if (!Global.DeviceConfiguration.EnabledDevices.Contains(Device.Device.DeviceName))
         {
             btnEnable.Content = "Enable";
             btnStart.IsEnabled = false;
@@ -236,7 +236,7 @@ public partial class Control_DeviceItem
         };
         optionsWindow.Closing += (_, _) =>
         {
-            ConfigManager.Save(Global.DeviceConfigration, DeviceConfig.ConfigFile);
+            ConfigManager.Save(Global.DeviceConfiguration, DeviceConfig.ConfigFile);
         };
 
         optionsWindow.ShowDialog();

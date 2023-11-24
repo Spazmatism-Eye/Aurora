@@ -14,16 +14,17 @@ public class AuroraPipe
     public event EventHandler<EventArgs>? Shutdown;
 
     private readonly DeviceManager _deviceManager;
-    private NamedPipeServerStream _dmPipe;
+
+    private List<NamedPipeServerStream> _pipes = new();
 
     public AuroraPipe(DeviceManager deviceManager)
     {
         _deviceManager = deviceManager;
 
-        _dmPipe = CreatePipe();
+        CreatePipe();
     }
 
-    private NamedPipeServerStream CreatePipe()
+    private void CreatePipe()
     {
         var securityIdentifier = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
 
@@ -36,22 +37,21 @@ public class AuroraPipe
             Constants.DeviceManagerPipe, PipeDirection.In,
             NamedPipeServerStream.MaxAllowedServerInstances,
             PipeTransmissionMode.Message, PipeOptions.Asynchronous, 5 * 1024, 5 * 1024, pipeSecurity);
+        _pipes.Add(pipe);
         
-        Task.Run(() => { pipe.BeginWaitForConnection(ReceiveCommand, null); });
-        
-        return pipe;
+        Task.Run(() => { pipe.BeginWaitForConnection(ReceiveCommand, pipe); });
     }
 
     async void ReceiveCommand(IAsyncResult ar)
     {
         Global.Logger.Information("Pipe connection established");
 
-        var pipe = _dmPipe;
+        var pipe = (NamedPipeServerStream)ar.AsyncState!;
 
-        _dmPipe = CreatePipe();
+        CreatePipe();
 
         using var sr = new StreamReader(pipe);
-        while (await sr.ReadLineAsync() is { } command)
+        while (pipe.IsConnected && await sr.ReadLineAsync() is { } command)
         {
             using var splits = command.Split(Constants.StringSplit).AsEnumerable().GetEnumerator();
 
@@ -102,6 +102,14 @@ public class AuroraPipe
                     await _deviceManager.ShareRemappableDevices();
                     break;
                 }
+                case DeviceCommands.Recalibrate:
+                {
+                    var deviceId = splits.Next();
+                    var color = SimpleColor.FromArgb(int.Parse(splits.Next()));
+
+                    Global.DeviceConfig.DeviceCalibrations[deviceId] = color;
+                    break;
+                }
                 default:
                 {
                     Global.Logger.Warning("Uknown command: {Command}", command);
@@ -109,5 +117,10 @@ public class AuroraPipe
                 }
             }
         }
+        Global.Logger.Information("Pipe disconnected");
+        CreatePipe();
+
+        await pipe.DisposeAsync();
+        _pipes.Remove(pipe);
     }
 }

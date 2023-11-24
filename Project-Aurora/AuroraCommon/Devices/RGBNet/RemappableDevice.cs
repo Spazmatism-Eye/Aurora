@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using RGB.NET.Core;
 
 namespace Common.Devices.RGBNet;
@@ -12,11 +11,14 @@ public class RemappableDevice
     
     // $"[{rgbDevice.DeviceInfo.DeviceType}] {rgbDevice.DeviceInfo.DeviceName}"
     public List<LedId> RgbNetLeds { get; }
+    
+    public SimpleColor Calibration { get; }
 
-    public RemappableDevice(string deviceId, string deviceSummary, List<LedId> rgbNetLeds)
+    public RemappableDevice(string deviceId, string deviceSummary, List<LedId> rgbNetLeds, SimpleColor calibration)
     {
         DeviceId = deviceId;
         DeviceSummary = deviceSummary;
         RgbNetLeds = rgbNetLeds;
+        Calibration = calibration;
     }
 }

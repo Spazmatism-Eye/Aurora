@@ -10,12 +10,14 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Aurora.Utils;
 using Microsoft.Win32;
 
 namespace Aurora.Settings.Controls;
 
-public partial class Window_ProcessSelection
+public partial class Window_ProcessSelection : IDisposable
 {
+    private readonly TransparencyComponent _transparencyComponent;
 
     public Window_ProcessSelection() {
         InitializeComponent();
@@ -27,7 +29,7 @@ public partial class Window_ProcessSelection
             try
             {
                 // Get the exe name
-                string name = Path.GetFileName(p.MainModule.FileName);
+                var name = Path.GetFileName(p.MainModule.FileName);
                 // Check if we've already got an exe by that name, if not add it
                 if (processList.All(x => x.Name != name))
                     processList.Add(new RunningProcess
@@ -50,6 +52,8 @@ public partial class Window_ProcessSelection
         // CollectionViewSorce to provide search/filter feature
         CollectionViewSource.GetDefaultView(RunningProcessList.ItemsSource).Filter = RunningProcessFilterPredicate;
         RunningProcessListFilterText.Focus();
+
+        _transparencyComponent = new TransparencyComponent(this, null);
     }
 
     /// <summary>Gets or sets the okay button's label. Default: "Select process".</summary>
@@ -74,7 +78,7 @@ public partial class Window_ProcessSelection
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void BrowseButton_Click(object? sender, RoutedEventArgs e) {
-        OpenFileDialog dialog = new OpenFileDialog() {
+        var dialog = new OpenFileDialog() {
             AddExtension = true,
             Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*",
             Multiselect = false
@@ -124,7 +128,7 @@ public partial class Window_ProcessSelection
 
             // Else if user is on browse tab
         } else {
-            string exe = ProcessBrowseResult.Text;
+            var exe = ProcessBrowseResult.Text;
             if (string.IsNullOrWhiteSpace(exe)) return; // Cannot OK if there is no text entered
             if (CheckCustomPathExists && !File.Exists(exe)) return; // Cannot OK if we require validation and the file doesn't exist
             ChosenExecutableName = exe.Substring(exe.LastIndexOfAny(new[] { '/', '\\' }) + 1); // Get just the exe name
@@ -142,6 +146,11 @@ public partial class Window_ProcessSelection
     private void CancelButton_Click(object? sender, RoutedEventArgs e) {
         DialogResult = false;
         Close();
+    }
+
+    public void Dispose()
+    {
+        _transparencyComponent.Dispose();
     }
 }
 

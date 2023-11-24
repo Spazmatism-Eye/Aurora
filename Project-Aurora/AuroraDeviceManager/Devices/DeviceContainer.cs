@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
-using Amib.Threading;
 using AuroraDeviceManager.Devices.RGBNet;
 using Common;
 using Common.Data;
 using Common.Devices;
+using Common.Utils;
 
 namespace AuroraDeviceManager.Devices;
 
@@ -12,16 +12,11 @@ public sealed class DeviceContainer : IDisposable
 {
     public IDevice Device { get; }
 
-    private readonly SmartThreadPool _worker = new(1000, 1)
-    {
-        Concurrency = 1,
-        MaxQueueLength = 1
-    };
+    private readonly SingleConcurrentThread _worker;
 
     private DeviceColorComposition _currentComp = new(new Dictionary<DeviceKeys, Color>());
 
     private readonly SemaphoreSlim _actionLock = new(1);
-    private readonly Action _updateAction;
 
     private readonly MemorySharedStruct<DeviceInformation> _deviceInformation;
     private readonly MemorySharedArray<DeviceVariable> _deviceVariables;
@@ -31,9 +26,9 @@ public sealed class DeviceContainer : IDisposable
     public DeviceContainer(IDevice device)
     {
         Device = device;
-        _worker.Name = device.DeviceName + " Thread";
+        
         var args = new DoWorkEventArgs(null);
-        _updateAction = () => { WorkerOnDoWork(args).Wait(); };
+        _worker = new SingleConcurrentThread(device.DeviceName + " Thread", () => { WorkerOnDoWork(args).Wait(); });
 
         _deviceInformation = new MemorySharedStruct<DeviceInformation>(SharedObjectName, GetSharedDeviceInformation());
         _deviceInformation.UpdateRequested += (_, _) => { UpdateSharedMemory(); };
@@ -115,14 +110,9 @@ public sealed class DeviceContainer : IDisposable
     public void UpdateDevice(Dictionary<DeviceKeys, Color> keyColors)
     {
         _currentComp.KeyColors = keyColors;
-        // (_worker.CurrentWorkItemsCount == 0 || _worker.InUseThreads == 0) part wakes the worker when program freezes more than 1 sec
-        if (_worker.WaitingCallbacks <= 1 && !Device.IsDoingWork && (_worker.CurrentWorkItemsCount == 0 || _worker.InUseThreads == 0))
+        if (!Device.IsDoingWork)
         {
-            _worker.QueueWorkItem(_updateAction);
-        }
-        else if (_worker.IsIdle || _worker.ActiveThreads == 0)
-        {
-            _worker.Start();
+            _worker.Trigger();
         }
     }
 
@@ -166,8 +156,7 @@ public sealed class DeviceContainer : IDisposable
 
     public void Dispose()
     {
-        _worker.Shutdown(250);
-        _worker.Dispose();
+        _worker.Dispose(250);
     }
 
     private void UpdateSharedMemory()

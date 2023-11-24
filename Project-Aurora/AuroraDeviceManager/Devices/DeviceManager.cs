@@ -218,9 +218,10 @@ public sealed class DeviceManager : IDisposable
         var remappableDevices = (
             from rgbNetController in rgbNetControllers
             from device in rgbNetController.DeviceList
-            let deviceSummary = $"[{device.DeviceInfo.DeviceType}] ({device.DeviceInfo.DeviceName})"
+            let calibration = Global.DeviceConfig.DeviceCalibrations.GetValueOrDefault(device.DeviceInfo.DeviceName, SimpleColor.White)
+            let deviceSummary = $"{rgbNetController.DeviceName}: [{device.DeviceInfo.DeviceType}] {device.DeviceInfo.DeviceName}"
             let rgbNetLeds = device.Select(l => l.Id).ToList()
-            select new RemappableDevice(device.DeviceInfo.DeviceName, deviceSummary, rgbNetLeds)
+            select new RemappableDevice(device.DeviceInfo.DeviceName, deviceSummary, rgbNetLeds, calibration)
         ).ToList();
 
         var currentDevices = new CurrentDevices(remappableDevices);

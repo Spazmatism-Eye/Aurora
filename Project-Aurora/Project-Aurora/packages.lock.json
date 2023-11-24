@@ -208,12 +208,6 @@
         "resolved": "1.4.2",
         "contentHash": "yjj+3zgz8zgXpiiC3ZdF/iyTBbz2fFvMxZFEBPUcwZjIvXOf37Ylm+K58hqMfIBt5JgU/Z2uoUS67JmTLe973A=="
       },
-      "SmartThreadPool.dll": {
-        "type": "Direct",
-        "requested": "[2.3.0, )",
-        "resolved": "2.3.0",
-        "contentHash": "AN25ChojrNsOzQSc3XGnJn/ncKqhAYwsOgV0REnm3Ip4IFX76zoWmPWFot3GeizTt0GRf2c2YZbK7EnAgQbyIQ=="
-      },
       "System.Management": {
         "type": "Direct",
         "requested": "[7.0.2, )",
@@ -685,6 +679,11 @@
           "NETStandard.Library": "1.6.1",
           "SharpDX": "4.2.0"
         }
+      },
+      "SmartThreadPool.dll": {
+        "type": "Transitive",
+        "resolved": "2.3.0",
+        "contentHash": "AN25ChojrNsOzQSc3XGnJn/ncKqhAYwsOgV0REnm3Ip4IFX76zoWmPWFot3GeizTt0GRf2c2YZbK7EnAgQbyIQ=="
       },
       "Superpower": {
         "type": "Transitive",
@@ -1596,6 +1595,7 @@
           "RGB.NET.Devices.CorsairLegacy": "[2.0.0-prerelease.111, )",
           "RGB.NET.Devices.Logitech": "[2.0.0-prerelease.111, )",
           "Serilog": "[2.10.0, )",
+          "SmartThreadPool.dll": "[2.3.0, )",
           "System.Threading.AccessControl": "[7.0.1, )"
         }
       },
