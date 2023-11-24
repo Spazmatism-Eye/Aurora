@@ -67,7 +67,7 @@ public static class Global
             LoggingLevelSwitch.MinimumLevel = Configuration.LogLevel;
         }
     }
-    public static DeviceConfig DeviceConfigration { get; set; }
+    public static DeviceConfig DeviceConfiguration { get; set; }
 
     public static KeyboardLayoutManager? kbLayout { get; set; }                //TODO module access
     public static Effects effengine { get; set; }
