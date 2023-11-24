@@ -280,6 +280,8 @@ public class UpdateManager
                     try
                     {
                         var filePath = Path.Combine(Program.ExePath, fileEntry.FullName);
+                        if (File.Exists(filePath))
+                            File.Move(filePath, $"{filePath}.updateremove");
                         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                         fileEntry.ExtractToFile(filePath, true);
                     }
@@ -316,6 +318,20 @@ public class UpdateManager
 
     private void PerformCleanup()
     {
+        var messyFiles = Directory.GetFiles(Program.ExePath, "*.updateremove", SearchOption.AllDirectories);
+
+        foreach (var file in messyFiles)
+        {
+            try
+            {
+                File.Delete(file);
+            }
+            catch
+            {
+                _log.Enqueue(new LogEntry("Unable to delete file - " + file, Color.Red));
+            }
+        }
+
         if (File.Exists(Path.Combine(Program.ExePath, "update.zip")))
             File.Delete(Path.Combine(Program.ExePath, "update.zip"));
     }
