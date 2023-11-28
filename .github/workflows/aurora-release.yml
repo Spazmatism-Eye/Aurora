@@ -17,12 +17,6 @@ jobs:
       Solution_Name: Project-Aurora/Project-Aurora.sln
 
     steps:
-      - name: Generate build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{secrets.github_token}}
-
       - uses: rishabhgupta/split-by@v1
         id: split
         with:
@@ -44,6 +38,12 @@ jobs:
         # Restore the application to populate the obj folder with RuntimeIdentifiers
       - name: Restore the application
         run: dotnet restore $env:Solution_Name
+
+      - name: Generate build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{secrets.github_token}}
 
       - name: Build
         run: dotnet build $env:Solution_Name --configuration $env:Configuration --no-restore

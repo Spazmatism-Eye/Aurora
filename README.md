@@ -9,6 +9,10 @@
 [![Total Downloads](https://img.shields.io/github/downloads/Aurora-RGB/Aurora/total.svg)](https://github.com/Aurora-RGB/Aurora/releases/latest)
 ![Build status](https://img.shields.io/badge/language-C%23-178600.svg)
 
+[Frequently Asked Questions](https://github.com/Aurora-RGB/Aurora/wiki)
+
+[Suported Devices](https://github.com/Aurora-RGB/Aurora/wiki/Supported-Devices)
+
 ## Alternatives
 Original Aurora's development paused for a while. During that time other forks have appeared while some of the Aurora's original contributors created more modern software *Artemis*.
 
