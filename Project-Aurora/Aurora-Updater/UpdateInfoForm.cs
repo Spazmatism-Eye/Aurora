@@ -13,6 +13,8 @@ public partial class UpdateInfoForm : Form
     public string UpdateDescription = "";
     public bool PreRelease = false;
     public long UpdateSize = 0;
+    public DateTimeOffset UpdateTime;
+    public long DownloadTime = 0;
 
     public UpdateInfoForm()
     {
@@ -36,9 +38,10 @@ public partial class UpdateInfoForm : Form
         lblUpdateTitle.Text = PreRelease ? "New Aurora Pre-release update is available!" : "New Aurora update is available!";
         labelUpdateDescription.Text = UpdateDescription;
         labelCurrentVersion.Text = $"Installed Version: {CurrentVersion}";
-        labelUpdateVersion.Text = $"Update Version: {UpdateVersion}";
         richTextBoxChangelog.Text = Changelog;
         labelUpdateSize.Text = $"Update Download Size: {SizeSuffix(UpdateSize, 2)}";
+        lblUpdateTime.Text = $"Release date: {UpdateTime.ToLocalTime()}";
+        lblDownloadCount.Text = $"Download Count: {DownloadTime}";
     }
 
     private void linkLabelViewHistory_LinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
@@ -76,5 +79,10 @@ public partial class UpdateInfoForm : Form
         File.WriteAllText("skipversion.txt", UpdateVersion);
         DialogResult = DialogResult.Cancel;
         Close();
+    }
+
+    private void richTextBoxChangelog_TextChanged(object sender, EventArgs e)
+    {
+
     }
 }

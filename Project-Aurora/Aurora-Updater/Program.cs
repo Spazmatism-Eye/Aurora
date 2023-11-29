@@ -160,15 +160,18 @@ internal static class Program
             }
             else
             {
+                var releaseAsset = StaticStorage.Manager.LatestRelease.Assets
+                    .First(s => s.Name.StartsWith("release") || s.Name.StartsWith("Aurora-v"));
                 var userResult = new UpdateInfoForm
                 {
                     Changelog = StaticStorage.Manager.LatestRelease.Body,
                     UpdateDescription = StaticStorage.Manager.LatestRelease.Name,
                     UpdateVersion = latestV.ToString(),
                     CurrentVersion = versionMajor.ToString(),
-                    UpdateSize = StaticStorage.Manager.LatestRelease.Assets
-                        .First(s => s.Name.StartsWith("release") || s.Name.StartsWith("Aurora-v")).Size,
-                    PreRelease = StaticStorage.Manager.LatestRelease.Prerelease
+                    UpdateSize = releaseAsset.Size,
+                    PreRelease = StaticStorage.Manager.LatestRelease.Prerelease,
+                    UpdateTime = releaseAsset.CreatedAt,
+                    DownloadTime = releaseAsset.DownloadCount,
                 };
 
                 userResult.ShowDialog();
