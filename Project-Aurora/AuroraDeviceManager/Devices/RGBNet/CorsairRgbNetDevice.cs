@@ -24,6 +24,14 @@ public class CorsairRgbNetDevice : RgbNetDevice
         variableRegistry.Register($"{DeviceName}_exclusive", false, "Request exclusive control");
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        
+        //give iCUE some time to initialize
+        Thread.Sleep(500);
+    }
+
     protected override bool OnShutdown()
     {
         base.OnShutdown();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Common.Devices;
 using Common;
@@ -50,48 +51,48 @@ public abstract class RgbNetDevice : DefaultDevice
     {
         Global.Logger.Information("Initializing {DeviceName}", DeviceName);
 
-        var connectSleepTimeSeconds =
-            Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_connect_sleep_time");
-        var remainingMillis = connectSleepTimeSeconds * 1000;
+        var connectSleepTimeSeconds = Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_connect_sleep_time");
+        var remainingMillis = TimeSpan.FromSeconds(connectSleepTimeSeconds);
 
+        Provider.DevicesChanged += ProviderOnDevicesChanged;
+        var timeWatch = Stopwatch.StartNew();
         do
         {
             try
             {
                 await ConfigureProvider();
 
-                Provider.DevicesChanged += ProviderOnDevicesChanged;
                 Provider.Initialize(RGBDeviceType.All, true);
+
                 IsInitialized = true;
-                break;
+                ErrorMessage = null;
+                OnInitialized();
+                Provider.Exception += ProviderOnException;
+                return true;
             }
             catch (DeviceProviderException e)
             {
                 Global.Logger.Error(e, "Device {DeviceProvider} init threw exception", DeviceName);
-                remainingMillis -= 1000;
+                remainingMillis -= timeWatch.Elapsed;
+                timeWatch.Restart();
 
-                if (e.IsCritical || remainingMillis <= 0)
+                if (e.IsCritical || remainingMillis <= TimeSpan.Zero)
                 {
+                    if (remainingMillis <= TimeSpan.Zero)
+                    {
+                        Global.Logger.Error("{DeviceProvider} initialization timed out after {Timeout} seconds",
+                            DeviceName, connectSleepTimeSeconds);
+                    }
                     ErrorMessage = $"{e.Message}";
-                    break;
+                    Provider.DevicesChanged -= ProviderOnDevicesChanged;
+                    return false;
                 }
 
-                ErrorMessage = $"{e.Message} ({(remainingMillis / 1000).ToString()})";
+                ErrorMessage = $"{e.Message} ({remainingMillis.Seconds.ToString()})";
 
                 await Task.Delay(1000);
             }
         } while (true);
-
-        if (!IsInitialized)
-        {
-            Provider.DevicesChanged -= ProviderOnDevicesChanged;
-            return false;
-        }
-
-        ErrorMessage = null;
-        OnInitialized();
-        Provider.Exception += ProviderOnException;
-        return true;
     }
 
     private async void ProviderOnException(object? sender, ExceptionEventArgs e)
