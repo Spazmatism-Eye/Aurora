@@ -14,13 +14,13 @@
 [Suported Devices](https://github.com/Aurora-RGB/Aurora/wiki/Supported-Devices)
 
 ## Alternatives
-Original Aurora's development paused for a while. During that time other forks have appeared while some of the Aurora's original contributors created more modern software *Artemis*.
+In case you don't like Aurora, there are free open-source alternatives to Aurora.
 
 While Artemis is a much more advanced and cross-platform, it is currently missing some game integrations (GSI games).
 
-| Project                                           | Main features                                                                                                                                                                                          |                                                |
-|---------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| [Artemis](https://github.com/Artemis-RGB/Artemis) | * Advanced animations<br/>* Minimal impact on games<br/>* Device layout editor<br/>* Linux support (work in progress)<br/>* Modularity. Maintainable and fast partial updates<br/>* Active development | Some games that use GSI are not supported yet. |
+| Project                                           | Main features                                                                                                                                                                                   |                                                                                                                                        |
+|---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| [Artemis](https://github.com/Artemis-RGB/Artemis) | * Advanced animations<br/>* Linux support (work in progress)| It is significantly harder to use but can be more powerful<br/>Many features alrady included in Aurora can be found by adding plugins. |
 
 # Project Aurora
 Project Aurora is a utility that unifies RGB lighting devices across different brands and enables them to work alongside each other, all while adding and improving RGB lighting support for various games that previous had none or little RGB lighting support. Aurora is mainly written in C#, but has C++ components to implement native support for other games.
@@ -49,10 +49,9 @@ Having issues? Want to discuss changes or talk about possible features? Want to 
 
 ### MANUAL
 
-1. First of all, make sure that your PC meets the requirements listed above. Also, make sure that you have [Visual C++ Redistributable Packages for Visual Studio 2017](https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads) and [Microsoft .NET Framework 4.6.1](https://www.microsoft.com/en-gb/download/details.aspx?id=49981) installed.
-2. Download the latest release from above
-3. Extract the archive anywhere on your computer. Preferably keep it in a location you can easily access.
-4. Run "Aurora.exe", from that point, Aurora should provide you with further instructions and options.
+1. Download the latest release from above
+2. Extract the archive anywhere on your computer. Preferably keep it in a location you can easily access.
+3. Run "Aurora.exe", from that point, Aurora should provide you with further instructions and options.
 
 ## Contributors ✨
 
