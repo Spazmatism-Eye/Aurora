@@ -45,7 +45,7 @@ public class Layer : INotifyPropertyChanged, ICloneable, IDisposable
         OverrideLogic = overrideLogic;
     }
 
-    public Layer(string name, ILayerHandler handler, OverrideLogicBuilder builder) : this(name, handler, builder.Create()) { }
+    public Layer(string name, ILayerHandler handler, OverrideLogicBuilder builder) : this(name, handler, new Dictionary<string, IOverrideLogic>(builder.Create())) { }
     #endregion
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -75,8 +75,7 @@ public class Layer : INotifyPropertyChanged, ICloneable, IDisposable
             }
         }
 
-        var effectLayer = ((dynamic)Handler.Properties).Enabled ? Handler.PostRenderFX(Handler.Render(gs)) : EffectLayer.EmptyLayer;
-        return effectLayer;
+        return ((dynamic)Handler.Properties).Enabled ? Handler.PostRenderFX(Handler.Render(gs)) : EffectLayer.EmptyLayer;
     }
 
     public void SetProfile(Application profile) {

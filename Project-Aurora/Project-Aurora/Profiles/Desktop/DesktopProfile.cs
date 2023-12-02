@@ -16,12 +16,23 @@ namespace Aurora.Profiles.Desktop;
 
 public enum InteractiveEffects
 {
-    [Description("None")] None = 0,
-    [Description("Key Wave")] Wave = 1,
-    [Description("Key Wave (Filled)")] WaveFilled = 3,
-    [Description("Key Fade")] KeyPress = 2,
-    [Description("Arrow Flow")] ArrowFlow = 4,
-    [Description("Key Wave (Rainbow)")] WaveRainbow = 5,
+    [Description("None")]
+    None = 0,
+
+    [Description("Key Wave")]
+    Wave = 1,
+
+    [Description("Key Wave (Filled)")]
+    WaveFilled = 3,
+
+    [Description("Key Fade")]
+    KeyPress = 2,
+
+    [Description("Arrow Flow")]
+    ArrowFlow = 4,
+
+    [Description("Key Wave (Rainbow)")]
+    WaveRainbow = 5,
 }
 
 public class DesktopProfile : ApplicationProfile
@@ -88,8 +99,8 @@ public class DesktopProfile : ApplicationProfile
         }, new OverrideLogicBuilder().SetDynamicBoolean("_Enabled",
             new BooleanAnd(new List<Evaluatable<bool>>
             {
-                new BooleanGSIBoolean("LocalPCInfo/Media/HasMedia"), new BooleanNot( new BooleanGSIBoolean("LocalPCInfo/Media/MediaPlaying") )
-            } )
+                new BooleanGSIBoolean("LocalPCInfo/Media/HasMedia"), new BooleanNot(new BooleanGSIBoolean("LocalPCInfo/Media/MediaPlaying"))
+            })
         )));
     }
 
@@ -163,6 +174,14 @@ public class DesktopProfile : ApplicationProfile
         base.Reset();
         AddOverlays();
 
+        var accentColorOverride = new OverrideLogicBuilder()
+            .SetDynamicColor(nameof(LayerHandlerProperties._PrimaryColor),
+                new NumberMathsOperation(new NumberGSINumeric("LocalPCInfo/Desktop/AccentA"), MathsOperator.Div, new NumberConstant(255)),
+                new NumberMathsOperation(new NumberGSINumeric("LocalPCInfo/Desktop/AccentR"), MathsOperator.Div, new NumberConstant(255)),
+                new NumberMathsOperation(new NumberGSINumeric("LocalPCInfo/Desktop/AccentG"), MathsOperator.Div, new NumberConstant(255)),
+                new NumberMathsOperation(new NumberGSINumeric("LocalPCInfo/Desktop/AccentB"), MathsOperator.Div, new NumberConstant(255))
+            );
+
         Layers = new ObservableCollection<Layer>
         {
             new("Num Lock", new LockColourLayerHandler
@@ -218,7 +237,7 @@ public class DesktopProfile : ApplicationProfile
                     },
                     PresentationType = ShortcutAssistantPresentationType.ProgressiveSuggestion,
                 }
-            }),
+            }, accentColorOverride),
             new("Win Shortcuts", new ShortcutAssistantLayerHandler
             {
                 Properties = new ShortcutAssistantLayerHandlerProperties
@@ -247,7 +266,7 @@ public class DesktopProfile : ApplicationProfile
                     },
                     PresentationType = ShortcutAssistantPresentationType.ProgressiveSuggestion,
                 }
-            }),
+            }, accentColorOverride),
             new("Alt Shortcuts", new ShortcutAssistantLayerHandler
             {
                 Properties = new ShortcutAssistantLayerHandlerProperties
@@ -266,7 +285,29 @@ public class DesktopProfile : ApplicationProfile
                     },
                     PresentationType = ShortcutAssistantPresentationType.ProgressiveSuggestion,
                 }
-            }),
+            }, accentColorOverride),
+            new("Accent", new SolidColorLayerHandler
+                {
+                    Properties = new LayerHandlerProperties
+                    {
+                        _Sequence = new KeySequence(new[]
+                        {
+                            DeviceKeys.ESC, DeviceKeys.TILDE, DeviceKeys.TAB, DeviceKeys.CAPS_LOCK, DeviceKeys.LEFT_SHIFT,
+                            DeviceKeys.LEFT_CONTROL,
+                            DeviceKeys.LEFT_WINDOWS, DeviceKeys.LEFT_ALT, DeviceKeys.RIGHT_ALT, DeviceKeys.FN_Key, DeviceKeys.LEFT_FN,
+                            DeviceKeys.APPLICATION_SELECT,
+                            DeviceKeys.RIGHT_CONTROL, DeviceKeys.RIGHT_SHIFT, DeviceKeys.ENTER, DeviceKeys.BACKSPACE,
+                            DeviceKeys.NUM_LOCK_LED, DeviceKeys.CAPS_LOCK_LED, DeviceKeys.SCROLL_LOCK_LED
+                        })
+                    }
+                },
+                accentColorOverride.SetLookupTable(nameof(LayerHandlerProperties._Enabled),
+                    new OverrideLookupTableBuilder<bool>()
+                        .AddEntry(false, new BooleanKeyDown(Keys.LControlKey))
+                        .AddEntry(false, new BooleanKeyDown(Keys.LWin))
+                        .AddEntry(false, new BooleanKeyDown(Keys.LMenu))
+                    )
+                ),
             new("CPU Usage", new PercentLayerHandler
             {
                 Properties = new PercentLayerHandlerProperties
@@ -385,7 +426,7 @@ public class DesktopProfile : ApplicationProfile
                             CommonColorUtils.FastColor(253, 83, 30),
                             CommonColorUtils.FastColor(136, 219, 61),
                             CommonColorUtils.FastColor(255, 83, 30)
-                            ))
+                        ))
                         {
                             start = new PointF(0, -0.5f),
                             center = new PointF(0, 0),
