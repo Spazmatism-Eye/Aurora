@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Aurora.Profiles;
 using Aurora.Settings;
 using Aurora.Settings.Layers;
 using Common.Devices;
@@ -23,16 +24,16 @@ public class Borderlands2Profile : ApplicationProfile
                 {
                     _PrimaryColor = Color.Red,
                     _SecondaryColor = Color.DarkRed,
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new DeviceKeys[] {
                         DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR, DeviceKeys.FIVE,
                         DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT, DeviceKeys.NINE, DeviceKeys.ZERO,
                         DeviceKeys.MINUS, DeviceKeys.EQUALS
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/CurrentHealth",
-                    _MaxVariablePath = "Player/MaximumHealth"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/CurrentHealth"),
+                    MaxVariablePath = new VariablePath("Player/MaximumHealth")
                 },
             }),
             new Layer("Shield Indicator", new PercentLayerHandler()
@@ -41,16 +42,16 @@ public class Borderlands2Profile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Cyan,
                     _SecondaryColor = Color.DarkCyan,
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new DeviceKeys[] {
                         DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4,
                         DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8,
                         DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/CurrentShield",
-                    _MaxVariablePath = "Player/MaximumShield"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/CurrentShield"),
+                    MaxVariablePath = new VariablePath("Player/MaximumShield")
                 },
             }),
             new Layer("Borderlands 2 Background", new SolidFillLayerHandler(){

@@ -3,7 +3,6 @@ using Aurora.Settings.Layers;
 using Aurora.Settings.Overrides.Logic;
 using System.Drawing;
 using Aurora.Profiles.LeagueOfLegends.GSI.Nodes;
-using Aurora.Settings.Overrides.Logic.Boolean;
 using DK = Common.Devices.DeviceKeys;
 
 namespace Aurora.Profiles.LeagueOfLegends
@@ -68,8 +67,8 @@ namespace Aurora.Profiles.LeagueOfLegends
                         _PrimaryColor = Color.Green,
                         _SecondaryColor = Color.Black,
                         _Sequence = new KeySequence(new DK[] { DK.F1, DK.F2, DK.F3, DK.F4, DK.F5, DK.F6, DK.F7, DK.F8, DK.F9, DK.F10, DK.F11, DK.F12 }),
-                        _VariablePath = "Player/ChampionStats/HealthCurrent",
-                        _MaxVariablePath = "Player/ChampionStats/HealthMax"
+                        VariablePath = new VariablePath("Player/ChampionStats/HealthCurrent"),
+                        MaxVariablePath = new VariablePath("Player/ChampionStats/HealthMax")
                     }
                 }, EnabledWhen(new BooleanGSIBoolean("Match/InGame"))),
                 new Layer("Resource", new PercentLayerHandler()
@@ -79,8 +78,8 @@ namespace Aurora.Profiles.LeagueOfLegends
                         _PrimaryColor = Color.DarkBlue,
                         _SecondaryColor = Color.Black,
                         _Sequence = new KeySequence(new DK[] { DK.Z, DK.X, DK.C, DK.V, DK.B, DK.N, DK.M, DK.COMMA, DK.PERIOD, DK.FORWARD_SLASH }),
-                        _VariablePath = "Player/ChampionStats/ResourceCurrent",
-                        _MaxVariablePath = "Player/ChampionStats/ResourceMax"
+                        VariablePath = new VariablePath("Player/ChampionStats/ResourceCurrent"),
+                        MaxVariablePath = new VariablePath("Player/ChampionStats/ResourceMax")
                     }
                 }, InGameAnd(new BooleanNot(new BooleanGSIEnum("Player/ChampionStats/ResourceType", ResourceType.None)))),
                 new Layer("Background", new Layers.LoLBackgroundLayerHandler())

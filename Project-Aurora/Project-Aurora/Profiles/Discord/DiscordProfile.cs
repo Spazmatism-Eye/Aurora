@@ -29,7 +29,7 @@ public class DiscordProfile : ApplicationProfile
             }, new OverrideLogicBuilder()
                 .SetDynamicBoolean("_Enabled", new StringComparison
                 {
-                    Operand1 = new StringGSIString { VariablePath = "Voice/Name" },
+                    Operand1 = new StringGSIString { VariablePath = new VariablePath("Voice/Name") },
                     Operand2 = new StringConstant { Value = "" },
                     Operator = StringComparisonOperator.NotEqual,
                 }).SetLookupTable("_PrimaryColor", overrideLookupTableBuilder)),

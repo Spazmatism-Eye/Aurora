@@ -66,16 +66,16 @@ public class CSGOProfile : ApplicationProfile
                     {
                         _PrimaryColor =  Color.FromArgb(0, 255, 0),
                         _SecondaryColor = Color.FromArgb(255, 0, 0),
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new[] {
                             DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4,
                             DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8,
                             DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12
                         }),
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/State/Health",
-                        _MaxVariablePath = "100"
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/State/Health"),
+                        MaxVariablePath = new VariablePath("100")
                     },
 
                 }, new OverrideLogicBuilder()
@@ -87,16 +87,16 @@ public class CSGOProfile : ApplicationProfile
                     {
                         _PrimaryColor =  Color.FromArgb(0, 0, 255),
                         _SecondaryColor = Color.FromArgb(255, 0, 0),
-                        _PercentType = PercentEffectType.Progressive,
+                        PercentType = PercentEffectType.Progressive,
                         _Sequence = new KeySequence(new[] {
                             DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR,
                             DeviceKeys.FIVE, DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT,
                             DeviceKeys.NINE, DeviceKeys.ZERO, DeviceKeys.MINUS, DeviceKeys.EQUALS
                         }),
-                        _BlinkThreshold = 0.15,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/Weapons/ActiveWeapon/AmmoClip",
-                        _MaxVariablePath = "Player/Weapons/ActiveWeapon/AmmoClipMax"
+                        BlinkThreshold = 0.15,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/Weapons/ActiveWeapon/AmmoClip"),
+                        MaxVariablePath = new VariablePath("Player/Weapons/ActiveWeapon/AmmoClipMax")
                     },
                 }, new OverrideLogicBuilder()
                     .SetDynamicBoolean("_Enabled", new BooleanGSIEnum("Round/Phase", RoundPhase.Live))

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using Aurora.Controls;
+using Aurora.Profiles;
 using Aurora.Settings.Overrides.Logic;
 using Aurora.Utils;
 
@@ -58,7 +59,7 @@ namespace Aurora.Settings.Layers.Controls
                 updownAnimationRepeat.Value = Context.Properties._AnimationRepeat;
                 triggerModeCb.SelectedValue = Context.Properties.TriggerMode;
                 triggerAnyKey.IsChecked = Context.Properties._TriggerAnyKey;
-                triggerPath.Text = Context.Properties._TriggerPath;
+                triggerPath.Text = Context.Properties.TriggerPath.GsiPath;
                 triggerKeys.Sequence = Context.Properties._TriggerKeySequence;
                 translateToKey.IsChecked = Context.Properties._KeyTriggerTranslate;
                 stackModeCb.SelectedValue = Context.Properties.StackMode;
@@ -200,7 +201,7 @@ namespace Aurora.Settings.Layers.Controls
 
         private void triggerPath_TextChanged(object? sender, TextChangedEventArgs e) {
             if (CanSet)
-                Context.Properties._TriggerPath = (sender as ComboBox).Text;
+                Context.Properties.TriggerPath = new VariablePath(((ComboBox)sender).Text);
         }
 
         private void triggerAnyKey_Checked(object? sender, RoutedEventArgs e) {

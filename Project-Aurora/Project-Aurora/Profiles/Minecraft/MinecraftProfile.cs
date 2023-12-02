@@ -4,7 +4,6 @@ using Aurora.Settings.Layers;
 using Aurora.Settings.Overrides.Logic;
 using System.Collections.Generic;
 using System.Drawing;
-using Aurora.Settings.Overrides.Logic.Boolean;
 using DK = Common.Devices.DeviceKeys;
 
 namespace Aurora.Profiles.Minecraft
@@ -28,8 +27,8 @@ namespace Aurora.Profiles.Minecraft
                 new Layer("Health Bar", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _VariablePath = "Player/Health",
-                        _MaxVariablePath = "Player/HealthMax",
+                        VariablePath = new VariablePath("Player/Health"),
+                        MaxVariablePath = new VariablePath("Player/HealthMax"),
                         _PrimaryColor = Color.Red,
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
@@ -49,8 +48,8 @@ namespace Aurora.Profiles.Minecraft
 
                 new Layer("Experience Bar", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties() {
-                        _VariablePath = "Player/Experience",
-                        _MaxVariablePath = "Player/ExperienceMax",
+                        VariablePath = new VariablePath("Player/Experience"),
+                        MaxVariablePath = new VariablePath("Player/ExperienceMax"),
                         _PrimaryColor = Color.FromArgb(255, 255, 0),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {

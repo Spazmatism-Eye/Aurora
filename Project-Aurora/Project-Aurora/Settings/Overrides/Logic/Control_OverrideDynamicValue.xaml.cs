@@ -22,9 +22,9 @@ namespace Aurora.Settings.Overrides.Logic {
             // Get a list that contains the label (string), the type of evaluatable (to restrict the list box), the evaluatable itself and the description.
             Parameters = context.ConstructorParameters.Select(kvp => new Tuple<string, Type, IEvaluatable, string>(
                 kvp.Key,
-                OverrideDynamicValue.typeDynamicDefMap[context.VarType].constructorParameters.First(p => p.name == kvp.Key).type,
+                OverrideDynamicValue.TypeDynamicDefMap[context.VarType].ConstructorParameters.First(p => p.Name == kvp.Key).Type,
                 kvp.Value,
-                OverrideDynamicValue.typeDynamicDefMap[context.VarType].constructorParameters.First(p => p.name == kvp.Key).description
+                OverrideDynamicValue.TypeDynamicDefMap[context.VarType].ConstructorParameters.First(p => p.Name == kvp.Key).Description
             )).ToList();
             DataContext = this;
         }

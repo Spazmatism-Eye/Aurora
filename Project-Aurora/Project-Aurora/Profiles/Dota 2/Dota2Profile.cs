@@ -30,16 +30,16 @@ namespace Aurora.Profiles.Dota_2
                     {
                         _PrimaryColor =  Color.FromArgb(0, 255, 0),
                         _SecondaryColor = Color.FromArgb(0, 60, 0),
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new DeviceKeys[] {
                             DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4,
                             DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8,
                             DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12
                         }),
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Hero/Health",
-                        _MaxVariablePath = "Hero/MaxHealth"
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Hero/Health"),
+                        MaxVariablePath = new VariablePath("Hero/MaxHealth")
                     },
                 }),
                 new Layer("Mana Indicator", new PercentLayerHandler()
@@ -48,16 +48,16 @@ namespace Aurora.Profiles.Dota_2
                     {
                         _PrimaryColor =  Color.FromArgb(0, 125, 255),
                         _SecondaryColor = Color.FromArgb(0, 0, 60),
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new DeviceKeys[] {
                             DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR,
                             DeviceKeys.FIVE, DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT,
                             DeviceKeys.NINE, DeviceKeys.ZERO, DeviceKeys.MINUS, DeviceKeys.EQUALS
                         }),
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Hero/Mana",
-                        _MaxVariablePath = "Hero/MaxMana"
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Hero/Mana"),
+                        MaxVariablePath = new VariablePath("Hero/MaxMana")
                     },
                 }),
                 new Layer("Dota 2 Ability Keys", new Layers.Dota2AbilityLayerHandler()),

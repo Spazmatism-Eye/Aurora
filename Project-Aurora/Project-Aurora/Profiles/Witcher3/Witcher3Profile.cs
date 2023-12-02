@@ -22,16 +22,16 @@ public class Witcher3Profile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Red,
                     _SecondaryColor = Color.DarkRed,
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new[] {
                         DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4,
                         DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8,
                         DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/CurrentHealth",
-                    _MaxVariablePath = "Player/MaximumHealth"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/CurrentHealth"),
+                    MaxVariablePath = new VariablePath("Player/MaximumHealth")
                 },
             }),
             new("Toxicity Indicator", new PercentLayerHandler
@@ -40,16 +40,16 @@ public class Witcher3Profile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Olive,
                     _SecondaryColor = Color.DarkOliveGreen,
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new[] {
                         DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR,
                         DeviceKeys.FIVE, DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT,
                         DeviceKeys.NINE, DeviceKeys.ZERO, DeviceKeys.MINUS, DeviceKeys.EQUALS
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/Toxicity",
-                    _MaxVariablePath = "100"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/Toxicity"),
+                    MaxVariablePath = new VariablePath("100")
                 },
             }),
             new("Stamina Indicator", new PercentLayerHandler
@@ -58,16 +58,16 @@ public class Witcher3Profile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Orange,
                     _SecondaryColor = Color.DarkOrange,
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new[] {
                         DeviceKeys.NUM_ONE, DeviceKeys.NUM_TWO, DeviceKeys.NUM_THREE, DeviceKeys.NUM_FOUR,
                         DeviceKeys.NUM_FIVE, DeviceKeys.NUM_SIX, DeviceKeys.NUM_SEVEN, DeviceKeys.NUM_EIGHT,
                         DeviceKeys.NUM_NINE
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/Stamina",
-                    _MaxVariablePath = "100"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/Stamina"),
+                    MaxVariablePath = new VariablePath("100")
                 },
             }),
             new("BG", new Witcher3BackgroundLayerHandler()),

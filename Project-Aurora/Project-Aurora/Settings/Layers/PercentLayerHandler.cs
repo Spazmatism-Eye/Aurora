@@ -11,33 +11,53 @@ namespace Aurora.Settings.Layers;
 
 public class PercentLayerHandlerProperties<TProperty> : LayerHandlerProperties2Color<TProperty> where TProperty : PercentLayerHandlerProperties<TProperty>
 {
-    [LogicOverridable("Percent Type")]
-    public PercentEffectType? _PercentType { get; set; }
-    [JsonIgnore]
-    public PercentEffectType PercentType => Logic._PercentType ?? _PercentType ?? PercentEffectType.Progressive_Gradual;
+    private PercentEffectType? _percentType;
+    [JsonProperty("_PercentType")]
+    public PercentEffectType PercentType
+    {
+        get => Logic._percentType ?? _percentType ?? PercentEffectType.Progressive_Gradual;
+        set => _percentType = value;
+    }
 
-    [LogicOverridable("Blink Threshold")]
-    public double? _BlinkThreshold { get; set; }
-    [JsonIgnore]
-    public double BlinkThreshold => Logic._BlinkThreshold ?? _BlinkThreshold ?? 0.0;
+    private double? _blinkThreshold;
+    [JsonProperty("_BlinkThreshold")]
+    public double BlinkThreshold
+    {
+        get => Logic._blinkThreshold ?? _blinkThreshold ?? 0.0;
+        set => _blinkThreshold = value;
+    }
 
-    public bool? _BlinkDirection { get; set; }
-    [JsonIgnore]
-    public bool BlinkDirection => Logic._BlinkDirection ?? _BlinkDirection ?? false;
+    private bool? _blinkDirection;
+    [JsonProperty("_BlinkDirection")]
+    public bool BlinkDirection
+    {
+        get => Logic._blinkDirection ?? _blinkDirection ?? false;
+        set => _blinkDirection = value;
+    }
 
-    [LogicOverridable("Blink Background")]
-    public bool? _BlinkBackground { get; set; }
-    [JsonIgnore]
-    public bool BlinkBackground => Logic._BlinkBackground ?? _BlinkBackground ?? false;
+    private bool? _blinkBackground;
+    [JsonProperty("_BlinkBackground")]
+    public bool BlinkBackground
+    {
+        get => Logic._blinkBackground ?? _blinkBackground ?? false;
+        set => _blinkBackground = value;
+    }
 
-    public string _VariablePath { get; set; }
-    [JsonIgnore]
-    public string VariablePath => Logic._VariablePath ?? _VariablePath ?? string.Empty;
+    private VariablePath? _variablePath;
+    [JsonProperty("_VariablePath")]
+    public VariablePath VariablePath
+    {
+        get => Logic._variablePath ?? _variablePath ?? VariablePath.Empty;
+        set => _variablePath = value;
+    }
 
-    public string _MaxVariablePath { get; set; }
-    [JsonIgnore]
-    public string MaxVariablePath => Logic._MaxVariablePath ?? _MaxVariablePath ?? string.Empty;
-
+    private VariablePath? _maxVariablePath;
+    [JsonProperty("_MaxVariablePath")]
+    public VariablePath MaxVariablePath
+    {
+        get => Logic._maxVariablePath ?? _maxVariablePath ?? VariablePath.Empty;
+        set => _maxVariablePath = value;
+    }
 
     // These two properties work slightly differently to the others. These are special properties that allow for
     // override the value using the overrides system. These are not displayed/directly editable by the user and 
@@ -55,17 +75,17 @@ public class PercentLayerHandlerProperties<TProperty> : LayerHandlerProperties2C
 
     public PercentLayerHandlerProperties()
     { }
-    public PercentLayerHandlerProperties(bool assign_default = false) : base(assign_default) { }
+    public PercentLayerHandlerProperties(bool assignDefault = false) : base(assignDefault) { }
 
     public override void Default()
     {
         base.Default();
         _PrimaryColor = CommonColorUtils.GenerateRandomColor();
         _SecondaryColor = CommonColorUtils.GenerateRandomColor();
-        _PercentType = PercentEffectType.Progressive_Gradual;
-        _BlinkThreshold = 0.0;
-        _BlinkDirection = false;
-        _BlinkBackground = false;
+        _percentType = PercentEffectType.Progressive_Gradual;
+        _blinkThreshold = 0.0;
+        _blinkDirection = false;
+        _blinkBackground = false;
     }
 }
 
@@ -103,7 +123,8 @@ public class PercentLayerHandler<TProperty> : LayerHandler<TProperty> where TPro
             
         var maxvalue = Properties.Logic._MaxValue ?? state.GetNumber(Properties.MaxVariablePath);
 
-        EffectLayer.PercentEffect(Properties.PrimaryColor, Properties.SecondaryColor, Properties.Sequence, value, maxvalue, Properties.PercentType, Properties.BlinkThreshold, Properties.BlinkDirection, Properties.BlinkBackground);
+        EffectLayer.PercentEffect(Properties.PrimaryColor, Properties.SecondaryColor, Properties.Sequence, value, maxvalue,
+            Properties.PercentType, Properties.BlinkThreshold, Properties.BlinkDirection, Properties.BlinkBackground);
         return EffectLayer;
     }
 
@@ -111,11 +132,11 @@ public class PercentLayerHandler<TProperty> : LayerHandler<TProperty> where TPro
     {
         if (profile != null)
         {
-            if (!double.TryParse(Properties._VariablePath, out _) && !string.IsNullOrWhiteSpace(Properties._VariablePath) && !profile.ParameterLookup.IsValidParameter(Properties._VariablePath))
-                Properties._VariablePath = string.Empty;
+            if (!double.TryParse(Properties.VariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.VariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.VariablePath.GsiPath))
+                Properties.VariablePath = VariablePath.Empty;
 
-            if (!double.TryParse(Properties._MaxVariablePath, out _) && !string.IsNullOrWhiteSpace(Properties._MaxVariablePath) && !profile.ParameterLookup.IsValidParameter(Properties._MaxVariablePath))
-                Properties._MaxVariablePath = string.Empty;
+            if (!double.TryParse(Properties.MaxVariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.MaxVariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.MaxVariablePath.GsiPath))
+                Properties.MaxVariablePath = VariablePath.Empty;
         }
         (Control as Control_PercentLayer).SetProfile(profile);
         base.SetApplication(profile);

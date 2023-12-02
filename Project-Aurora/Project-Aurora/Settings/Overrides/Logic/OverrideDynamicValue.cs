@@ -31,9 +31,9 @@ public class OverrideDynamicValue : IOverrideLogic {
         // Create a new set of constructor parameters by taking all the defined values in the typeDynamicDefMap for this type, then creating
         // a new instance of the default IEvaluatable for each parameter. E.G. for a parameter specified as EvaluatableType.Boolean, a new true
         // constant will be put in the constructor parameters dictionary.
-        ConstructorParameters = typeDynamicDefMap.ContainsKey(type)
-            ? typeDynamicDefMap[type].constructorParameters.ToDictionary(dcpd => dcpd.name, dcpd => EvaluatableDefaults.Get(dcpd.type))
-            : new();
+        ConstructorParameters = TypeDynamicDefMap.TryGetValue(type, out var value)
+            ? value.ConstructorParameters.ToDictionary(dcpd => dcpd.Name, dcpd => EvaluatableDefaults.Get(dcpd.Type))
+            : new Dictionary<string, IEvaluatable>();
     }
 
     /// <summary>
@@ -65,20 +65,22 @@ public class OverrideDynamicValue : IOverrideLogic {
     /// <summary>
     /// Evaluates the DynamicConstructor logic with the given gamestate.
     /// </summary>
-    public object? Evaluate(IGameState gameState) => typeDynamicDefMap.ContainsKey(VarType)
-        // If this is a valid type (i.e. supported by the dynamic constructor), then call the constructor method with the results of the IEvaluatables as the parameter
-        ? typeDynamicDefMap[VarType].dynamicConstructor(ConstructorParameters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Evaluate(gameState)))
-        // If it's not valid, simply return null (which will mean there is no override).
-        : null;
+    public object? Evaluate(IGameState gameState)
+    {
+        if (!TypeDynamicDefMap.TryGetValue(VarType, out var value)) return null;
+
+        var dictionary = ConstructorParameters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Evaluate(gameState));
+        return value.DynamicConstructor(dictionary);
+    }
 
     /// <summary>
     /// Creates the control that is used to edit the IEvaluatables used as parameters for this DynamicValue logic
     /// </summary>
-    public Visual GetControl() => typeDynamicDefMap.ContainsKey(VarType)
+    public Visual GetControl() => TypeDynamicDefMap.ContainsKey(VarType)
         // If this has a valid type (i.e. supported by the dynamic constructor), then create the control and pass in `this` and `application` for context
         ? new Control_OverrideDynamicValue(this)
         // If it is an invalid type, then simply show a red warning message
-        : (Visual)new Label { Content = "This property type is not supported with the dynamic value editor. Sorry :(", Foreground = Brushes.Red, Margin = new System.Windows.Thickness(6) };
+        : new Label { Content = "This property type is not supported with the dynamic value editor. Sorry :(", Foreground = Brushes.Red, Margin = new System.Windows.Thickness(6) };
     #endregion
 
     /// <summary>
@@ -87,7 +89,7 @@ public class OverrideDynamicValue : IOverrideLogic {
     /// that are required for the constructor (including what type they are) and also a constructor function which is passed these RESOLVED
     /// parameters each frame.
     /// </summary>
-    internal static readonly ConcurrentDictionary<Type, DCD> typeDynamicDefMap = new ConcurrentDictionary<Type, DCD>(new Dictionary<Type, DCD> {
+    internal static readonly ConcurrentDictionary<Type, DCD> TypeDynamicDefMap = new(new Dictionary<Type, DCD> {
         // Boolean
         { typeof(bool), new DCD(p => p["Value"], new[]{ new DCPD("Value", typeof(bool)) }) },
 
@@ -109,7 +111,8 @@ public class OverrideDynamicValue : IOverrideLogic {
         ) },
 
         { typeof(KeySequence), new DCD(
-            p => new KeySequence(new FreeFormObject(Convert.ToSingle(p["X"]), Convert.ToSingle(p["Y"]), Convert.ToSingle(p["Width"]), Convert.ToSingle(p["Height"]), Convert.ToSingle(p["Angle"]))),
+            p => new KeySequence(new FreeFormObject(Convert.ToSingle(p["X"]), Convert.ToSingle(p["Y"]), Convert.ToSingle(p["Width"]),
+                Convert.ToSingle(p["Height"]), Convert.ToSingle(p["Angle"]))),
             new[] {
                 new DCPD("X", typeof(double)),
                 new DCPD("Y", typeof(double)),
@@ -132,7 +135,7 @@ public class OverrideDynamicValue : IOverrideLogic {
 
     #region Dynamic Constructor Helper Methods
     /// <summary>Converts a double object (from 0-1) into a color component (int between 0 and 255).</summary>
-    private static int ToColorComp(object c) => Double.IsNaN((double)c) ? 0 : Convert.ToInt32(MathUtils.Clamp((double)c, 0, 1) * 255);
+    private static int ToColorComp(object c) => double.IsNaN((double)c) ? 0 : Convert.ToInt32(MathUtils.Clamp((double)c, 0, 1) * 255);
     #endregion
 }
 
@@ -141,27 +144,27 @@ public class OverrideDynamicValue : IOverrideLogic {
 /// </summary>
 struct DynamicConstructorDefinition {
     /// <summary>The function that takes parameters and should return a object created from those parameters.</summary>
-    public Func<Dictionary<string, object>, object> dynamicConstructor;
+    public readonly Func<Dictionary<string, object>, object> DynamicConstructor;
     /// <summary>The type of parameters expected by this constructor method.</summary>
-    public DCPD[] constructorParameters;
+    public readonly DCPD[] ConstructorParameters;
 
     public DynamicConstructorDefinition(Func<Dictionary<string, object>, object> constructor, DCPD[] parameters) {
-        dynamicConstructor = constructor;
-        constructorParameters = parameters;
+        DynamicConstructor = constructor;
+        ConstructorParameters = parameters;
     }
 }
 
 struct DynamicConstructorParamDefinition {
     /// <summary>Parameter name.</summary>
-    public string name;
+    public readonly string Name;
     /// <summary>The type of variable this parameter is.</summary>
-    public Type type;
+    public readonly Type Type;
     /// <summary>A simple description of the parameter for the user.</summary>
-    public string description;
+    public readonly string? Description;
 
-    public DynamicConstructorParamDefinition(string name, Type type, string description=null) {
-        this.name = name;
-        this.type = type;
-        this.description = description;
+    public DynamicConstructorParamDefinition(string name, Type type, string? description=null) {
+        Name = name;
+        Type = type;
+        Description = description;
     }
 }

@@ -40,7 +40,7 @@ namespace Aurora.Profiles.StardewValley
                         _AnimationDuration = 0.5f,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnLow,
-                        _TriggerPath = "Player/Health/Current",
+                        TriggerPath = new VariablePath("Player/Health/Current"),
                         _StackMode = AnimationStackMode.Stack
                     }
                 }),
@@ -48,8 +48,8 @@ namespace Aurora.Profiles.StardewValley
                 new Layer("Health Bar", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _VariablePath = "Player/Health/Current",
-                        _MaxVariablePath = "Player/Health/Max",
+                        VariablePath = new VariablePath("Player/Health/Current"),
+                        MaxVariablePath = new VariablePath("Player/Health/Max"),
                         _PrimaryColor = Color.Lime,
                         _SecondaryColor = Color.Red,
                         _Sequence = new KeySequence(new[] {
@@ -64,8 +64,8 @@ namespace Aurora.Profiles.StardewValley
                 new Layer("Energy Bar", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _VariablePath = "Player/Energy/Current",
-                        _MaxVariablePath = "Player/Energy/Max",
+                        VariablePath = new VariablePath("Player/Energy/Current"),
+                        MaxVariablePath = new VariablePath("Player/Energy/Max"),
                         _PrimaryColor = Color.Yellow,
                         _SecondaryColor = Color.Red,
                         _Sequence = new KeySequence(new[] {

@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Aurora.EffectsEngine;
 using Aurora.EffectsEngine.Animations;
+using Aurora.Profiles;
 using Aurora.Settings;
 using Aurora.Settings.Layers;
 using Aurora.Settings.Overrides.Logic;
@@ -94,7 +95,7 @@ public class CloneHeroProfile : ApplicationProfile
                     _AnimationDuration = 0.4f,
                     _AnimationRepeat = 1,
                     _TriggerMode = AnimationTriggerMode.OnLow,
-                    _TriggerPath = "Player/NoteStreak",
+                    TriggerPath = new VariablePath("Player/NoteStreak"),
                     _StackMode = AnimationStackMode.Stack
                 }
             }),
@@ -177,14 +178,14 @@ public class CloneHeroProfile : ApplicationProfile
             {
                 Properties = new PercentLayerHandlerProperties()
                 {
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new FreeFormObject(646.37f, 41.39f, 195f, 148.65f, -90)),
                     _PrimaryColor = Color.FromArgb(0, 227, 255),
                     _SecondaryColor = Color.Black,
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/StarPowerPercent",
-                    _MaxVariablePath = "100",
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/StarPowerPercent"),
+                    MaxVariablePath = new VariablePath("100"),
                 },
             }),
 
@@ -198,7 +199,7 @@ public class CloneHeroProfile : ApplicationProfile
                         _AnimationDuration = 0.4f,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnHigh,
-                        _TriggerPath = "Player/Score",
+                        TriggerPath = new VariablePath("Player/Score"),
                         _StackMode = AnimationStackMode.Stack,
                         _forceKeySequence = true,
                         _Sequence = new KeySequence(new[] { DK.PRINT_SCREEN, DK.SCROLL_LOCK, DK.PAUSE_BREAK, DK.INSERT, DK.HOME, DK.HOME, DK.PAGE_UP,
@@ -218,7 +219,7 @@ public class CloneHeroProfile : ApplicationProfile
                         _AnimationDuration = 0.4f,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnHigh,
-                        _TriggerPath = "Player/Score",
+                        TriggerPath = new VariablePath("Player/Score"),
                         _StackMode = AnimationStackMode.Stack,
                         _forceKeySequence = true,
                         _Sequence = new KeySequence(new[] { DK.PRINT_SCREEN, DK.SCROLL_LOCK, DK.PAUSE_BREAK, DK.INSERT, DK.HOME, DK.HOME, DK.PAGE_UP,
@@ -232,14 +233,14 @@ public class CloneHeroProfile : ApplicationProfile
                 {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new FreeFormObject((float)-2.75, (float)-2.61, (float)553.3, (float)36, 0)),
                         _PrimaryColor = Color.FromArgb(199, 0, 255),
                         _SecondaryColor = Color.Transparent,
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/NoteStreak4x",
-                        _MaxVariablePath = "1",
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/NoteStreak4x"),
+                        MaxVariablePath = new VariablePath("1"),
                     },
                 }, new OverrideLogicBuilder()
                     .SetLookupTable("_PrimaryColor", new OverrideLookupTableBuilder<Color>()
@@ -251,14 +252,14 @@ public class CloneHeroProfile : ApplicationProfile
                 {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new FreeFormObject((float)-2.75, (float)-2.61, (float)553.3, (float)36, 0)),
                         _PrimaryColor = Color.FromArgb(0, 255, 59),
                         _SecondaryColor = Color.Transparent,
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/NoteStreak3x",
-                        _MaxVariablePath = "10",
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/NoteStreak3x"),
+                        MaxVariablePath = new VariablePath("10"),
                     },
                 }, new OverrideLogicBuilder()
                     .SetLookupTable("_PrimaryColor", new OverrideLookupTableBuilder<Color>()
@@ -270,14 +271,14 @@ public class CloneHeroProfile : ApplicationProfile
                 {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new FreeFormObject((float)-2.75, (float)-2.61, (float)553.3, (float)36, 0)),
                         _PrimaryColor = Color.FromArgb(255, 146, 0),
                         _SecondaryColor = Color.Transparent,
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/NoteStreak2x",
-                        _MaxVariablePath = "10",
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/NoteStreak2x"),
+                        MaxVariablePath = new VariablePath("10"),
                     },
                 }, new OverrideLogicBuilder()
                     .SetLookupTable("_PrimaryColor", new OverrideLookupTableBuilder<Color>()
@@ -289,14 +290,14 @@ public class CloneHeroProfile : ApplicationProfile
                 {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new FreeFormObject((float)-2.75, (float)-2.61, (float)553.3, (float)36, 0)),
                         _PrimaryColor = Color.FromArgb(255, 247, 44),
                         _SecondaryColor = Color.Transparent,
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/NoteStreak1x",
-                        _MaxVariablePath = "10",
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/NoteStreak1x"),
+                        MaxVariablePath = new VariablePath("10"),
                     }
                 }, new OverrideLogicBuilder()
                     .SetLookupTable("_PrimaryColor", new OverrideLookupTableBuilder<Color>()

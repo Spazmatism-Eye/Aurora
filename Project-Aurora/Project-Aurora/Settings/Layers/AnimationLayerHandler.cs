@@ -51,9 +51,13 @@ namespace Aurora.Settings.Layers
         public AnimationStackMode StackMode => Logic._StackMode ?? _StackMode ?? AnimationStackMode.Ignore;
         public AnimationStackMode? _StackMode { get; set; }
 
-        [JsonIgnore]
-        public string TriggerPath => Logic._TriggerPath ?? _TriggerPath ?? string.Empty;
-        public string _TriggerPath { get; set; }
+        private VariablePath? _triggerPath;
+        [JsonProperty("_TriggerPath")]
+        public VariablePath TriggerPath
+        {
+            get => Logic._triggerPath ?? _triggerPath ?? VariablePath.Empty;
+            set => _triggerPath = value;
+        }
 
         [JsonIgnore]
         public IEvaluatable EvaluatableTrigger => Logic._EvaluatableTrigger ?? _EvaluatableTrigger;
@@ -87,7 +91,7 @@ namespace Aurora.Settings.Layers
             _AnimationRepeat = 0;
             _TriggerMode = AnimationTriggerMode.AlwaysOn;
             _StackMode = AnimationStackMode.Ignore;
-            _TriggerPath = "";
+            TriggerPath = VariablePath.Empty;
             _TriggerKeySequence = new KeySequence();
             _TriggerAnyKey = false;
             _KeyTriggerTranslate = false;
@@ -281,8 +285,8 @@ namespace Aurora.Settings.Layers
 
         public override void SetApplication(Application profile) {
             // Check to ensure the property specified actually exists
-            if (profile != null && !string.IsNullOrWhiteSpace(Properties._TriggerPath) && !profile.ParameterLookup.IsValidParameter(Properties._TriggerPath))
-                Properties._TriggerPath = string.Empty;
+            if (profile != null && !string.IsNullOrWhiteSpace(Properties.TriggerPath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.TriggerPath.GsiPath))
+                Properties.TriggerPath = VariablePath.Empty;
 
             // Tell the control to update (will update the combobox with the possible variable paths)
             (Control as Control_AnimationLayer).SetProfile(profile);

@@ -61,7 +61,7 @@ namespace Aurora.Profiles.ETS2 {
 
                 new Layer("Throttle Key", new PercentGradientLayerHandler {
                     Properties = new PercentGradientLayerHandlerProperties {
-                        _Gradient = new EffectBrush() {
+                        Gradient = new EffectBrush() {
                             type = EffectBrush.BrushType.Linear,
                             colorGradients = new SortedDictionary<double, Color> {
                                 { 0, Color.FromArgb(0, 255, 255) },
@@ -69,15 +69,15 @@ namespace Aurora.Profiles.ETS2 {
                             }
                         },
                         _Sequence = new KeySequence(new DeviceKeys[]{ DeviceKeys.W }),
-                        _VariablePath = "Truck/gameThrottle",
-                        _MaxVariablePath = "1",
-                        _PercentType = PercentEffectType.AllAtOnce
+                        VariablePath = new VariablePath("Truck/gameThrottle"),
+                        MaxVariablePath = new VariablePath("1"),
+                        PercentType = PercentEffectType.AllAtOnce
                     }
                 }),
 
                 new Layer("Brake Key", new PercentGradientLayerHandler {
                     Properties = new PercentGradientLayerHandlerProperties {
-                        _Gradient = new EffectBrush() {
+                        Gradient = new EffectBrush() {
                             type = EffectBrush.BrushType.Linear,
                             colorGradients = new SortedDictionary<double, Color> {
                                 { 0, Color.FromArgb(0, 255, 255) },
@@ -85,9 +85,9 @@ namespace Aurora.Profiles.ETS2 {
                             }
                         },
                         _Sequence = new KeySequence(new DeviceKeys[]{ DeviceKeys.S }),
-                        _VariablePath = "Truck/gameBrake",
-                        _MaxVariablePath = "1",
-                        _PercentType = PercentEffectType.AllAtOnce
+                        VariablePath = new VariablePath("Truck/gameBrake"),
+                        MaxVariablePath = new VariablePath("1"),
+                        PercentType = PercentEffectType.AllAtOnce
                     }
                 }),
 
@@ -105,7 +105,7 @@ namespace Aurora.Profiles.ETS2 {
 
                 new Layer("RPM", new PercentGradientLayerHandler {
                     Properties = new PercentGradientLayerHandlerProperties {
-                        _Gradient = new EffectBrush() {
+                        Gradient = new EffectBrush() {
                             type = EffectBrush.BrushType.Linear,
                             colorGradients = new SortedDictionary<double, Color> {
                                 { 0, Color.FromArgb(65, 255, 0) },
@@ -119,8 +119,8 @@ namespace Aurora.Profiles.ETS2 {
                             DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR, DeviceKeys.FIVE,
                             DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT, DeviceKeys.NINE, DeviceKeys.ZERO
                         }),
-                        _VariablePath = "Truck/engineRpm",
-                        _MaxVariablePath = "Truck/engineRpmMax"
+                        VariablePath = new VariablePath("Truck/engineRpm"),
+                        MaxVariablePath = new VariablePath("Truck/engineRpmMax")
                     }
                 }),
 
@@ -241,7 +241,7 @@ namespace Aurora.Profiles.ETS2 {
 
                 new Layer("Fuel", new PercentGradientLayerHandler {
                     Properties = new PercentGradientLayerHandlerProperties {
-                        _Gradient = new EffectBrush() {
+                        Gradient = new EffectBrush() {
                             type = EffectBrush.BrushType.Linear,
                             colorGradients = new SortedDictionary<double, Color> {
                                 { 0f, Color.FromArgb(255, 0, 0) },
@@ -254,14 +254,14 @@ namespace Aurora.Profiles.ETS2 {
                         _Sequence = new KeySequence(new DeviceKeys[] {
                             DeviceKeys.NUM_ONE, DeviceKeys.NUM_FOUR, DeviceKeys.NUM_SEVEN, DeviceKeys.NUM_LOCK
                         }),
-                        _VariablePath = "Truck/fuel",
-                        _MaxVariablePath = "Truck/fuelCapacity"
+                        VariablePath = new VariablePath("Truck/fuel"),
+                        MaxVariablePath = new VariablePath("Truck/fuelCapacity")
                     }
                 }),
 
                 new Layer("Air Pressure", new PercentGradientLayerHandler {
                     Properties = new PercentGradientLayerHandlerProperties {
-                        _Gradient = new EffectBrush() {
+                        Gradient = new EffectBrush() {
                             type = EffectBrush.BrushType.Linear,
                             colorGradients = new SortedDictionary<double, Color> {
                                 { 0f, Color.FromArgb(255, 0, 0) },
@@ -274,8 +274,8 @@ namespace Aurora.Profiles.ETS2 {
                         _Sequence = new KeySequence(new DeviceKeys[] {
                             DeviceKeys.NUM_THREE, DeviceKeys.NUM_SIX, DeviceKeys.NUM_NINE, DeviceKeys.NUM_ASTERISK
                         }),
-                        _VariablePath = "Truck/airPressure",
-                        _MaxVariablePath = "Truck/airPressureMax"
+                        VariablePath = new VariablePath("Truck/airPressure"),
+                        MaxVariablePath = new VariablePath("Truck/airPressureMax")
                     }
                 }),
 

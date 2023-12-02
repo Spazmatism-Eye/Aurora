@@ -20,10 +20,10 @@ public partial class Control_BooleanGSIEnum
         Type selectedEnumType = null;
         var application = Utils.AttachedApplication.GetApplication(this);
         var isValid = ((FrameworkElement)Content).DataContext is BooleanGSIEnum ctx
-                      && !string.IsNullOrWhiteSpace(ctx.StatePath) // If the path to the enum GSI isn't empty
+                      && !string.IsNullOrWhiteSpace(ctx.VariablePath.GsiPath) // If the path to the enum GSI isn't empty
                       && application?.ParameterLookup != null // If the application parameter lookup is ready (and application isn't null)
-                      && application.ParameterLookup.IsValidParameter(ctx.StatePath) // If the param lookup has the specified GSI key
-                      && (selectedEnumType = application.ParameterLookup[ctx.StatePath].ClrType).IsEnum; // And the GSI variable is an enum type
+                      && application.ParameterLookup.IsValidParameter(ctx.VariablePath.GsiPath) // If the param lookup has the specified GSI key
+                      && (selectedEnumType = application.ParameterLookup[ctx.VariablePath.GsiPath].ClrType).IsEnum; // And the GSI variable is an enum type
 
         EnumVal.IsEnabled = isValid;
         EnumVal.ItemsSource = isValid ? Utils.EnumUtils.GetEnumItemsSource(selectedEnumType) : null;

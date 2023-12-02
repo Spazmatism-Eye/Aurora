@@ -27,30 +27,30 @@ namespace Aurora.Profiles.RocketLeague
                 {
                     Properties = new PercentGradientLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.AllAtOnce,
+                        PercentType = PercentEffectType.AllAtOnce,
                         _Sequence = new KeySequence(new DeviceKeys[] { DeviceKeys.Peripheral, DeviceKeys.Peripheral_Logo } ),
-                        _Gradient = new EffectsEngine.EffectBrush(new ColorSpectrum(Color.Yellow, Color.Red).SetColorAt(0.75f, Color.OrangeRed)),
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/Boost",
-                        _MaxVariablePath = "1"
+                        Gradient = new EffectsEngine.EffectBrush(new ColorSpectrum(Color.Yellow, Color.Red).SetColorAt(0.75f, Color.OrangeRed)),
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/Boost"),
+                        MaxVariablePath = new VariablePath("1")
                     },
                 }),
                 new Layer("Boost Indicator", new PercentGradientLayerHandler()
                 {
                     Properties = new PercentGradientLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(new DeviceKeys[] {
                             DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4, DeviceKeys.F5,
                             DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8, DeviceKeys.F9, DeviceKeys.F10,
                             DeviceKeys.F11, DeviceKeys.F12
                         }),
-                        _Gradient = new EffectsEngine.EffectBrush(new ColorSpectrum(Color.Yellow, Color.Red).SetColorAt(0.75f, Color.OrangeRed)),
-                        _BlinkThreshold = 0.0,
-                        _BlinkDirection = false,
-                        _VariablePath = "Player/Boost",
-                        _MaxVariablePath = "1",
+                        Gradient = new EffectsEngine.EffectBrush(new ColorSpectrum(Color.Yellow, Color.Red).SetColorAt(0.75f, Color.OrangeRed)),
+                        BlinkThreshold = 0.0,
+                        BlinkDirection = false,
+                        VariablePath = new VariablePath("Player/Boost"),
+                        MaxVariablePath = new VariablePath("1"),
                     },
                 }),
                 new Layer("Boost Background", new SolidColorLayerHandler()
@@ -70,10 +70,10 @@ namespace Aurora.Profiles.RocketLeague
                 {
                     Properties = new PercentLayerHandlerProperties()
                     {
-                        _PercentType = PercentEffectType.Progressive_Gradual,
+                        PercentType = PercentEffectType.Progressive_Gradual,
                         _Sequence = new KeySequence(Effects.WholeCanvasFreeForm),
-                        _VariablePath = "YourTeam/Goals",
-                        _MaxVariablePath ="Match/TotalGoals",
+                        VariablePath = new VariablePath("YourTeam/Goals"),
+                        MaxVariablePath = new VariablePath("Match/TotalGoals"),
                         _PrimaryColor = Color.Transparent,
                         _SecondaryColor = Color.Transparent
                     }

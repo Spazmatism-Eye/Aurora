@@ -36,8 +36,8 @@ public class DesktopProfile : ApplicationProfile
                 {
                     DeviceKeys.VOLUME_MUTE, DeviceKeys.VOLUME_UP, DeviceKeys.VOLUME_DOWN
                 }),
-                _PercentType = PercentEffectType.AllAtOnce,
-                _Gradient = new EffectBrush
+                PercentType = PercentEffectType.AllAtOnce,
+                Gradient = new EffectBrush
                 {
                     type = EffectBrush.BrushType.Linear,
                     wrap = EffectBrush.BrushWrap.None,
@@ -50,8 +50,8 @@ public class DesktopProfile : ApplicationProfile
                         { 1f, Color.FromArgb(91, 0, 255) }
                     }
                 },
-                _VariablePath = "LocalPCInfo/SystemVolume",
-                _MaxVariablePath = "1"
+                VariablePath = new VariablePath("LocalPCInfo/SystemVolume"),
+                MaxVariablePath = new VariablePath("1")
             },
         }));
     }
@@ -273,17 +273,17 @@ public class DesktopProfile : ApplicationProfile
                 {
                     _PrimaryColor = Color.FromArgb(0, 205, 255),
                     _SecondaryColor = Color.FromArgb(0, 65, 80),
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new[]
                     {
                         DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4,
                         DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8,
                         DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "LocalPCInfo/CPU/Usage",
-                    _MaxVariablePath = "100"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("LocalPCInfo/CPU/Usage"),
+                    MaxVariablePath = new VariablePath("100")
                 },
                 EnableSmoothing = true,
             })
@@ -296,17 +296,17 @@ public class DesktopProfile : ApplicationProfile
                 {
                     _PrimaryColor = Color.FromArgb(255, 80, 0),
                     _SecondaryColor = Color.FromArgb(90, 30, 0),
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new[]
                     {
                         DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR,
                         DeviceKeys.FIVE, DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT,
                         DeviceKeys.NINE, DeviceKeys.ZERO, DeviceKeys.MINUS, DeviceKeys.EQUALS
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "LocalPCInfo/RAM/Used",
-                    _MaxVariablePath = "LocalPCInfo/RAM/Total"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("LocalPCInfo/RAM/Used"),
+                    MaxVariablePath = new VariablePath("LocalPCInfo/RAM/Total")
                 },
                 EnableSmoothing = true
             })

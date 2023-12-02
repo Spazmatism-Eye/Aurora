@@ -76,8 +76,8 @@ namespace Aurora.Profiles.Slime_Rancher
 
                 new Layer("Health", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties() {
-                        _VariablePath = "Player/Health/Current",
-                        _MaxVariablePath = "Player/Health/Max",
+                        VariablePath = new VariablePath("Player/Health/Current"),
+                        MaxVariablePath = new VariablePath("Player/Health/Max"),
                         _PrimaryColor = Color.FromArgb(255, 17, 17),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
@@ -88,8 +88,8 @@ namespace Aurora.Profiles.Slime_Rancher
 
                 new Layer("Energy", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties() {
-                        _VariablePath = "Player/Energy/Current",
-                        _MaxVariablePath = "Player/Energy/Max",
+                        VariablePath = new VariablePath("Player/Energy/Current"),
+                        MaxVariablePath = new VariablePath("Player/Energy/Max"),
                         _PrimaryColor = Color.FromArgb(9, 173, 233),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
@@ -100,8 +100,8 @@ namespace Aurora.Profiles.Slime_Rancher
 
                 new Layer("Radiation", new PercentLayerHandler() {
                     Properties = new PercentLayerHandlerProperties() {
-                        _VariablePath = "Player/Radiation/Current",
-                        _MaxVariablePath = "Player/Radiation/Max",
+                        VariablePath = new VariablePath("Player/Radiation/Current"),
+                        MaxVariablePath = new VariablePath("Player/Radiation/Max"),
                         _PrimaryColor = Color.FromArgb(60, 233, 118),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {

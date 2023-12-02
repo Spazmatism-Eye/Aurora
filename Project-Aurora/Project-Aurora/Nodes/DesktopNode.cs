@@ -1,9 +1,15 @@
 ﻿using Aurora.Utils;
+using Common.Utils;
 
 namespace Aurora.Nodes;
 
 public class DesktopNode : Node
 {
+    /// <summary>
+    /// Returns whether or not the device dession is in a locked state.
+    /// </summary>
+    public bool IsLocked => DesktopUtils.IsDesktopLocked;
+    
     public int AccentA { get; private set; }
     public int AccentR { get; private set; }
     public int AccentG { get; private set; }

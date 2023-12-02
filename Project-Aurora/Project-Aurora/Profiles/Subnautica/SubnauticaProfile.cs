@@ -5,6 +5,7 @@ using Aurora.EffectsEngine;
 using Aurora.EffectsEngine.Animations;
 using Aurora.Settings;
 using Aurora.Settings.Layers;
+using Aurora.Settings.Overrides.Logic;
 using DK = Common.Devices.DeviceKeys;
 
 namespace Aurora.Profiles.Subnautica {
@@ -15,16 +16,14 @@ namespace Aurora.Profiles.Subnautica {
 
             Layers = new ObservableCollection<Layer>
             {
-
-                new Layer("PDA Open", new ConditionalLayerHandler{
-                    Properties = new ConditionalLayerProperties
+                new Layer("PDA Open", new SolidColorLayerHandler(){
+                    Properties = new LayerHandlerProperties
                     {
-                        _ConditionPath = "Player/PDAopened",
                         _PrimaryColor = Color.FromArgb(170,0,0,0),
-                        _SecondaryColor = Color.FromArgb(0,0,0,0),
                         _Sequence = new KeySequence(new FreeFormObject(0, -50, 980, 280))
                     }
-                }
+                },
+                    new OverrideLogicBuilder().SetDynamicBoolean(nameof(LayerHandlerProperties._Enabled), new BooleanGSIBoolean("Player/PDAopened"))
                 ),
                 new Layer("PDA Close Animation", new AnimationLayerHandler {
                     Properties = new AnimationLayerHandlerProperties {
@@ -36,7 +35,7 @@ namespace Aurora.Profiles.Subnautica {
                                 .SetFrame(.5f, new AnimationFilledRectangle(new Rectangle(0, 70, 1000, 60), Color.FromArgb(170, 0, 0, 0)))
                         }),
                         _TriggerMode = AnimationTriggerMode.OnTrue,
-                        _TriggerPath = "Player/PDAclosing",
+                        TriggerPath = new VariablePath("Player/PDAclosing"),
                         _StackMode = AnimationStackMode.Ignore,
                         _Sequence = new KeySequence(new FreeFormObject(0, -50, 980, 280))
                     }
@@ -52,7 +51,7 @@ namespace Aurora.Profiles.Subnautica {
                                 .SetFrame(.5f, new AnimationFilledRectangle(new Rectangle(0, 0, 1000, 60), Color.FromArgb(170, 0, 0, 0)))
                         }),
                         _TriggerMode = AnimationTriggerMode.OnTrue,
-                        _TriggerPath = "Player/PDAopening",
+                        TriggerPath = new VariablePath("Player/PDAopening"),
                         _StackMode = AnimationStackMode.Ignore,
                         _Sequence = new KeySequence(new FreeFormObject(0, -50, 980, 280))
                     }
@@ -62,14 +61,14 @@ namespace Aurora.Profiles.Subnautica {
                 {
                     Properties = new PercentLayerHandlerProperties
                     {
-                        _VariablePath = "Player/Health",
-                        _MaxVariablePath = "100",
+                        VariablePath = new VariablePath("Player/Health"),
+                        MaxVariablePath = new VariablePath("100"),
                         _PrimaryColor = Color.FromArgb(255, 0, 0),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
                             DK.F1, DK.F2, DK.F3, DK.F4, DK.F5, DK.F6, DK.F7, DK.F8, DK.F9, DK.F10, DK.F11, DK.F12
                         }),
-                        _BlinkThreshold = 0.25
+                        BlinkThreshold = 0.25
                     }
                 }),
 
@@ -77,14 +76,14 @@ namespace Aurora.Profiles.Subnautica {
                 {
                     Properties = new PercentLayerHandlerProperties
                     {
-                        _VariablePath = "Player/Food",
-                        _MaxVariablePath = "100",
+                        VariablePath = new VariablePath("Player/Food"),
+                        MaxVariablePath = new VariablePath("100"),
                         _PrimaryColor = Color.FromArgb(139, 69, 19),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
                             DK.Q, DK.W, DK.E, DK.R, DK.T, DK.Y, DK.U, DK.I, DK.O, DK.P
                         }),
-                        _BlinkThreshold = 0.25
+                        BlinkThreshold = 0.25
                     }
                 }),
 
@@ -92,14 +91,14 @@ namespace Aurora.Profiles.Subnautica {
                 {
                     Properties = new PercentLayerHandlerProperties
                     {
-                        _VariablePath = "Player/Water",
-                        _MaxVariablePath = "100",
+                        VariablePath = new VariablePath("Player/Water"),
+                        MaxVariablePath = new VariablePath("100"),
                         _PrimaryColor = Color.FromArgb(0, 0, 255),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
                             DK.A, DK.S, DK.D, DK.F, DK.G, DK.H, DK.J, DK.K,DK.L
                         }),
-                        _BlinkThreshold = 0.25
+                        BlinkThreshold = 0.25
                     }
                 }),
 
@@ -107,21 +106,21 @@ namespace Aurora.Profiles.Subnautica {
                 {
                     Properties = new PercentLayerHandlerProperties
                     {
-                        _VariablePath = "Player/OxygenAvailable",
-                        _MaxVariablePath = "Player/OxygenCapacity",
+                        VariablePath = new VariablePath("Player/OxygenAvailable"),
+                        MaxVariablePath = new VariablePath("Player/OxygenCapacity"),
                         _PrimaryColor = Color.FromArgb(0, 170, 65),
                         _SecondaryColor = Color.Transparent,
                         _Sequence = new KeySequence(new[] {
                             DK.ONE, DK.TWO, DK.THREE, DK.FOUR, DK.FIVE, DK.SIX, DK.SEVEN, DK.EIGHT, DK.NINE, DK.ZERO, DK.MINUS, DK.EQUALS
                         }),
-                        _BlinkThreshold = 0.25
+                        BlinkThreshold = 0.25
                     }
                 }),
 
                 new Layer("Background", new PercentGradientLayerHandler
                 {
                     Properties = new PercentGradientLayerHandlerProperties {
-                        _Gradient = new EffectBrush
+                        Gradient = new EffectBrush
                         {
                             type = EffectBrush.BrushType.Linear,
                             start = new PointF(0, 0),
@@ -131,11 +130,11 @@ namespace Aurora.Profiles.Subnautica {
                                 { 1, Color.FromArgb(0, 3, 53) }
                             }
                         },
-                        _VariablePath = "Player/DepthLevel",
-                        _MaxVariablePath = "-40",
+                        VariablePath = new VariablePath("Player/DepthLevel"),
+                        MaxVariablePath = new VariablePath("-40"),
                         _PrimaryColor = Color.FromArgb(29, 131, 176),
                         _SecondaryColor = Color.Transparent,
-                        _PercentType = PercentEffectType.AllAtOnce,
+                        PercentType = PercentEffectType.AllAtOnce,
                         _Sequence = new KeySequence(new FreeFormObject(0, -36, 980, 265))
                     }
                 }),

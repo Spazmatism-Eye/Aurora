@@ -47,10 +47,10 @@ namespace Aurora.Profiles.Osu {
                     Properties = new PercentLayerHandlerProperties {
                         _PrimaryColor = Color.Lime,
                         _SecondaryColor = Color.Red,
-                        _VariablePath = "Game/Accuracy",
-                        _MaxVariablePath = "100",
+                        VariablePath = new VariablePath("Game/Accuracy"),
+                        MaxVariablePath = new VariablePath("100"),
                         _Sequence = new KeySequence(new[] { DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR, DeviceKeys.FIVE, DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT, DeviceKeys.NINE, DeviceKeys.ZERO }),
-                        _PercentType = PercentEffectType.Progressive_Gradual
+                        PercentType = PercentEffectType.Progressive_Gradual
                     }
                 }),
 
@@ -64,7 +64,7 @@ namespace Aurora.Profiles.Osu {
                         _AnimationDuration = 0.5f,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnChange,
-                        _TriggerPath = "Game/CountMiss",
+                        TriggerPath = new VariablePath("Game/CountMiss"),
                         _StackMode = AnimationStackMode.Stack
                     }
                 }),
@@ -79,7 +79,7 @@ namespace Aurora.Profiles.Osu {
                         _AnimationDuration = 0.5f,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnLow,
-                        _TriggerPath = "Game/CountMiss",
+                        TriggerPath = new VariablePath("Game/CountMiss"),
                         _StackMode = AnimationStackMode.Stack
                     }
                 }),
@@ -88,10 +88,10 @@ namespace Aurora.Profiles.Osu {
                     Properties = new PercentLayerHandlerProperties {
                         _PrimaryColor = Color.FromArgb(0, 160, 255),
                         _SecondaryColor = Color.Black,
-                        _VariablePath = "Game/HP",
-                        _MaxVariablePath = "200",
+                        VariablePath = new VariablePath("Game/HP"),
+                        MaxVariablePath = new VariablePath("200"),
                         _Sequence = new KeySequence(new[] { DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4, DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8, DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12 }),
-                        _PercentType = PercentEffectType.Progressive_Gradual
+                        PercentType = PercentEffectType.Progressive_Gradual
                     }
                 }),
 
@@ -101,7 +101,7 @@ namespace Aurora.Profiles.Osu {
                         _AnimationDuration = 1,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnHigh,
-                        _TriggerPath = "Game/Count300",
+                        TriggerPath = new VariablePath("Game/Count300"),
                         _StackMode = AnimationStackMode.Stack
                     }
                 }),
@@ -112,7 +112,7 @@ namespace Aurora.Profiles.Osu {
                         _AnimationDuration = 1,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnHigh,
-                        _TriggerPath = "Game/Count100",
+                        TriggerPath = new VariablePath("Game/Count100"),
                         _StackMode = AnimationStackMode.Stack
                     }
                 }),
@@ -123,7 +123,7 @@ namespace Aurora.Profiles.Osu {
                         _AnimationDuration = 1,
                         _AnimationRepeat = 1,
                         _TriggerMode = AnimationTriggerMode.OnHigh,
-                        _TriggerPath = "Game/Count50",
+                        TriggerPath = new VariablePath("Game/Count50"),
                         _StackMode = AnimationStackMode.Stack
                     }
                 }),

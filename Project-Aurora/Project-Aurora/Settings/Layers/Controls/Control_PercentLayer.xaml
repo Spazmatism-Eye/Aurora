@@ -15,10 +15,10 @@
 
     <Grid>
         <Label HorizontalAlignment="Left" Padding="0" Content="Current Value:" VerticalAlignment="Top" Margin="0,4,0,0"/>
-        <Controls:GameStateParameterPicker x:Name="variablePicker" SelectedPath="{Binding Path=Properties._VariablePath}" PropertyType="Number" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="79,0,0,0" Width="188" />
+        <Controls:GameStateParameterPicker x:Name="variablePicker" SelectedPath="{Binding Path=Properties.VariablePath}" PropertyType="Number" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="79,0,0,0" Width="188" />
 
         <Label HorizontalAlignment="Left" Padding="0" Content="Maximum Value:" VerticalAlignment="Top" Margin="0,31,0,0"/>
-        <Controls:GameStateParameterPicker x:Name="maxVariablePicker" SelectedPath="{Binding Path=Properties._MaxVariablePath}" PropertyType="Number" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,29,0,0" Width="175" />
+        <Controls:GameStateParameterPicker x:Name="maxVariablePicker" SelectedPath="{Binding Path=Properties.MaxVariablePath}" PropertyType="Number" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="92,29,0,0" Width="175" />
 
         <Label HorizontalAlignment="Left" Padding="0" Content="Progress Color:" VerticalAlignment="Top" Margin="0,60,0,0"/>
         <xctk:ColorPicker SelectedColor="{Binding Properties._PrimaryColor, Converter={StaticResource DrawingToMediaColorConv}}" ColorMode="ColorCanvas" UsingAlphaChannel="True" Margin="85,56,0,0"  Width="182" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>

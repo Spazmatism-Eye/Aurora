@@ -12,12 +12,13 @@ namespace Aurora.Settings.Layers;
 public class BinaryCounterLayerHandlerProperties : LayerHandlerProperties<BinaryCounterLayerHandlerProperties> {
 
     // The var path of the variable to use (set though the UI, cannot be set with overrides)
-    [JsonIgnore] private string? _variablePath;
+    [JsonIgnore]
+    private VariablePath? _variablePath;
 
     [JsonProperty("_VariablePath")]
-    public string VariablePath
+    public VariablePath VariablePath
     {
-        get => Logic._variablePath ?? _variablePath ?? "";
+        get => Logic._variablePath ?? _variablePath ?? VariablePath.Empty;
         set => SetFieldAndRaisePropertyChanged(out _variablePath, value);
     }
 
@@ -31,7 +32,7 @@ public class BinaryCounterLayerHandlerProperties : LayerHandlerProperties<Binary
 
     public override void Default() {
         base.Default();
-        _variablePath = "";
+        _variablePath = VariablePath.Empty;
     }
 }
 

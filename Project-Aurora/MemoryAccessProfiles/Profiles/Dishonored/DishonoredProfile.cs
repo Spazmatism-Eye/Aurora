@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Aurora.Profiles;
 using Aurora.Settings;
 using Aurora.Settings.Layers;
 using Common.Devices;
@@ -23,16 +24,16 @@ public class DishonoredProfile : ApplicationProfile
                 {
                     _PrimaryColor = Color.Red,
                     _SecondaryColor = Color.FromArgb(255,70,0,0),
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new DeviceKeys[] {
                         DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR, DeviceKeys.FIVE,
                         DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT, DeviceKeys.NINE, DeviceKeys.ZERO,
                         DeviceKeys.MINUS, DeviceKeys.EQUALS
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/CurrentHealth",
-                    _MaxVariablePath = "Player/MaximumHealth"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/CurrentHealth"),
+                    MaxVariablePath = new VariablePath("Player/MaximumHealth")
                 },
             }),
             new Layer("Mana Indicator", new PercentLayerHandler()
@@ -41,16 +42,16 @@ public class DishonoredProfile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Blue,
                     _SecondaryColor = Color.FromArgb(255,0,0,70),
-                    _PercentType = PercentEffectType.Progressive_Gradual,
+                    PercentType = PercentEffectType.Progressive_Gradual,
                     _Sequence = new KeySequence(new DeviceKeys[] {
                         DeviceKeys.F1, DeviceKeys.F2, DeviceKeys.F3, DeviceKeys.F4,
                         DeviceKeys.F5, DeviceKeys.F6, DeviceKeys.F7, DeviceKeys.F8,
                         DeviceKeys.F9, DeviceKeys.F10, DeviceKeys.F11, DeviceKeys.F12
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/CurrentMana",
-                    _MaxVariablePath = "Player/MaximumMana"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/CurrentMana"),
+                    MaxVariablePath = new VariablePath("Player/MaximumMana")
                 },
             }),
             new Layer("Mana Potions", new PercentLayerHandler()
@@ -59,16 +60,16 @@ public class DishonoredProfile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Blue,
                     _SecondaryColor = Color.FromArgb(255,0,0,70),
-                    _PercentType = PercentEffectType.Progressive,
+                    PercentType = PercentEffectType.Progressive,
                     _Sequence = new KeySequence(new DeviceKeys[] {
                         DeviceKeys.DELETE, DeviceKeys.END, DeviceKeys.PAGE_DOWN,
                         DeviceKeys.INSERT, DeviceKeys.HOME, DeviceKeys.PAGE_UP,
                         DeviceKeys.PRINT_SCREEN, DeviceKeys.SCROLL_LOCK, DeviceKeys.PAUSE_BREAK
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/ManaPots",
-                    _MaxVariablePath = "9"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/ManaPots"),
+                    MaxVariablePath = new VariablePath("9")
                 },
             }),
             new Layer("Health Potions", new PercentLayerHandler()
@@ -77,16 +78,16 @@ public class DishonoredProfile : ApplicationProfile
                 {
                     _PrimaryColor =  Color.Red,
                     _SecondaryColor = Color.FromArgb(255,70,0,0),
-                    _PercentType = PercentEffectType.Progressive,
+                    PercentType = PercentEffectType.Progressive,
                     _Sequence = new KeySequence(new DeviceKeys[] {
                         DeviceKeys.NUM_ONE, DeviceKeys.NUM_TWO, DeviceKeys.NUM_THREE, DeviceKeys.NUM_FOUR,
                         DeviceKeys.NUM_FIVE, DeviceKeys.NUM_SIX, DeviceKeys.NUM_SEVEN, DeviceKeys.NUM_EIGHT,
                         DeviceKeys.NUM_NINE
                     }),
-                    _BlinkThreshold = 0.0,
-                    _BlinkDirection = false,
-                    _VariablePath = "Player/HealthPots",
-                    _MaxVariablePath = "9"
+                    BlinkThreshold = 0.0,
+                    BlinkDirection = false,
+                    VariablePath = new VariablePath("Player/HealthPots"),
+                    MaxVariablePath = new VariablePath("9")
                 },
             }),
             new Layer("Background", new SolidFillLayerHandler(){
