@@ -185,8 +185,8 @@ ToolTip="Disabling device control will stop ChromaSDK from controlling Razer Dev
                             <Border Name="LightsyncInfo" ToolTipService.InitialShowDelay="0" ToolTipService.BetweenShowDelay="0"
                                     ToolTip="On some systems this only works after restarts!"
                                     CornerRadius="50"
-                                    Width="15" Height="15"
-                                    Padding="0,0,0,0"
+                                    Width="18" Height="17"
+                                    Padding="1,0,1,0"
                                     Background="Orange"
                                     BorderBrush="Black"
                                     BorderThickness="1">
