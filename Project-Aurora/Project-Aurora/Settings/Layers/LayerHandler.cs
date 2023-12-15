@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows;
 using Aurora.Settings.Layers.Controls;
 using Common.Utils;
@@ -221,10 +222,10 @@ namespace Aurora.Settings.Layers
         public Application Application { get; protected set; }
 
         [JsonIgnore]
-        protected UserControl _Control;
+        protected UserControl? _Control;
 
         [JsonIgnore]
-        public UserControl Control => _Control ??= CreateControl();
+        public UserControl Control => _Control ??= CreateControlOnMain();
 
         private TProperty _properties = Activator.CreateInstance<TProperty>();
         public TProperty Properties
@@ -381,9 +382,19 @@ namespace Aurora.Settings.Layers
             Application = profile;
         }
 
+        private UserControl CreateControlOnMain()
+        {
+            var tcs = new TaskCompletionSource<UserControl>();
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                tcs.SetResult(CreateControl());
+            });
+            return tcs.Task.Result;
+        }
+
         protected virtual UserControl CreateControl()
         {
-            return new Control_DefaultLayer();
+            return CreateControlOnMain();
         }
 
         [OnDeserialized]

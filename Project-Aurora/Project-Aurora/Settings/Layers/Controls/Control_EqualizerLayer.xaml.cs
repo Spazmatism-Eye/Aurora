@@ -158,11 +158,11 @@ public partial class ControlEqualizerLayer
             ((EqualizerLayerHandler)DataContext).Properties._DimColor = ColorUtils.MediaColorToDrawingColor(((ColorPicker)sender).SelectedColor.Value);
     }
 
-    private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && _settingsSet && DataContext is EqualizerLayerHandler && sender is Aurora.Controls.KeySequence sequence)
+        if (IsLoaded && _settingsSet && DataContext is EqualizerLayerHandler)
         {
-            ((EqualizerLayerHandler)DataContext).Properties._Sequence = sequence.Sequence;
+            ((EqualizerLayerHandler)DataContext).Properties._Sequence = e.NewValue;
         }
     }
 

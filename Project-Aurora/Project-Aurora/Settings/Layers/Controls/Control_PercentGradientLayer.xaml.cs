@@ -9,8 +9,7 @@ namespace Aurora.Settings.Layers.Controls;
 /// </summary>
 public partial class Control_PercentGradientLayer
 {
-    private bool settingsset;
-    private bool profileset = false;
+    private bool _settingsSet;
 
     public Control_PercentGradientLayer()
     {
@@ -26,13 +25,13 @@ public partial class Control_PercentGradientLayer
 
     private void SetSettings()
     {
-        if (DataContext is not PercentGradientLayerHandler || settingsset) return;
-        ComboBox_effect_type.SelectedValue = (DataContext as PercentGradientLayerHandler).Properties.PercentType;
-        updown_blink_value.Value = (int)((DataContext as PercentGradientLayerHandler).Properties.BlinkThreshold * 100);
-        CheckBox_threshold_reverse.IsChecked = (DataContext as PercentGradientLayerHandler).Properties.BlinkDirection;
-        KeySequence_keys.Sequence = (DataContext as PercentGradientLayerHandler).Properties._Sequence;
+        if (DataContext is not PercentGradientLayerHandler || _settingsSet) return;
+        ComboBox_effect_type.SelectedValue = ((PercentGradientLayerHandler)DataContext).Properties.PercentType;
+        updown_blink_value.Value = (int)(((PercentGradientLayerHandler)DataContext).Properties.BlinkThreshold * 100);
+        CheckBox_threshold_reverse.IsChecked = ((PercentGradientLayerHandler)DataContext).Properties.BlinkDirection;
+        KeySequence_keys.Sequence = ((PercentGradientLayerHandler)DataContext).Properties._Sequence;
 
-        var brush = (DataContext as PercentGradientLayerHandler).Properties.Gradient.GetMediaBrush();
+        var brush = ((PercentGradientLayerHandler)DataContext).Properties.Gradient.GetMediaBrush();
         try
         {
             gradient_editor.Brush = brush;
@@ -42,7 +41,7 @@ public partial class Control_PercentGradientLayer
             Global.logger.Error(exc, "Could not set brush");
         }
 
-        settingsset = true;
+        _settingsSet = true;
     }
 
     internal void SetApplication(Profiles.Application profile)
@@ -50,10 +49,10 @@ public partial class Control_PercentGradientLayer
         VariablePath.Application = MaxVariablePath.Application = profile;
     }
 
-    private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && settingsset && DataContext is PercentGradientLayerHandler && sender is Aurora.Controls.KeySequence)
-            (DataContext as PercentGradientLayerHandler).Properties._Sequence = (sender as Aurora.Controls.KeySequence).Sequence;
+        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler)
+            ((PercentGradientLayerHandler)DataContext).Properties._Sequence = e.NewValue;
     }
 
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
@@ -65,29 +64,29 @@ public partial class Control_PercentGradientLayer
 
     private void Gradient_editor_BrushChanged(object? sender, ColorBox.BrushChangedEventArgs e)
     {
-        if (IsLoaded && settingsset && DataContext is PercentGradientLayerHandler && sender is ColorBox.ColorBox colorBox)
-            (DataContext as PercentGradientLayerHandler).Properties.Gradient = new EffectsEngine.EffectBrush(colorBox.Brush);
+        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler && sender is ColorBox.ColorBox colorBox)
+            ((PercentGradientLayerHandler)DataContext).Properties.Gradient = new EffectsEngine.EffectBrush(colorBox.Brush);
     }
 
     private void updown_blink_value_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<object> e)
     {
-        if (IsLoaded && settingsset && DataContext is PercentGradientLayerHandler && sender is Xceed.Wpf.Toolkit.IntegerUpDown down && down.Value.HasValue)
-            (DataContext as PercentGradientLayerHandler).Properties.BlinkThreshold = down.Value.Value / 100.0D;
+        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler && sender is Xceed.Wpf.Toolkit.IntegerUpDown down && down.Value.HasValue)
+            ((PercentGradientLayerHandler)DataContext).Properties.BlinkThreshold = down.Value.Value / 100.0D;
     }
 
     private void ComboBox_effect_type_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (IsLoaded && settingsset && DataContext is PercentGradientLayerHandler && sender is ComboBox comboBox)
+        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler && sender is ComboBox comboBox)
         {
-            (DataContext as PercentGradientLayerHandler).Properties.PercentType = (PercentEffectType)comboBox.SelectedValue;
+            ((PercentGradientLayerHandler)DataContext).Properties.PercentType = (PercentEffectType)comboBox.SelectedValue;
         }
     }
 
     private void CheckBox_threshold_reverse_Checked(object? sender, RoutedEventArgs e)
     {
-        if (IsLoaded && settingsset && DataContext is PercentGradientLayerHandler && sender is CheckBox checkBox && checkBox.IsChecked.HasValue)
+        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler && sender is CheckBox checkBox && checkBox.IsChecked.HasValue)
         {
-            (DataContext as PercentGradientLayerHandler).Properties.BlinkDirection = checkBox.IsChecked.Value;
+            ((PercentGradientLayerHandler)DataContext).Properties.BlinkDirection = checkBox.IsChecked.Value;
         }
     }
 }

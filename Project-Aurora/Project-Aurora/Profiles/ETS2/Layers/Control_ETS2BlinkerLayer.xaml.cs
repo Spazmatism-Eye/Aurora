@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Aurora.Settings;
 using Aurora.Utils;
 
 namespace Aurora.Profiles.ETS2.Layers {
@@ -48,14 +49,14 @@ namespace Aurora.Profiles.ETS2.Layers {
                 context.Properties._BlinkerOffColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
         }
 
-        private void LeftBlinker_keys_SequenceUpdated(object? sender, EventArgs e) {
-            if (IsLoaded && settingsset && DataContext is ETS2BlinkerLayerHandler && sender is Controls.KeySequence)
-                context.Properties._LeftBlinkerSequence = (sender as Controls.KeySequence).Sequence;
+        private void LeftBlinker_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
+            if (IsLoaded && settingsset && DataContext is ETS2BlinkerLayerHandler)
+                context.Properties._LeftBlinkerSequence = e.NewValue;
         }
 
-        private void RightBlinker_keys_SequenceUpdated(object? sender, EventArgs e) {
-            if (IsLoaded && settingsset && DataContext is ETS2BlinkerLayerHandler && sender is Controls.KeySequence)
-                context.Properties._RightBlinkerSequence = (sender as Controls.KeySequence).Sequence;
+        private void RightBlinker_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
+            if (IsLoaded && settingsset && DataContext is ETS2BlinkerLayerHandler)
+                context.Properties._RightBlinkerSequence = e.NewValue;
         }
     }
 }

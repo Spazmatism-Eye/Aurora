@@ -14,11 +14,11 @@ public sealed partial class LightingStateManagerModule : AuroraModule
     private readonly Task<AuroraHttpListener?> _httpListener;
     private readonly Task<DeviceManager> _deviceManager;
 
-    private static readonly TaskCompletionSource<LightingStateManager> _taskSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private static readonly TaskCompletionSource<LightingStateManager> TaskSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     private LightingStateManager? _manager;
 
-    public static Task<LightingStateManager> LightningStateManager => _taskSource.Task;
+    public static Task<LightingStateManager> LightningStateManager => TaskSource.Task;
 
     public LightingStateManagerModule(Task<PluginManager> pluginManager, Task<IpcListener?> ipcListener,
         Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager)
@@ -29,11 +29,6 @@ public sealed partial class LightingStateManagerModule : AuroraModule
         _deviceManager = deviceManager;
     }
 
-    public override async Task InitializeAsync()
-    {
-        await Initialize();
-    }
-
     protected override async Task Initialize()
     {
         Global.logger.Information("Loading Applications");
@@ -42,7 +37,7 @@ public sealed partial class LightingStateManagerModule : AuroraModule
         Global.LightingStateManager = lightingStateManager;
         await lightingStateManager.Initialize();
 
-        _taskSource.SetResult(lightingStateManager);
+        TaskSource.SetResult(lightingStateManager);
 
         var ipcListener = await _ipcListener;
         if (ipcListener != null)

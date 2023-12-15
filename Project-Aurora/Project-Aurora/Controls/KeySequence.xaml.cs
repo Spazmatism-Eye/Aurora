@@ -93,7 +93,7 @@ namespace Aurora.Controls
             source.sequence_freestyle_checkbox.IsChecked = @new.Type == Settings.KeySequenceType.FreeForm;
 
             // Fire an event? Dunno if this is really neccessary but since it was already there I feel like I should keep it
-            source.SequenceUpdated?.Invoke(source, EventArgs.Empty);
+            source.SequenceUpdated?.Invoke(source, new RoutedPropertyChangedEventArgs<Settings.KeySequence>((Settings.KeySequence)e.OldValue, source.Sequence));
         }
         #endregion
 
@@ -130,24 +130,14 @@ namespace Aurora.Controls
 
 
         /// <summary>Fired whenever the KeySequence object is changed or re-created. Does NOT trigger when keys are changed.</summary>
-        public event EventHandler SequenceUpdated;
+        public event RoutedPropertyChangedEventHandler<Settings.KeySequence>? SequenceUpdated;
         /// <summary>Fired whenever keys are changed.</summary>
-        public event EventHandler SequenceKeysChange;
-        public event SelectionChangedEventHandler SelectionChanged;
+        public event EventHandler? SequenceKeysChange;
+        public event SelectionChangedEventHandler? SelectionChanged;
 
         public KeySequence()
         {
             InitializeComponent();
-
-            /* BAD BAD BAD!!! Don't do this! Doing this overrides the DataContext of the control, so if you were to use a binding on this control
-             * from another control, the binding would try access 'this' instead. E.G., in the following example, the binding is attempting to
-             * access KeySequence.SomeProperty, which is not what is expected. By looking at this code (and if it were a proper control), the
-             * binding should be accessing SomeContext.SomeProperty.
-             * <Grid DataContext="SomeContext">
-             *     <KeySequence Sequence="{Binding SomeProperty}" />
-             * </Grid> */
-            //this.DataContext = this;
-
             UpdateTitle(Title);
         }
 
@@ -312,7 +302,7 @@ namespace Aurora.Controls
             {
                 Sequence.Freeform = eventArgs.FreeForm;
 
-                SequenceUpdated?.Invoke(this, EventArgs.Empty);
+                SequenceUpdated?.Invoke(this, new RoutedPropertyChangedEventArgs<Settings.KeySequence>(Sequence, Sequence));
             }
         }
 

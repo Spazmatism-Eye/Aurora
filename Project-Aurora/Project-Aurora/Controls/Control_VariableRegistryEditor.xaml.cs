@@ -13,9 +13,9 @@ public partial class Control_VariableRegistryEditor
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     public static readonly DependencyProperty RegisteredVariablesProperty = DependencyProperty.Register(nameof(RegisteredVariables), typeof(VariableRegistry), typeof(Control_VariableRegistryEditor));
 
-    public VariableRegistry RegisteredVariables
+    public VariableRegistry? RegisteredVariables
     {
-        get => (VariableRegistry)GetValue(RegisteredVariablesProperty);
+        get => GetValue(RegisteredVariablesProperty) as VariableRegistry;
         set
         {
             SetValue(RegisteredVariablesProperty, value);
@@ -39,16 +39,15 @@ public partial class Control_VariableRegistryEditor
         if (RegisteredVariables == null)
             return;
 
-        foreach (var variablename in RegisteredVariables.GetRegisteredVariableKeys())
+        foreach (var variableName in RegisteredVariables.GetRegisteredVariableKeys())
         {
             var varItem = new Control_VariableRegistryItem {
-                VariableName = variablename,
+                VariableName = variableName,
                 VarRegistry = VarRegistrySource,
             };
-                
 
             stack_Options.Children.Add(varItem);
-            stack_Options.Children.Add(new Separator() { Height = 5, Opacity = 0 });
+            stack_Options.Children.Add(new Separator { Height = 5, Opacity = 0 });
         }
     }
 

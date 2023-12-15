@@ -68,15 +68,19 @@ namespace Aurora.Settings.Layers.Controls
             }
         }
 
-        internal void SetProfile(Profiles.Application profile) {
-            if (profile != null && !profileset) {
-                this.profile = profile;
-                AttachedApplication.SetApplication(triggerEvaluatable, profile);
-                UpdatePathCombobox();
-                profileset = true;
-            }
-            settingsset = false;
-            SetSettings();
+        internal void SetProfile(Profiles.Application profile)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (profile != null && !profileset) {
+                    this.profile = profile;
+                    AttachedApplication.SetApplication(triggerEvaluatable, profile);
+                    UpdatePathCombobox();
+                    profileset = true;
+                }
+                settingsset = false;
+                SetSettings();
+            });
         }
 
         private void UpdatePathCombobox() {
@@ -142,9 +146,9 @@ namespace Aurora.Settings.Layers.Controls
                 Context.Properties._scaleToKeySequenceBounds = ((sender as CheckBox).IsChecked.HasValue ? (sender as CheckBox).IsChecked.Value : false);
         }
 
-        private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e) {
+        private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
             if (CanSet && sender is KeySequence)
-                Context.Properties._Sequence = (sender as Aurora.Controls.KeySequence).Sequence;
+                Context.Properties._Sequence = e.NewValue;
         }
 
         private void updownAnimationDuration_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<object> e) {
@@ -213,9 +217,9 @@ namespace Aurora.Settings.Layers.Controls
             triggerKeys.IsEnabled = !val;
         }
 
-        private void triggerKeys_SequenceUpdated(object? sender, EventArgs e) {
+        private void triggerKeys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
             if (CanSet)
-                Context.Properties._TriggerKeySequence = (sender as Aurora.Controls.KeySequence).Sequence;
+                Context.Properties._TriggerKeySequence = e.NewValue;
         }
 
         private void translateToKey_Checked(object? sender, RoutedEventArgs e) {

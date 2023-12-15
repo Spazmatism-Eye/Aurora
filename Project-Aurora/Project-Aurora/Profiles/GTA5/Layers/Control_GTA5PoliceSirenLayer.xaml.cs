@@ -71,19 +71,19 @@ namespace Aurora.Profiles.GTA5.Layers
                 (DataContext as GTA5PoliceSirenLayerHandler).Properties.PeripheralUse = (sender as CheckBox).IsChecked.Value;
         }
 
-        private void KeySequence_LeftSiren_SequenceUpdated(object? sender, EventArgs e)
+        private void KeySequence_LeftSiren_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<Settings.KeySequence> e)
         {
-            if (IsLoaded && settingsset && DataContext is GTA5PoliceSirenLayerHandler && sender is KeySequence)
+            if (IsLoaded && settingsset && DataContext is GTA5PoliceSirenLayerHandler)
             {
-                (DataContext as GTA5PoliceSirenLayerHandler).Properties.LeftSirenSequence = (sender as KeySequence).Sequence;
+                (DataContext as GTA5PoliceSirenLayerHandler).Properties.LeftSirenSequence = e.NewValue;
             }
         }
 
-        private void KeySequence_RightSiren_SequenceUpdated(object? sender, EventArgs e)
+        private void KeySequence_RightSiren_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<Settings.KeySequence> e)
         {
-            if (IsLoaded && settingsset && DataContext is GTA5PoliceSirenLayerHandler && sender is KeySequence)
+            if (IsLoaded && settingsset && DataContext is GTA5PoliceSirenLayerHandler)
             {
-                (DataContext as GTA5PoliceSirenLayerHandler).Properties.RightSirenSequence = (sender as KeySequence).Sequence;
+                (DataContext as GTA5PoliceSirenLayerHandler).Properties.RightSirenSequence = e.NewValue;
             }
         }
 

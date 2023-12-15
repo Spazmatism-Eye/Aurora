@@ -116,22 +116,20 @@ public partial class Control_LayerControlPresenter
     {
         if (IsLoaded && !isSettingNewLayer && sender is CheckBox checkBox)
             Layer.Handler._EnableExclusionMask = checkBox.IsChecked.Value;
-
-        //keyseq_ExcludeMask.IsEnabled = Layer.Handler.EnableExclusionMask;
     }
 
-    private void keyseq_ExcludeMask_SequenceUpdated(object? sender, EventArgs e)
+    private void keyseq_ExcludeMask_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && !isSettingNewLayer && sender is KeySequence sequence)
-            Layer.Handler._ExclusionMask = sequence;
+        if (IsLoaded && !isSettingNewLayer)
+            Layer.Handler._ExclusionMask = e.NewValue;
     }
 
     private void sldr_Opacity_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        if (IsLoaded && !isSettingNewLayer && sender is Slider slider)
+        if (IsLoaded && !isSettingNewLayer)
         {
-            Layer.Handler._Opacity = (float)slider.Value / 100.0f;
-            lbl_Opacity_Text.Text = $"{(int)slider.Value} %";
+            Layer.Handler._Opacity = (float)e.NewValue / 100.0f;
+            lbl_Opacity_Text.Text = $"{(int)e.NewValue} %";
         }
     }
 

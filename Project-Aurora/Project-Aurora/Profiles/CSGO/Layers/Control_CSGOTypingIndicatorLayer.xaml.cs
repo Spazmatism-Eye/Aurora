@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using Aurora.Settings;
 using Aurora.Utils;
 
 namespace Aurora.Profiles.CSGO.Layers;
@@ -52,11 +53,11 @@ public partial class Control_CSGOTypingIndicatorLayer
             (DataContext as CSGOTypingIndicatorLayerHandler).Properties._TypingKeysColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
     }
 
-    private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && settingsset && DataContext is CSGOTypingIndicatorLayerHandler && sender is Controls.KeySequence)
+        if (IsLoaded && settingsset && DataContext is CSGOTypingIndicatorLayerHandler)
         {
-            (DataContext as CSGOTypingIndicatorLayerHandler).Properties._Sequence = (sender as Aurora.Controls.KeySequence).Sequence;
+            (DataContext as CSGOTypingIndicatorLayerHandler).Properties._Sequence = e.NewValue;
         }
     }
 }

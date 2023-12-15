@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Aurora.EffectsEngine;
 using Aurora.Scripts.VoronScripts;
 using Aurora.Settings;
@@ -524,7 +525,10 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
                 if (profileFilename.Equals(Settings.SelectedProfile))
                     Profile = profileSettings;
 
-                Profiles.Add(profileSettings);
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Profiles.Add(profileSettings);
+                });
             }
         }
         else

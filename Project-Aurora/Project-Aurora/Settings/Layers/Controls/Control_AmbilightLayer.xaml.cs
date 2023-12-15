@@ -28,8 +28,8 @@ public partial class Control_AmbilightLayer
     private void SetSettings()
     {
         if (DataContext is not AmbilightLayerHandler || _settingsSet) return;
-        affectedKeys.Sequence = (DataContext as AmbilightLayerHandler).Properties._Sequence;
-        var properties = (DataContext as AmbilightLayerHandler).Properties;
+        affectedKeys.Sequence = ((AmbilightLayerHandler)DataContext).Properties._Sequence;
+        var properties = ((AmbilightLayerHandler)DataContext).Properties;
         XCoordinate.Value = properties.Coordinates.Left;
         YCoordinate.Value = properties.Coordinates.Top;
         HeightCoordinate.Value = properties.Coordinates.Height;
@@ -48,7 +48,7 @@ public partial class Control_AmbilightLayer
         if (!_settingsSet)
             return;
 
-        (DataContext as AmbilightLayerHandler).Properties.Coordinates = new Rectangle(
+        ((AmbilightLayerHandler)DataContext).Properties.Coordinates = new Rectangle(
             XCoordinate.Value ?? 0, 
             YCoordinate.Value ?? 0,
             WidthCoordinate.Value ?? 0,
@@ -58,14 +58,14 @@ public partial class Control_AmbilightLayer
 
     private void TextBox_TextChanged(object? sender, TextChangedEventArgs e)
     {
-        (DataContext as AmbilightLayerHandler)?.UpdateSpecificProcessHandle((e.Source as TextBox).Text);
+        (DataContext as AmbilightLayerHandler)?.UpdateSpecificProcessHandle(((TextBox)e.Source).Text);
     }
 
-    private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && _settingsSet && DataContext is AmbilightLayerHandler && sender is Aurora.Controls.KeySequence)
+        if (IsLoaded && _settingsSet && DataContext is AmbilightLayerHandler)
         {
-            (DataContext as AmbilightLayerHandler).Properties._Sequence = (sender as Aurora.Controls.KeySequence).Sequence;
+            ((AmbilightLayerHandler)DataContext).Properties._Sequence = e.NewValue;
         }
     }
 }

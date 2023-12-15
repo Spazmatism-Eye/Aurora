@@ -1,67 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Aurora.Settings;
 using Aurora.Utils;
+using Xceed.Wpf.Toolkit;
 
-namespace Plugin_Example.Layers
+namespace Plugin_Example.Layers;
+
+/// <summary>
+/// Interaction logic for Control_DefaultLayer.xaml
+/// </summary>
+public partial class Control_ExampleLayer
 {
-    /// <summary>
-    /// Interaction logic for Control_DefaultLayer.xaml
-    /// </summary>
-    public partial class Control_ExampleLayer : UserControl
+    private bool _settingsset;
+
+    public Control_ExampleLayer()
     {
-        private bool settingsset = false;
+        InitializeComponent();
+    }
 
-        public Control_ExampleLayer()
+    public Control_ExampleLayer(ExampleLayerHandler dataContext)
+    {
+        InitializeComponent();
+
+        DataContext = dataContext;
+    }
+
+    public void SetSettings()
+    {
+        if(DataContext is ExampleLayerHandler layer && !_settingsset)
         {
-            InitializeComponent();
+            ColorPicker_primaryColor.SelectedColor = ColorUtils.DrawingColorToMediaColor(((ExampleLayerHandler)DataContext).Properties._PrimaryColor ?? System.Drawing.Color.Empty);
+            KeySequence_keys.Sequence = layer.Properties._Sequence;
+
+            _settingsset = true;
         }
+    }
 
-        public Control_ExampleLayer(ExampleLayerHandler datacontext)
-        {
-            InitializeComponent();
+    private void ColorPicker_primaryColor_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+    {
+        if (IsLoaded && _settingsset && DataContext is ExampleLayerHandler layer && sender is ColorPicker)
+            layer.Properties._PrimaryColor = ColorUtils.MediaColorToDrawingColor(e.NewValue.GetValueOrDefault());
+    }
 
-            this.DataContext = datacontext;
-        }
+    private void KeySequence_keys_SequenceUpdated(object sender, RoutedPropertyChangedEventArgs<KeySequence> e)
+    {
+        if (IsLoaded && _settingsset && DataContext is ExampleLayerHandler layer)
+            layer.Properties._Sequence = e.NewValue;
+    }
 
-        public void SetSettings()
-        {
-            if(this.DataContext is ExampleLayerHandler && !settingsset)
-            {
-                this.ColorPicker_primaryColor.SelectedColor = ColorUtils.DrawingColorToMediaColor((this.DataContext as ExampleLayerHandler).Properties._PrimaryColor ?? System.Drawing.Color.Empty);
-                this.KeySequence_keys.Sequence = (this.DataContext as ExampleLayerHandler).Properties._Sequence;
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        SetSettings();
 
-                settingsset = true;
-            }
-        }
-
-        private void ColorPicker_primaryColor_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            if (IsLoaded && settingsset && this.DataContext is ExampleLayerHandler && sender is Xceed.Wpf.Toolkit.ColorPicker && (sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.HasValue)
-                (this.DataContext as ExampleLayerHandler).Properties._PrimaryColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
-        }
-
-        private void KeySequence_keys_SequenceUpdated(object sender, EventArgs e)
-        {
-            if (IsLoaded && settingsset && this.DataContext is ExampleLayerHandler && sender is Aurora.Controls.KeySequence)
-                (this.DataContext as ExampleLayerHandler).Properties._Sequence = (sender as Aurora.Controls.KeySequence).Sequence;
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetSettings();
-
-            this.Loaded -= UserControl_Loaded;
-        }
+        Loaded -= UserControl_Loaded;
     }
 }

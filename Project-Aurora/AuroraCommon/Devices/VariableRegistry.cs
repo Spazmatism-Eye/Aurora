@@ -160,7 +160,7 @@ public class VariableRegistry : ICloneable //Might want to implement something l
             _variables[name].Merge(varItem);
     }
 
-    public bool SetVariable(string name, object variable)
+    public bool SetVariable(string name, object? variable)
     {
         if (_variables.ContainsKey(name))
         {

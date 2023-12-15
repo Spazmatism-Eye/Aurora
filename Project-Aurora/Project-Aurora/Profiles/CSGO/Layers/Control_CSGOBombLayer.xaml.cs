@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Aurora.Settings;
 using Aurora.Utils;
 
 namespace Aurora.Profiles.CSGO.Layers;
@@ -74,11 +75,11 @@ public partial class Control_CSGOBombLayer
             (DataContext as CSGOBombLayerHandler).Properties._PeripheralUse = (sender as CheckBox).IsChecked.Value;
     }
 
-    private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && settingsset && DataContext is CSGOBombLayerHandler && sender is Controls.KeySequence)
+        if (IsLoaded && settingsset && DataContext is CSGOBombLayerHandler)
         {
-            (DataContext as CSGOBombLayerHandler).Properties._Sequence = (sender as Controls.KeySequence).Sequence;
+            (DataContext as CSGOBombLayerHandler).Properties._Sequence = e.NewValue;
         }
     }
 }

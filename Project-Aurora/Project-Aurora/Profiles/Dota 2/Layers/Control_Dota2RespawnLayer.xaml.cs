@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using Aurora.Settings;
 using Aurora.Utils;
 
 namespace Aurora.Profiles.Dota_2.Layers;
@@ -67,9 +68,9 @@ public partial class Control_Dota2RespawnLayer
             (DataContext as Dota2RespawnLayerHandler).Properties._RespawningColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
     }
 
-    private void KeySequence_sequence_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_sequence_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && settingsset && DataContext is Dota2RespawnLayerHandler && sender is Controls.KeySequence)
-            (DataContext as Dota2RespawnLayerHandler).Properties._Sequence = (sender as Aurora.Controls.KeySequence).Sequence;
+        if (IsLoaded && settingsset && DataContext is Dota2RespawnLayerHandler)
+            (DataContext as Dota2RespawnLayerHandler).Properties._Sequence = e.NewValue;
     }
 }

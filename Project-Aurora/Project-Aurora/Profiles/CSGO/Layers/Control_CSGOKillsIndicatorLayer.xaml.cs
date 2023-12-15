@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using Aurora.Settings;
 using Aurora.Utils;
 
 namespace Aurora.Profiles.CSGO.Layers;
@@ -59,11 +60,11 @@ public partial class Control_CSGOKillIndicatorLayer
             (DataContext as CSGOKillIndicatorLayerHandler).Properties._HeadshotKillColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
     }
 
-    private void KeySequence_keys_SequenceUpdated(object? sender, EventArgs e)
+    private void KeySequence_keys_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
     {
-        if (IsLoaded && settingsset && DataContext is CSGOKillIndicatorLayerHandler && sender is Controls.KeySequence)
+        if (IsLoaded && settingsset && DataContext is CSGOKillIndicatorLayerHandler)
         {
-            (DataContext as CSGOKillIndicatorLayerHandler).Properties._Sequence = (sender as Controls.KeySequence).Sequence;
+            (DataContext as CSGOKillIndicatorLayerHandler).Properties._Sequence = e.NewValue;
         }
     }
 }

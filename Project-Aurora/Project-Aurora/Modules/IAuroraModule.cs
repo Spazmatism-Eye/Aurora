@@ -21,7 +21,7 @@ public abstract class AuroraModule : IDisposable
 
     private TaskCompletionSource? _taskSource;
 
-    private async Task QueueInit(Func<Task> action)
+    private Task QueueInit(Func<Task> action)
     {
         _taskSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -31,12 +31,11 @@ public abstract class AuroraModule : IDisposable
             ModuleThreadPool.Start();
         }
 
-        await _taskSource.Task;
-        return;
+        return _taskSource.Task;
 
-        async Task WorkItemCallback(object _)
+        Task WorkItemCallback(object _)
         {
-            await action();
+            return action();
         }
 
         void PostExecuteWorkItemCallback(IWorkItemResult _)
@@ -45,9 +44,9 @@ public abstract class AuroraModule : IDisposable
         }
     }
 
-    public virtual async Task InitializeAsync()
+    public virtual Task InitializeAsync()
     {
-        await QueueInit(InitButWait);
+        return QueueInit(InitButWait);
     }
 
     private async Task InitButWait()
