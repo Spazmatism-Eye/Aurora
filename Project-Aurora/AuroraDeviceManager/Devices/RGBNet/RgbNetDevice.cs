@@ -60,7 +60,9 @@ public abstract class RgbNetDevice : DefaultDevice
         {
             try
             {
+                timeWatch.Stop();
                 await ConfigureProvider();
+                timeWatch.Start();
 
                 Provider.Initialize(RGBDeviceType.All, true);
 
