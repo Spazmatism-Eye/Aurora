@@ -101,7 +101,7 @@ namespace AuroraDeviceManager.Devices.LightFX
         [DllImport(LightfxSdkDll)]
         public static extern int GetError();
 
-        [DllImport(LightfxSdkDll)]
+        [DllImport(LightfxSdkDll, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool getReadStatus();
 
