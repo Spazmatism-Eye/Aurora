@@ -6,35 +6,34 @@ namespace Aurora.Modules.HardwareMonitor;
 
 public partial class HardwareMonitor
 {
-    public sealed class GPUUpdater : HardwareUpdater
+    public sealed class GpuUpdater : HardwareUpdater
     {
         #region Sensors
-        private readonly ISensor _GPUTemp;
-        public float GPUCoreTemp => GetValue(_GPUTemp);
+        private readonly ISensor? _gpuTemp;
+        public float GpuCoreTemp => GetValue(_gpuTemp);
 
-        private readonly ISensor _GPUFan;
-        public float GPUFan => GetValue(_GPUFan);
+        private readonly ISensor? _gpuFan;
+        public float GpuFan => GetValue(_gpuFan);
 
-        private readonly ISensor _GPULoad;
-        public float GPULoad => GetValue(_GPULoad);
+        private readonly ISensor? _gpuLoad;
+        public float GpuLoad => GetValue(_gpuLoad);
 
-        private readonly ISensor _GPUPower;
-        public float GPUPower => GetValue(_GPUPower);
+        private readonly ISensor? _gpuPower;
+        public float GpuPower => GetValue(_gpuPower);
         #endregion
 
-        public GPUUpdater(IEnumerable<IHardware> hardware)
+        public GpuUpdater(IEnumerable<IHardware> hardware)
         {
-            hw = hardware.FirstOrDefault(hw => hw.HardwareType == HardwareType.GpuAmd ||
-                                               hw.HardwareType == HardwareType.GpuNvidia);
+            hw = hardware.FirstOrDefault(h => h.HardwareType is HardwareType.GpuAmd or HardwareType.GpuNvidia);
             if (hw is null)
             {
                 Global.logger.Error("[HardwareMonitor] Could not find hardware of type GPU or hardware monitoring is disabled");
                 return;
             }
-            _GPULoad = FindSensor(SensorType.Load);
-            _GPUTemp = FindSensor(SensorType.Temperature);
-            _GPUFan = FindSensor(SensorType.Fan);
-            _GPUPower = FindSensor(SensorType.Power);
+            _gpuLoad = FindSensor(SensorType.Load);
+            _gpuTemp = FindSensor(SensorType.Temperature);
+            _gpuFan = FindSensor(SensorType.Fan);
+            _gpuPower = FindSensor(SensorType.Power);
         }
     }
 }

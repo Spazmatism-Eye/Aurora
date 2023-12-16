@@ -6,39 +6,40 @@ namespace Aurora.Modules.HardwareMonitor;
 
 public partial class HardwareMonitor
 {
-    public sealed class CPUUpdater : HardwareUpdater
+    public sealed class CpuUpdater : HardwareUpdater
     {
         #region Sensors
-        private readonly List<ISensor> _CPUTemp;
-        public float CPUTemp => GetValue(_CPUTemp.FirstOrDefault(x => x.Index == Global.Configuration.HardwareMonitorCPUTemperature));
+        private readonly List<ISensor> _cpuTemp;
+        public float CpuTemp => GetValue(_cpuTemp.FirstOrDefault());
 
-        private readonly List<ISensor> _CPULoad;
-        public float CPULoad => GetValue(_CPULoad.FirstOrDefault(x => x.Index == Global.Configuration.HardwareMonitorCPULoad));
+        private readonly List<ISensor> _cpuLoad;
+        public float CpuLoad => GetValue(_cpuLoad.FirstOrDefault());
 
-        private readonly ISensor _CPUPower;
-        public float CPUPower => GetValue(_CPUPower);
+        private readonly ISensor? _cpuPower;
+        public float CpuPower => GetValue(_cpuPower);
+
         #endregion
 
-        public CPUUpdater(IEnumerable<IHardware> hardware)
+        public CpuUpdater(IEnumerable<IHardware> hardware)
         {
-            hw = hardware.FirstOrDefault(hw => hw.HardwareType == HardwareType.Cpu);
+            hw = hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
             if (hw is null)
             {
                 Global.logger.Error("[HardwareMonitor] Could not find hardware of type CPU or hardware monitoring is disabled");
-                _CPUTemp = new();
-                _CPULoad = new();
+                _cpuTemp = new List<ISensor>();
+                _cpuLoad = new List<ISensor>();
                 return;
             }
 
-            _CPUTemp = FindSensors(SensorType.Temperature);
-            _CPULoad = FindSensors(SensorType.Load);
-            _CPUPower = FindSensor(SensorType.Power);
+            _cpuTemp = FindSensors(SensorType.Temperature);
+            _cpuLoad = FindSensors(SensorType.Load);
+            _cpuPower = FindSensor(SensorType.Power);
 
-            _updateTimer.Elapsed += (a, b) =>
+            _updateTimer.Elapsed += (_, _) =>
             {
                 // To update Aurora GUI In Hardware Monitor tab
-                NotifyPropertyChanged(nameof(CPUTemp));
-                NotifyPropertyChanged(nameof(CPULoad));
+                NotifyPropertyChanged(nameof(CpuTemp));
+                NotifyPropertyChanged(nameof(CpuLoad));
             };
         }
     }

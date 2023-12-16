@@ -6,17 +6,17 @@ namespace Aurora.Modules.HardwareMonitor;
 
 public partial class HardwareMonitor
 {
-    public sealed class RAMUpdater : HardwareUpdater
+    public sealed class RamUpdater : HardwareUpdater
     {
         #region Sensors
-        private readonly ISensor _RAMUsed;
-        public float RAMUsed => GetValue(_RAMUsed);
+        private readonly ISensor? _ramUsed;
+        public float RamUsed => GetValue(_ramUsed);
 
-        private readonly ISensor _RAMFree;
-        public float RAMFree => GetValue(_RAMFree);
+        private readonly ISensor? _ramFree;
+        public float RamFree => GetValue(_ramFree);
         #endregion
 
-        public RAMUpdater(IEnumerable<IHardware> hws)
+        public RamUpdater(IEnumerable<IHardware> hws)
         {
             hw = hws.FirstOrDefault(h => h.HardwareType == HardwareType.Memory);
             if (hw is null)
@@ -24,8 +24,8 @@ public partial class HardwareMonitor
                 Global.logger.Error("[HardwareMonitor] Could not find hardware of type RAM or hardware monitoring is disabled");
                 return;
             }
-            _RAMUsed = FindSensor("data/0");
-            _RAMFree = FindSensor("data/1");
+            _ramUsed = FindSensor("data/0");
+            _ramFree = FindSensor("data/1");
         }
     }
 }

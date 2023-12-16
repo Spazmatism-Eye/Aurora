@@ -6,30 +6,30 @@ namespace Aurora.Modules.HardwareMonitor;
 
 public partial class HardwareMonitor
 {
-    public sealed class NETUpdater : HardwareUpdater
+    public sealed class NetUpdater : HardwareUpdater
     {
         #region Sensors
-        private readonly ISensor _BandwidthUsed;
-        public float BandwidthUsed => GetValue(_BandwidthUsed);
+        private readonly ISensor? _bandwidthUsed;
+        public float BandwidthUsed => GetValue(_bandwidthUsed);
 
-        private readonly ISensor _UploadSpeed;
-        public float UploadSpeedBytes => GetValue(_UploadSpeed);
+        private readonly ISensor? _uploadSpeed;
+        public float UploadSpeedBytes => GetValue(_uploadSpeed);
 
-        private readonly ISensor _DownloadSpeed;
-        public float DownloadSpeedBytes => GetValue(_DownloadSpeed);
+        private readonly ISensor? _downloadSpeed;
+        public float DownloadSpeedBytes => GetValue(_downloadSpeed);
         #endregion
 
-        public NETUpdater(IEnumerable<IHardware> hardware)
+        public NetUpdater(IEnumerable<IHardware> hardware)
         {
-            hw = hardware.FirstOrDefault(hw => hw.HardwareType == HardwareType.Network);
+            hw = hardware.FirstOrDefault(w => w.HardwareType == HardwareType.Network);
             if (hw is null)
             {
                 Global.logger.Error("[HardwareMonitor] Could not find hardware of type Network or hardware monitoring is disabled");
                 return;
             }
-            _BandwidthUsed = FindSensor(SensorType.Load);
-            _UploadSpeed = FindSensor("throughput/7");
-            _DownloadSpeed = FindSensor("throughput/8");
+            _bandwidthUsed = FindSensor(SensorType.Load);
+            _uploadSpeed = FindSensor("throughput/7");
+            _downloadSpeed = FindSensor("throughput/8");
         }
     }
 }

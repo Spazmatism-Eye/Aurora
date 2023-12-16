@@ -14,7 +14,7 @@ public partial class HardwareMonitor
     public abstract class HardwareUpdater : INotifyPropertyChanged
     {
         protected int maxQueue = 0;
-        protected IHardware hw;
+        protected IHardware? hw;
         protected bool inUse;
 
         private Stopwatch _lastUsage = Stopwatch.StartNew();
@@ -49,10 +49,10 @@ public partial class HardwareMonitor
             _updateTimer.Start();
         }
 
-        protected float GetValue(ISensor sensor)
+        protected float GetValue(ISensor? sensor)
         {
             if (sensor is null)
-                return 0;
+                return -1;
 
             if (!inUse)
             {

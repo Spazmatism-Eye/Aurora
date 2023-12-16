@@ -9,43 +9,43 @@ namespace Aurora.Modules.HardwareMonitor;
 
 public interface IHardwareMonitor
 {
-    HardwareMonitor.GPUUpdater Gpu { get; }
-    HardwareMonitor.CPUUpdater Cpu { get; }
-    HardwareMonitor.RAMUpdater Ram { get; }
-    HardwareMonitor.NETUpdater Net { get; }
+    HardwareMonitor.GpuUpdater Gpu { get; }
+    HardwareMonitor.CpuUpdater Cpu { get; }
+    HardwareMonitor.RamUpdater Ram { get; }
+    HardwareMonitor.NetUpdater Net { get; }
 }
 
 public class NoopHardwareMonitor : IHardwareMonitor
 {
-    private readonly Lazy<HardwareMonitor.GPUUpdater> _gpu = new(() => new (new List<IHardware>()));
-    private readonly Lazy<HardwareMonitor.CPUUpdater> _cpu = new(() => new (new List<IHardware>()));
-    private readonly Lazy<HardwareMonitor.NETUpdater> _net = new(() => new (new List<IHardware>()));
-    private readonly Lazy<HardwareMonitor.RAMUpdater> _ram = new(() => new (new List<IHardware>()));
+    private readonly Lazy<HardwareMonitor.GpuUpdater> _gpu = new(() => new (new List<IHardware>()));
+    private readonly Lazy<HardwareMonitor.CpuUpdater> _cpu = new(() => new (new List<IHardware>()));
+    private readonly Lazy<HardwareMonitor.NetUpdater> _net = new(() => new (new List<IHardware>()));
+    private readonly Lazy<HardwareMonitor.RamUpdater> _ram = new(() => new (new List<IHardware>()));
 
-    public HardwareMonitor.GPUUpdater Gpu => _gpu.Value;
+    public HardwareMonitor.GpuUpdater Gpu => _gpu.Value;
 
-    public HardwareMonitor.CPUUpdater Cpu => _cpu.Value;
+    public HardwareMonitor.CpuUpdater Cpu => _cpu.Value;
 
-    public HardwareMonitor.RAMUpdater Ram => _ram.Value;
+    public HardwareMonitor.RamUpdater Ram => _ram.Value;
 
-    public HardwareMonitor.NETUpdater Net => _net.Value;
+    public HardwareMonitor.NetUpdater Net => _net.Value;
 }
 
 public partial class HardwareMonitor: IHardwareMonitor
 {
     private static readonly IEnumerable<IHardware> Hardware;
 
-    private static readonly Lazy<GPUUpdater> _gpu = new(() => new GPUUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
-    public GPUUpdater Gpu => _gpu.Value;
+    private static readonly Lazy<GpuUpdater> _gpu = new(() => new GpuUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
+    public GpuUpdater Gpu => _gpu.Value;
 
-    private static readonly Lazy<CPUUpdater> _cpu = new(() => new CPUUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
-    public CPUUpdater Cpu => _cpu.Value;
+    private static readonly Lazy<CpuUpdater> _cpu = new(() => new CpuUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
+    public CpuUpdater Cpu => _cpu.Value;
 
-    private static readonly Lazy<RAMUpdater> _ram = new(() => new RAMUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
-    public RAMUpdater Ram => _ram.Value;
+    private static readonly Lazy<RamUpdater> _ram = new(() => new RamUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
+    public RamUpdater Ram => _ram.Value;
 
-    private static readonly Lazy<NETUpdater> _net = new(() => new NETUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
-    public NETUpdater Net => _net.Value;
+    private static readonly Lazy<NetUpdater> _net = new(() => new NetUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
+    public NetUpdater Net => _net.Value;
 
 #pragma warning disable CA1810 // Initialize reference type static fields inline
     static HardwareMonitor()

@@ -160,8 +160,6 @@ public class Configuration : INotifyPropertyChanged
     public int HardwareMonitorUpdateRate { get; set; } = 500;
     public int HardwareMonitorMaxQueue { get; set; } = 8;
     public bool HardwareMonitorUseAverageValues { get; set; } = true;
-    public int HardwareMonitorCPUTemperature { get; set; }
-    public int HardwareMonitorCPULoad { get; set; }
 
     public double Width { get; set; } = 1200;
     public double Height { get; set; } = 800;
