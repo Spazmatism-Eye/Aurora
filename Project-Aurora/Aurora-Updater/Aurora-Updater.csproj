@@ -24,6 +24,7 @@
     <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     <OutputPath>$(SolutionDir)..\Build\$(Configuration)</OutputPath>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">

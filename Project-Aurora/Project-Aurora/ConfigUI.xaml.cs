@@ -184,10 +184,15 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private void OnAuroraCommandReceived(object? sender, string e)
     {
+        Global.logger.Information("Received command: {Command}", e);
         switch (e)
         {
             case "restore":
                 Dispatcher.Invoke(Display);
+                break;
+            case "shutdown":
+                ShutdownDevices().Wait();
+                ExitApp();
                 break;
         }
     }
@@ -340,7 +345,7 @@ partial class ConfigUI : INotifyPropertyChanged
         await (await _deviceManager).ShutdownDevices();
     }
 
-    private void Window_Closing(object? sender, CancelEventArgs e)
+    private async void Window_Closing(object? sender, CancelEventArgs e)
     {
         switch (Global.Configuration.CloseMode)
         {
@@ -356,6 +361,7 @@ partial class ConfigUI : INotifyPropertyChanged
                 }
                 else
                 {
+                    await ShutdownDevices();
                     ExitApp();
                 }
 
@@ -366,6 +372,7 @@ partial class ConfigUI : INotifyPropertyChanged
                 e.Cancel = true;
                 break;
             default:
+                await ShutdownDevices();
                 ExitApp();
                 break;
         }

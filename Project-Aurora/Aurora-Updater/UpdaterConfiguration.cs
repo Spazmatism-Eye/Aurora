@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace Aurora_Updater;
 
+[JsonObject]
 public class UpdaterConfiguration
 {
     private static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "Config");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -11,82 +12,47 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using Aurora_Updater.Data;
 using Octokit;
 using Timer = System.Timers.Timer;
 using Version = SemanticVersioning.Version;
 
 namespace Aurora_Updater;
 
-public class LogEntry
-{
-    private readonly string _message;
-    private readonly Color _color;
-
-    public LogEntry()
-    {
-        _message = string.Empty;
-        _color = Color.Black;
-    }
-
-    public LogEntry(string message)
-    {
-        _message = message;
-        _color = Color.Black;
-    }
-
-    public LogEntry(string message, Color color)
-    {
-        _message = message;
-        _color = color;
-    }
-
-    public Color GetColor()
-    {
-        return _color;
-    }
-
-    public string GetMessage()
-    {
-        return _message;
-    }
-
-    public override string ToString()
-    {
-        return _message;
-    }
-}
-
 public class UpdateManager
 {
     private readonly string[] _ignoreFiles = { };
-    private readonly Queue<LogEntry> _log = new();
+    private readonly ObservableCollection<LogEntry> _log = new();
     private float _downloadProgress;
     private float _extractProgress;
     private int? _previousPercentage;
-    private int _secondsLeft = 3;
-    private readonly UpdaterConfiguration _config;
-    private readonly GitHubClient _gClient;
+    private int _secondsLeft = 15;
+    private readonly UpdateInfo _updateInfo;
+    
     public readonly Release LatestRelease;
+    private readonly LogEntry _downloadLogEntry = new("Download 0%");
 
     public UpdateManager(Version version, string author, string repoName)
     {
-        _gClient = new(new ProductHeaderValue("aurora-updater", version.ToString()));
+        UpdaterConfiguration config;
         try
         {
-            _config = UpdaterConfiguration.Load();
+            config = UpdaterConfiguration.Load();
         }
         catch
         {
-            _config = new UpdaterConfiguration();
+            config = new UpdaterConfiguration();
         }
+
+        _updateInfo = new UpdateInfo(version, author, repoName, config.GetDevReleases);
 
         PerformCleanup();
         var tries = 20;
-        while (LatestRelease == null && tries-- != 0)
+        do
         {
             try
             {
-                LatestRelease = FetchData(version, author, repoName);
+                LatestRelease = _updateInfo.FetchData().Result;
             }
             catch (AggregateException e)
             {
@@ -99,7 +65,7 @@ public class UpdateManager
                     throw;
                 }
             }
-        }
+        } while (LatestRelease == null && tries-- != 0);
     }
 
     public void ClearLog()
@@ -112,16 +78,14 @@ public class UpdateManager
         return _log.ToArray();
     }
 
+    public ObservableCollection<LogEntry> GetObservable()
+    {
+        return _log;
+    }
+
     public int GetTotalProgress()
     {
         return (int)((_downloadProgress + _extractProgress) / 2.0f * 100.0f);
-    }
-
-    private Release FetchData(Version version, string owner, string repositoryName)
-    {
-        if (_config.GetDevReleases || !string.IsNullOrWhiteSpace(version.PreRelease))
-            return _gClient.Repository.Release.GetAll(owner, repositoryName, new ApiOptions { PageCount = 1, PageSize = 1 }).Result[0];
-        return  _gClient.Repository.Release.GetLatest(owner, repositoryName).Result;
     }
 
     public async Task RetrieveUpdate()
@@ -132,7 +96,8 @@ public class UpdateManager
             var url = assets.First(s => s.Name.StartsWith("release") || s.Name.StartsWith("Aurora-v")).BrowserDownloadUrl;
 
             if (string.IsNullOrWhiteSpace(url)) return;
-            _log.Enqueue(new LogEntry("Starting download... "));
+            _log.Add(new LogEntry("Starting download... "));
+            _log.Add(_downloadLogEntry);
 
             using var client = new WebClient();
             client.DownloadProgressChanged += client_DownloadProgressChanged;
@@ -158,8 +123,8 @@ public class UpdateManager
                 }
             }
 
-            _log.Enqueue(new LogEntry("Download complete."));
-            _log.Enqueue(new LogEntry());
+            _log.Add(new LogEntry("Download complete."));
+            _log.Add(new LogEntry());
             _downloadProgress = 1.0f;
 
             if (ExtractUpdate())
@@ -171,18 +136,18 @@ public class UpdateManager
         }
         catch (Exception exc)
         {
-            _log.Enqueue(new LogEntry(exc.Message, Color.Red));
+            _log.Add(new LogEntry(exc.Message, Color.Red));
         }
     }
 
     private class PluginUpdater
     {
-        private readonly Queue<LogEntry> _log;
+        private readonly ObservableCollection<LogEntry> _log;
         private readonly ReleaseAsset _pluginDll;
         private readonly WebClient _client;
         private readonly Uri _address;
 
-        public PluginUpdater(ReleaseAsset pluginDll, WebClient client, Uri address, Queue<LogEntry> log)
+        public PluginUpdater(ReleaseAsset pluginDll, WebClient client, Uri address, ObservableCollection<LogEntry> log)
         {
             _pluginDll = pluginDll;
             _client = client;
@@ -194,7 +159,7 @@ public class UpdateManager
         {
             if (File.Exists(installDirPlugin))
             {
-                _log.Enqueue(new LogEntry("Updating " + _pluginDll.Name));
+                _log.Add(new LogEntry("Updating " + _pluginDll.Name));
                 await _client.DownloadFileTaskAsync(_address, installDirPlugin);
             }
         }
@@ -202,9 +167,9 @@ public class UpdateManager
 
     private void client_DownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
     {
-        var bytesIn = double.Parse(e.BytesReceived.ToString());
-        var totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-        var percentage = bytesIn / totalBytes;
+        var bytesIn = e.BytesReceived;
+        var totalBytes = e.TotalBytesToReceive;
+        var percentage = (double)bytesIn / totalBytes;
 
         var newPercentage = (int)(percentage * 100);
         if (_previousPercentage == newPercentage)
@@ -212,7 +177,7 @@ public class UpdateManager
 
         _previousPercentage = newPercentage;
 
-        _log.Enqueue(new LogEntry("Download " + newPercentage + "%"));
+        _downloadLogEntry.Message = $"Download {newPercentage}%";
         _downloadProgress = newPercentage / 100.0f;
     }
 
@@ -220,27 +185,29 @@ public class UpdateManager
     {
         if (_secondsLeft > 0)
         {
-            _log.Enqueue(new LogEntry($"Restarting Aurora in {_secondsLeft} second{(_secondsLeft == 1 ? "" : "s")}..."));
+            _log.Add(new LogEntry($"Restarting Aurora in {_secondsLeft} second{(_secondsLeft == 1 ? "" : "s")}..."));
             _secondsLeft--;
         }
         else
         {
             //Kill all Aurora instances
-            foreach (var proc in Process.GetProcessesByName("Aurora"))
-                proc.Kill();
+            var auroraInterface = new AuroraInterface();
+            auroraInterface.ShutdownAurora().Wait();
 
             try
             {
-                var auroraProc = new ProcessStartInfo();
-                auroraProc.FileName = Path.Combine(Program.ExePath, "Aurora.exe");
+                var auroraProc = new ProcessStartInfo
+                {
+                    FileName = Path.Combine(Program.ExePath, "Aurora.exe")
+                };
                 Process.Start(auroraProc);
 
                 Environment.Exit(0); //Exit, no further action required
             }
             catch (Exception exc)
             {
-                _log.Enqueue(new LogEntry($"Could not restart Aurora. Error:\r\n{exc}", Color.Red));
-                _log.Enqueue(new LogEntry("Please restart Aurora manually.", Color.Red));
+                _log.Add(new LogEntry($"Could not restart Aurora. Error:\r\n{exc}", Color.Red));
+                _log.Add(new LogEntry("Please restart Aurora manually.", Color.Red));
 
                 MessageBox.Show(
                     $"Could not restart Aurora.\r\nPlease restart Aurora manually.\r\nError:\r\n{exc}",
@@ -255,20 +222,20 @@ public class UpdateManager
     {
         if (File.Exists(Path.Combine(Program.ExePath, "update.zip")))
         {
-            _log.Enqueue(new LogEntry("Unpacking update..."));
+            _log.Add(new LogEntry("Unpacking update..."));
 
             try
             {
                 var updateFile = ZipFile.OpenRead(Path.Combine(Program.ExePath, "update.zip"));
                 var countOfEntries = updateFile.Entries.Count;
-                _log.Enqueue(new LogEntry($"{countOfEntries} files detected."));
+                _log.Add(new LogEntry($"{countOfEntries} files detected."));
 
                 for (var i = 0; i < countOfEntries; i++)
                 {
                     var percentage = i / (float)countOfEntries;
 
                     var fileEntry = updateFile.Entries[i];
-                    _log.Enqueue(new LogEntry($"[{Math.Truncate(percentage * 100)}%] Updating: {fileEntry.FullName}"));
+                    _log.Add(new LogEntry($"[{Math.Truncate(percentage * 100)}%] Updating: {fileEntry.FullName}"));
                     _extractProgress = (float)(Math.Truncate(percentage * 100) / 100.0f);
 
                     if (Path.EndsInDirectorySeparator(fileEntry.FullName))
@@ -287,7 +254,7 @@ public class UpdateManager
                     }
                     catch (IOException e)
                     {
-                        _log.Enqueue(new LogEntry($"{fileEntry.FullName} is inaccessible.", Color.Red));
+                        _log.Add(new LogEntry($"{fileEntry.FullName} is inaccessible.", Color.Red));
 
                         MessageBox.Show($"{fileEntry.FullName} is inaccessible.\r\nPlease close Aurora.\r\n\r\n {e.StackTrace}");
                         i--;
@@ -299,20 +266,20 @@ public class UpdateManager
             }
             catch (Exception exc)
             {
-                _log.Enqueue(new LogEntry(exc.Message, Color.Red));
+                _log.Add(new LogEntry(exc.Message, Color.Red));
 
                 return false;
             }
 
-            _log.Enqueue(new LogEntry("All files updated."));
-            _log.Enqueue(new LogEntry());
-            _log.Enqueue(new LogEntry("Updater will automatically restart Aurora."));
+            _log.Add(new LogEntry("All files updated."));
+            _log.Add(new LogEntry());
+            _log.Add(new LogEntry("Updater will automatically restart Aurora."));
             _extractProgress = 1.0f;
 
             return true;
         }
 
-        _log.Enqueue(new LogEntry("Update file not found.", Color.Red));
+        _log.Add(new LogEntry("Update file not found.", Color.Red));
         return false;
     }
 
@@ -328,7 +295,7 @@ public class UpdateManager
             }
             catch
             {
-                _log.Enqueue(new LogEntry("Unable to delete file - " + file, Color.Red));
+                _log.Add(new LogEntry("Unable to delete file - " + file, Color.Red));
             }
         }
 
