@@ -45,8 +45,8 @@ partial class ConfigUI : INotifyPropertyChanged
     private readonly TimeSpan _renderTimeout = TimeSpan.FromMinutes(5);
     private readonly EffectColor _desktopColorScheme = new(0, 0, 0, 0);
 
-    private EffectColor _previousColor = new(0, 0, 0, 0);
-    private EffectColor _currentColor = new(0, 0, 0, 0);
+    private EffectColor _previousColor = new(0, 0, 0);
+    private EffectColor _currentColor = new(0, 0, 0);
 
     private double _transitionAmount;
 

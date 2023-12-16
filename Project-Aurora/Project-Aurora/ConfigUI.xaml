@@ -11,6 +11,7 @@
              AcrylicWindowStyle="NoIcon"
              FallbackColor="#09000000"
              ExtendViewIntoTitleBar="True"
+             AcrylicAccentState="BlurBehind"
              Height="{Binding Source={x:Static local:Global.Configuration}, Path=Height, Mode=TwoWay}"
              Width="{Binding Source={x:Static local:Global.Configuration}, Path=Width, Mode=TwoWay}"
              Left="{Binding Source={x:Static local:Global.Configuration}, Path=Left, Mode=TwoWay}"
