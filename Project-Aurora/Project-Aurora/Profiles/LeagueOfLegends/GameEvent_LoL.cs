@@ -1,17 +1,11 @@
-﻿using Aurora.Profiles;
-using Aurora.Profiles.LeagueOfLegends.GSI;
+﻿using Aurora.Profiles.LeagueOfLegends.GSI;
 using Aurora.Profiles.LeagueOfLegends.GSI.Nodes;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
+using Aurora.Modules;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Utils;
 
@@ -202,7 +196,7 @@ namespace Aurora.Profiles.LeagueOfLegends
 
         private async void UpdateData(object? sender, ElapsedEventArgs e)
         {
-            if (!RunningProcessMonitor.Instance.IsProcessRunning("league of legends.exe"))
+            if (!ProcessesModule.RunningProcessMonitor.Result.IsProcessRunning("league of legends.exe"))
             {
                 allGameData = null;
                 return;

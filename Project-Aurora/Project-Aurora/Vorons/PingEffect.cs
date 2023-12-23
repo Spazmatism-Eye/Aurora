@@ -18,6 +18,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using Aurora.EffectsEngine;
+using Aurora.Modules;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Profiles;
 using Aurora.Settings;
@@ -738,10 +739,10 @@ namespace Aurora.Scripts.VoronScripts
 		{
 			try
 			{
-				var activeProcessName = ActiveProcessMonitor.Instance.ProcessName;
+				var activeProcessName = ProcessesModule.ActiveProcessMonitor.Result.ProcessName;
 				if (!string.IsNullOrWhiteSpace(activeProcessName))
 					activeProcessName = Path.GetFileName(activeProcessName).ToLower();
-				var activeWindowTitle = ActiveProcessMonitor.Instance.ProcessTitle;
+				var activeWindowTitle = ProcessesModule.ActiveProcessMonitor.Result.ProcessTitle;
 
 				if (HostsPerApplication != null)
 				{

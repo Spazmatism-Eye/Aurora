@@ -40,26 +40,30 @@ public sealed class LightingStateManager
     public event EventHandler? PreUpdate;
     public event EventHandler? PostUpdate;
 
-    private readonly ActiveProcessMonitor _processMonitor;
-
     private readonly Func<ILightEvent, bool> _isOverlayActiveProfile;
 
     private readonly Task<PluginManager> _pluginManager;
     private readonly Task<IpcListener?> _ipcListener;
     private readonly Task<Devices.DeviceManager> _deviceManager;
+    private readonly Task<ActiveProcessMonitor> _activeProcessMonitor;
+    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
 
     private bool Initialized { get; set; }
 
-    public LightingStateManager(Task<PluginManager> pluginManager, Task<IpcListener?> ipcListener, Task<Devices.DeviceManager> deviceManager)
+    public LightingStateManager(Task<PluginManager> pluginManager, Task<IpcListener?> ipcListener,
+        Task<Devices.DeviceManager> deviceManager, Task<ActiveProcessMonitor> activeProcessMonitor, Task<RunningProcessMonitor> runningProcessMonitor)
     {
         _pluginManager = pluginManager;
         _ipcListener = ipcListener;
         _deviceManager = deviceManager;
 
-        _processMonitor = ActiveProcessMonitor.Instance;
-        _isOverlayActiveProfile = evt =>
-            evt.IsOverlayEnabled &&
-            evt.Config.ProcessNames.Any(name => RunningProcessMonitor.Instance.IsProcessRunning(name));
+        _activeProcessMonitor = activeProcessMonitor;
+        _runningProcessMonitor = runningProcessMonitor;
+        _isOverlayActiveProfile = evt => evt.IsOverlayEnabled &&
+                                         evt.Config.ProcessNames.Any(ProcessRunning);
+        return;
+
+        bool ProcessRunning(string name) => _runningProcessMonitor.Result.IsProcessRunning(name);
     }
 
     public async Task Initialize()
@@ -359,7 +363,7 @@ public sealed class LightingStateManager
     {
         if (Global.Configuration.DetectionMode != ApplicationDetectionMode.ForegroundApp ||
             _currentTick < _nextProcessNameUpdate) return;
-        _processMonitor.UpdateActiveProcessPolling();
+        _activeProcessMonitor.Result.UpdateActiveProcessPolling();
         _nextProcessNameUpdate = _currentTick + 1000L;
     }
 
@@ -432,7 +436,7 @@ public sealed class LightingStateManager
             return;
         }
 
-        var rawProcessName = _processMonitor.ProcessName;
+        var rawProcessName = _activeProcessMonitor.Result.ProcessName;
 
         UpdateProcess();
         var newFrame = new EffectsEngine.EffectFrame();
@@ -504,8 +508,8 @@ public sealed class LightingStateManager
     /// or because the process is open (false).</param>
     private ILightEvent GetCurrentProfile(out bool preview)
     {
-        var processName = _processMonitor.ProcessName.ToLower();
-        var processTitle = _processMonitor.ProcessTitle;
+        var processName = _activeProcessMonitor.Result.ProcessName.ToLower();
+        var processTitle = _activeProcessMonitor.Result.ProcessTitle;
         ILightEvent? profile = null;
         ILightEvent? tempProfile;
         preview = false;

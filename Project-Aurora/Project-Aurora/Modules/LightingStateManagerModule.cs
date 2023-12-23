@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Aurora.Devices;
 using Aurora.Modules.GameStateListen;
+using Aurora.Modules.ProcessMonitor;
 using Aurora.Profiles;
 using Aurora.Settings;
 using Lombok.NET;
@@ -13,6 +14,8 @@ public sealed partial class LightingStateManagerModule : AuroraModule
     private readonly Task<IpcListener?> _ipcListener;
     private readonly Task<AuroraHttpListener?> _httpListener;
     private readonly Task<DeviceManager> _deviceManager;
+    private readonly Task<ActiveProcessMonitor> _activeProcessMonitor;
+    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
 
     private static readonly TaskCompletionSource<LightingStateManager> TaskSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -21,18 +24,21 @@ public sealed partial class LightingStateManagerModule : AuroraModule
     public static Task<LightingStateManager> LightningStateManager => TaskSource.Task;
 
     public LightingStateManagerModule(Task<PluginManager> pluginManager, Task<IpcListener?> ipcListener,
-        Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager)
+        Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager,
+        Task<ActiveProcessMonitor> activeProcessMonitor, Task<RunningProcessMonitor> runningProcessMonitor)
     {
         _pluginManager = pluginManager;
         _ipcListener = ipcListener;
         _httpListener = httpListener;
         _deviceManager = deviceManager;
+        _activeProcessMonitor = activeProcessMonitor;
+        _runningProcessMonitor = runningProcessMonitor;
     }
 
     protected override async Task Initialize()
     {
         Global.logger.Information("Loading Applications");
-        var lightingStateManager = new LightingStateManager(_pluginManager, _ipcListener, _deviceManager);
+        var lightingStateManager = new LightingStateManager(_pluginManager, _ipcListener, _deviceManager, _activeProcessMonitor, _runningProcessMonitor);
         _manager = lightingStateManager;
         Global.LightingStateManager = lightingStateManager;
         await lightingStateManager.Initialize();

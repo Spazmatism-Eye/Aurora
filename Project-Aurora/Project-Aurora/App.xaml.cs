@@ -36,11 +36,14 @@ public partial class App
     private static readonly PluginsModule PluginsModule = new();
     private static readonly IpcListenerModule IpcListenerModule = new();
     private static readonly HttpListenerModule HttpListenerModule = new();
+    private static readonly ProcessesModule ProcessesModule = new();
     private static readonly RazerSdkModule RazerSdkModule = new(LightingStateManagerModule.LightningStateManager);
     private static readonly DevicesModule DevicesModule = new(RazerSdkModule.RzSdkManager);
     private static readonly LightingStateManagerModule LightingStateManagerModule = new(
-        PluginsModule.PluginManager, IpcListenerModule.IpcListener, HttpListenerModule.HttpListener, DevicesModule.DeviceManager);
-    private static readonly OnlineSettings OnlineSettings = new(DevicesModule.DeviceManager);
+        PluginsModule.PluginManager, IpcListenerModule.IpcListener, HttpListenerModule.HttpListener,
+        DevicesModule.DeviceManager, ProcessesModule.ActiveProcessMonitor, ProcessesModule.RunningProcessMonitor
+    );
+    private static readonly OnlineSettings OnlineSettings = new(DevicesModule.DeviceManager, ProcessesModule.RunningProcessMonitor);
     private static readonly LayoutsModule LayoutsModule = new(RazerSdkModule.RzSdkManager, OnlineSettings.LayoutsUpdate);
 
     private readonly List<AuroraModule> _modules = new()
@@ -52,16 +55,17 @@ public partial class App
         new AudioCaptureModule(),
         new PointerUpdateModule(),
         new HardwareMonitorModule(),
-        new LogitechSdkModule(),
+        new LogitechSdkModule(ProcessesModule.RunningProcessMonitor),
         OnlineSettings,
         PluginsModule,
         IpcListenerModule,
         HttpListenerModule,
+        ProcessesModule,
         DevicesModule,
         LayoutsModule,
         LightingStateManagerModule,
         RazerSdkModule,
-        new PerformanceMonitor(),
+        new PerformanceMonitor(ProcessesModule.RunningProcessMonitor),
     };
 
     private static readonly SemaphoreSlim _preventShutdown = new(0);

@@ -51,7 +51,7 @@ public class LogitechSdkListener
         "Aurora.exe", "AuroraCommunity.exe", "AuroraDeviceManager.exe"
     };
 
-    public async Task Initialize()
+    public async Task Initialize(Task<RunningProcessMonitor> runningProcessMonitor)
     {
         const string runReg = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
         using var runKey = Registry.LocalMachine.OpenSubKey(runReg);
@@ -71,7 +71,7 @@ public class LogitechSdkListener
             }
         }
 
-        if (RunningProcessMonitor.Instance.IsProcessRunning("lcore.exe"))
+        if ((await runningProcessMonitor).IsProcessRunning("lcore.exe"))
         {
             State = LightsyncSdkState.Conflicted;
             return;

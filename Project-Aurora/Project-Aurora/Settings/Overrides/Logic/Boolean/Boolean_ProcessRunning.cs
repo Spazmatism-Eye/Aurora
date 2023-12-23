@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Aurora.Modules;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Settings.Controls;
 using Aurora.Utils;
@@ -37,7 +38,7 @@ public class BooleanProcessRunning : Evaluatable<bool> {
     }
 
     protected override bool Execute(IGameState gameState)
-        => RunningProcessMonitor.Instance.IsProcessRunning(ProcessName);
+        => ProcessesModule.RunningProcessMonitor.Result.IsProcessRunning(ProcessName);
         
     public override Evaluatable<bool> Clone() => new BooleanProcessRunning { ProcessName = ProcessName };
 }

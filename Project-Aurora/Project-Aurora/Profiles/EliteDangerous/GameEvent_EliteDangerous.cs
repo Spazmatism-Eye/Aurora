@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Aurora.Modules;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Profiles.EliteDangerous.GSI;
 using Aurora.Profiles.EliteDangerous.GSI.Nodes;
@@ -327,7 +328,7 @@ public class GameEvent_EliteDangerous : GameEvent_Generic
 
     private Process GetActiveProcess()
     {
-        return Process.GetProcessById(ActiveProcessMonitor.Instance.ProcessId);
+        return Process.GetProcessById(ProcessesModule.ActiveProcessMonitor.Result.ProcessId);
     }
 
     public override void OnStart()

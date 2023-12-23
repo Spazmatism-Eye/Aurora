@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Amib.Threading;
 using Aurora.EffectsEngine;
+using Aurora.Modules;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Profiles;
 using Aurora.Settings.Layers.Ambilight;
@@ -445,7 +446,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
                 break;
             case AmbilightCaptureType.ForegroundApp:
                 _specificProcessHandle = User32.GetForegroundWindow();
-                ActiveProcessMonitor.Instance.ActiveProcessChanged += ProcessChanged;
+                ProcessesModule.ActiveProcessMonitor.Result.ActiveProcessChanged += ProcessChanged;
                 break;
             case AmbilightCaptureType.Coordinates:
             case AmbilightCaptureType.EntireMonitor:
@@ -458,7 +459,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
 
     private void ClearEvents()
     {
-        ActiveProcessMonitor.Instance.ActiveProcessChanged -= ProcessChanged;
+        ProcessesModule.ActiveProcessMonitor.Result.ActiveProcessChanged -= ProcessChanged;
         WindowListener.Instance.WindowCreated -= WindowsChanged;
         WindowListener.Instance.WindowDestroyed -= WindowsChanged;
     }

@@ -12,24 +12,26 @@ using Aurora.Modules.OnlineConfigs.Model;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Utils.IpApi;
 using ICSharpCode.SharpZipLib.Zip;
-using Lombok.NET;
 using Microsoft.Win32;
 
 namespace Aurora.Modules;
 
-public sealed partial class OnlineSettings : AuroraModule
+public sealed class OnlineSettings : AuroraModule
 {
     public static Dictionary<string, DeviceTooltips> DeviceTooltips = new();
     
     private readonly Task<DeviceManager> _deviceManager;
+    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
+    
     private Dictionary<string, ShutdownProcess> _shutdownProcesses = new();
     private readonly TaskCompletionSource _layoutUpdateTaskSource = new();
 
     public Task LayoutsUpdate => _layoutUpdateTaskSource.Task;
 
-    public OnlineSettings(Task<DeviceManager> deviceManager)
+    public OnlineSettings(Task<DeviceManager> deviceManager, Task<RunningProcessMonitor> runningProcessMonitor)
     {
         _deviceManager = deviceManager;
+        _runningProcessMonitor = runningProcessMonitor;
     }
 
     protected override async Task Initialize()
@@ -48,7 +50,7 @@ public sealed partial class OnlineSettings : AuroraModule
         //TODO update layouts
         await Refresh();
 
-        RunningProcessMonitor.Instance.RunningProcessesChanged += OnRunningProcessesChanged;
+        (await _runningProcessMonitor).RunningProcessesChanged += OnRunningProcessesChanged;
 
         if (Global.Configuration.Lat == 0 && Global.Configuration.Lon == 0)
         {
@@ -229,9 +231,13 @@ public sealed partial class OnlineSettings : AuroraModule
         }
     }
 
-    [Async]
+    public override async Task DisposeAsync()
+    {
+        (await _runningProcessMonitor).RunningProcessesChanged -= OnRunningProcessesChanged;
+    }
+
     public override void Dispose()
     {
-        RunningProcessMonitor.Instance.RunningProcessesChanged -= OnRunningProcessesChanged;
+        DisposeAsync().Wait();
     }
 }

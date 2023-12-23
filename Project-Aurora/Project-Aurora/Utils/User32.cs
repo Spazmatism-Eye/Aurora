@@ -48,6 +48,9 @@ internal static class User32
     internal static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc,
         WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
 
+    [DllImport("user32.dll")]
+    internal static extern bool UnhookWinEvent(IntPtr eventHook);
+
     [Pure]
     [DllImport("user32.dll")]
     internal static extern bool GetLastInputInfo(ref tagLASTINPUTINFO plii);

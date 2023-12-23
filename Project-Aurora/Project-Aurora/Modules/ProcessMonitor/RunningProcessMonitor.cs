@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Runtime.CompilerServices;
-using Lombok.NET;
 
 namespace Aurora.Modules.ProcessMonitor;
 
@@ -25,8 +24,7 @@ public class RunningProcessChanged: EventArgs
 /// process closes and can delay by about 2 seconds, though this really shouldn't be an issue since this isn't required for the
 /// profile switching - only the overlay toggling.
 /// </summary>
-[Singleton]
-public sealed partial class RunningProcessMonitor : IDisposable {
+public sealed class RunningProcessMonitor : IDisposable {
     public event EventHandler<RunningProcessChanged>? RunningProcessesChanged;
 
     /// <summary>A list of all currently running processes (and how many instances are running).</summary>
@@ -41,7 +39,7 @@ public sealed partial class RunningProcessMonitor : IDisposable {
     /// Creates a new instance of the <see cref="RunningProcessMonitor"/>, which performs an initial scan of running
     /// processes and then sets up the watchers with their relevant commands.
     /// </summary>
-    private RunningProcessMonitor() {
+    internal RunningProcessMonitor() {
         // Fetch all processes running now
         _runningProcesses = Process.GetProcesses()
             .Select(p =>

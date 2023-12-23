@@ -16,6 +16,8 @@ public sealed class PerformanceMonitor : AuroraModule
 
     private static readonly bool EnableChromaMonitor = false;
 
+    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
+
     private readonly SmartThreadPool _threadPool = new(new STPStartInfo
     {
         AreThreadsBackground = true,
@@ -33,6 +35,11 @@ public sealed class PerformanceMonitor : AuroraModule
 
     private PerformanceCounter? _auroraMemCounter;
     private PerformanceCounter? _rzStreamCpuCounter;
+
+    public PerformanceMonitor(Task<RunningProcessMonitor> runningProcessMonitor)
+    {
+        _runningProcessMonitor = runningProcessMonitor;
+    }
 
     protected override Task Initialize()
     {
@@ -60,23 +67,18 @@ public sealed class PerformanceMonitor : AuroraModule
         }
     }
 
-    public override Task DisposeAsync()
+    public override async Task DisposeAsync()
     {
-        RunningProcessMonitor.Instance.RunningProcessesChanged -= ProcessMonitorOnRunningProcessesChanged;
+        (await _runningProcessMonitor).RunningProcessesChanged -= ProcessMonitorOnRunningProcessesChanged;
         
         _working = false;
         _endTrigger.SetResult();
         _threadPool.Join();
-        return Task.CompletedTask;
     }
 
     public override void Dispose()
     {
-        RunningProcessMonitor.Instance.RunningProcessesChanged -= ProcessMonitorOnRunningProcessesChanged;
-
-        _working = false;
-        _endTrigger.SetResult();
-        _threadPool.Join();
+        DisposeAsync().Wait();
     }
 
     private void InitializeAurora()
@@ -92,13 +94,13 @@ public sealed class PerformanceMonitor : AuroraModule
         Environment.Exit(10);
     }
 
-    private void InitializeRazerStreamApi()
+    private async Task InitializeRazerStreamApi()
     {
-        if (RunningProcessMonitor.Instance.IsProcessRunning(RzChromaStreamStartProcessName))
+        if ((await _runningProcessMonitor).IsProcessRunning(RzChromaStreamStartProcessName))
         {
             _rzStreamCpuCounter = new PerformanceCounter("Process", "% Processor Time", RazerChromeServerProcessName, true);
         }
-        RunningProcessMonitor.Instance.RunningProcessesChanged += ProcessMonitorOnRunningProcessesChanged;
+        (await _runningProcessMonitor).RunningProcessesChanged += ProcessMonitorOnRunningProcessesChanged;
     }
 
     private void ProcessMonitorOnRunningProcessesChanged(object? sender, RunningProcessChanged e)

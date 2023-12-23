@@ -2,12 +2,10 @@
 using System.Diagnostics;
 using Aurora.Settings;
 using Aurora.Utils;
-using Lombok.NET;
 
 namespace Aurora.Modules.ProcessMonitor;
 
-[Singleton]
-public sealed partial class ActiveProcessMonitor
+public sealed class ActiveProcessMonitor : IDisposable
 {
 	private const uint WinEventOutOfContext = 0;
 	private const uint EventSystemForeground = 3;
@@ -29,16 +27,21 @@ public sealed partial class ActiveProcessMonitor
 	public event EventHandler? ActiveProcessChanged;
 
 	private readonly User32.WinEventDelegate _dele;
+	private readonly IntPtr _setWinEventHook;
+	private readonly IntPtr _winEventHook;
 
-	private ActiveProcessMonitor()
+	internal ActiveProcessMonitor()
 	{
 		_dele = WinEventProc;
 		if (Global.Configuration.DetectionMode != ApplicationDetectionMode.WindowsEvents)
 		{
 			return;
 		}
-		User32.SetWinEventHook(EventSystemForeground, EventSystemForeground, IntPtr.Zero, _dele, 0, 0, WinEventOutOfContext);
-		User32.SetWinEventHook(EventSystemMinimizeEnd, EventSystemMinimizeEnd, IntPtr.Zero, _dele, 0, 0, WinEventOutOfContext);
+
+		_setWinEventHook = User32.SetWinEventHook(EventSystemForeground, EventSystemForeground, 
+			IntPtr.Zero, _dele, 0, 0, WinEventOutOfContext);
+		_winEventHook = User32.SetWinEventHook(EventSystemMinimizeEnd, EventSystemMinimizeEnd, 
+			IntPtr.Zero, _dele, 0, 0, WinEventOutOfContext);
 	}
 
 	private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr windowHandle, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
@@ -74,5 +77,11 @@ public sealed partial class ActiveProcessMonitor
 		ProcessTitle = string.Empty;
 		ProcessName = string.Empty;
 		ProcessId = 0;
+	}
+
+	public void Dispose()
+	{
+		User32.UnhookWinEvent(_setWinEventHook);
+		User32.UnhookWinEvent(_winEventHook);
 	}
 }

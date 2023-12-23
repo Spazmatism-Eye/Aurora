@@ -1,5 +1,5 @@
-﻿using Aurora.Modules.HardwareMonitor;
-using Aurora.Modules.ProcessMonitor;
+﻿using Aurora.Modules;
+using Aurora.Modules.HardwareMonitor;
 
 namespace Aurora.Nodes;
 
@@ -52,12 +52,12 @@ public class LocalPcInformation : Node
     /// <summary>
     /// Returns focused window's name.
     /// </summary>
-    public string ActiveWindowName => ActiveProcessMonitor.Instance.ProcessTitle;
+    public string ActiveWindowName => ProcessesModule.ActiveProcessMonitor.Result.ProcessTitle;
 
     /// <summary>
     /// Returns focused window's process name.
     /// </summary>
-    public string ActiveProcess => ActiveProcessMonitor.Instance.ProcessName;
+    public string ActiveProcess => ProcessesModule.ActiveProcessMonitor.Result.ProcessName;
 
     private static CelestialData? _celestialData;
     public CelestialData CelestialData => _celestialData ??= new CelestialData();
