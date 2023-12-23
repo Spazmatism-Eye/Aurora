@@ -1,18 +1,23 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using RGB.NET.Core;
 
 namespace Common.Devices.RGBNet;
 
-[Serializable]
 public class DeviceRemap
 {
-    [JsonProperty(PropertyName = "n")]
-    public string Name { get; init; }
+    [JsonPropertyName("n")]
+    public string Name { get; }
 
-    [JsonProperty(PropertyName = "k")]
+    [JsonPropertyName("k")]
     public Dictionary<LedId, DeviceKeys> KeyMapper { get; } = new(Constants.MaxKeyId);
 
     [JsonConstructor]
+    public DeviceRemap(string name, Dictionary<LedId, DeviceKeys> keyMapper)
+    {
+        Name = name;
+        KeyMapper = keyMapper;
+    }
+
     public DeviceRemap(string name)
     {
         Name = name;

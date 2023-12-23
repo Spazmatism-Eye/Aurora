@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Common.Devices.RGBNet;
 
-[Serializable]
 public class DeviceMappingConfig
 {
     private static Lazy<DeviceMappingConfig> _configLoader = new(LoadConfig, LazyThreadSafetyMode.ExecutionAndPublication);
@@ -12,11 +12,17 @@ public class DeviceMappingConfig
     [JsonIgnore]
     private static string _configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "DeviceMappings.json");
 
-    [JsonProperty(PropertyName = "d")]
-    public List<DeviceRemap> Devices { get; set; } = new();
+    [JsonPropertyName("d")]
+    public List<DeviceRemap> Devices { get; init; } = new();
 
     private DeviceMappingConfig()
     {
+    }
+
+    [JsonConstructor]
+    public DeviceMappingConfig(List<DeviceRemap> devices)
+    {
+        Devices = devices;
     }
 
     private static DeviceMappingConfig LoadConfig()
@@ -27,14 +33,14 @@ public class DeviceMappingConfig
         }
 
         using var file = File.OpenText(_configPath);
-        var serializer = new JsonSerializer();
-        
-        return serializer.Deserialize<DeviceMappingConfig>(new JsonTextReader(file)) ?? new DeviceMappingConfig();
+
+        var deviceMappingConfig = JsonSerializer.Deserialize<DeviceMappingConfig>(file.ReadToEnd());
+        return deviceMappingConfig ?? new DeviceMappingConfig();
     }
 
     public void SaveConfig()
     {
-        var content = JsonConvert.SerializeObject(this, Formatting.Indented);
+        var content = JsonSerializer.Serialize(this, new JsonSerializerOptions{ WriteIndented = true});
 
         Directory.CreateDirectory(Path.GetDirectoryName(_configPath) ?? throw new InvalidOperationException());
         File.WriteAllText(_configPath, content, Encoding.UTF8);
