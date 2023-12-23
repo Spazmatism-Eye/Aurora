@@ -65,14 +65,14 @@ public sealed class InputEvents : IInputEvents
 
     delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
     private readonly WndProc? _fnWndProcHook;
-    private readonly nint _hWndProcHook;
+    private readonly nint _originalWndProc;
     private readonly IntPtr _hWnd;
 
     public InputEvents()
     {
         _hWnd = User32.CreateWindowEx(0, "STATIC", "", 0x80000000, 0, 0,
             0, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-        _hWndProcHook = User32.GetWindowLongPtr(_hWnd, -4);
+        _originalWndProc = User32.GetWindowLongPtr(_hWnd, -4);
 
         // register the keyboard device and you can register device which you need like mouse
         RawInputDevice.RegisterDevice(HidUsageAndPage.Keyboard, RawInputDeviceFlags.InputSink, _hWnd);
@@ -88,66 +88,80 @@ public sealed class InputEvents : IInputEvents
         const int wmInput = 0x00FF;
 
         // You can read inputs by processing the WM_INPUT message.
-        if (msg != wmInput) return User32.CallWindowProc(_hWndProcHook, _hWnd, msg, wparam, lparam);
+        if (msg != wmInput) return User32.CallWindowProc(_originalWndProc, _hWnd, msg, wparam, lparam);
         // Create an RawInputData from the handle stored in lParam.
         var data = RawInputData.FromHandle(lparam);
 
         // The data will be an instance of either RawInputMouseData, RawInputKeyboardData, or RawInputHidData.
         // They contain the raw input data in their properties.
-        switch (data)
+        var intercepted = data switch
         {
-            case RawInputMouseData mouse:
-                DeviceOnMouseInput(mouse.Mouse);
-                break;
-            case RawInputKeyboardData keyboard:
-                DeviceOnKeyboardInput(keyboard.Keyboard);
-                break;
-        }
+            RawInputMouseData mouse => DeviceOnMouseInput(mouse.Mouse),
+            RawInputKeyboardData keyboard => DeviceOnKeyboardInput(keyboard.Keyboard),
+            _ => false,
+        };
 
-        //return User32.CallWindowProc(_hWndProcHook, _hWnd, msg, wparam, lparam);
-        return IntPtr.Zero;
+        return intercepted ? IntPtr.Zero : User32.CallWindowProc(_originalWndProc, _hWnd, msg, wparam, lparam);
     }
 
-    private void DeviceOnKeyboardInput(RawKeyboard keyboardData)
+    /// <param name="keyboardData"></param>
+    /// <returns>if input should be interrupted or not</returns>
+    private bool DeviceOnKeyboardInput(RawKeyboard keyboardData)
     {
         try
         {
-            var key = KeyUtils.CorrectRawInputData(keyboardData.VirutalKey, keyboardData.ScanCode, keyboardData.Flags);
+            var flags = keyboardData.Flags;
+            // e0 and e1 are escape sequences used for certain special keys, such as PRINT and PAUSE/BREAK.
+            // see http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
+            var isE0 = flags.HasFlag(RawKeyboardFlags.KeyE0);
+            var isE1 = flags.HasFlag(RawKeyboardFlags.KeyE1);
+            var key = KeyUtils.CorrectRawInputData(keyboardData.VirutalKey, keyboardData.ScanCode, isE0, isE1);
             if ((int)key == 255)
             {
                 // discard "fake keys" which are part of an escaped sequence
-                return;
+                return false;
             }
 
-            if ((keyboardData.Flags & RawKeyboardFlags.Up) != 0)
+            var keyboardKeyEvent = new KeyboardKeyEvent(key, flags.HasFlag(RawKeyboardFlags.KeyE0));
+            if ((flags & RawKeyboardFlags.Up) != 0)
             {
                 _pressedKeySequence.RemoveAll(k => k == key);
-                KeyUp?.Invoke(this, new KeyboardKeyEvent(key, keyboardData.Flags));
+                KeyUp?.Invoke(this, keyboardKeyEvent);
             }
             else
             {
                 if (!_pressedKeySequence.Contains(key))
                     _pressedKeySequence.Add(key);
-                KeyDown?.Invoke(this, new KeyboardKeyEvent(key, keyboardData.Flags));
+                KeyDown?.Invoke(this, keyboardKeyEvent);
             }
+
+            return keyboardKeyEvent.Intercepted;
         }
         catch (Exception exc)
         {
             Global.logger.Error(exc, "Exception while handling keyboard input");
+            return false;
         }
     }
 
     /// <summary>
     /// Handles a SharpDX MouseInput event and fires the relevant InputEvents event (Scroll, MouseButtonDown or MouseButtonUp).
+    /// <returns>if input should be interrupted or not</returns>
     /// </summary>
-    private void DeviceOnMouseInput(RawMouse mouseData)
+    private bool DeviceOnMouseInput(RawMouse mouseData)
     {
         // Scrolling
         if (mouseData.ButtonData != 0)
         {
             if (mouseData.Buttons == RawMouseButtonFlags.MouseWheel)
-                Scroll?.Invoke(this, new MouseScrollEvent(mouseData.ButtonData));
-            return;
+            {
+                var mouseScrollEvent = new MouseScrollEvent(mouseData.ButtonData);
+                Scroll?.Invoke(this, mouseScrollEvent);
+
+                return mouseScrollEvent.Intercepted;
+            }
+
+            return false;
         }
 
         var (button, isDown) = mouseData.Buttons switch
@@ -161,17 +175,20 @@ public sealed class InputEvents : IInputEvents
             _ => (MouseButtons.Left, false)
         };
 
+        var mouseKeyEvent = new MouseKeyEvent(button);
         if (isDown)
         {
             if (!_pressedMouseButtons.Contains(button))
                 _pressedMouseButtons.Add(button);
-            MouseButtonDown?.Invoke(this, new MouseKeyEvent(button));
+            MouseButtonDown?.Invoke(this, mouseKeyEvent);
         }
         else
         {
             _pressedMouseButtons.Remove(button);
-            MouseButtonUp?.Invoke(this, new MouseKeyEvent(button));
+            MouseButtonUp?.Invoke(this, mouseKeyEvent);
         }
+
+        return mouseKeyEvent.Intercepted;
     }
 
     public TimeSpan GetTimeSinceLastInput() {

@@ -4,29 +4,33 @@ using System.Windows.Forms;
 using Aurora.Utils;
 using Common.Devices;
 using JetBrains.Annotations;
-using Linearstar.Windows.RawInput.Native;
 
 namespace Aurora.Modules.Inputs;
 
-public class KeyboardKeyEvent : EventArgs
+public abstract class AuroraInputEvent : EventArgs
+{
+    public bool Intercepted { get; set; }
+}
+
+public class KeyboardKeyEvent : AuroraInputEvent
 {
     public Keys Key { get; }
-    private bool IsE0 { get; }
+    private bool IsExtended { get; }
     private DeviceKeys? _deviceKey;
 
-    public KeyboardKeyEvent(Keys key, RawKeyboardFlags flags)
+    public KeyboardKeyEvent(Keys key, bool isExtended)
     {
         Key = key;
-        IsE0 = flags.HasFlag(RawKeyboardFlags.KeyE0);
+        IsExtended = isExtended;
     }
 
     public DeviceKeys GetDeviceKey()
     {
-        return _deviceKey ??= KeyUtils.GetDeviceKey(Key, IsE0);
+        return _deviceKey ??= KeyUtils.GetDeviceKey(Key, IsExtended);
     }
 }
 
-public class MouseKeyEvent : EventArgs
+public class MouseKeyEvent : AuroraInputEvent
 {
     public MouseButtons Key { get; }
 
@@ -36,7 +40,7 @@ public class MouseKeyEvent : EventArgs
     }
 }
 
-public class MouseScrollEvent : EventArgs
+public class MouseScrollEvent : AuroraInputEvent
 {
     public int WheelDelta { get; }
 

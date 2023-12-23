@@ -1,13 +1,18 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Lombok.NET;
 using Aurora.Modules.Inputs;
+using Aurora.Settings;
+using Common.Devices;
 using Common.Utils;
 
 namespace Aurora.Modules;
 
 public sealed partial class InputsModule : AuroraModule
 {
+    private const bool VolumeToBrightnessReady = false;
+    
     public override async Task InitializeAsync()
     {
         await Initialize();
@@ -19,9 +24,12 @@ public sealed partial class InputsModule : AuroraModule
         {
             Global.logger.Information("Loading Input Hooking");
             Global.InputEvents = new InputEvents();
-            Global.Configuration.PropertyChanged += SetupVolumeAsBrightness;
-            SetupVolumeAsBrightness(Global.Configuration,
-                new PropertyChangedEventArgs(nameof(Global.Configuration.UseVolumeAsBrightness)));
+            if (VolumeToBrightnessReady)
+            {
+                Global.Configuration.PropertyChanged += SetupVolumeAsBrightness;
+                SetupVolumeAsBrightness(Global.Configuration,
+                    new PropertyChangedEventArgs(nameof(Global.Configuration.UseVolumeAsBrightness)));
+            }
             Global.logger.Information("Loaded Input Hooking");
         }
 
@@ -40,16 +48,31 @@ public sealed partial class InputsModule : AuroraModule
 
     private static void SetupVolumeAsBrightness(object? sender, PropertyChangedEventArgs eventArgs)
     {
-        //if (eventArgs.PropertyName != nameof(Global.Configuration.UseVolumeAsBrightness)) return;
-        //if (Global.Configuration.UseVolumeAsBrightness)
-        //{
-        //    InputInterceptor = new InputInterceptor();
-        //    InputInterceptor.Input += InterceptVolumeAsBrightness;
-        //}
-        //else if (InputInterceptor != null)
-        //{
-        //    InputInterceptor.Input -= InterceptVolumeAsBrightness;
-        //    InputInterceptor.Dispose();
-        //}
+        if (eventArgs.PropertyName != nameof(Global.Configuration.UseVolumeAsBrightness)) return;
+        if (Global.Configuration.UseVolumeAsBrightness)
+        {
+            Global.InputEvents.KeyDown -= InterceptVolumeAsBrightness;
+            Global.InputEvents.KeyDown += InterceptVolumeAsBrightness;
+        }
+        else
+        {
+            Global.InputEvents.KeyDown -= InterceptVolumeAsBrightness;
+        }
+    }
+    
+    private static void InterceptVolumeAsBrightness(object? sender, KeyboardKeyEvent e)
+    {
+        if (!Global.InputEvents.Alt) return;
+        
+        e.Intercepted = true;
+        Task.Factory.StartNew(() =>
+            {
+                var brightness = Global.Configuration.GlobalBrightness;
+                brightness += e.GetDeviceKey() == DeviceKeys.VOLUME_UP ? 0.05f : -0.05f;
+                Global.Configuration.GlobalBrightness = Math.Max(0f, Math.Min(1f, brightness));
+
+                ConfigManager.Save(Global.Configuration, Configuration.ConfigFile);
+            }
+        );
     }
 }

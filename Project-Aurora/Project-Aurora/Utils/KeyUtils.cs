@@ -1,5 +1,4 @@
-﻿using Aurora.Devices;
-using Aurora.Settings;
+﻿using Aurora.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Common.Devices;
-using Linearstar.Windows.RawInput.Native;
 
 namespace Aurora.Utils;
 
@@ -119,14 +117,10 @@ public static class KeyUtils
     /// <summary>
     /// Correcting RawInput data according to an article https://blog.molecular-matters.com/2011/09/05/properly-handling-keyboard-input/
     /// </summary>
-    public static Keys CorrectRawInputData(int virtualKey, int keyboardDataScanCode, RawKeyboardFlags flags)
+    public static Keys CorrectRawInputData(int virtualKey, int keyboardDataScanCode, bool isE0, bool isE1)
     {
         var key = (Keys)virtualKey;
 
-        // e0 and e1 are escape sequences used for certain special keys, such as PRINT and PAUSE/BREAK.
-        // see http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
-        var isE0 = flags.HasFlag(RawKeyboardFlags.KeyE0);
-        var isE1 = flags.HasFlag(RawKeyboardFlags.KeyE1);
         if (Global.kbLayout.LoadedLocalization.IsAutomaticGeneration() && key is >= Keys.A and <= Keys.Z or >= Keys.Oem1 and <= Keys.Oem102)
         {
             var thread = User32.GetWindowThreadProcessId(User32.GetForegroundWindow(), out _);
