@@ -17,10 +17,14 @@ public class ScriptLayerHandlerProperties : LayerHandlerProperties<ScriptLayerHa
     [JsonIgnore]
     public string Script => Logic._Script ?? _Script ?? String.Empty;
 
-    public VariableRegistry? _ScriptProperties { get; set; }
+    private VariableRegistry? _scriptProperties;
 
-    [JsonIgnore]
-    public VariableRegistry ScriptProperties => Logic._ScriptProperties ?? _ScriptProperties;
+    [JsonProperty("_ScriptProperties")]
+    public VariableRegistry ScriptProperties
+    {
+        get => Logic._scriptProperties ?? _scriptProperties ?? throw new NullReferenceException("ScriptLayerHandlerProperties._scriptProperties is null");
+        set => _scriptProperties = value;
+    }
 
     public ScriptLayerHandlerProperties() { }
 
@@ -29,7 +33,7 @@ public class ScriptLayerHandlerProperties : LayerHandlerProperties<ScriptLayerHa
     public override void Default()
     {
         base.Default();
-        _ScriptProperties = new VariableRegistry();
+        _scriptProperties = new VariableRegistry();
     }
 }
 
@@ -80,7 +84,7 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
     {
         if (IsScriptValid)
         {
-            return (VariableRegistry)ProfileManager.EffectScripts[Properties._Script].Properties.Clone();
+            return ProfileManager.EffectScripts[Properties._Script].Properties;
         }
 
         return null;
@@ -88,6 +92,11 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
 
     public void OnScriptChanged()
     {
+        if (Properties._Script == null || !ProfileManager.EffectScripts.ContainsKey(Properties._Script))
+        {
+            return;
+        }
+        Properties.ScriptProperties = ProfileManager.EffectScripts[Properties._Script].Properties;
     }
 
     [JsonIgnore]

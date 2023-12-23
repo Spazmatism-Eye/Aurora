@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Common.Devices;
 
 namespace Aurora.Settings.Layers.Controls;
 
@@ -32,18 +31,18 @@ public partial class Control_ScriptLayer
 
     private void cboScripts_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        ScriptLayerHandler handler = (ScriptLayerHandler)DataContext;
+        var handler = (ScriptLayerHandler)DataContext;
         handler.OnScriptChanged();
         UpdateScriptSettings();
     }
 
     private void UpdateScriptSettings()
     {
-        ScriptLayerHandler handler = (ScriptLayerHandler)DataContext;
+        var handler = (ScriptLayerHandler)DataContext;
         ScriptPropertiesEditor.RegisteredVariables = handler.GetScriptPropertyRegistry();
-        VariableRegistry varReg = ScriptPropertiesEditor.RegisteredVariables;
+        var varReg = ScriptPropertiesEditor.RegisteredVariables;
         ScriptPropertiesEditor.Visibility = varReg == null || varReg.Count == 0 ? Visibility.Hidden : Visibility.Visible;
-        ScriptPropertiesEditor.VarRegistrySource = handler.IsScriptValid ? handler.Properties._ScriptProperties : null;
+        ScriptPropertiesEditor.VarRegistrySource = handler.IsScriptValid ? handler.Properties.ScriptProperties : null;
     }
 
     private void refreshScriptList_Click(object? sender, RoutedEventArgs e) {

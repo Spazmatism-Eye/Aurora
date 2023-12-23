@@ -43,7 +43,7 @@ public partial class Control_VariableRegistryEditor
         {
             var varItem = new Control_VariableRegistryItem {
                 VariableName = variableName,
-                VarRegistry = VarRegistrySource,
+                VarRegistry = RegisteredVariables,
             };
 
             stack_Options.Children.Add(varItem);

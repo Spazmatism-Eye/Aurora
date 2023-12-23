@@ -17,6 +17,7 @@ using Aurora.Scripts.VoronScripts;
 using Aurora.Settings;
 using Aurora.Settings.Layers;
 using Aurora.Utils;
+using Aurora.Vorons;
 using Common.Utils;
 using IronPython.Hosting;
 using IronPython.Runtime.Types;
