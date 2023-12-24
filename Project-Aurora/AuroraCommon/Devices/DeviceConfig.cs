@@ -1,10 +1,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Common.Devices;
 
-[JsonObject]
+[Serializable]
 public class DeviceConfig : INotifyPropertyChanged
 {
     public const string FileName = "DeviceConfig.json";
@@ -16,20 +16,17 @@ public class DeviceConfig : INotifyPropertyChanged
 
     public Dictionary<string, SimpleColor> DeviceCalibrations { get; set; } = new();
 
-    [JsonProperty("allow_peripheral_devices")]
+    [JsonPropertyName("allow_peripheral_devices")]
     public bool AllowPeripheralDevices { get; set; } = true;
 
-    [JsonProperty("devices_disable_keyboard")]
+    [JsonPropertyName("devices_disable_keyboard")]
     public bool DevicesDisableKeyboard { get; set; }
 
-    [JsonProperty("devices_disable_mouse")]
+    [JsonPropertyName("devices_disable_mouse")]
     public bool DevicesDisableMouse { get; set; }
 
-    [JsonProperty("devices_disable_headset")]
+    [JsonPropertyName("devices_disable_headset")]
     public bool DevicesDisableHeadset { get; set; }
-
-    [JsonProperty("unified_hid_disabled")]
-    public bool UnifiedHidDisabled { get; set; } = true;
 
     [JsonIgnore]
     public ObservableCollection<string> EnabledDevices
@@ -77,7 +74,7 @@ public class DeviceConfig : INotifyPropertyChanged
         "OpenRGB (RGB.NET)",
     };
 
-    [JsonProperty(nameof(EnabledDevices))]
+    [JsonPropertyName(nameof(EnabledDevices))]
     private ObservableCollection<string>? _enabledDevices;
 
     public VariableRegistry VarRegistry { get; set; } = new();

@@ -1591,7 +1591,6 @@
         "dependencies": {
           "IronPython": "[3.4.1, )",
           "Microsoft.Win32.SystemEvents": "[7.0.0, )",
-          "Newtonsoft.Json": "[13.0.3, )",
           "RGB.NET.Devices.CorsairLegacy": "[2.0.0-prerelease.111, )",
           "RGB.NET.Devices.Logitech": "[2.0.0-prerelease.111, )",
           "Serilog": "[2.10.0, )",

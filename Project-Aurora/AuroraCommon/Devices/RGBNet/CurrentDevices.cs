@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Common.Devices.RGBNet;
 
-[JsonObject]
 public class CurrentDevices
 {
+    [JsonConstructor]
     public CurrentDevices(List<RemappableDevice> devices)
     {
         Devices = devices;

@@ -1,9 +1,10 @@
-﻿using Common.Utils;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Common.Utils;
 
 namespace Common.Devices;
 
-[JsonObject]
+[Serializable]
 public class VariableRegistryItem
 {
     public object? Value;
@@ -103,10 +104,9 @@ public enum VariableFlags
     UseHEX = 1
 }
 
-[JsonObject]
 public class VariableRegistry : ICloneable //Might want to implement something like IEnumerable here
 {
-    [JsonProperty("Variables")]
+    [JsonPropertyName("Variables")]
     private Dictionary<string, VariableRegistryItem> _variables = new();
 
     [JsonIgnore]
@@ -240,12 +240,11 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public object Clone()
     {
-        var str = JsonConvert.SerializeObject(this, Formatting.None);
+        var str = JsonSerializer.Serialize(this, new JsonSerializerOptions{ WriteIndented = false});
 
-        return JsonConvert.DeserializeObject(
+        return JsonSerializer.Deserialize(
             str,
-            GetType(),
-            new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace }
-        );
+            GetType()
+        )!;
     }
 }
