@@ -71,12 +71,12 @@ public sealed class LightingStateManager
         if (Initialized)
             return;
         // Register all Application types in the assembly
-        var profileTypes = from type in Assembly.GetExecutingAssembly().GetLoadableTypes()
+        var profiles = from type in Assembly.GetExecutingAssembly().GetLoadableTypes()
             where type.BaseType == typeof(Application) && type != typeof(GenericApplication)
             let inst = (Application)Activator.CreateInstance(type)
             orderby inst.Config.Name
             select inst;
-        foreach (var inst in profileTypes)
+        foreach (var inst in profiles)
             RegisterEvent(inst);
 
         // Register all layer types that are in the Aurora.Settings.Layers namespace.
@@ -159,9 +159,7 @@ public sealed class LightingStateManager
     public void RegisterEvent(ILightEvent @event)
     {
         var profileId = @event.Config.ID;
-        if (string.IsNullOrWhiteSpace(profileId) || Events.ContainsKey(profileId)) return;
-
-        Events.Add(profileId, @event);
+        if (string.IsNullOrWhiteSpace(profileId) || !Events.TryAdd(profileId, @event)) return;
 
         foreach (var exe in @event.Config.ProcessNames)
         {

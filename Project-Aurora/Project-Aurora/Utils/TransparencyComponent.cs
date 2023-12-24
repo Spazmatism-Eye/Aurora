@@ -116,7 +116,7 @@ public sealed class TransparencyComponent : IDisposable
     public void SetBackgroundColor(EffectColor a)
     {
         _color = a;
-        _window.Dispatcher.Invoke(_setBackground);
+        _window.Dispatcher.BeginInvoke(_setBackground);
     }
 
     private void SetBackground()

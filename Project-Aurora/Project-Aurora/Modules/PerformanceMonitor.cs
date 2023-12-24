@@ -41,7 +41,14 @@ public sealed class PerformanceMonitor : AuroraModule
         _runningProcessMonitor = runningProcessMonitor;
     }
 
-    protected override async Task Initialize()
+    protected override Task Initialize()
+    {
+        Task.Run(BackgroundInitialize);
+        
+        return Task.CompletedTask;
+    }
+
+    private async void BackgroundInitialize()
     {
         InitializeAurora();
         if (EnableChromaMonitor)

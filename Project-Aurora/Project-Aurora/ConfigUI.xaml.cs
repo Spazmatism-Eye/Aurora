@@ -103,7 +103,7 @@ partial class ConfigUI : INotifyPropertyChanged
         _ipcListener = ipcListener;
         _deviceManager = deviceManager;
         _lightingStateManager = lightingStateManager;
-        _settingsControl = new(rzSdkManager, pluginManager, layoutManager, httpListener, deviceManager, ipcListener);
+        _settingsControl = new Control_Settings(rzSdkManager, pluginManager, layoutManager, httpListener, deviceManager, ipcListener);
         
         InitializeComponent();
 
@@ -113,40 +113,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
         _settingsControl.DataContext = this;
 
-        _keyboardTimerCallback = () =>
-        {
-            if (DateTime.Now - _lastActivated > _renderTimeout)
-            {
-                return;
-            }
-            if (_transitionAmount <= 1.0f)
-            {
-                _transitionAmount += _keyboardTimer.Elapsed.TotalSeconds;
-                var smooth = 1 - Math.Pow(1 - Math.Min(_transitionAmount, 1d), 3);
-                var a = EffectColor.BlendColors(_previousColor, _currentColor, smooth);
-                _transparencyComponent.SetBackgroundColor(a);
-            }
-
-            Dispatcher.Invoke(UpdateKeyboardLayouts);
-            return;
-
-            void UpdateKeyboardLayouts()
-            {
-                var keyLights = Global.effengine.GetKeyboardLights();
-                _layoutManager.Result.SetKeyboardColors(keyLights);
-
-                if (Global.key_recorder?.IsRecording() ?? false)
-                {
-                    KeyboardRecordMessage.Visibility = Visibility.Visible;
-                    KeyboardViewBorder.BorderBrush = Brushes.Red;
-                }
-                else
-                {
-                    KeyboardRecordMessage.Visibility = Visibility.Hidden;
-                    KeyboardViewBorder.BorderBrush = Brushes.Transparent;
-                }
-            }
-        };
+        _keyboardTimerCallback = KeyboardTimerCallback;
         _virtualKeyboardTimer.Elapsed += virtual_keyboard_timer_Tick;
 
         //Show hidden profiles button
@@ -157,6 +124,41 @@ partial class ConfigUI : INotifyPropertyChanged
             Margin = new Thickness(0, 5, 0, 0)
         };
         _profileHidden.MouseDown += HiddenProfile_MouseDown;
+    }
+
+    private void KeyboardTimerCallback()
+    {
+        if (DateTime.Now - _lastActivated > _renderTimeout)
+        {
+            return;
+        }
+        if (_transitionAmount <= 1.0f)
+        {
+            _transitionAmount += _keyboardTimer.Elapsed.TotalSeconds;
+            var smooth = 1 - Math.Pow(1 - Math.Min(_transitionAmount, 1d), 3);
+            var a = EffectColor.BlendColors(_previousColor, _currentColor, smooth);
+            _transparencyComponent.SetBackgroundColor(a);
+        }
+
+        Dispatcher.BeginInvoke(UpdateKeyboardLayouts);
+        return;
+
+        async void UpdateKeyboardLayouts()
+        {
+            var keyLights = Global.effengine.GetKeyboardLights();
+            (await _layoutManager).SetKeyboardColors(keyLights);
+
+            if (Global.key_recorder?.IsRecording() ?? false)
+            {
+                KeyboardRecordMessage.Visibility = Visibility.Visible;
+                KeyboardViewBorder.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                KeyboardRecordMessage.Visibility = Visibility.Hidden;
+                KeyboardViewBorder.BorderBrush = Brushes.Transparent;
+            }
+        }
     }
 
     public async Task Initialize()
@@ -438,51 +440,57 @@ partial class ConfigUI : INotifyPropertyChanged
                      .Select(profileName => (Application)lightingStateManager.Events[profileName])
                      .OrderBy(item => item.Settings.Hidden ? 1 : 0))
         {
-            ImageSource icon = application.Icon;
-            Image profileImage;
+            var icon = application.Icon;
             if (application is GenericApplication)
             {
-                GenericApplicationSettings settings = (GenericApplicationSettings)application.Settings;
-                profileImage = new Image
+                await Dispatcher.InvokeAsync(() =>
                 {
-                    Tag = application,
-                    Source = icon,
-                    ToolTip = settings.ApplicationName + " Settings",
-                    Margin = new Thickness(0, 5, 0, 0)
-                };
-                profileImage.MouseDown += ProfileImage_MouseDown;
+                    var settings = (GenericApplicationSettings)application.Settings;
+                    var profileImage = new Image
+                    {
+                        Tag = application,
+                        Source = icon,
+                        ToolTip = settings.ApplicationName + " Settings",
+                        Margin = new Thickness(0, 0, 0, 5)
+                    };
+                    profileImage.MouseDown += ProfileImage_MouseDown;
 
-                Image profileRemove = new Image
-                {
-                    Source = new BitmapImage(new Uri(@"Resources/removeprofile_icon.png", UriKind.Relative)),
-                    ToolTip = $"Remove {settings.ApplicationName} Profile",
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    Height = 16,
-                    Width = 16,
-                    Visibility = Visibility.Hidden,
-                    Tag = application.Config.ID
-                };
-                profileRemove.MouseDown += RemoveProfile_MouseDown;
+                    var profileRemove = new Image
+                    {
+                        Source = new BitmapImage(new Uri(@"Resources/removeprofile_icon.png", UriKind.Relative)),
+                        ToolTip = $"Remove {settings.ApplicationName} Profile",
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        VerticalAlignment = VerticalAlignment.Bottom,
+                        Height = 16,
+                        Width = 16,
+                        Visibility = Visibility.Hidden,
+                        Tag = application.Config.ID
+                    };
+                    profileRemove.MouseDown += RemoveProfile_MouseDown;
 
-                Grid profileGrid = new Grid
-                {
-                    Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0)),
-                    Margin = new Thickness(0, 5, 0, 0),
-                    Tag = profileRemove
-                };
+                    var profileGrid = new Grid
+                    {
+                        Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0)),
+                        Margin = new Thickness(0, 5, 0, 0),
+                        Tag = profileRemove
+                    };
 
-                profileGrid.MouseEnter += Profile_grid_MouseEnter;
-                profileGrid.MouseLeave += Profile_grid_MouseLeave;
+                    profileGrid.MouseEnter += Profile_grid_MouseEnter;
+                    profileGrid.MouseLeave += Profile_grid_MouseLeave;
 
-                profileGrid.Children.Add(profileImage);
-                profileGrid.Children.Add(profileRemove);
+                    profileGrid.Children.Add(profileImage);
+                    profileGrid.Children.Add(profileRemove);
 
-                profiles_stack.Children.Add(profileGrid);
+                    profiles_stack.Children.Add(profileGrid);
+
+                    if (!application.Config.ID.Equals(focusedKey)) return;
+                    FocusedApplication = application;
+                    TransitionToProfile(profileImage);
+                });
             }
             else
             {
-                profileImage = new Image
+                var profileImage = new Image
                 {
                     Tag = application,
                     Source = icon,
@@ -492,18 +500,17 @@ partial class ConfigUI : INotifyPropertyChanged
                 };
                 profileImage.MouseDown += ProfileImage_MouseDown;
                 profiles_stack.Children.Add(profileImage);
-            }
 
-            if (!application.Config.ID.Equals(focusedKey)) continue;
-            FocusedApplication = application;
-            TransitionToProfile(profileImage);
+                if (!application.Config.ID.Equals(focusedKey)) continue;
+                FocusedApplication = application;
+                TransitionToProfile(profileImage);
+            }
         }
 
         //Add new profiles button
         _profileAdd.MouseDown -= AddProfile_MouseDown;
         _profileAdd.MouseDown += AddProfile_MouseDown;
         profiles_stack.Children.Add(_profileAdd);
-
         profiles_stack.Children.Add(_profileHidden);
     }
 

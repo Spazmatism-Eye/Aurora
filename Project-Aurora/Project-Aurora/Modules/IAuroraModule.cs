@@ -11,7 +11,7 @@ public abstract class AuroraModule : IDisposable
     private static readonly SmartThreadPool ModuleThreadPool = new(new STPStartInfo
     {
         AreThreadsBackground = true,
-        ThreadPriority = ThreadPriority.AboveNormal,
+        ThreadPriority = ThreadPriority.BelowNormal,
     })
     {
         Name = "Initialize Threads",
@@ -36,13 +36,17 @@ public abstract class AuroraModule : IDisposable
         Task WorkItemCallback(object _)
         {
             Global.logger.Debug("Started module: {Module}", GetType());
-            return action();
+            return action().ContinueWith(t =>
+            {
+                _taskSource.SetResult();
+                Global.logger.Debug("Finished module: {Module}", GetType());
+
+                return t;
+            });
         }
 
         void PostExecuteWorkItemCallback(IWorkItemResult _)
         {
-            Application.Current.Dispatcher.Invoke(() => { _taskSource.SetResult(); });
-            Global.logger.Debug("Finished module: {Module}", GetType());
         }
     }
 

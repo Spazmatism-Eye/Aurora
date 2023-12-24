@@ -5,14 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Threading;
 using Aurora.Modules;
-using Aurora.Modules.GameStateListen;
 using Aurora.Modules.ProcessMonitor;
 using Aurora.Settings;
 using Aurora.Settings.Controls;
@@ -68,7 +65,7 @@ public partial class App
         new PerformanceMonitor(ProcessesModule.RunningProcessMonitor),
     };
 
-    private static readonly SemaphoreSlim _preventShutdown = new(0);
+    private static readonly SemaphoreSlim PreventShutdown = new(0);
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -105,9 +102,15 @@ public partial class App
             .Where(t => t!= null).ToArray();
 
         Global.logger.Information("Loading ConfigUI...");
+        var stopwatch = Stopwatch.StartNew();
         var configUi = new ConfigUI(RazerSdkModule.RzSdkManager, PluginsModule.PluginManager, LayoutsModule.LayoutManager,
             HttpListenerModule.HttpListener, IpcListenerModule.IpcListener, DevicesModule.DeviceManager, LightingStateManagerModule.LightningStateManager);
+        Global.logger.Debug("new ConfigUI() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
+        stopwatch.Restart();
+        
         await configUi.Initialize();
+        Global.logger.Debug("configUi.Initialize() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
+        stopwatch.Stop();
 
         Global.logger.Information("Waiting for modules...");
         await Task.WhenAll(initModules);
@@ -126,7 +129,7 @@ public partial class App
         {
             Global.logger.Information("Session ending. Reason: {Reason}", sessionEndingParams.ReasonSessionEnding);
             configUi.ExitApp();
-            _preventShutdown.Wait();
+            PreventShutdown.Wait();
         };
     }
 
@@ -164,7 +167,7 @@ public partial class App
     [DoesNotReturn]
     internal static void ForceShutdownApp(int exitCode)
     {
-        _preventShutdown.Release();
+        PreventShutdown.Release();
         Environment.ExitCode = exitCode;
         Environment.Exit(exitCode);
     }
@@ -242,7 +245,7 @@ public partial class App
         Mutex.ReleaseMutex();
         Mutex.Dispose();
 
-        _preventShutdown.Release();
+        PreventShutdown.Release();
     }
 
     private Thread StartForceExitTimer()

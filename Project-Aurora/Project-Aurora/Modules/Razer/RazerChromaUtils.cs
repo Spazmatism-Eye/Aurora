@@ -159,12 +159,20 @@ public static class RazerChromaUtils
 
     public static async Task DisableDeviceControlAsync()
     {
-        const string file = @"<?xml version=""1.0"" encoding=""utf-8""?>" +
-                            "\n<devices>" +
-                            "\n</devices>";
+        const string file = """
+                            <?xml version="1.0" encoding="utf-8"?>
+                            <devices>
+                            </devices>
+                            """;
+
+        var chromaPath = GetChromaPath();
+        var length = File.Open(chromaPath + "\\Devices.xml", FileMode.Open, FileAccess.Read, FileShare.ReadWrite).Length;
+        if (length <= file.Length)
+        {
+            return;
+        }
 
         List<Task> tasks = new();
-        var chromaPath = GetChromaPath();
         if (chromaPath != null)
         {
             tasks.Add(File.WriteAllTextAsync(chromaPath + "\\Devices.xml", file));
