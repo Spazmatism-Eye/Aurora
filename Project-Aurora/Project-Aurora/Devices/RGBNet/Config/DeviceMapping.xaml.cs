@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,6 +9,7 @@ using Aurora.Modules.GameStateListen;
 using Common;
 using Common.Devices;
 using Common.Devices.RGBNet;
+using RGB.NET.Core;
 
 namespace Aurora.Devices.RGBNet.Config;
 
@@ -18,7 +20,7 @@ public partial class DeviceMapping
 {
     private readonly Task<DeviceManager> _deviceManager;
     private readonly Task<IpcListener?> _ipcListener;
-    
+
     private readonly List<RemappableDevice> _devices = new();
     private readonly List<RgbNetKeyToDeviceKeyControl> _keys = new();
 
@@ -56,7 +58,7 @@ public partial class DeviceMapping
         {
             case DeviceCommands.RemappableDevices:
                 var remappableDevices = ReadDevices(json);
-                
+
                 Dispatcher.Invoke(() => LoadDevices(remappableDevices));
                 break;
         }
@@ -96,11 +98,11 @@ public partial class DeviceMapping
                 var button = new Button();
                 button.Content = device.DeviceSummary;
 
-                button.Click += (_,_) =>
+                button.Click += (_, _) =>
                 {
                     for (var i = 0; i < AsusDeviceList.Children.Count; i++)
                     {
-                        if (AsusDeviceList.Children[i] is Button dButton) 
+                        if (AsusDeviceList.Children[i] is Button dButton)
                             dButton.IsEnabled = true;
                     }
 
@@ -114,27 +116,54 @@ public partial class DeviceMapping
     }
 
     private static CurrentDevices ReadDevices(string json)
-    { 
+    {
         return JsonSerializer.Deserialize<CurrentDevices>(json) ?? new CurrentDevices(new List<RemappableDevice>());
     }
 
-    private void DeviceSelect(RemappableDevice remappableDevice)
+    private async void DeviceSelect(RemappableDevice remappableDevice)
     {
-        _keys.Clear();
-
         // Rebuild the key area
         AsusDeviceKeys.Children.Clear();
 
-        var deviceRemap = GetDeviceRemap(remappableDevice);
-
-        foreach (var led in remappableDevice.RgbNetLeds)
+        await Task.Run(async () =>
         {
-            var keyControl = new RgbNetKeyToDeviceKeyControl(deviceRemap, led);
-                
-            keyControl.BlinkCallback += () =>
+            _keys.Clear();
+            
+            var deviceRemap = GetDeviceRemap(remappableDevice);
+
+            var keyControls = remappableDevice.RgbNetLeds
+                .Select(CreateKeyControl(deviceRemap))
+                .Select(kc => kc.ContinueWith(PrepareControl(remappableDevice, deviceRemap)));
+            foreach (var keyControlTask in keyControls)
             {
-                _deviceManager.Result.BlinkRemappableKey(remappableDevice, led);
-            };
+                var keyControl = await await keyControlTask;
+                Dispatcher.BeginInvoke(() =>
+                {
+                    AsusDeviceKeys.Children.Add(keyControl);
+                });
+            }
+        });
+    }
+
+    private Func<LedId, Task<RgbNetKeyToDeviceKeyControl>> CreateKeyControl(DeviceRemap deviceRemap)
+    {
+        return led =>
+        {
+            var tcs = new TaskCompletionSource<RgbNetKeyToDeviceKeyControl>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            Dispatcher.BeginInvoke(() => { tcs.SetResult(new RgbNetKeyToDeviceKeyControl(deviceRemap, led)); });
+
+            return tcs.Task;
+        };
+    }
+
+    private Func<Task<RgbNetKeyToDeviceKeyControl>, Task<RgbNetKeyToDeviceKeyControl>> PrepareControl(RemappableDevice remappableDevice, DeviceRemap deviceRemap)
+    {
+        return async keyControlTask =>
+        {
+            var keyControl = await keyControlTask;
+            var led = keyControl.Led;
+            keyControl.BlinkCallback += () => { _deviceManager.Result.BlinkRemappableKey(remappableDevice, led); };
 
             keyControl.DeviceKeyChanged += async (_, newKey) =>
             {
@@ -150,11 +179,11 @@ public partial class DeviceMapping
                 var deviceManager = await _deviceManager;
                 await deviceManager.RemapKey(remappableDevice.DeviceId, led, newKey);
             };
-                
+
             _keys.Add(keyControl);
-                
-            AsusDeviceKeys.Children.Add(keyControl);
-        }
+
+            return keyControl;
+        };
     }
 
     private DeviceRemap GetDeviceRemap(RemappableDevice device)
@@ -178,17 +207,18 @@ public partial class DeviceMapping
     {
         await ReloadDevices();
     }
-        
+
     private void SetAllNone_Click(object? sender, RoutedEventArgs e)
     {
         foreach (var key in _keys)
             key.DeviceKey = DeviceKeys.NONE;
     }
-        
+
     private void SetAllLogo_Click(object? sender, RoutedEventArgs e)
     {
         foreach (var key in _keys)
             key.DeviceKey = DeviceKeys.Peripheral_Logo;
     }
+
     #endregion
 }

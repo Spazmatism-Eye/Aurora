@@ -25,14 +25,14 @@ public partial class RgbNetKeyToDeviceKeyControl
     }
 
     private readonly DeviceRemap _configDeviceRemap;
-    private readonly LedId _led;
+    public LedId Led { get; }
 
     public event EventHandler<DeviceKeys?>? DeviceKeyChanged;
 
     public RgbNetKeyToDeviceKeyControl(DeviceRemap configDeviceRemap, LedId led)
     {
         _configDeviceRemap = configDeviceRemap;
-        _led = led;
+        Led = led;
         
         InitializeComponent();
 
@@ -42,14 +42,14 @@ public partial class RgbNetKeyToDeviceKeyControl
 
     private void UpdateMappedLedId()
     {
-        if (_configDeviceRemap.KeyMapper.TryGetValue(_led, out var deviceKey))
+        if (_configDeviceRemap.KeyMapper.TryGetValue(Led, out var deviceKey))
         {
             DeviceKeyButton.Content = deviceKey;
             ButtonBorder.BorderBrush = Brushes.Blue;
         }
         else
         {
-            if (RgbNetKeyMappings.KeyNames.TryGetValue(_led, out var defaultKey))
+            if (RgbNetKeyMappings.KeyNames.TryGetValue(Led, out var defaultKey))
             {
                 DeviceKeyButton.Content = defaultKey;
                 ButtonBorder.BorderBrush = Brushes.Black;
