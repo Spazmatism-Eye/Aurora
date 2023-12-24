@@ -85,10 +85,4 @@ public class Witcher3BackgroundLayerHandler : LayerHandler<Witcher3BackgroundLay
 
         return EffectLayer;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_Witcher3BackgroundLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

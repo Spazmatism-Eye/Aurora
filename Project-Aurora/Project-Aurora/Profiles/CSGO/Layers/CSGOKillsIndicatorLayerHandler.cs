@@ -140,10 +140,4 @@ public class CSGOKillIndicatorLayerHandler : LayerHandler<CSGOKillIndicatorLayer
 
         _lastCountedKill = csgostate.Player.State.RoundKills;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_CSGOKillIndicatorLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

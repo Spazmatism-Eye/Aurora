@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Aurora.Utils;
+using KeySequence = Aurora.Settings.KeySequence;
 
 namespace Aurora.Profiles.ETS2.Layers {
     /// <summary>
@@ -46,25 +47,25 @@ namespace Aurora.Profiles.ETS2.Layers {
         }
 
         private void lightMode_SelectionChanged(object? sender, SelectionChangedEventArgs e) {
-            if (isReady && sender is ComboBox) {
-                context.Properties._BeaconStyle = (ETS2_BeaconStyle)(sender as ComboBox).SelectedValue;
+            if (isReady && sender is ComboBox comboBox) {
+                context.Properties._BeaconStyle = (ETS2_BeaconStyle)comboBox.SelectedValue;
                 speedSlider.IsEnabled = context.Properties._BeaconStyle == ETS2_BeaconStyle.Simple_Flash;
             }
         }
 
         private void speedSlider_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e) {
-            if (isReady && sender is Slider)
-                context.Properties._Speed = (float)(sender as Slider).Value;
+            if (isReady && sender is Slider slider)
+                context.Properties._Speed = (float)slider.Value;
         }
 
         private void beaconColorPicker_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e) {
-            if (isReady && sender is Xceed.Wpf.Toolkit.ColorPicker && (sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.HasValue)
-                context.Properties._PrimaryColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
+            if (isReady && sender is Xceed.Wpf.Toolkit.ColorPicker { SelectedColor: not null } colorPicker)
+                context.Properties._PrimaryColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
         }
 
-        private void keyPicker_SequenceUpdated(object? sender, EventArgs e) {
-            if (isReady && sender is KeySequence)
-                context.Properties._Sequence = (sender as KeySequence).Sequence;
+        private void keyPicker_SequenceUpdated(object sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
+            if (isReady)
+                context.Properties._Sequence = e.NewValue;
         }
     }
 }

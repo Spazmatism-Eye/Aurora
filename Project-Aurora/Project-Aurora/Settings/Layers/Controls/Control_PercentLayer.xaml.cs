@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace Aurora.Settings.Layers.Controls {
 
-    public partial class Control_PercentLayer : UserControl {
+    public partial class Control_PercentLayer : IProfileContainingControl {
 
         public Control_PercentLayer() {
             InitializeComponent();
@@ -15,7 +15,7 @@ namespace Aurora.Settings.Layers.Controls {
             DataContext = context;
         }
 
-        internal void SetProfile(Profiles.Application profile) {
+        public void SetProfile(Profiles.Application profile) {
             variablePicker.Application = maxVariablePicker.Application = profile;
         }
     }

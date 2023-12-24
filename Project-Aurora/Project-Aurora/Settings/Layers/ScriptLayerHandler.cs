@@ -41,8 +41,6 @@ public class ScriptLayerHandlerProperties : LayerHandlerProperties<ScriptLayerHa
 [LogicOverrideIgnoreProperty("_Sequence")]
 public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, INotifyPropertyChanged
 {
-    internal Application ProfileManager;
-
     public event PropertyChangedEventHandler? PropertyChanged;
 
     [JsonIgnore]
@@ -54,7 +52,7 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
         if (!IsScriptValid) return EffectLayer.EmptyLayer;
         try
         {
-            var script = ProfileManager.EffectScripts[Properties.Script];
+            var script = Application.EffectScripts[Properties.Script];
             var scriptLayers = script.UpdateLights(Properties.ScriptProperties, gamestate);
             EffectLayer.Clear();
             switch (scriptLayers)
@@ -84,7 +82,7 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
     {
         if (IsScriptValid)
         {
-            return ProfileManager.EffectScripts[Properties._Script].Properties;
+            return Application.EffectScripts[Properties._Script].Properties;
         }
 
         return null;
@@ -92,20 +90,20 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
 
     public void OnScriptChanged()
     {
-        if (Properties._Script == null || !ProfileManager.EffectScripts.ContainsKey(Properties._Script))
+        if (Properties._Script == null || !Application.EffectScripts.ContainsKey(Properties._Script))
         {
             return;
         }
-        Properties.ScriptProperties = ProfileManager.EffectScripts[Properties._Script].Properties;
+        Properties.ScriptProperties = Application.EffectScripts[Properties._Script].Properties;
     }
 
     [JsonIgnore]
-    public bool IsScriptValid => ProfileManager?.EffectScripts?.ContainsKey(Properties.Script) ?? false;
+    public bool IsScriptValid => Application?.EffectScripts?.ContainsKey(Properties.Script) ?? false;
 
     public override void SetApplication(Application profile)
     {
-        ProfileManager = profile;
-        (_Control as Control_ScriptLayer)?.SetProfile(profile);
+        Application = profile;
+        base.SetApplication(profile);
         OnScriptChanged();
     }
 

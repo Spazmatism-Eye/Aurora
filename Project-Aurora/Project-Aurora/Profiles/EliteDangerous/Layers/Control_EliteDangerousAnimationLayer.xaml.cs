@@ -33,10 +33,6 @@ namespace Aurora.Profiles.EliteDangerous.Layers
 //            }
 //        }
 
-        internal void SetProfile(Application profile)
-        {
-        }
-
         private void UserControl_Loaded(object? sender, RoutedEventArgs e)
         {
 //            SetSettings();

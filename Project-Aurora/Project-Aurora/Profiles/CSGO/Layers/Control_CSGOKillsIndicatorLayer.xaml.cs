@@ -37,10 +37,6 @@ public partial class Control_CSGOKillIndicatorLayer
         }
     }
 
-    internal void SetProfile(Application profile)
-    {
-    }
-
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();

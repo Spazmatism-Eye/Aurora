@@ -43,10 +43,6 @@ public partial class Control_Witcher3BackgroundLayer
         settingsset = true;
     }
 
-    internal void SetProfile(Application profile)
-    {
-    }
-
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();

@@ -95,10 +95,4 @@ public class CSGOBurningLayerHandler : LayerHandler<CSGOBurningLayerHandlerPrope
         EffectLayer.Fill(_solidBrush);
         return EffectLayer;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_CSGOBurningLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

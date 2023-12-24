@@ -243,11 +243,5 @@ namespace Aurora.Profiles.Payday_2.Layers
 
             return bg_layer;
         }
-
-        public override void SetApplication(Application profile)
-        {
-            (_Control as Control_PD2BackgroundLayer)?.SetProfile(profile);
-            base.SetApplication(profile);
-        }
     }
 }

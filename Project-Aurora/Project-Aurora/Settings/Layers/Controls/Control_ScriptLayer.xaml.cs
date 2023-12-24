@@ -18,7 +18,7 @@ public partial class Control_ScriptLayer
     public Control_ScriptLayer(ScriptLayerHandler layerHandler) : this()
     {
         DataContext = layerHandler;
-        SetProfile(layerHandler.ProfileManager);
+        SetProfile(layerHandler.Application);
         UpdateScriptSettings();
     }
 

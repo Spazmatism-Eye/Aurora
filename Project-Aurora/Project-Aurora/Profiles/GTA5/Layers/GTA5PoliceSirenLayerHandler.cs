@@ -269,12 +269,6 @@ public class GTA5PoliceSirenLayerHandler : LayerHandler<Gta5PoliceSirenLayerHand
         return EffectLayer;
     }
 
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_GTA5PoliceSirenLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
-
     protected override void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
     {
         base.PropertiesChanged(sender, args);

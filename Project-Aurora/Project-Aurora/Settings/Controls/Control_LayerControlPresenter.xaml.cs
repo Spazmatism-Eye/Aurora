@@ -24,15 +24,7 @@ public partial class Control_LayerControlPresenter
         InitializeComponent();
     }
 
-    public Control_LayerControlPresenter(Layer layer) : this()
-    {
-        Layer = layer;
-        grdLayerConfigs.Visibility = Visibility.Hidden;
-        grd_LayerControl.IsHitTestVisible = true;
-        grd_LayerControl.Effect = null;
-    }
-
-    private void SetLayer(Layer layer)
+    private async void SetLayer(Layer layer)
     {
         isSettingNewLayer = true;
 
@@ -41,7 +33,7 @@ public partial class Control_LayerControlPresenter
         cmbLayerType.ItemsSource = layer.AssociatedApplication.AllowedLayers.OrderBy(l => l.Order).ThenBy(l => l.Name);
         cmbLayerType.SelectedValue = Layer.Handler.GetType();
 
-        ctrlLayerTypeConfig.Content = layer.Control;
+        ctrlLayerTypeConfig.Content = await layer.Control;
         chkLayerSmoothing.IsChecked = Layer.Handler.EnableSmoothing;
         chk_ExcludeMask.IsChecked = Layer.Handler._EnableExclusionMask ?? false;
         keyseq_ExcludeMask.Sequence = Layer.Handler._ExclusionMask;
@@ -68,13 +60,13 @@ public partial class Control_LayerControlPresenter
         }
     }
 
-    private void ResetLayer(Type type)
+    private async void ResetLayer(Type type)
     {
         if (IsLoaded && !isSettingNewLayer && type != null)
         {
             _Layer.Handler = (ILayerHandler)Activator.CreateInstance(type);
 
-            ctrlLayerTypeConfig.Content = _Layer.Control;
+            ctrlLayerTypeConfig.Content = await _Layer.Control;
             chkLayerSmoothing.IsChecked = _Layer.Handler.EnableSmoothing;
             chk_ExcludeMask.IsChecked = Layer.Handler._EnableExclusionMask ?? false;
             keyseq_ExcludeMask.Sequence = Layer.Handler._ExclusionMask;

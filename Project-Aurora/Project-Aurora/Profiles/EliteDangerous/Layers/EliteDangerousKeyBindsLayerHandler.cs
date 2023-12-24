@@ -380,10 +380,4 @@ public class EliteDangerousKeyBindsLayerHandler : LayerHandler<EliteDangerousKey
 
         return EffectLayer;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_EliteDangerousKeyBindsLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

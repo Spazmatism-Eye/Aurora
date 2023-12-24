@@ -34,10 +34,6 @@ public partial class Control_EliteDangerousBackgroundLayer
         }
     }
 
-    internal void SetProfile(Application profile)
-    {
-    }
-
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();

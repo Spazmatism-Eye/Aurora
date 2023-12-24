@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using Aurora.Utils;
 
@@ -26,7 +27,7 @@ public class Layer : INotifyPropertyChanged, ICloneable, IDisposable
     public ILayerHandler Handler { get; set; } = new DefaultLayerHandler();
 
     [JsonIgnore]
-    public UserControl Control => Handler.Control;
+    public Task<UserControl> Control => Handler.Control;
 
     public bool Enabled { get; set; } = true;
 

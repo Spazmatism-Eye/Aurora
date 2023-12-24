@@ -1,15 +1,13 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using Application = Aurora.Profiles.Application;
 
 namespace MemoryAccessProfiles.Profiles.ResidentEvil2.Layers;
 
 /// <summary>
 /// Interaction logic for Control_ResidentEvil2HealthLayer.xaml
 /// </summary>
-public partial class Control_ResidentEvil2HealthLayer : UserControl
+public partial class Control_ResidentEvil2HealthLayer
 {
-    private bool settingsset = false;
+    private bool settingsset;
 
     public Control_ResidentEvil2HealthLayer()
     {
@@ -20,41 +18,37 @@ public partial class Control_ResidentEvil2HealthLayer : UserControl
     {
         InitializeComponent();
 
-        this.DataContext = datacontext;
+        DataContext = datacontext;
     }
 
     public void SetSettings()
     {
-        if (this.DataContext is ResidentEvil2HealthLayerHandler && !settingsset)
+        if (DataContext is ResidentEvil2HealthLayerHandler && !settingsset)
         {
-            if (!this.status_style.HasItems)
+            if (!status_style.HasItems)
             {
-                this.status_style.Items.Add(ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Static);
-                this.status_style.Items.Add(ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Scanning);
+                status_style.Items.Add(ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Static);
+                status_style.Items.Add(ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Scanning);
             }
 
-            this.status_style.SelectedItem = (this.DataContext as ResidentEvil2HealthLayerHandler).Properties._DisplayType ?? ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Static;
+            status_style.SelectedItem = (DataContext as ResidentEvil2HealthLayerHandler).Properties._DisplayType ?? ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Static;
 
             settingsset = true;
         }
-    }
-
-    internal void SetProfile(Application profile)
-    {
     }
 
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();
 
-        this.Loaded -= UserControl_Loaded;
+        Loaded -= UserControl_Loaded;
     }
 
     private void status_style_SelectionChanged(object? sender, RoutedEventArgs e)
     {
-        if (IsLoaded && settingsset && this.DataContext is ResidentEvil2HealthLayerHandler)
+        if (IsLoaded && settingsset && DataContext is ResidentEvil2HealthLayerHandler)
         {
-            (this.DataContext as ResidentEvil2HealthLayerHandler).Properties._DisplayType = (ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType)this.status_style.SelectedItem;
+            (DataContext as ResidentEvil2HealthLayerHandler).Properties._DisplayType = (ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType)status_style.SelectedItem;
         }
     }
 }

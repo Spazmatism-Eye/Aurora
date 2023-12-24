@@ -39,10 +39,6 @@ public partial class Control_Dota2BackgroundLayer
         }
     }
 
-    internal void SetProfile(Application profile)
-    {
-    }
-
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();

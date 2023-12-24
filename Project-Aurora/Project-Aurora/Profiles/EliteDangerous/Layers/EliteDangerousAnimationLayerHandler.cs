@@ -221,12 +221,6 @@ public class EliteDangerousAnimationLayerHandler : LayerHandler<EliteDangerousAn
         return EffectLayer;
     }
 
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_EliteDangerousAnimationLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
-
     public void UpdateAnimations()
     {
         _fsdCountdownMix = new AnimationMix();

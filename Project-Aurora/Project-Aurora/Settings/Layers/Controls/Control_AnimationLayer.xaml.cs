@@ -15,7 +15,7 @@ namespace Aurora.Settings.Layers.Controls
     /// <summary>
     /// Interaction logic for Control_AnimationLayer.xaml
     /// </summary>
-    public partial class Control_AnimationLayer : UserControl
+    public partial class Control_AnimationLayer : IProfileContainingControl
     {
         private Window windowAnimationEditor = null;
         private static bool windowAnimationEditorOpen;
@@ -68,7 +68,7 @@ namespace Aurora.Settings.Layers.Controls
             }
         }
 
-        internal void SetProfile(Profiles.Application profile)
+        public void SetProfile(Profiles.Application profile)
         {
             Dispatcher.Invoke(() =>
             {

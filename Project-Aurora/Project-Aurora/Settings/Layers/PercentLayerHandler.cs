@@ -138,7 +138,6 @@ public class PercentLayerHandler<TProperty> : LayerHandler<TProperty> where TPro
             if (!double.TryParse(Properties.MaxVariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.MaxVariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.MaxVariablePath.GsiPath))
                 Properties.MaxVariablePath = VariablePath.Empty;
         }
-        (Control as Control_PercentLayer).SetProfile(profile);
         base.SetApplication(profile);
     }
 

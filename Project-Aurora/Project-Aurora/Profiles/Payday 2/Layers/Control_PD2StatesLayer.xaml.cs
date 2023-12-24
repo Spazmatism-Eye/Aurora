@@ -35,11 +35,6 @@ namespace Aurora.Profiles.Payday_2.Layers
             InitializeComponent();
         }
 
-
-        internal void SetProfile(Application profile)
-        {
-        }
-
         private void UserControl_Loaded(object? sender, RoutedEventArgs e)
         {
 

@@ -112,9 +112,9 @@ namespace Aurora.Profiles.Minecraft.Layers {
                 Context.Properties._GradualProgress = (sender as CheckBox).IsChecked.Value;
         }
 
-        private void KeySequence_Keys_SequenceUpdated(object? sender, EventArgs e) {
+        private void KeySequence_Keys_SequenceUpdated(object sender, RoutedPropertyChangedEventArgs<Settings.KeySequence> e) {
             if (CanSet)
-                Context.Properties._Sequence = (sender as KeySequence).Sequence;
+                Context.Properties._Sequence = e.NewValue;
         }
     }
 }

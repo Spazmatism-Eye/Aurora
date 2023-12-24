@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Aurora.Utils;
+using KeySequence = Aurora.Settings.KeySequence;
 
 namespace Aurora.Profiles.Minecraft.Layers {
     /// <summary>
@@ -58,9 +59,9 @@ namespace Aurora.Profiles.Minecraft.Layers {
                 Context.Properties._SecondaryColor = ColorUtils.MediaColorToDrawingColor(e.NewValue.Value);
         }
 
-        private void KeySequence_Keys_SequenceUpdated(object? sender, EventArgs e) {
+        private void KeySequence_Keys_SequenceUpdated(object sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
             if (IsLoaded && settingsSet && DataContext is MinecraftBackgroundLayerHandler)
-                Context.Properties._Sequence = (sender as KeySequence).Sequence;
+                Context.Properties._Sequence = e.NewValue;
         }
     }
 }

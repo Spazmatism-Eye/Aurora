@@ -97,10 +97,4 @@ public class CSGOWinningTeamLayerHandler : LayerHandler<CSGOWinningTeamLayerHand
 
         return EffectLayer;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_CSGOWinningTeamLayer)?.SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

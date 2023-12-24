@@ -732,12 +732,6 @@ namespace Aurora.Profiles.Dota_2.Layers
             return EffectLayer;
         }
 
-        public override void SetApplication(Application profile)
-        {
-            (Control as Control_Dota2HeroAbilityEffectsLayer)?.SetProfile(profile);
-            base.SetApplication(profile);
-        }
-
         private void UpdateAnimations()
         {
             _razorPlasmaFieldTrack = new AnimationTrack("Razor Plasma Field", 2.0f);

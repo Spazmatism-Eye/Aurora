@@ -85,12 +85,6 @@ public class CSGODeathLayerHandler : LayerHandler<CSGODeathLayerHandlerPropertie
         return EffectLayer;
     }
 
-    public override void SetApplication(Application profile)
-    {
-        ((Control_CSGODeathLayer)Control).SetProfile(profile);
-        base.SetApplication(profile);
-    }
-
     private int GetFadeAlpha()
     {
         var t = Utils.Time.GetMillisecondsSinceEpoch() - _lastTimeMillis;

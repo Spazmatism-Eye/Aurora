@@ -51,11 +51,5 @@ namespace Aurora.Profiles.EliteDangerous.Layers
 
             return EffectLayer;
         }
-
-        public override void SetApplication(Application profile)
-        {
-            (Control as Control_EliteDangerousBackgroundLayer).SetProfile(profile);
-            base.SetApplication(profile);
-        }
     }
 }

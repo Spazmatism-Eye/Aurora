@@ -111,12 +111,6 @@ public class Dota2BackgroundLayerHandler : LayerHandler<Dota2BackgroundLayerHand
         return EffectLayer;
     }
 
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_Dota2BackgroundLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
-
     private double GetDimmingValue()
     {
         if (isDimming && Properties.DimEnabled)

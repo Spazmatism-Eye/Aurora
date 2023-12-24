@@ -61,10 +61,4 @@ public class CSGOTypingIndicatorLayerHandler : LayerHandler<CSGOTypingIndicatorL
         return EffectLayer;
 
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_CSGOTypingIndicatorLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

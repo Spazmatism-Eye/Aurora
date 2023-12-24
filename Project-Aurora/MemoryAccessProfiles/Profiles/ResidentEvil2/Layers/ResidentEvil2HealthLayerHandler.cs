@@ -162,10 +162,4 @@ public class ResidentEvil2HealthLayerHandler : LayerHandler<ResidentEvil2HealthL
         }
         else return bg_layer;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        ( Control as Control_ResidentEvil2HealthLayer ).SetProfile( profile );
-        base.SetApplication( profile );
-    }
 }

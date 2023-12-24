@@ -123,12 +123,6 @@ public class CSGOBackgroundLayerHandler : LayerHandler<CSGOBackgroundLayerHandle
         return EffectLayer;
     }
 
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_CSGOBackgroundLayer)?.SetProfile(profile);
-        base.SetApplication(profile);
-    }
-
     private double GetDimmingValue()
     {
         if (!_isDimming || !Properties.DimEnabled) return _dimValue = 100.0;

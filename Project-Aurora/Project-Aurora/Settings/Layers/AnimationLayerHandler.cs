@@ -288,9 +288,6 @@ namespace Aurora.Settings.Layers
             if (profile != null && !string.IsNullOrWhiteSpace(Properties.TriggerPath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.TriggerPath.GsiPath))
                 Properties.TriggerPath = VariablePath.Empty;
 
-            // Tell the control to update (will update the combobox with the possible variable paths)
-            (Control as Control_AnimationLayer).SetProfile(profile);
-
             base.SetApplication(profile);
         }
 

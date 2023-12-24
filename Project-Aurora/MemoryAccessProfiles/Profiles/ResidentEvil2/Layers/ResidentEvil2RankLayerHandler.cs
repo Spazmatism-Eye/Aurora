@@ -12,14 +12,15 @@ namespace MemoryAccessProfiles.Profiles.ResidentEvil2.Layers;
 
 public class ResidentEvil2RankLayerHandlerProperties : LayerHandlerProperties2Color<ResidentEvil2RankLayerHandlerProperties>
 {
-    public ResidentEvil2RankLayerHandlerProperties() : base() { }
+    public ResidentEvil2RankLayerHandlerProperties()
+    { }
 
     public ResidentEvil2RankLayerHandlerProperties(bool assign_default = false) : base( assign_default ) { }
 
     public override void Default()
     {
         base.Default();
-        this._Sequence = new KeySequence(new DeviceKeys[] {
+        _Sequence = new KeySequence(new[] {
             DeviceKeys.ONE, DeviceKeys.TWO, DeviceKeys.THREE, DeviceKeys.FOUR, DeviceKeys.FIVE,
             DeviceKeys.SIX, DeviceKeys.SEVEN, DeviceKeys.EIGHT, DeviceKeys.NINE
         });
@@ -48,11 +49,5 @@ public class ResidentEvil2RankLayerHandler : LayerHandler<ResidentEvil2RankLayer
             }
         }
         return keys_layer;
-    }
-
-    public override void SetApplication(Application profile)
-    {
-        ( Control as Control_ResidentEvil2RankLayer ).SetProfile( profile );
-        base.SetApplication( profile );
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using Application = Aurora.Profiles.Application;
 
 namespace MemoryAccessProfiles.Profiles.ResidentEvil2.Layers;
 
 /// <summary>
 /// Interaction logic for Control_ResidentEvil2RankLayer.xaml
 /// </summary>
-public partial class Control_ResidentEvil2RankLayer : UserControl
+public partial class Control_ResidentEvil2RankLayer
 {
-    private bool settingsset = false;
+    private bool _settingsSet;
 
     public Control_ResidentEvil2RankLayer()
     {
@@ -20,25 +18,21 @@ public partial class Control_ResidentEvil2RankLayer : UserControl
     {
         InitializeComponent();
 
-        this.DataContext = datacontext;
+        DataContext = datacontext;
     }
 
-    public void SetSettings()
+    private void SetSettings()
     {
-        if (this.DataContext is ResidentEvil2RankLayerHandler && !settingsset)
+        if (DataContext is ResidentEvil2RankLayerHandler && !_settingsSet)
         {
-            settingsset = true;
+            _settingsSet = true;
         }
-    }
-
-    internal void SetProfile(Application profile)
-    {
     }
 
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();
 
-        this.Loaded -= UserControl_Loaded;
+        Loaded -= UserControl_Loaded;
     }
 }

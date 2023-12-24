@@ -46,10 +46,6 @@ namespace Aurora.Profiles.Payday_2.Layers
             }
         }
 
-        internal void SetProfile(Application profile)
-        {
-        }
-
         private void UserControl_Loaded(object? sender, RoutedEventArgs e)
         {
             SetSettings();

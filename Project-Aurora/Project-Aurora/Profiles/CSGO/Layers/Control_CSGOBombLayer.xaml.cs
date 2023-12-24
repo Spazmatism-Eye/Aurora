@@ -40,10 +40,6 @@ public partial class Control_CSGOBombLayer
         }
     }
 
-    internal void SetProfile(Application profile)
-    {
-    }
-
     private void UserControl_Loaded(object? sender, RoutedEventArgs e)
     {
         SetSettings();

@@ -423,11 +423,5 @@ namespace Aurora.Profiles.Dota_2.Layers
 
             return EffectLayer;
         }
-
-        public override void SetApplication(Application profile)
-        {
-            (Control as Control_Dota2ItemLayer).SetProfile(profile);
-            base.SetApplication(profile);
-        }
     }
 }

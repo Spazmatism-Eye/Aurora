@@ -150,10 +150,4 @@ public class CSGOBombLayerHandler : LayerHandler<CSGOBombLayerHandlerProperties>
 
         return EffectLayer;
     }
-
-    public override void SetApplication(Application profile)
-    {
-        (Control as Control_CSGOBombLayer).SetProfile(profile);
-        base.SetApplication(profile);
-    }
 }

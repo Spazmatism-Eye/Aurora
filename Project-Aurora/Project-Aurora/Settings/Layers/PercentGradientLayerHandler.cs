@@ -60,20 +60,6 @@ public class PercentGradientLayerHandler : PercentLayerHandler<PercentGradientLa
         return EffectLayer;
     }
 
-    public override void SetApplication(Application profile)
-    {
-        if (profile != null)
-        {
-            if (!double.TryParse(Properties.VariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.VariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.VariablePath.GsiPath))
-                Properties.VariablePath = VariablePath.Empty;
-
-            if (!double.TryParse(Properties.MaxVariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.MaxVariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.MaxVariablePath.GsiPath))
-                Properties.MaxVariablePath = VariablePath.Empty;
-        }
-        (Control as Control_PercentGradientLayer).SetApplication(profile);
-        Application = profile;
-    }
-
     public override void Dispose()
     {
         EffectLayer.Dispose();

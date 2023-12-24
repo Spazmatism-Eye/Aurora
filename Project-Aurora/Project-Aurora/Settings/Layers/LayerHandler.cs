@@ -191,7 +191,7 @@ namespace Aurora.Settings.Layers
 
     public interface ILayerHandler: IDisposable
     {
-        UserControl Control { get; }
+        Task<UserControl> Control { get; }
 
         object Properties { get; set; }
 
@@ -222,10 +222,10 @@ namespace Aurora.Settings.Layers
         public Application Application { get; protected set; }
 
         [JsonIgnore]
-        protected UserControl? _Control;
+        protected Task<UserControl>? _Control;
 
         [JsonIgnore]
-        public UserControl Control => _Control ??= CreateControlOnMain();
+        public Task<UserControl> Control => _Control ??= CreateControlOnMain();
 
         private TProperty _properties = Activator.CreateInstance<TProperty>();
         public TProperty Properties
@@ -377,24 +377,25 @@ namespace Aurora.Settings.Layers
             }
         }
 
-        public virtual void SetApplication(Application profile)
+        public virtual async void SetApplication(Application profile)
         {
             Application = profile;
+            (await Control as IProfileContainingControl)?.SetProfile(profile);
         }
 
-        private UserControl CreateControlOnMain()
+        private Task<UserControl> CreateControlOnMain()
         {
             var tcs = new TaskCompletionSource<UserControl>();
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 tcs.SetResult(CreateControl());
             });
-            return tcs.Task.Result;
+            return tcs.Task;
         }
 
         protected virtual UserControl CreateControl()
         {
-            return CreateControlOnMain();
+            return new Control_DefaultLayer();
         }
 
         [OnDeserialized]
@@ -431,7 +432,7 @@ namespace Aurora.Settings.Layers
     }
 
     [LayerHandlerMeta(Exclude = true)]
-    public class LayerHandler : LayerHandler<LayerHandlerProperties>
+    public abstract class LayerHandler : LayerHandler<LayerHandlerProperties>
     {
         public LayerHandler(string name) : base(name)
         {
