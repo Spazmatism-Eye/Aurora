@@ -2,11 +2,14 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Aurora.Settings.Overrides.Logic;
 using Common.Devices;
 using Newtonsoft.Json.Linq;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Aurora.Utils;
 
@@ -296,3 +299,17 @@ public class SingleToDoubleConverter : JsonConverter
         throw new NotImplementedException("Unnecessary because CanWrite is false. The type will skip the converter.");
     }
 }
+
+public class DateTimeOffsetConverterUsingDateTimeParse : System.Text.Json.Serialization.JsonConverter<DateTimeOffset >
+{
+    public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        return DateTimeOffset.Parse(reader.GetString() ?? "");
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateTimeOffset  value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString());
+    }
+}
+

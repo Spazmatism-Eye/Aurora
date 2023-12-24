@@ -40,9 +40,11 @@ public sealed class OnlineSettings : AuroraModule
         var localSettingsDate = localSettings.OnlineSettingsTime;
         if (localSettingsDate > DateTimeOffset.MinValue)
         {
+            // means online settings already exists, loading can continue immediately
             _layoutUpdateTaskSource.TrySetResult();
         }
         
+        // reload settings as user unlocks
         SystemEvents.SessionSwitch += SystemEvents_SessionSwitch;
 
         await DownloadAndExtract();
