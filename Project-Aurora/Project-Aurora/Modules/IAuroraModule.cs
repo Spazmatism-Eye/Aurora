@@ -15,8 +15,8 @@ public abstract class AuroraModule : IDisposable
     })
     {
         Name = "Initialize Threads",
-        Concurrency = 10,
-        MaxThreads = 6,
+        Concurrency = 25,
+        MaxThreads = 8,
     };
 
     private TaskCompletionSource? _taskSource;
@@ -35,12 +35,14 @@ public abstract class AuroraModule : IDisposable
 
         Task WorkItemCallback(object _)
         {
+            Global.logger.Debug("Started module: {Module}", GetType());
             return action();
         }
 
         void PostExecuteWorkItemCallback(IWorkItemResult _)
         {
             Application.Current.Dispatcher.Invoke(() => { _taskSource.SetResult(); });
+            Global.logger.Debug("Finished module: {Module}", GetType());
         }
     }
 

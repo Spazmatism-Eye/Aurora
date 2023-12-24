@@ -41,17 +41,17 @@ public sealed class PerformanceMonitor : AuroraModule
         _runningProcessMonitor = runningProcessMonitor;
     }
 
-    protected override Task Initialize()
+    protected override async Task Initialize()
     {
         InitializeAurora();
         if (EnableChromaMonitor)
         {
-            InitializeRazerStreamApi();
+            await InitializeRazerStreamApi();
         }
 
         _working = true;
         _threadPool.QueueWorkItem((Action)MonitorPerformance);
-        return Task.CompletedTask;
+        return;
 
         void MonitorPerformance()
         {
@@ -83,7 +83,7 @@ public sealed class PerformanceMonitor : AuroraModule
 
     private void InitializeAurora()
     {
-        _auroraMemCounter = new("Process", "Working Set", Process.GetCurrentProcess().ProcessName);
+        _auroraMemCounter = new PerformanceCounter("Process", "Working Set", Process.GetCurrentProcess().ProcessName);
     }
 
     private void CheckAuroraMemory()
