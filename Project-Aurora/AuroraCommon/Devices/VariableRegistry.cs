@@ -154,9 +154,7 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public void Register(string name, VariableRegistryItem varItem)
     {
-        if (!_variables.ContainsKey(name))
-            _variables.Add(name, varItem);
-        else
+        if (!_variables.TryAdd(name, varItem))
             _variables[name].Merge(varItem);
     }
 
@@ -222,10 +220,7 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public string GetTitle(string name)
     {
-        if (_variables.TryGetValue(name, out var variable))
-            return variable.Title;
-
-        return "";
+        return _variables.TryGetValue(name, out var variable) ? variable.Title : "";
     }
 
     public string GetRemark(string name)
@@ -242,9 +237,8 @@ public class VariableRegistry : ICloneable //Might want to implement something l
     {
         var str = JsonSerializer.Serialize(this, new JsonSerializerOptions{ WriteIndented = false});
 
-        return JsonSerializer.Deserialize(
-            str,
-            GetType()
+        return JsonSerializer.Deserialize<VariableRegistry>(
+            str
         )!;
     }
 }

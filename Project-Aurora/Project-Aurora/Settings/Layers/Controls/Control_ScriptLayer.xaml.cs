@@ -32,7 +32,8 @@ public partial class Control_ScriptLayer
     private void cboScripts_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var handler = (ScriptLayerHandler)DataContext;
-        handler.OnScriptChanged();
+        var script = e.AddedItems[0] as string;
+        handler.Properties.Script = script;
         UpdateScriptSettings();
     }
 

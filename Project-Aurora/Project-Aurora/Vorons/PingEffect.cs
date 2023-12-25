@@ -135,27 +135,27 @@ public class PingEffect : IEffectScript
 
 	private long CurrentTime { get; set; }
 
-	private void ReadProperties()
+	private void ReadProperties(VariableRegistry properties)
 	{
-		Keys = Properties.GetVariable<KeySequence>("Keys or Freestyle");
-		EffectType = Properties.GetVariable<bool>("Graph Mode") ? EffectTypes.PingGraph : EffectTypes.PingPulse;
+		Keys = properties.GetVariable<KeySequence>("Keys or Freestyle");
+		EffectType = properties.GetVariable<bool>("Graph Mode") ? EffectTypes.PingGraph : EffectTypes.PingPulse;
 		//(EffectTypes)properties.GetVariable<long>("Effect type");
 
-		PingSignalWidth = Properties.GetVariable<long>("Ping Signal Width") / 100f;
-		PingShadowWidth = Properties.GetVariable<long>("Ping Shadow Width") / 100f;
+		PingSignalWidth = properties.GetVariable<long>("Ping Signal Width") / 100f;
+		PingShadowWidth = properties.GetVariable<long>("Ping Shadow Width") / 100f;
 
-		FailAnimationDuration = Properties.GetVariable<long>("Fail Animation Duration");
-		SuccessAnimationDuration = Properties.GetVariable<long>("Success Animation Duration");
-		DelayBetweenRequests = Properties.GetVariable<long>("Delay Between Requests");
-		DelayAfterAnimation = Properties.GetVariable<long>("Delay After Animation");
+		FailAnimationDuration = properties.GetVariable<long>("Fail Animation Duration");
+		SuccessAnimationDuration = properties.GetVariable<long>("Success Animation Duration");
+		DelayBetweenRequests = properties.GetVariable<long>("Delay Between Requests");
+		DelayAfterAnimation = properties.GetVariable<long>("Delay After Animation");
 
-		BarGradient = Gradients.GetOrAdd(Properties.GetVariable<string>("Bar Gradient"), ScriptHelper.StringToSpectrum);
-		FailAnimationGradient = Gradients.GetOrAdd(Properties.GetVariable<string>("Fail Animation Gradient"), ScriptHelper.StringToSpectrum);
+		BarGradient = Gradients.GetOrAdd(properties.GetVariable<string>("Bar Gradient"), ScriptHelper.StringToSpectrum);
+		FailAnimationGradient = Gradients.GetOrAdd(properties.GetVariable<string>("Fail Animation Gradient"), ScriptHelper.StringToSpectrum);
 
-		DefaultHost = Properties.GetVariable<string>("Default Host");
-		PerAppHosts = Properties.GetVariable<string>("Per App Hosts");
+		DefaultHost = properties.GetVariable<string>("Default Host");
+		PerAppHosts = properties.GetVariable<string>("Per App Hosts");
 
-		MaxPing = Properties.GetVariable<long>("Max Ping");
+		MaxPing = properties.GetVariable<long>("Max Ping");
 		AnimationReserveDelay = 50;// properties.GetVariable<long>("Animation Reserve Delay");
 
 		var data = PingAnimations.GetOrAdd(new Tuple<KeySequence, string, string>(Keys, DefaultHost, PerAppHosts),
@@ -167,18 +167,18 @@ public class PingEffect : IEffectScript
 		Data = data.Key;
 
 		ShadowGradient = new ColorSpectrum(Color.Black, Color.FromArgb(0, Color.Black));
-		PingSignalColor = Properties.GetVariable<RealColor>("Ping Signal Color").GetDrawingColor();
+		PingSignalColor = properties.GetVariable<RealColor>("Ping Signal Color").GetDrawingColor();
 		PingGradient = new ColorSpectrum(Color.FromArgb(0, PingSignalColor), PingSignalColor);
 
 		BrightMode = false;// properties.GetVariable<bool>("BrightMode");
-		PingsInGraphMode = Properties.GetVariable<long>("Number of Pings in graph mode");
+		PingsInGraphMode = properties.GetVariable<long>("Number of Pings in graph mode");
 
 		CurrentTime = Time.GetMillisecondsSinceEpoch();
 	}
 
 	public object UpdateLights(VariableRegistry properties, IGameState state = null)
 	{
-		ReadProperties();
+		ReadProperties(properties);
 
 		_layer.Clear();
 		Render(_layer);

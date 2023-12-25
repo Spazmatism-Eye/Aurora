@@ -27,7 +27,7 @@
 
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" VerticalAlignment="Top" HorizontalAlignment="Stretch">
                 <Label Content="Script:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="cboScripts" Width="160" Margin="5" VerticalAlignment="Center" IsEditable="False" SelectionChanged="cboScripts_SelectionChanged" SelectedValue="{Binding Path=Properties._Script, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox x:Name="cboScripts" Width="160" Margin="5" VerticalAlignment="Center" IsEditable="False" SelectionChanged="cboScripts_SelectionChanged" SelectedValue="{Binding Path=Properties.Script, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button VerticalAlignment="Center" Content="Reload Scripts" ToolTip="Reloads the scripts, updating an existing scripts and showing newly added ones" Margin="5" Click="refreshScriptList_Click" />
             </StackPanel>
 

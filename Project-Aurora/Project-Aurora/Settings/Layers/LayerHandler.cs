@@ -105,10 +105,10 @@ namespace Aurora.Settings.Layers
             _PrimaryColor = CommonColorUtils.GenerateRandomColor();
             if (_Sequence != null)
             {
-                _Sequence.Freeform.ValuesChanged -= OnPropertiesChanged;
+                _Sequence.Freeform.ValuesChanged -= OnFreeformChanged;
             }
             _Sequence = new KeySequence();
-            _Sequence.Freeform.ValuesChanged += OnPropertiesChanged;
+            _Sequence.Freeform.ValuesChanged += OnFreeformChanged;
         }
 
         public object GetOverride(string propertyName) {
@@ -138,9 +138,9 @@ namespace Aurora.Settings.Layers
             OnPropertiesChanged(this, new PropertyChangedEventArgs(""));
         }
 
-        public void OnPropertiesChanged(object? sender, object args = null)
+        public void OnPropertiesChanged(object? sender, PropertyChangedEventArgs args)
         {
-            PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(""));
+            PropertyChanged?.Invoke(sender, args);
         }
 
         public void OnPropertiesChanged(object? sender)
@@ -150,7 +150,12 @@ namespace Aurora.Settings.Layers
 
         public void Dispose()
         {
-            _Sequence.Freeform.ValuesChanged -= OnPropertiesChanged;
+            _Sequence.Freeform.ValuesChanged -= OnFreeformChanged;
+        }
+
+        private void OnFreeformChanged(object? sender, FreeFormChangedEventArgs e)
+        {
+            OnPropertiesChanged(sender, new PropertyChangedEventArgs(nameof(_Sequence.Freeform)));
         }
     }
 

@@ -53,11 +53,11 @@ public class Gta5PoliceSirenLayerHandlerProperties : LayerHandlerProperties2Colo
             if (_leftSirenSequence != null)
             {
                 var oldFreeForm = _leftSirenSequence.Freeform;
-                WeakEventManager<FreeFormObject, EventArgs>.RemoveHandler(oldFreeForm, nameof(oldFreeForm.ValuesChanged), OnPropertiesChanged);
+                WeakEventManager<FreeFormObject, PropertyChangedEventArgs>.RemoveHandler(oldFreeForm, nameof(oldFreeForm.ValuesChanged), OnPropertiesChanged);
             }
             _leftSirenSequence = value;
             var freeForm = _leftSirenSequence.Freeform;
-            WeakEventManager<FreeFormObject, EventArgs>.AddHandler(freeForm, nameof(freeForm.ValuesChanged), OnPropertiesChanged);
+            WeakEventManager<FreeFormObject, PropertyChangedEventArgs>.AddHandler(freeForm, nameof(freeForm.ValuesChanged), OnPropertiesChanged);
         }
     }
 
@@ -72,11 +72,11 @@ public class Gta5PoliceSirenLayerHandlerProperties : LayerHandlerProperties2Colo
             if (_rightSirenSequence != null)
             {
                 var oldFreeForm = _rightSirenSequence.Freeform;
-                WeakEventManager<FreeFormObject, EventArgs>.RemoveHandler(oldFreeForm, nameof(oldFreeForm.ValuesChanged), OnPropertiesChanged);
+                WeakEventManager<FreeFormObject, PropertyChangedEventArgs>.RemoveHandler(oldFreeForm, nameof(oldFreeForm.ValuesChanged), OnPropertiesChanged);
             }
             _rightSirenSequence = value;
             var freeForm = _rightSirenSequence.Freeform;
-            WeakEventManager<FreeFormObject, EventArgs>.AddHandler(freeForm, nameof(freeForm.ValuesChanged), OnPropertiesChanged);
+            WeakEventManager<FreeFormObject, PropertyChangedEventArgs>.AddHandler(freeForm, nameof(freeForm.ValuesChanged), OnPropertiesChanged);
         }
     }
 

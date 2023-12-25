@@ -149,34 +149,34 @@ namespace Aurora.Vorons
 		private float CycledGradientShiftBaseSpeed { get; set; }
 		private float CycledGradientShiftFullSpeed { get; set; }
 
-		private void ReadProperties()
+		private void ReadProperties(VariableRegistry properties)
 		{
-			Keys = Properties.GetVariable<KeySequence>("Keys or Freestyle");
-			EffectType = (EffectTypes)Properties.GetVariable<long>("Effect type");
+			Keys = properties.GetVariable<KeySequence>("Keys or Freestyle");
+			EffectType = (EffectTypes)properties.GetVariable<long>("Effect type");
 
-			ValueSource = ValueSources.GetOrAdd(Properties.GetVariable<string>("Value source"), key =>
+			ValueSource = ValueSources.GetOrAdd(properties.GetVariable<string>("Value source"), key =>
 			{
 				var parsedValueSource = key.Split('|').Select(x => x.Trim()).ToArray();
 				return PerformanceCounterManager.GetCounter(parsedValueSource[0], parsedValueSource[1], parsedValueSource[2],
 					1000);
 			});
-			ValueExpression = Properties.GetVariable<string>("Value expression");
-			Gradient = Gradients.GetOrAdd(Properties.GetVariable<string>("Gradient"), ScriptHelper.StringToSpectrum);
+			ValueExpression = properties.GetVariable<string>("Value expression");
+			Gradient = Gradients.GetOrAdd(properties.GetVariable<string>("Gradient"), ScriptHelper.StringToSpectrum);
 
-			EnableOverloadBlinking = Properties.GetVariable<bool>("Enable Overload Blinking");
-			OverloadStartThreshold = Properties.GetVariable<long>("Overload Start Threshold") / 100f;
-			OverloadFullThreshold = Properties.GetVariable<long>("Overload Full Threshold") / 100f;
-			OverloadBlinkingSpeed = (int)Properties.GetVariable<long>("Overload Blinking Speed");
-			OverloadBlinkingColor = Properties.GetVariable<RealColor>("Overload Blinking Color")
+			EnableOverloadBlinking = properties.GetVariable<bool>("Enable Overload Blinking");
+			OverloadStartThreshold = properties.GetVariable<long>("Overload Start Threshold") / 100f;
+			OverloadFullThreshold = properties.GetVariable<long>("Overload Full Threshold") / 100f;
+			OverloadBlinkingSpeed = (int)properties.GetVariable<long>("Overload Blinking Speed");
+			OverloadBlinkingColor = properties.GetVariable<RealColor>("Overload Blinking Color")
 				.GetDrawingColor();
 
-			CycledGradientShiftBaseSpeed = Properties.GetVariable<long>("Cycled Gradient Shift Base Speed") / 100f;
-			CycledGradientShiftFullSpeed = Properties.GetVariable<long>("Cycled Gradient Shift Full Speed") / 100f;
+			CycledGradientShiftBaseSpeed = properties.GetVariable<long>("Cycled Gradient Shift Base Speed") / 100f;
+			CycledGradientShiftFullSpeed = properties.GetVariable<long>("Cycled Gradient Shift Full Speed") / 100f;
 		}
 
 		public object UpdateLights(VariableRegistry properties, IGameState state = null)
 		{
-			ReadProperties();
+			ReadProperties(properties);
 
 			_effectLayer.Clear();
 			var value = ValueSource.GetValue() / 100f;

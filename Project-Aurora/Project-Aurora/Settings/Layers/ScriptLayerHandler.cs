@@ -12,15 +12,26 @@ namespace Aurora.Settings.Layers;
 
 public class ScriptLayerHandlerProperties : LayerHandlerProperties<ScriptLayerHandlerProperties>
 {
-    public string? _Script { get; set; } = null;
-
-    [JsonIgnore]
-    public string Script => Logic._Script ?? _Script ?? String.Empty;
+    private string? _script;
+    [JsonProperty("_Script")]
+    public string? Script
+    {
+        get => Logic._script ?? _script ?? string.Empty;
+        set
+        {
+            if (_script == value)
+            {
+                return;
+            }
+            _script = value;
+            OnPropertiesChanged(this, new PropertyChangedEventArgs(nameof(Script)));
+        }
+    }
 
     private VariableRegistry? _scriptProperties;
 
     [JsonProperty("_ScriptProperties")]
-    public VariableRegistry ScriptProperties
+    public VariableRegistry? ScriptProperties
     {
         get => Logic._scriptProperties ?? _scriptProperties ?? throw new NullReferenceException("ScriptLayerHandlerProperties._scriptProperties is null");
         set => _scriptProperties = value;
@@ -82,19 +93,29 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
     {
         if (IsScriptValid)
         {
-            return Application.EffectScripts[Properties._Script].Properties;
+            return Application.EffectScripts[Properties.Script].Properties;
         }
 
         return null;
     }
 
-    public void OnScriptChanged()
+    protected override void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
     {
-        if (Properties._Script == null || !Application.EffectScripts.ContainsKey(Properties._Script))
+        base.PropertiesChanged(sender, args);
+
+        if (args.PropertyName == nameof(Properties.Script))
+        {
+            OnScriptChanged();
+        }
+    }
+
+    private void OnScriptChanged()
+    {
+        if (Properties.Script == null || !Application.EffectScripts.ContainsKey(Properties.Script))
         {
             return;
         }
-        Properties.ScriptProperties = Application.EffectScripts[Properties._Script].Properties;
+        Properties.ScriptProperties ??= (VariableRegistry)Application.EffectScripts[Properties.Script].Properties.Clone();
     }
 
     [JsonIgnore]
@@ -104,7 +125,6 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
     {
         Application = profile;
         base.SetApplication(profile);
-        OnScriptChanged();
     }
 
     protected override UserControl CreateControl()
