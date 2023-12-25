@@ -12,6 +12,7 @@ using Aurora.Modules.ProcessMonitor;
 using Common.Devices;
 using Common.Utils;
 using Microsoft.Win32;
+using Microsoft.Win32.SafeHandles;
 using RGB.NET.Devices.Logitech;
 using Color = System.Drawing.Color;
 
@@ -39,7 +40,7 @@ public class LogitechSdkListener
 
     private LogiSetTargetDeviceType DeviceType { get; set; }
 
-    private readonly PipeListener _pipeListener = new("LGS_LED_SDK-00000001");
+    private readonly List<PipeListener> _pipeListeners = new();
     private readonly ConcurrentDictionary<DeviceKeys, Color> _colors = new();
     private readonly HashSet<DeviceKeys> _excluded = new();
 
@@ -83,43 +84,28 @@ public class LogitechSdkListener
             await Task.Delay(5000);
         }
 
-        _pipeListener.ClientConnected += PipeListenerOnClientConnected;
-        _pipeListener.ClientDisconnected += OnPipeListenerClientDisconnected;
-        _pipeListener.CommandReceived += OnPipeListenerCommandReceived;
-        _pipeListener.StartListening();
+        for (var i = 0; i < 5; i++)
+        {
+            var pipeListener = new PipeListener("LGS_LED_SDK-0000000" + i);
+            
+            pipeListener.ClientConnected += PipeListenerOnClientConnected;
+            pipeListener.ClientDisconnected += OnPipeListenerClientDisconnected;
+            pipeListener.CommandReceived += OnPipeListenerCommandReceived;
+            pipeListener.StartListening();
+
+            _pipeListeners.Add(pipeListener);
+        }
 
         State = IsInstalled() ? LightsyncSdkState.Waiting : LightsyncSdkState.NotInstalled;
     }
 
     private static bool IsInstalled()
     {
-        return AuroraInstalled() || ArtemisInstalled();
-    }
-
-    private static bool AuroraInstalled()
-    {
         using var key64 = Registry.LocalMachine.OpenSubKey(RegistryPath64);
         using var key32 = Registry.LocalMachine.OpenSubKey(RegistryPath32);
 
-        const string dllPath32 = @"C:\ProgramData\Aurora\x86\LogitechLed.dll";
-        const string dllPath64 = @"C:\ProgramData\Aurora\x64\LogitechLed.dll";
-
-        var is64BitKeyPresent = key64?.GetValue(null)?.ToString() == dllPath64;
-        var is32BitKeyPresent = key32?.GetValue(null)?.ToString() == dllPath32;
-        
-        return is64BitKeyPresent && is32BitKeyPresent;
-    }
-
-    private static bool ArtemisInstalled()
-    {
-        using var key64 = Registry.LocalMachine.OpenSubKey(RegistryPath64);
-        using var key32 = Registry.LocalMachine.OpenSubKey(RegistryPath32);
-
-        const string dllPath32 = @"C:\ProgramData\Artemis\Plugins\Artemis.Plugins.Wrappers.Logitech-c6dda69b\x86\LogitechLed.dll";
-        const string dllPath64 = @"C:\ProgramData\Artemis\Plugins\Artemis.Plugins.Wrappers.Logitech-c6dda69b\x64\LogitechLed.dll";
-
-        var is64BitKeyPresent = key64?.GetValue(null)?.ToString() == dllPath64;
-        var is32BitKeyPresent = key32?.GetValue(null)?.ToString() == dllPath32;
+        var is64BitKeyPresent = File.Exists(key64?.GetValue(null)?.ToString()) ;
+        var is32BitKeyPresent = File.Exists(key32?.GetValue(null)?.ToString());
         
         return is64BitKeyPresent && is32BitKeyPresent;
     }
@@ -145,7 +131,7 @@ public class LogitechSdkListener
         switch (command)
         {
             case LogitechPipeCommand.Init:
-                Init(span);
+                Init((PipeListener)sender, span);
                 break;
             case LogitechPipeCommand.SetTargetDevice:
                 SetTargetDevice(span);
@@ -270,12 +256,12 @@ public class LogitechSdkListener
         }
     }
 
-    private void Init(ReadOnlySpan<byte> span)
+    private void Init(PipeListener pipeListener, ReadOnlySpan<byte> span)
     {
         var name = ReadNullTerminatedUnicodeString(span);
         if (_blockedApps.Contains(Path.GetFileName(name)))
         {
-            _pipeListener.Disconnect();
+            pipeListener.Disconnect();
         }
 
         foreach (var key in Enum.GetValues(typeof(DeviceKeys)).Cast<DeviceKeys>())
@@ -404,8 +390,12 @@ public class LogitechSdkListener
         _colors.Clear();
         _excluded.Clear();
 
-        _pipeListener.ClientDisconnected -= OnPipeListenerClientDisconnected;
-        _pipeListener.CommandReceived -= OnPipeListenerCommandReceived;
-        _pipeListener.Dispose();
+        foreach (var pipeListener in _pipeListeners)
+        {
+            pipeListener.ClientDisconnected -= OnPipeListenerClientDisconnected;
+            pipeListener.CommandReceived -= OnPipeListenerCommandReceived;
+            pipeListener.Dispose();
+        }
+        _pipeListeners.Clear();
     }
 }
