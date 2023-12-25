@@ -93,7 +93,7 @@
                 </Border>
                 <controls:Control_ProfileManager x:Name="ctrlProfileManager" FocusedApplication="{Binding FocusedApplication}"
                                                  Height="25" Margin="0,3,0,0" Background="#00000000" PreviewMouseDown="ctrlProfileManager_PreviewMouseDown" />
-                <controls:Control_LayerList x:Name="ctrlOverlayLayerManager" Margin="0,3,0,0"
+                <controls:Control_LayerList Margin="0,3,0,0" Tooltip="These are activated when the program is enabled even when program runs in the background"
                                             SelectedLayer="{Binding SelectedLayer, Mode=TwoWay}"
                                             FocusedApplication="{Binding FocusedApplication}"
                                             LayerCollection="{Binding Path=FocusedApplication.Profile.OverlayLayers}"

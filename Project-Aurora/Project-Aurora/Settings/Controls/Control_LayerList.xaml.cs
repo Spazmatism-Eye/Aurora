@@ -131,7 +131,32 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     }
         
     public static readonly DependencyProperty ListTitleProperty =
-        DependencyProperty.Register("ListTitle", typeof(string), typeof(Control_LayerList), new PropertyMetadata("Layers"));
+        DependencyProperty.Register(nameof(ListTitle), typeof(string), typeof(Control_LayerList), new PropertyMetadata("Layers"));
+    #endregion
+
+    #region Tooltip Property
+
+    public string? Tooltip
+    {
+        get => (string)GetValue(TooltipProperty);
+        set => SetValue(TooltipProperty, value);
+    }
+        
+    public static readonly DependencyProperty TooltipProperty =
+        DependencyProperty.Register(nameof(Tooltip), typeof(string), typeof(Control_LayerList), new PropertyMetadata(null, OnTooltipChanged));
+
+    private static void OnTooltipChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var c = (Control_LayerList)d;
+        if (e.NewValue == null)
+        {
+            c.TooltipText.Visibility = Visibility.Hidden;
+            return;
+        }
+
+        c.TooltipText.Visibility = Visibility.Visible;
+    }
+
     #endregion
         
     /// <summary>

@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Controls="clr-namespace:Aurora.Controls"
              xmlns:Utils="clr-namespace:Aurora.Utils"
-             xmlns:Win="System.Windows"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="200" GotFocus="UserControl_GotFocus">
     <UserControl.Resources>
@@ -18,7 +17,15 @@
     <Grid>
         <Border Background="#A5000000" CornerRadius="8" />
         <Border Background="#54A8A8A8" CornerRadius="8" VerticalAlignment="Top" Height="25">
-            <TextBlock TextWrapping="Wrap" Text="{Binding ListTitle}" VerticalAlignment="Top" Margin="10,3,10,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock TextWrapping="Wrap" Text="{Binding ListTitle}" VerticalAlignment="Top" Margin="10,3,10,0"/>
+                <TextBlock Grid.Column="1" Name="TooltipText" ToolTip="{Binding Tooltip}" ToolTipService.InitialShowDelay="0" ToolTipService.BetweenShowDelay="0"
+                           TextWrapping="Wrap" Text="?" VerticalAlignment="Top" Margin="10,3,10,0" Visibility="Hidden"/>
+            </Grid>
         </Border>
         
         <StackPanel Orientation="Horizontal" Margin="0,30" VerticalAlignment="Top" HorizontalAlignment="Right" Height="24">
