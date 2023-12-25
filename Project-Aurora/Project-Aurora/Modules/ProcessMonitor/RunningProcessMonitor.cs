@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Aurora.Modules.ProcessMonitor;
 
@@ -27,13 +29,16 @@ public class RunningProcessChanged: EventArgs
 public sealed class RunningProcessMonitor : IDisposable {
     public event EventHandler<RunningProcessChanged>? RunningProcessesChanged;
 
+    private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.SupportsRecursion);
+
     /// <summary>A list of all currently running processes (and how many instances are running).</summary>
     /// <remarks>The reason for the count is so that if two processes of the same file are running and one is closed, we can know
     /// that the other is still running.</remarks>
     private readonly Dictionary<string, int> _runningProcesses;
 
     private readonly ManagementEventWatcher _startWatcher;
-    private readonly ManagementEventWatcher _stopWatcher;
+    private readonly ManagementEventWatcher _shortStopWatcher;
+    private readonly ManagementEventWatcher _longStopWatcher;
 
     /// <summary>
     /// Creates a new instance of the <see cref="RunningProcessMonitor"/>, which performs an initial scan of running
@@ -46,11 +51,7 @@ public sealed class RunningProcessMonitor : IDisposable {
             {
                 try
                 {
-                    return System.IO.Path.GetFileName(p.MainModule.FileName).ToLower();
-                }
-                catch
-                {
-                    return p.ProcessName.ToLower();
+                    return p.ProcessName.ToLower() + ".exe";
                 }
                 finally
                 {
@@ -66,12 +67,17 @@ public sealed class RunningProcessMonitor : IDisposable {
         _startWatcher.Start();
 
         // Listen for closed processes 
-        _stopWatcher = new ManagementEventWatcher("SELECT ProcessName FROM Win32_ProcessStopTrace");
-        _stopWatcher.EventArrived += ProcessStopped;
-        _stopWatcher.Start();
+        _shortStopWatcher = new ManagementEventWatcher("SELECT ProcessName FROM Win32_ProcessStopTrace");
+        _shortStopWatcher.EventArrived += ShortProcessStopped;
+        _shortStopWatcher.Start();
+
+        // Listen for closed processes 
+        var query = new WqlEventQuery("__InstanceDeletionEvent", TimeSpan.FromSeconds(1), "TargetInstance isa 'Win32_Process'");
+        _longStopWatcher = new ManagementEventWatcher(query);
+        _longStopWatcher.EventArrived += LongProcessStopped;
+        _longStopWatcher.Start();
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
     private void ProcessStarted(object? sender, EventArrivedEventArgs e)
     {
         // Get the name of the started process
@@ -79,46 +85,106 @@ public sealed class RunningProcessMonitor : IDisposable {
         {
             return;
         }
+
         name = name.ToLower();
-        // Set the dictionary to be the existing value + 1 or simply 1 if it doesn't exist already.
-        _runningProcesses[name] = _runningProcesses.TryGetValue(name, out var i) ? i + 1 : 1;
-        RunningProcessesChanged?.Invoke(sender, new RunningProcessChanged(name));
+
+        Task.Run(() =>
+        {
+            _lock.EnterWriteLock();
+            // Set the dictionary to be the existing value + 1 or simply 1 if it doesn't exist already.
+            _runningProcesses[name] = _runningProcesses.TryGetValue(name, out var i) ? i + 1 : 1;
+            _lock.ExitWriteLock();
+        
+            RunningProcessesChanged?.Invoke(this, new RunningProcessChanged(name));
+        });
     }
 
-    [MethodImpl(MethodImplOptions.Synchronized)]
-    private void ProcessStopped(object? sender, EventArrivedEventArgs e)
+    private void ShortProcessStopped(object? sender, EventArrivedEventArgs e)
     {
         // Get the name of the terminated process
-        if (e.NewEvent.Properties["ProcessName"].Value is not string name)
+        if (e.NewEvent.GetPropertyValue("ProcessName") is not string name)
         {
             return;
         }
-        name = name.ToLower();
-        // Ensure the process exists in our dictionary
-        if (_runningProcesses.TryGetValue(name, out var count))
+
+        // Win32_ProcessStopTrace only gets us the first 10 characters of the process name, so we won't use it
+        if (name.Length > 10 || !name.EndsWith(".exe"))
         {
-            if (count == 1) // If there is only 1 process currently running, remove it (since that must've been the one that terminated)
-                _runningProcesses.Remove(name);
-            else // Else, simply decrement the process count number
-                _runningProcesses[name]--;
+            return;
+        }
+        
+        name = name.ToLower();
+
+        RemoveProcess(name);
+    }
+
+    private void LongProcessStopped(object? sender, EventArrivedEventArgs e)
+    {
+        // Get the name of the terminated process
+        if (e.NewEvent.GetPropertyValue("TargetInstance") is not ManagementBaseObject targetInstance)
+        {
+            return;
         }
 
-        RunningProcessesChanged?.Invoke(sender, new RunningProcessChanged(name));
+        if (targetInstance.GetPropertyValue("Name") is not string name)
+        {
+            return;
+        }
+
+        // Win32_ProcessStopTrace only gets us the first 10 characters of the process name, we handle it here
+        if (name.Length <= 10)
+        {
+            return;
+        }
+        
+        name = name.ToLower();
+
+        RemoveProcess(name);
+    }
+
+    private void RemoveProcess(string name)
+    {
+        Task.Run(() =>
+        {
+            _lock.EnterWriteLock();
+            
+            // Ensure the process exists in our dictionary
+            if (_runningProcesses.TryGetValue(name, out var count))
+            {
+                if (count == 1) // If there is only 1 process currently running, remove it (since that must've been the one that terminated)
+                    _runningProcesses.Remove(name);
+                else // Else, simply decrement the process count number
+                    _runningProcesses[name]--;
+            }
+            else
+            {
+                Global.logger.Warning("Closed process {ProcessName} didn't exist in our list", name);
+            }
+
+            _lock.ExitWriteLock();
+
+            RunningProcessesChanged?.Invoke(this, new RunningProcessChanged(name));
+        });
     }
 
     /// <summary>
     /// Returns whether the given process name is detected as running or not.
     /// </summary>
-    [MethodImpl(MethodImplOptions.Synchronized)]
-    public bool IsProcessRunning(string name) => _runningProcesses.ContainsKey(name);
+    public bool IsProcessRunning(string name)
+    {
+        _lock.EnterReadLock();
+        var isProcessRunning = _runningProcesses.ContainsKey(name);
+        _lock.ExitReadLock();
+        return isProcessRunning;
+    }
 
     public void Dispose()
     {
         _startWatcher.EventArrived -= ProcessStarted;
         _startWatcher.Stop();
         _startWatcher.Dispose();
-        _stopWatcher.EventArrived -= ProcessStopped;
-        _stopWatcher.Stop();
-        _stopWatcher.Dispose();
+        _shortStopWatcher.EventArrived -= ShortProcessStopped;
+        _shortStopWatcher.Stop();
+        _shortStopWatcher.Dispose();
     }
 }
