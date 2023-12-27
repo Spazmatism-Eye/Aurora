@@ -492,7 +492,7 @@ namespace AuroraDeviceManager.Devices.LightFX
         {
             variableRegistry = new VariableRegistry();
             variableRegistry.Register($"{DeviceName}_custom_pid", false, "Use Custom PID");
-            variableRegistry.Register($"{DeviceName}_pid", 0, "Device PID: 0x", flags: VariableFlags.UseHEX);
+            variableRegistry.Register($"{DeviceName}_pid", 0, "Device PID: 0x", flags: VariableFlags.UseHex);
             variableRegistry.Register($"{DeviceName}_length", true, "Use 12 byte data");
         }
     }

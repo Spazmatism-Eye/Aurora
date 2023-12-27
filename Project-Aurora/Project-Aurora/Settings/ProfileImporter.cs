@@ -725,30 +725,42 @@ public static class ProfileImporter
         {
             // Attempt to read and deserialise the profile
             var json = File.ReadAllText(filepath, Encoding.UTF8);
-            var inProf = (ApplicationProfile)JsonConvert.DeserializeObject(json, typeof(ApplicationProfile), new JsonSerializerSettings
+            var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ObjectCreationHandling = ObjectCreationHandling.Replace,
                 TypeNameHandling = TypeNameHandling.Auto,
                 SerializationBinder = new AuroraSerializationBinder(),
-            });
+            };
+            jsonSerializerSettings.Converters.Add(new EnumConverter());
+            jsonSerializerSettings.Converters.Add(new SingleToDoubleConverter());
+            jsonSerializerSettings.Converters.Add(new OverrideTypeConverter());
+            jsonSerializerSettings.Converters.Add(new TypeAnnotatedObjectConverter());
+            jsonSerializerSettings.Converters.Add(new DictionaryJsonConverterAdapter());
+            jsonSerializerSettings.Converters.Add(new ConcurrentDictionaryJsonConverterAdapter());
+            var inProf = (ApplicationProfile)JsonConvert.DeserializeObject(json, typeof(ApplicationProfile), jsonSerializerSettings);
 
             // Create a new profile on the current application (so that profiles can be imported from different applications)
             var newProf = app.AddNewProfile(inProf.ProfileName);
             newProf.TriggerKeybind = inProf.TriggerKeybind.Clone();
 
             // Copy any valid layers from the read profile to the new one
-            void ImportLayers(ObservableCollection<Layer> source, ObservableCollection<Layer> target) {
+            void ImportLayers(ObservableCollection<Layer> source, ICollection<Layer> target)
+            {
                 target.Clear();
-                for (var i = 0; i < source.Count; i++)
-                    if (app.IsAllowedLayer(source[i].Handler.GetType()))
-                        target.Add((Layer)source[i].Clone());
+                foreach (var layer in source)
+                {
+                    if (!app.IsAllowedLayer(layer.Handler.GetType())) continue;
+
+                    var newL = (Layer)layer.Clone();
+                    target.Add(newL);
+                    newL.SetProfile(app);
+                }
             }
             ImportLayers(inProf.Layers, newProf.Layers);
             ImportLayers(inProf.OverlayLayers, newProf.OverlayLayers);
 
             // Force a save to write the new profile to disk in the appdata dir
             app.SaveProfiles();
-
         }
         catch (Exception ex)
         {

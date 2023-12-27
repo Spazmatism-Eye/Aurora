@@ -21,7 +21,7 @@ public class OpenRgbNetDevice : RgbNetDevice
     {
         base.ConfigureProvider();
         
-        var ip = Global.DeviceConfig.VarRegistry.GetVariable<string>($"{DeviceName}_ip");
+        var ip = Global.DeviceConfig.VarRegistry.GetString($"{DeviceName}_ip");
         var port = Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_port");
 
         if (ip == IPAddress.Loopback.ToString())

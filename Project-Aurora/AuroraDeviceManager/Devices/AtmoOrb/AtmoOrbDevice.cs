@@ -144,7 +144,7 @@ public class AtmoOrbDevice : DefaultDevice
         List<string> orbIDs;
         try
         {
-            string orbIds = Global.DeviceConfig.VarRegistry.GetVariable<string>($"{DeviceName}_orb_ids") ?? "";
+            string orbIds = Global.DeviceConfig.VarRegistry.GetString($"{DeviceName}_orb_ids");
             orbIDs = orbIds.Split(',').ToList();
         }
         catch (Exception)

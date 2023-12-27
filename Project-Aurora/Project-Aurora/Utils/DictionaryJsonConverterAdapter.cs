@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using JsonException = System.Text.Json.JsonException;
 
 namespace Aurora.Utils;
 
@@ -80,7 +81,7 @@ public class SortedDictionaryAdapter : JsonConverter<SortedDictionary<double, Co
 public class DictionaryJsonConverterAdapter : JsonConverter<IDictionary<dynamic, dynamic>>
 {
     
-    public override void WriteJson(JsonWriter writer, IDictionary<object, object> value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, IDictionary<dynamic, dynamic>? value, JsonSerializer serializer)
     {
         serializer.Serialize(writer,value);
     }
@@ -103,7 +104,7 @@ public class DictionaryJsonConverterAdapter : JsonConverter<IDictionary<dynamic,
             }
 
             var key = Convert.ChangeType(prop.Name, keyType, CultureInfo.InvariantCulture);
-            if (keyType == typeof(Double))
+            if (keyType == typeof(double))
             {
                 double.TryParse(prop.Name, out var doubleKey);
                 key = doubleKey;
@@ -116,6 +117,11 @@ public class DictionaryJsonConverterAdapter : JsonConverter<IDictionary<dynamic,
 
     private static IDictionary<dynamic, dynamic> Instance(Type objectType)
     {
-        return (IDictionary<dynamic, dynamic>)Expression.New(objectType.GetConstructor(Type.EmptyTypes));
+        var constructorInfo = objectType.GetConstructor(Type.EmptyTypes);
+        if (constructorInfo == null)
+        {
+            throw new JsonException("Type " + objectType + " does not have parameterless constructor");
+        }
+        return (IDictionary<dynamic, dynamic>)Activator.CreateInstance(objectType)!;
     }
 }

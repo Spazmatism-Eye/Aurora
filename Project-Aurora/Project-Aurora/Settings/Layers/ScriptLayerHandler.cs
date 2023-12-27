@@ -14,7 +14,7 @@ public class ScriptLayerHandlerProperties : LayerHandlerProperties<ScriptLayerHa
 {
     private string? _script;
     [JsonProperty("_Script")]
-    public string? Script
+    public string Script
     {
         get => Logic._script ?? _script ?? string.Empty;
         set
@@ -31,7 +31,7 @@ public class ScriptLayerHandlerProperties : LayerHandlerProperties<ScriptLayerHa
     private VariableRegistry? _scriptProperties;
 
     [JsonProperty("_ScriptProperties")]
-    public VariableRegistry? ScriptProperties
+    public VariableRegistry ScriptProperties
     {
         get => Logic._scriptProperties ?? _scriptProperties ?? throw new NullReferenceException("ScriptLayerHandlerProperties._scriptProperties is null");
         set => _scriptProperties = value;
@@ -103,7 +103,7 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
     {
         base.PropertiesChanged(sender, args);
 
-        if (args.PropertyName == nameof(Properties.Script))
+        if (args.PropertyName is nameof(Properties.Script))
         {
             OnScriptChanged();
         }
@@ -111,15 +111,15 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
 
     private void OnScriptChanged()
     {
-        if (Properties.Script == null || !Application.EffectScripts.ContainsKey(Properties.Script))
+        if (Properties.Script == null || Application == null || !Application.EffectScripts.ContainsKey(Properties.Script))
         {
             return;
         }
-        Properties.ScriptProperties ??= (VariableRegistry)Application.EffectScripts[Properties.Script].Properties.Clone();
+        Properties.ScriptProperties = (VariableRegistry)Application.EffectScripts[Properties.Script].Properties.Clone();
     }
 
     [JsonIgnore]
-    public bool IsScriptValid => Application?.EffectScripts?.ContainsKey(Properties.Script) ?? false;
+    public bool  IsScriptValid => Application?.EffectScripts?.ContainsKey(Properties.Script) ?? false;
 
     public override void SetApplication(Application profile)
     {

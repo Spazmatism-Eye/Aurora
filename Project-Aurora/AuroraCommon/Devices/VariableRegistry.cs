@@ -1,32 +1,20 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Common.Utils;
 
 namespace Common.Devices;
 
 [Serializable]
-public class VariableRegistryItem
+public class VariableRegistryItem : ICloneable
 {
-    public object? Value;
-    private object? @default;
+    public object? Value { get; set; }
 
-    [JsonIgnore]
-    public object? Default
-    {
-        get => @default?.TryClone();
-        private set => @default = value?.TryClone();
-    }
+    public object? Default { get; private set; }
 
-    [JsonIgnore]
-    public object? Max;
-    [JsonIgnore]
-    public object? Min;
-    [JsonIgnore]
-    public string Title = "";
-    [JsonIgnore]
-    public string Remark = "";
-    [JsonIgnore]
-    public VariableFlags Flags = VariableFlags.None;
+    public object? Max { get; set; }
+    public object? Min { get; set; }
+    public string Title { get; set; } = "";
+    public string Remark { get; set; } = "";
+    public VariableFlags Flags { get; set; } = VariableFlags.None;
 
     public VariableRegistryItem()
     {
@@ -66,11 +54,11 @@ public class VariableRegistryItem
         Flags = flags;
     }
 
-    public void SetVariable(object? newvalue)
+    public void SetVariable(object? newValue)
     {
-        if (Value != null && newvalue != null && Value.GetType() == newvalue.GetType())
+        if (Value != null && newValue != null && Value.GetType() == newValue.GetType())
         {
-            Value = newvalue;
+            Value = newValue;
         }
     }
 
@@ -81,50 +69,51 @@ public class VariableRegistryItem
         Remark = variableRegistryItem.Remark;
         Min = variableRegistryItem.Min;
         Max = variableRegistryItem.Max;
-        var typ = Value.GetType();
-        if (variableRegistryItem.Default != null)
-        {
-            var defaultType = variableRegistryItem.Default.GetType();
-
-            if (defaultType != typ && typ == typeof(long) && defaultType.IsEnum)
-                Value = Enum.ToObject(defaultType, Value);
-            else if (defaultType != typ && Value is long && TypeUtils.IsNumericType(defaultType))
-                Value = Convert.ChangeType(Value, defaultType);
-            else if (Value == null && defaultType != typ)
-                Value = variableRegistryItem.Default;
-        }
 
         Flags = variableRegistryItem.Flags;
+
+        if (variableRegistryItem.Default == null) return;
+
+        var defaultType = variableRegistryItem.Default.GetType();
+        var typ = Value.GetType();
+
+        if (defaultType != typ && typ == typeof(long) && defaultType.IsEnum)
+            Value = Enum.ToObject(defaultType, Value);
+        else if (defaultType != typ && Value is long && TypeUtils.IsNumericType(defaultType))
+            Value = Convert.ChangeType(Value, defaultType);
+        else if (Value == null && defaultType != typ)
+            Value = variableRegistryItem.Default;
+    }
+
+    public object Clone()
+    {
+        return new VariableRegistryItem(Value?.TryClone(), Default?.TryClone(), Max, Min, Title, Remark);
     }
 }
 
 public enum VariableFlags
 {
     None = 0,
-    UseHEX = 1
+    UseHex = 1
 }
 
 public class VariableRegistry : ICloneable //Might want to implement something like IEnumerable here
 {
-    [JsonPropertyName("Variables")]
-    private Dictionary<string, VariableRegistryItem> _variables = new();
-
     [JsonIgnore]
-    public int Count => _variables.Count;
+    public int Count => Variables.Count;
 
-    [JsonIgnore]
-    public IEnumerable<(string, VariableRegistryItem)> Variables => _variables.Select(kv => (kv.Key, kv.Value));
+    public IDictionary<string, VariableRegistryItem> Variables { get; set; } = new Dictionary<string, VariableRegistryItem>();
 
     public void Combine(VariableRegistry otherRegistry, bool removeMissing = false)
     {
         //Below doesn't work for added variables
         var vars = new Dictionary<string, VariableRegistryItem>();
 
-        foreach (var variable in otherRegistry._variables)
+        foreach (var variable in otherRegistry.Variables)
         {
             if (removeMissing)
             {
-                var local = _variables.ContainsKey(variable.Key) ? _variables[variable.Key] : null;
+                var local = Variables.TryGetValue(variable.Key, out var outVar) ? outVar : null;
                 if (local != null)
                     local.Merge(variable.Value);
                 else
@@ -137,60 +126,63 @@ public class VariableRegistry : ICloneable //Might want to implement something l
         }
 
         if (removeMissing)
-            _variables = vars;
+            Variables = vars;
     }
 
     public IEnumerable<string> GetRegisteredVariableKeys()
     {
-        return _variables.Keys.ToArray();
+        return Variables.Keys.ToArray();
     }
 
-    public void Register(string name, object defaultValue, string title = "", object max = null, object min = null, string remark = "",
+    public void Register(string name, object defaultValue, string title = "", object? max = null, object? min = null, string remark = "",
         VariableFlags flags = VariableFlags.None)
     {
-        if (!_variables.ContainsKey(name))
-            _variables.Add(name, new VariableRegistryItem(defaultValue, max, min, title, remark, flags));
+        if (!Variables.ContainsKey(name))
+            Variables.Add(name, new VariableRegistryItem(defaultValue, max, min, title, remark, flags));
     }
 
     public void Register(string name, VariableRegistryItem varItem)
     {
-        if (!_variables.TryAdd(name, varItem))
-            _variables[name].Merge(varItem);
+        if (!Variables.TryAdd(name, varItem))
+            Variables[name].Merge(varItem);
     }
 
-    public bool SetVariable(string name, object? variable)
+    public void SetVariable(string name, object? variable)
     {
-        if (_variables.ContainsKey(name))
-        {
-            _variables[name].SetVariable(variable);
-            return true;
-        }
+        if (!Variables.ContainsKey(name)) return;
 
-        return false;
+        Variables[name].SetVariable(variable);
     }
 
     public void ResetVariable(string name)
     {
-        if (_variables.ContainsKey(name))
+        if (Variables.ContainsKey(name))
         {
-            _variables[name].Value = _variables[name].Default;
+            Variables[name].Value = Variables[name].Default;
         }
     }
 
-    public T GetVariable<T>(string name)
+    public string GetString(string name)
     {
-        if (_variables.ContainsKey(name) && _variables[name] != null && _variables[name].Value != null &&
-            typeof(T).IsAssignableFrom(_variables[name].Value.GetType()))
-            return (T)_variables[name].Value;
-
-        return default(T);
+        if (Variables.TryGetValue(name, out var value) && value.Value is string strVal)
+            return strVal;
+        
+        return string.Empty;
     }
 
-    public bool GetVariableMax<T>(string name, out T value)
+    public T GetVariable<T>(string name) where T : new()
     {
-        if (_variables.ContainsKey(name) && _variables[name] != null && _variables[name].Max != null && _variables[name].Value is T)
+        if (Variables.TryGetValue(name, out var value) && value.Value is T tVal)
+            return tVal;
+
+        return default(T) ?? new T();
+    }
+
+    public bool GetVariableMax<T>(string name, out T? value)
+    {
+        if (Variables.TryGetValue(name, out var outVal) && outVal is { Max: not null, Value: T })
         {
-            value = (T)_variables[name].Max;
+            value = (T)outVal.Max;
             return true;
         }
 
@@ -200,9 +192,9 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public bool GetVariableMin<T>(string name, out T value)
     {
-        if (_variables.ContainsKey(name) && _variables[name] != null && _variables[name].Min != null && _variables[name].Value is T)
+        if (Variables.TryGetValue(name, out var outVal) && outVal is { Min: not null, Value: T })
         {
-            value = (T)_variables[name].Min;
+            value = (T)outVal.Min;
             return true;
         }
 
@@ -212,33 +204,34 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public Type GetVariableType(string name)
     {
-        if (_variables.ContainsKey(name) && _variables[name] != null && _variables[name].Value != null)
-            return _variables[name].Value.GetType();
+        if (Variables.TryGetValue(name, out var value) && value.Value != null)
+            return value.Value.GetType();
 
         return typeof(object);
     }
 
     public string GetTitle(string name)
     {
-        return _variables.TryGetValue(name, out var variable) ? variable.Title : "";
+        return Variables.TryGetValue(name, out var variable) ? variable.Title : string.Empty;
     }
 
     public string GetRemark(string name)
     {
-        return _variables.TryGetValue(name, out var variable) ? variable.Remark : "";
+        return Variables.TryGetValue(name, out var variable) ? variable.Remark : string.Empty;
     }
 
     public VariableFlags GetFlags(string name)
     {
-        return _variables.TryGetValue(name, out var variable) ? variable.Flags : VariableFlags.None;
+        return Variables.TryGetValue(name, out var variable) ? variable.Flags : VariableFlags.None;
     }
 
     public object Clone()
     {
-        var str = JsonSerializer.Serialize(this, new JsonSerializerOptions{ WriteIndented = false});
-
-        return JsonSerializer.Deserialize<VariableRegistry>(
-            str
-        )!;
+        var clone = new VariableRegistry();
+        foreach (var registryItem in Variables)
+        {
+            clone.Variables[registryItem.Key] = (VariableRegistryItem)registryItem.Value.Clone();
+        }
+        return clone;
     }
 }

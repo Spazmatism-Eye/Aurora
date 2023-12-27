@@ -27,7 +27,7 @@ public class YeeLightDevice : DefaultDevice
         if (IsInitialized) return IsInitialized;
         try
         {
-            var ipListString = Global.DeviceConfig.VarRegistry.GetVariable<string>($"{DeviceName}_IP");
+            var ipListString = Global.DeviceConfig.VarRegistry.GetString($"{DeviceName}_IP");
             var autoDiscover = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_auto_discovery");
             await YeeLightConnector.PopulateDevices(_lights, autoDiscover ? null : ipListString).ConfigureAwait(false);
 

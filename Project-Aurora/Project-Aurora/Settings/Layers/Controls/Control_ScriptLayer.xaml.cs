@@ -32,7 +32,7 @@ public partial class Control_ScriptLayer
     private void cboScripts_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var handler = (ScriptLayerHandler)DataContext;
-        var script = e.AddedItems[0] as string;
+        var script = (string)e.AddedItems[0]!;
         handler.Properties.Script = script;
         UpdateScriptSettings();
     }
@@ -43,7 +43,8 @@ public partial class Control_ScriptLayer
         ScriptPropertiesEditor.RegisteredVariables = handler.GetScriptPropertyRegistry();
         var varReg = ScriptPropertiesEditor.RegisteredVariables;
         ScriptPropertiesEditor.Visibility = varReg == null || varReg.Count == 0 ? Visibility.Hidden : Visibility.Visible;
-        ScriptPropertiesEditor.VarRegistrySource = handler.IsScriptValid ? handler.Properties.ScriptProperties : null;
+        if (handler.IsScriptValid)
+            ScriptPropertiesEditor.VarRegistrySource = handler.Properties.ScriptProperties;
     }
 
     private void refreshScriptList_Click(object? sender, RoutedEventArgs e) {

@@ -33,7 +33,7 @@ public class YeelightRgbNetDevice : RgbNetDevice
         }
         else
         {
-            var ipAddresses = Global.DeviceConfig.VarRegistry.GetVariable<string>($"{DeviceName}_IP");
+            var ipAddresses = Global.DeviceConfig.VarRegistry.GetString($"{DeviceName}_IP");
             YeelightProvider.IpAddresses = ipAddresses;
         }
         YeelightProvider.Instance.MusicModeOnly = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_music_mode_only");

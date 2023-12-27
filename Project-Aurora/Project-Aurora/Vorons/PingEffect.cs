@@ -149,11 +149,11 @@ public class PingEffect : IEffectScript
 		DelayBetweenRequests = properties.GetVariable<long>("Delay Between Requests");
 		DelayAfterAnimation = properties.GetVariable<long>("Delay After Animation");
 
-		BarGradient = Gradients.GetOrAdd(properties.GetVariable<string>("Bar Gradient"), ScriptHelper.StringToSpectrum);
-		FailAnimationGradient = Gradients.GetOrAdd(properties.GetVariable<string>("Fail Animation Gradient"), ScriptHelper.StringToSpectrum);
+		BarGradient = Gradients.GetOrAdd(properties.GetString("Bar Gradient"), ScriptHelper.StringToSpectrum);
+		FailAnimationGradient = Gradients.GetOrAdd(properties.GetString("Fail Animation Gradient"), ScriptHelper.StringToSpectrum);
 
-		DefaultHost = properties.GetVariable<string>("Default Host");
-		PerAppHosts = properties.GetVariable<string>("Per App Hosts");
+		DefaultHost = properties.GetString("Default Host");
+		PerAppHosts = properties.GetString("Per App Hosts");
 
 		MaxPing = properties.GetVariable<long>("Max Ping");
 		AnimationReserveDelay = 50;// properties.GetVariable<long>("Animation Reserve Delay");

@@ -87,14 +87,14 @@ public partial class Control_VariableRegistryItem
         else if (varType == typeof(string))
         {
             var txtbxControl = new TextBox();
-            txtbxControl.Text = VarRegistry.GetVariable<string>(VariableName);
+            txtbxControl.Text = VarRegistry.GetString(VariableName);
             txtbxControl.TextChanged += Txtbx_control_TextChanged;
 
             grd_control.Children.Add(txtbxControl);
         }
         else if (varType == typeof(int))
         {
-            if (VarRegistry.GetFlags(VariableName).HasFlag(VariableFlags.UseHEX))
+            if (VarRegistry.GetFlags(VariableName).HasFlag(VariableFlags.UseHex))
             {
                 var hexBox = new TextBox();
                 hexBox.PreviewTextInput += HexBoxOnPreviewTextInput;

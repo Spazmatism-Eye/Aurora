@@ -154,14 +154,14 @@ namespace Aurora.Vorons
 			Keys = properties.GetVariable<KeySequence>("Keys or Freestyle");
 			EffectType = (EffectTypes)properties.GetVariable<long>("Effect type");
 
-			ValueSource = ValueSources.GetOrAdd(properties.GetVariable<string>("Value source"), key =>
+			ValueSource = ValueSources.GetOrAdd(properties.GetString("Value source"), key =>
 			{
 				var parsedValueSource = key.Split('|').Select(x => x.Trim()).ToArray();
 				return PerformanceCounterManager.GetCounter(parsedValueSource[0], parsedValueSource[1], parsedValueSource[2],
 					1000);
 			});
-			ValueExpression = properties.GetVariable<string>("Value expression");
-			Gradient = Gradients.GetOrAdd(properties.GetVariable<string>("Gradient"), ScriptHelper.StringToSpectrum);
+			ValueExpression = properties.GetString("Value expression");
+			Gradient = Gradients.GetOrAdd(properties.GetString("Gradient"), ScriptHelper.StringToSpectrum);
 
 			EnableOverloadBlinking = properties.GetVariable<bool>("Enable Overload Blinking");
 			OverloadStartThreshold = properties.GetVariable<long>("Overload Start Threshold") / 100f;
