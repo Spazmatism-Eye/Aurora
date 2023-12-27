@@ -148,7 +148,7 @@ public partial class GameStateParameterPicker : INotifyPropertyChanged {
                                              // If we're in number mode, allow the selected path to be a double
                                              || (PropertyType == GSIPropertyType.Number && double.TryParse(path.GsiPath, out var _))
                                              // If not in number mode, must be a valid path and have the same type as the expected property type
-                                             || Application.ParameterLookup.IsValidParameter(path.GsiPath, PropertyType);
+                                             || (Application?.ParameterLookup?.IsValidParameter(path.GsiPath, PropertyType) ?? false);
 
     #region Animation
     /// <summary>Animates the list boxes.</summary>
