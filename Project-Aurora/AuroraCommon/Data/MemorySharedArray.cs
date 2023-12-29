@@ -118,6 +118,10 @@ public class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> where T
 
             // Write the data at the calculated offset
             var element = pair.Value;
+            if (!_accessor.CanWrite)
+            {
+                return;
+            }
             _accessor.Write(sizeof(int) + offset, ref element);
         }
 

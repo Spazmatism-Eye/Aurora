@@ -79,6 +79,10 @@ public class MemorySharedStruct<T> : SignaledMemoryObject where T : struct
         // Marshal the struct to a byte array
         Marshal.StructureToPtr(element, _writePointer, true);
 
+        if (!_accessor.CanWrite)
+        {
+            return;
+        }
         _accessor.WriteArray(0, _writeBuffer, 0, _writeBuffer.Length);
 
         SignalUpdated();
