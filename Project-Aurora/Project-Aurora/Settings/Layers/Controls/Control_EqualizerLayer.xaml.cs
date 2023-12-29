@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Aurora.EffectsEngine;
 using Aurora.Utils;
 using ColorBox;
@@ -249,7 +250,7 @@ public partial class ControlEqualizerLayer
     {
         try
         {
-            Dispatcher.Invoke(
+            Dispatcher.BeginInvoke(
                 () =>
                 {
                     using var memory = new MemoryStream();
@@ -262,7 +263,7 @@ public partial class ControlEqualizerLayer
                     bitmapImage.EndInit();
 
                     _previewImage.Source = bitmapImage;
-                });
+                }, DispatcherPriority.Render);
         }
         catch (Exception ex)
         {

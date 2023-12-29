@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 using Aurora.Modules;
 using Aurora.Modules.Inputs;
 using Keys = System.Windows.Forms.Keys;
@@ -38,11 +39,11 @@ public partial class Control_SingleKeyEditor
 
     private static void InputEvents_KeyDown(object? sender, KeyboardKeyEvent e) {
         if (_listeningEditor != null)
-            _listeningEditor.Dispatcher.Invoke(() => {
+            _listeningEditor.Dispatcher.BeginInvoke(() => {
                 _listeningEditor.SelectedKey = e.Key;
                 _listeningEditor.UpdateButtonText(false);
                 _listeningEditor = null;
-            });
+            }, DispatcherPriority.Input);
     }
 
     // Dependency Property

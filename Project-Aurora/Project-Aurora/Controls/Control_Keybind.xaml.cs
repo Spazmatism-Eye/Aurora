@@ -3,6 +3,7 @@ using Aurora.Settings;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Aurora.Modules;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -43,7 +44,7 @@ public partial class Control_Keybind
 
     private void InputEventsKeyDown(object? sender, EventArgs e)
     {
-        Dispatcher.Invoke(
+        Dispatcher.BeginInvoke(
             async () =>
             {
                 if (!Equals(_ActiveKeybind)) return;
@@ -57,7 +58,7 @@ public partial class Control_Keybind
                 }
                 else
                     textBoxKeybind.Text = "ERROR (No KeybindProperty set)";
-            });
+            }, DispatcherPriority.Input);
     }
 
     private bool _isRecording;

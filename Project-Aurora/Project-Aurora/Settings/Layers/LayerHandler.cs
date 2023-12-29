@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Aurora.Settings.Layers.Controls;
 using Common.Utils;
 using JetBrains.Annotations;
@@ -400,7 +401,7 @@ namespace Aurora.Settings.Layers
             System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 tcs.SetResult(CreateControl());
-            });
+            }, DispatcherPriority.Loaded);
             return tcs.Task;
         }
 

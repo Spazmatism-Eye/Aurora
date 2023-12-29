@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Aurora.Devices;
 using Aurora.Modules.GameStateListen;
 using Aurora.Settings;
@@ -65,11 +66,11 @@ public partial class Control_DeviceCalibration : IDisposable
                     device => Color.FromArgb(device.Calibration.ToArgb())
                 );
 
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(() =>
                 {
                     DeviceList.ItemsSource = DeviceCalibrations;
                     DeviceList.Items.Refresh();
-                });
+                }, DispatcherPriority.Loaded);
 
                 //release lock
                 if (_devicesUpdated.CurrentCount > 0)

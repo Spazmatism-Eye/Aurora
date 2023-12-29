@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Aurora.Controls {
 
@@ -53,17 +54,17 @@ namespace Aurora.Controls {
 
         // Take the bitmap from the layer and transform it into a format that can be used by WPF
         private void RenderLayerPreview(object? sender, System.Drawing.Bitmap bitmap) =>
-            Dispatcher.Invoke(delegate {
-                using (var ms = new MemoryStream()) {
-                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    ms.Position = 0;
-                    var bitmapImg = new BitmapImage();
-                    bitmapImg.BeginInit();
-                    bitmapImg.StreamSource = ms;
-                    bitmapImg.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImg.EndInit();
-                    imagePreview.Source = bitmapImg;
-                }
-            });
+            Dispatcher.BeginInvoke(() =>
+            {
+                using var ms = new MemoryStream();
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                ms.Position = 0;
+                var bitmapImg = new BitmapImage();
+                bitmapImg.BeginInit();
+                bitmapImg.StreamSource = ms;
+                bitmapImg.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImg.EndInit();
+                imagePreview.Source = bitmapImg;
+            }, DispatcherPriority.Loaded);
     }
 }

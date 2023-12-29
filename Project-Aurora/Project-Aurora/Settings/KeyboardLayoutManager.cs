@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Aurora.Devices;
 using Aurora.Settings.Controls.Keycaps;
 using Aurora.Utils;
@@ -352,7 +353,7 @@ public class KeyboardLayoutManager
 
     public delegate void LayoutUpdatedEventHandler(object? sender);
 
-    public event LayoutUpdatedEventHandler KeyboardLayoutUpdated;
+    public event LayoutUpdatedEventHandler? KeyboardLayoutUpdated;
 
     private const string CulturesFolder = "kb_layouts";
 
@@ -587,7 +588,7 @@ public class KeyboardLayoutManager
         {
             CreateUserControl();
             KeyboardLayoutUpdated?.Invoke(this);
-        });
+        }, DispatcherPriority.Send);
     }
 
     private bool LoadLayout(string path, out VirtualGroup layout)

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
 
@@ -61,23 +62,22 @@ public class Window_BitmapView : Window
     {
         try
         {
-            Dispatcher.Invoke(
-                () =>
+            Dispatcher.BeginInvoke(() =>
+            {
+                lock (bitmap)
                 {
-                    lock (bitmap)
-                    {
-                        using MemoryStream memory = new MemoryStream();
-                        bitmap.Save(memory, ImageFormat.Png);
-                        memory.Position = 0;
-                        BitmapImage bitmapimage = new BitmapImage();
-                        bitmapimage.BeginInit();
-                        bitmapimage.StreamSource = memory;
-                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapimage.EndInit();
+                    using MemoryStream memory = new MemoryStream();
+                    bitmap.Save(memory, ImageFormat.Png);
+                    memory.Position = 0;
+                    BitmapImage bitmapimage = new BitmapImage();
+                    bitmapimage.BeginInit();
+                    bitmapimage.StreamSource = memory;
+                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapimage.EndInit();
 
-                        imgBitmap.Source = bitmapimage;
-                    }
-                });
+                    imgBitmap.Source = bitmapimage;
+                }
+            }, DispatcherPriority.Render);
         }
         catch (Exception ex)
         {

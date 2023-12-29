@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Aurora.Controls;
 using Aurora.Devices;
 using Aurora.EffectsEngine;
@@ -140,7 +141,7 @@ partial class ConfigUI : INotifyPropertyChanged
             _transparencyComponent.SetBackgroundColor(a);
         }
 
-        Dispatcher.BeginInvoke(UpdateKeyboardLayouts);
+        Dispatcher.BeginInvoke(UpdateKeyboardLayouts, DispatcherPriority.Render);
         return;
 
         async void UpdateKeyboardLayouts()
@@ -190,7 +191,7 @@ partial class ConfigUI : INotifyPropertyChanged
         switch (e)
         {
             case "restore":
-                Dispatcher.Invoke(Display);
+                Dispatcher.BeginInvoke(Display, DispatcherPriority.Input);
                 break;
             case "shutdown":
                 ShutdownDevices().Wait();

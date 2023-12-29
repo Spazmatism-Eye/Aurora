@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Aurora.Modules.GameStateListen;
 using Common;
 using Common.Devices;
@@ -59,7 +60,7 @@ public partial class DeviceMapping
             case DeviceCommands.RemappableDevices:
                 var remappableDevices = ReadDevices(json);
 
-                Dispatcher.Invoke(() => LoadDevices(remappableDevices));
+                Dispatcher.BeginInvoke(() => LoadDevices(remappableDevices), DispatcherPriority.Loaded);
                 break;
         }
     }
@@ -95,8 +96,10 @@ public partial class DeviceMapping
             foreach (var device in _devices)
             {
                 // create a new button for the ui
-                var button = new Button();
-                button.Content = device.DeviceSummary;
+                var button = new Button
+                {
+                    Content = device.DeviceSummary
+                };
 
                 button.Click += (_, _) =>
                 {
@@ -112,7 +115,7 @@ public partial class DeviceMapping
 
                 AsusDeviceList.Children.Add(button);
             }
-        });
+        }, DispatcherPriority.Loaded);
     }
 
     private static CurrentDevices ReadDevices(string json)
@@ -140,7 +143,7 @@ public partial class DeviceMapping
                 Dispatcher.BeginInvoke(() =>
                 {
                     AsusDeviceKeys.Children.Add(keyControl);
-                });
+                }, DispatcherPriority.Input);
             }
         });
     }
@@ -151,7 +154,7 @@ public partial class DeviceMapping
         {
             var tcs = new TaskCompletionSource<RgbNetKeyToDeviceKeyControl>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            Dispatcher.BeginInvoke(() => { tcs.SetResult(new RgbNetKeyToDeviceKeyControl(deviceRemap, led)); });
+            Dispatcher.BeginInvoke(() => { tcs.SetResult(new RgbNetKeyToDeviceKeyControl(deviceRemap, led)); }, DispatcherPriority.Loaded);
 
             return tcs.Task;
         };

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Aurora.Modules.GameStateListen;
 using Aurora.Profiles;
 using Newtonsoft.Json;
@@ -61,10 +62,10 @@ public partial class Window_GSIHttpDebug
         SetJsonText(_httpListener.CurrentGameState.Json);
 
         // Start a timer to update the time displays for the request
-        _timeDisplayTimer = new Timer(_ => Dispatcher.Invoke(() => {
+        _timeDisplayTimer = new Timer(_ => Dispatcher.BeginInvoke(() => {
             if (_lastRequestTime.HasValue)
                 CurRequestTime.Text = _lastRequestTime + " (" + (DateTime.Now - _lastRequestTime).Value.TotalSeconds.ToString("0.00") + "s ago)";
-        }), null, 0, 50);
+        }, DispatcherPriority.DataBind), null, 0, 50);
     }
 
     private void Window_Closing(object? sender, CancelEventArgs e)
@@ -88,7 +89,7 @@ public partial class Window_GSIHttpDebug
     {
         // This needs to be invoked due to the UI thread being different from the networking thread.
         // Without this, an exception is thrown trying to update the text box.
-        Dispatcher.Invoke(() => SetJsonText(gamestate.Json));
+        Dispatcher.BeginInvoke(() => SetJsonText(gamestate.Json), DispatcherPriority.DataBind);
         // Also record the time this request came in
         _lastRequestTime = DateTime.Now;
     }

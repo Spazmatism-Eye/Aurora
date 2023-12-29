@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Scripting.Utils;
 using Microsoft.Win32;
 
@@ -54,7 +55,7 @@ public partial class Control_Chroma : INotifyPropertyChanged
         {
             EnabledPrograms.Clear();
             EnabledPrograms.AddRange(_profile.AllChromaApps.Except(_settings.ExcludedPrograms));
-        });
+        }, DispatcherPriority.Input);
     }
 
     private void SetSettings()

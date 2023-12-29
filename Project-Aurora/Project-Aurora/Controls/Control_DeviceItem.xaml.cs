@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Aurora.Devices;
 using Aurora.Settings.Controls;
 using Common.Devices;
@@ -33,7 +34,7 @@ public partial class Control_DeviceItem
         deviceItem.Device.Device.Updated += deviceItem.OnDeviceOnUpdated;
     }
 
-    private readonly Timer _updateControlsTimer;
+    private readonly Timer _updateControlsTimer = new(1000);
 
     private bool _deviceRunning;
 
@@ -47,7 +48,6 @@ public partial class Control_DeviceItem
     {
         InitializeComponent();
 
-        _updateControlsTimer = new Timer(1000);
         _updateControlsTimer.Elapsed += Update_controls_timer_Elapsed;
     }
 
@@ -65,13 +65,13 @@ public partial class Control_DeviceItem
         {
             var memorySharedDevice = Device.Device;
             Task.Run(() => { memorySharedDevice.RequestUpdate(); });
-        });
+        }, DispatcherPriority.Background);
     }
 
     private void btnToggleOnOff_Click(object? sender, EventArgs e)
     {
-        btnStart.Content = "Working...";
-        btnStart.IsEnabled = false;
+        BtnStart.Content = "Working...";
+        BtnStart.IsEnabled = false;
         var device = Device;
         if (device.Device.IsInitialized)
         {
@@ -104,9 +104,9 @@ public partial class Control_DeviceItem
 
         if (_deviceRunning)
         {
-            btnStart.Content = "Working...";
-            btnStart.IsEnabled = false;
-            btnEnable.IsEnabled = false;
+            BtnStart.Content = "Working...";
+            BtnStart.IsEnabled = false;
+            BtnEnable.IsEnabled = false;
             
             var device = Device;
             Task.Run(async () =>
@@ -122,15 +122,18 @@ public partial class Control_DeviceItem
 
     private void UserControl_Loaded(object? sender, EventArgs e)
     {
-        try
+        Dispatcher.BeginInvoke(() =>
         {
-            UpdateStatic();
-            UpdateDynamic();
-        }
-        catch (Exception ex)
-        {
-            Global.logger.Warning(ex, "DeviceItem update error:");
-        }
+            try
+            {
+                UpdateStatic();
+                UpdateDynamic();
+            }
+            catch (Exception ex)
+            {
+                Global.logger.Warning(ex, "DeviceItem update error:");
+            }
+        }, DispatcherPriority.Background);
     }
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
@@ -151,7 +154,7 @@ public partial class Control_DeviceItem
             {
                 Global.logger.Warning(ex, "DeviceItem update error:");
             }
-        });
+        }, Background);
     }
 
     private void UpdateStatic()
@@ -184,8 +187,8 @@ public partial class Control_DeviceItem
 
         Recommended.Visibility = Device.Device.Tooltips.Recommended ? Visibility.Visible : Visibility.Hidden;
 
-        btnOptions.IsEnabled = Device.Device.RegisteredVariables.Count != 0;
-        deviceName.Text = Device.Device.DeviceName;
+        BtnOptions.IsEnabled = Device.Device.RegisteredVariables.Count != 0;
+        DeviceName.Text = Device.Device.DeviceName;
     }
 
     private void UpdateDynamic()
@@ -193,38 +196,38 @@ public partial class Control_DeviceItem
         if (Device.Device.isDoingWork)
         {
             _deviceRunning = false;
-            btnStart.Content = "Working...";
-            btnStart.IsEnabled = false;
-            btnEnable.IsEnabled = false;
+            BtnStart.Content = "Working...";
+            BtnStart.IsEnabled = false;
+            BtnEnable.IsEnabled = false;
             _updateControlsTimer.Start();
         }
         else if (Device.Device.IsInitialized)
         {
             _deviceRunning = true;
-            btnStart.Content = "Stop";
-            btnStart.IsEnabled = true;
-            btnEnable.IsEnabled = true;
+            BtnStart.Content = "Stop";
+            BtnStart.IsEnabled = true;
+            BtnEnable.IsEnabled = true;
             _updateControlsTimer.Start();
         }
         else
         {
             _deviceRunning = false;
-            btnStart.Content = "Start";
-            btnStart.IsEnabled = true;
-            btnEnable.IsEnabled = true;
+            BtnStart.Content = "Start";
+            BtnStart.IsEnabled = true;
+            BtnEnable.IsEnabled = true;
         }
 
-        deviceDetails.Text = Device.Device.DeviceDetails;
-        devicePerformance.Text = Device.Device.DeviceUpdatePerformance;
+        DeviceDetails.Text = Device.Device.DeviceDetails;
+        DevicePerformance.Text = Device.Device.DeviceUpdatePerformance;
 
         if (!Global.DeviceConfiguration.EnabledDevices.Contains(Device.Device.DeviceName))
         {
-            btnEnable.Content = "Enable";
-            btnStart.IsEnabled = false;
+            BtnEnable.Content = "Enable";
+            BtnStart.IsEnabled = false;
         }
         else if (!Device.Device.isDoingWork)
         {
-            btnEnable.Content = "Disable";
+            BtnEnable.Content = "Disable";
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Aurora.Devices;
 using Aurora.Modules.GameStateListen;
 
@@ -41,9 +42,15 @@ public partial class Control_DeviceManager
         var deviceContainers = (await _deviceManager).DeviceContainers;
         Dispatcher.BeginInvoke(() =>
         {
-            LstDevices.ItemsSource = deviceContainers;
-            LstDevices.Items.Refresh();
-        });
+            if (ReferenceEquals(LstDevices.ItemsSource, deviceContainers))
+            {
+                LstDevices.Items.Refresh();
+            }
+            else
+            {
+                LstDevices.ItemsSource = deviceContainers;
+            }
+        }, DispatcherPriority.Input);
     }
 
     private async void btnRestartAll_Click(object? sender, RoutedEventArgs e)

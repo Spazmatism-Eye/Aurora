@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Aurora.EffectsEngine;
 using SourceChord.FluentWPF;
 using static Aurora.Utils.Win32Transparency;
@@ -68,7 +69,7 @@ public sealed class TransparencyComponent : IDisposable
             return;
         }
 
-        _window.Dispatcher.Invoke(() => { SetTransparencyEffect(0); });
+        _window.Dispatcher.BeginInvoke(() => { SetTransparencyEffect(0); }, DispatcherPriority.Render);
     }
 
     private void SetTransparencyEffect(int lightThemeEnabled)
@@ -116,7 +117,7 @@ public sealed class TransparencyComponent : IDisposable
     public void SetBackgroundColor(EffectColor a)
     {
         _color = a;
-        _window.Dispatcher.BeginInvoke(_setBackground);
+        _window.Dispatcher.BeginInvoke(_setBackground, DispatcherPriority.Render);
     }
 
     private void SetBackground()

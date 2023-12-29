@@ -20,8 +20,8 @@
                 <ColumnDefinition Width="80" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Available Devices" VerticalAlignment="Top" Margin="2" />
-            <Button Grid.Column="2" Content="Calibrate Devices" VerticalAlignment="Top"  Click="btnCalibrate_Click" Margin="2"/>
-            <Button Grid.Column="3" Content="Restart All" VerticalAlignment="Top"  Click="btnRestartAll_Click" Margin="2"/>
+            <Button Grid.Column="2" Content="Calibrate Devices" VerticalAlignment="Top" Click="btnCalibrate_Click" Margin="2"/>
+            <Button Grid.Column="3" Content="Restart All" VerticalAlignment="Top" Click="btnRestartAll_Click" Margin="2"/>
         </Grid>
         <ListView x:Name="LstDevices" Grid.Row="1" ItemsSource="{Binding ReferenceComparisons, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
             <ListBox.ItemTemplate>

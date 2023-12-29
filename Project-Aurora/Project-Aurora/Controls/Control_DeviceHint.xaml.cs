@@ -35,6 +35,5 @@ public partial class Control_DeviceHint
     public Control_DeviceHint()
     {
         InitializeComponent();
-        DataContext = this;
     }
 }
