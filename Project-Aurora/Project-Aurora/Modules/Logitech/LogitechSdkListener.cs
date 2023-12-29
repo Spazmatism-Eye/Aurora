@@ -84,20 +84,23 @@ public class LogitechSdkListener
             await Task.Delay(5000);
         }
 
-        for (var i = 0; i < 5; i++)
-        {
-            var pipeListener = new PipeListener("LGS_LED_SDK-0000000" + i);
+        var i = WTSGetActiveConsoleSessionId();
+        var lgsPipeName = "LGS_LED_SDK-" + $"{i:00000000}";
+        Global.logger.Information("LGS Pipe name: {PipeName}", lgsPipeName);
+        var pipeListener = new PipeListener(lgsPipeName);
             
-            pipeListener.ClientConnected += PipeListenerOnClientConnected;
-            pipeListener.ClientDisconnected += OnPipeListenerClientDisconnected;
-            pipeListener.CommandReceived += OnPipeListenerCommandReceived;
-            pipeListener.StartListening();
+        pipeListener.ClientConnected += PipeListenerOnClientConnected;
+        pipeListener.ClientDisconnected += OnPipeListenerClientDisconnected;
+        pipeListener.CommandReceived += OnPipeListenerCommandReceived;
+        pipeListener.StartListening();
 
-            _pipeListeners.Add(pipeListener);
-        }
+        _pipeListeners.Add(pipeListener);
 
         State = IsInstalled() ? LightsyncSdkState.Waiting : LightsyncSdkState.NotInstalled;
     }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern uint WTSGetActiveConsoleSessionId();
 
     private static bool IsInstalled()
     {
@@ -131,7 +134,7 @@ public class LogitechSdkListener
         switch (command)
         {
             case LogitechPipeCommand.Init:
-                Init((PipeListener)sender, span);
+                Init((PipeListener)sender!, span);
                 break;
             case LogitechPipeCommand.SetTargetDevice:
                 SetTargetDevice(span);
