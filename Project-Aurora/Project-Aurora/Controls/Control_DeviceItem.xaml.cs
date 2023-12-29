@@ -17,7 +17,19 @@ namespace Aurora.Controls;
 public partial class Control_DeviceItem
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty DeviceProperty = DependencyProperty.Register(nameof(Device), typeof(DeviceContainer), typeof(Control_DeviceItem));
+    public static readonly DependencyProperty DeviceProperty = DependencyProperty.Register(nameof(Device), typeof(DeviceContainer), typeof(Control_DeviceItem), new PropertyMetadata(DevicePropertyUpdated));
+
+    private static void DevicePropertyUpdated(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var deviceItem = (Control_DeviceItem)d;
+
+        if (e.OldValue is DeviceContainer oldValue)
+        {
+            oldValue.Device.Updated -= deviceItem.OnDeviceOnUpdated;
+        }
+
+        deviceItem.Device.Device.Updated += deviceItem.OnDeviceOnUpdated;
+    }
 
     private readonly Timer _updateControlsTimer;
 
@@ -45,7 +57,7 @@ public partial class Control_DeviceItem
 
     private void RequestUpdate()
     {
-        Dispatcher.Invoke(() =>
+        Dispatcher.BeginInvoke(() =>
         {
             var memorySharedDevice = Device.Device;
             Task.Run(() => { memorySharedDevice.RequestUpdate(); });
@@ -102,23 +114,15 @@ public partial class Control_DeviceItem
 
     private void UserControl_Loaded(object? sender, EventArgs e)
     {
-        Device.Device.Updated += OnDeviceOnUpdated;
-        Dispatcher.Invoke(() =>
+        try
         {
-            try
-            {
-                if (IsVisible)
-                {
-                    UpdateStatic();
-                    UpdateDynamic();
-                }
-            }
-            catch (Exception ex)
-            {
-                Global.logger.Warning(ex, "DeviceItem update error:");
-            }
-        });
-        RequestUpdate();
+            UpdateStatic();
+            UpdateDynamic();
+        }
+        catch (Exception ex)
+        {
+            Global.logger.Warning(ex, "DeviceItem update error:");
+        }
     }
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
@@ -129,7 +133,7 @@ public partial class Control_DeviceItem
 
     private void OnDeviceOnUpdated(object? o, EventArgs eventArgs)
     {
-        Dispatcher.Invoke(() =>
+        Dispatcher.BeginInvoke(() =>
         {
             try
             {
@@ -173,6 +177,7 @@ public partial class Control_DeviceItem
         Recommended.Visibility = Device.Device.Tooltips.Recommended ? Visibility.Visible : Visibility.Hidden;
 
         btnOptions.IsEnabled = Device.Device.RegisteredVariables.Count != 0;
+        deviceName.Text = Device.Device.DeviceName;
     }
 
     private void UpdateDynamic()
@@ -198,7 +203,6 @@ public partial class Control_DeviceItem
             btnEnable.IsEnabled = true;
         }
 
-        deviceName.Text = Device.Device.DeviceName;
         deviceDetails.Text = Device.Device.DeviceDetails;
         devicePerformance.Text = Device.Device.DeviceUpdatePerformance;
 
@@ -210,7 +214,6 @@ public partial class Control_DeviceItem
         else if (!Device.Device.isDoingWork)
         {
             btnEnable.Content = "Disable";
-            btnStart.IsEnabled = true;
         }
     }
 

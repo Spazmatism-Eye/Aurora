@@ -225,9 +225,4 @@
     </Page>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modules\Plugins\" />
-  </ItemGroup>
-
-
 </Project>

@@ -39,7 +39,7 @@ public partial class Control_DeviceManager
     private async Task UpdateControls()
     {
         var deviceContainers = (await _deviceManager).DeviceContainers;
-        Dispatcher.Invoke(() =>
+        Dispatcher.BeginInvoke(() =>
         {
             LstDevices.ItemsSource = deviceContainers;
             LstDevices.Items.Refresh();

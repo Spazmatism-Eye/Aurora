@@ -27,7 +27,7 @@ public sealed class DeviceManager : IDisposable
 
     public event EventHandler? DevicesUpdated;
 
-    public List<DeviceContainer> DeviceContainers { get; private set; } = new();
+    public List<DeviceContainer> DeviceContainers { get; } = new();
 
     private readonly CancellationTokenSource _cancel = new();
 
