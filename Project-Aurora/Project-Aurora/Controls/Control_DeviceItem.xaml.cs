@@ -17,7 +17,9 @@ namespace Aurora.Controls;
 public partial class Control_DeviceItem
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty DeviceProperty = DependencyProperty.Register(nameof(Device), typeof(DeviceContainer), typeof(Control_DeviceItem), new PropertyMetadata(DevicePropertyUpdated));
+    public static readonly DependencyProperty DeviceProperty = DependencyProperty.Register(
+        nameof(Device), typeof(DeviceContainer), typeof(Control_DeviceItem), new PropertyMetadata(DevicePropertyUpdated)
+    );
 
     private static void DevicePropertyUpdated(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -32,6 +34,8 @@ public partial class Control_DeviceItem
     }
 
     private readonly Timer _updateControlsTimer;
+
+    private bool _deviceRunning;
 
     public DeviceContainer Device
     {
@@ -69,17 +73,20 @@ public partial class Control_DeviceItem
         btnStart.Content = "Working...";
         btnStart.IsEnabled = false;
         var device = Device;
-        Task.Run(async () =>
+        if (device.Device.IsInitialized)
         {
-            if (device.Device.IsInitialized)
+            Task.Run(async () =>
             {
                 await device.DisableDevice();
-            }
-            else
+            });
+        }
+        else
+        {
+            Task.Run(async () =>
             {
                 await device.EnableDevice();
-            }
-        });
+            });
+        }
     }
 
     private void btnToggleEnableDisable_Click(object? sender, EventArgs e)
@@ -93,21 +100,22 @@ public partial class Control_DeviceItem
         {
             Global.DeviceConfiguration.EnabledDevices.Remove(Device.Device.DeviceName);
         }
-        btnStart.Content = "Working...";
-        btnStart.IsEnabled = false;
-        btnEnable.IsEnabled = false;
+        UpdateDynamic();
 
-        var device = Device;
-        Task.Run(async () =>
+        if (_deviceRunning)
         {
-            if (deviceEnabled)
+            btnStart.Content = "Working...";
+            btnStart.IsEnabled = false;
+            btnEnable.IsEnabled = false;
+            
+            var device = Device;
+            Task.Run(async () =>
             {
                 await device.DisableDevice();
-            }
-            else
-            {
-                await device.EnableDevice();
-            }
+            });
+        }
+        Task.Run(() =>
+        {
             ConfigManager.Save(Global.DeviceConfiguration, DeviceConfig.ConfigFile);
         });
     }
@@ -149,7 +157,7 @@ public partial class Control_DeviceItem
     private void UpdateStatic()
     {
         Beta.Visibility = Device.Device.Tooltips.Beta ? Visibility.Visible : Visibility.Hidden;
-            
+
         var infoTooltip = Device.Device.Tooltips.Info;
         if (infoTooltip != null)
         {
@@ -184,6 +192,7 @@ public partial class Control_DeviceItem
     {
         if (Device.Device.isDoingWork)
         {
+            _deviceRunning = false;
             btnStart.Content = "Working...";
             btnStart.IsEnabled = false;
             btnEnable.IsEnabled = false;
@@ -191,6 +200,7 @@ public partial class Control_DeviceItem
         }
         else if (Device.Device.IsInitialized)
         {
+            _deviceRunning = true;
             btnStart.Content = "Stop";
             btnStart.IsEnabled = true;
             btnEnable.IsEnabled = true;
@@ -198,6 +208,7 @@ public partial class Control_DeviceItem
         }
         else
         {
+            _deviceRunning = false;
             btnStart.Content = "Start";
             btnStart.IsEnabled = true;
             btnEnable.IsEnabled = true;
@@ -237,10 +248,7 @@ public partial class Control_DeviceItem
                 RegisteredVariables = Device.Device.RegisteredVariables
             }
         };
-        optionsWindow.Closing += (_, _) =>
-        {
-            ConfigManager.Save(Global.DeviceConfiguration, DeviceConfig.ConfigFile);
-        };
+        optionsWindow.Closing += (_, _) => { ConfigManager.Save(Global.DeviceConfiguration, DeviceConfig.ConfigFile); };
 
         optionsWindow.ShowDialog();
     }
