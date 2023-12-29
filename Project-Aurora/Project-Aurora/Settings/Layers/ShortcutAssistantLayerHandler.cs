@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Aurora.Modules;
 using Aurora.Settings.Layers.Controls;
 using Aurora.Utils;
 using Common.Devices;
@@ -153,7 +154,7 @@ public class ShortcutAssistantLayerHandler : LayerHandler<ShortcutAssistantLayer
     /// <returns>true if layer is active</returns>
     private bool IsLayerActive()
     {
-        var heldKeys = Global.InputEvents.PressedKeys;
+        var heldKeys = InputsModule.InputEvents.Result.PressedKeys;
 
         var keyToCheck = heldKeys.FirstOrDefault();
 
@@ -192,7 +193,7 @@ public class ShortcutAssistantLayerHandler : LayerHandler<ShortcutAssistantLayer
 
         // The layer is active. At this point we have at least 1 key to highlight
 
-        var heldKeys = Global.InputEvents.PressedKeys;
+        var heldKeys = InputsModule.InputEvents.Result.PressedKeys;
         var heldKeysToHighlight = MatchHeldKeysToShortcutTree(heldKeys, Properties.ShortcutKeysTree); // This is also the path in shortcut tree
 
         var currentShortcutNode = Properties.ShortcutKeysTree.GetNodeByPath(heldKeysToHighlight);

@@ -1,55 +1,60 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
+using Aurora.Modules;
 using Aurora.Modules.Inputs;
 using Keys = System.Windows.Forms.Keys;
 
-namespace Aurora.Controls {
-    /// <summary>
-    /// Interaction logic for Control_SingleKeyEditor.xaml
-    /// </summary>
-    public partial class Control_SingleKeyEditor : UserControl {
+namespace Aurora.Controls;
 
-        /// <summary>A reference to the editor that is currently listening for a keypress</summary>
-        private static Control_SingleKeyEditor listeningEditor;
+/// <summary>
+/// Interaction logic for Control_SingleKeyEditor.xaml
+/// </summary>
+public partial class Control_SingleKeyEditor
+{
 
-        // Static constructor so that we only have to add a input event listener once.
-        static Control_SingleKeyEditor() {
-            Global.InputEvents.KeyDown += InputEvents_KeyDown;
-        }
+    /// <summary>A reference to the editor that is currently listening for a keypress</summary>
+    private static Control_SingleKeyEditor? _listeningEditor;
 
-        // Instance constructor to create UI elements
-        public Control_SingleKeyEditor() {
-            InitializeComponent();
-            DataContext = this;
-        }
+    // Static constructor so that we only have to add a input event listener once.
+    static Control_SingleKeyEditor() {
+    }
 
-        // Assign or unassign the `listeningEditor` from this UserControl
-        private void AssignButton_Click(object? sender, RoutedEventArgs e) {
-            var assigning = listeningEditor != this;
-            listeningEditor?.UpdateButtonText(false);
-            UpdateButtonText(assigning);
-            listeningEditor = assigning ? this : null;
-        }
+    // Instance constructor to create UI elements
+    public Control_SingleKeyEditor() {
+        InitializeComponent();
+        DataContext = this;
+    }
 
-        private void UpdateButtonText(bool assigning) {
-            assignButton.Content = assigning ? "Press a key" : "Assign";
-        }
+    // Assign or unassign the `listeningEditor` from this UserControl
+    private void AssignButton_Click(object? sender, RoutedEventArgs e) {
+        var assigning = _listeningEditor != this;
+        _listeningEditor?.UpdateButtonText(false);
+        UpdateButtonText(assigning);
+        _listeningEditor = assigning ? this : null;
+    }
 
-        private static void InputEvents_KeyDown(object? sender, KeyboardKeyEvent e) {
-            if (listeningEditor != null)
-                listeningEditor.Dispatcher.Invoke(() => {
-                    listeningEditor.SelectedKey = e.Key;
-                    listeningEditor.UpdateButtonText(false);
-                    listeningEditor = null;
-                });
-        }
+    private void UpdateButtonText(bool assigning) {
+        assignButton.Content = assigning ? "Press a key" : "Assign";
+    }
 
-        // Dependency Property
-        public static readonly DependencyProperty SelectedKeyProperty = DependencyProperty.Register("SelectedKey", typeof(Keys), typeof(Control_SingleKeyEditor), new FrameworkPropertyMetadata(default(Keys), FrameworkPropertyMetadataOptions.AffectsRender));
+    private static void InputEvents_KeyDown(object? sender, KeyboardKeyEvent e) {
+        if (_listeningEditor != null)
+            _listeningEditor.Dispatcher.Invoke(() => {
+                _listeningEditor.SelectedKey = e.Key;
+                _listeningEditor.UpdateButtonText(false);
+                _listeningEditor = null;
+            });
+    }
 
-        public Keys SelectedKey {
-            get => (Keys)GetValue(SelectedKeyProperty);
-            set => SetValue(SelectedKeyProperty, value);
-        }
+    // Dependency Property
+    public static readonly DependencyProperty SelectedKeyProperty = DependencyProperty.Register("SelectedKey", typeof(Keys), typeof(Control_SingleKeyEditor), new FrameworkPropertyMetadata(default(Keys), FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public Keys SelectedKey {
+        get => (Keys)GetValue(SelectedKeyProperty);
+        set => SetValue(SelectedKeyProperty, value);
+    }
+
+    private async void Control_SingleKeyEditor_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        (await InputsModule.InputEvents).KeyDown += InputEvents_KeyDown;
     }
 }

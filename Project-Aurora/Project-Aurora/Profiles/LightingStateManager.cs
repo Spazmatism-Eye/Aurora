@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Aurora.Modules;
 using Aurora.Modules.GameStateListen;
 using Aurora.Modules.ProcessMonitor;
 
@@ -113,7 +114,7 @@ public sealed class LightingStateManager
         }
 
         // Listen for profile keybind triggers
-        Global.InputEvents.KeyDown += CheckProfileKeybinds;
+        (await InputsModule.InputEvents).KeyDown += CheckProfileKeybinds;
 
         Initialized = true;
     }

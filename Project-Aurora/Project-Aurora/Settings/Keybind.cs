@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Aurora.Modules;
 
 namespace Aurora.Settings;
 
@@ -31,7 +32,7 @@ public class Keybind
 
     public bool IsPressed()
     {
-        var pressedKeys = Global.InputEvents.PressedKeys;
+        var pressedKeys = InputsModule.InputEvents.Result.PressedKeys;
 
         if (pressedKeys.Count <= 0 || pressedKeys.Count != _assignedKeys.Count) return false;
         return !_assignedKeys.Where((_, i) => pressedKeys[i] != _assignedKeys.ElementAt(i)).Any();

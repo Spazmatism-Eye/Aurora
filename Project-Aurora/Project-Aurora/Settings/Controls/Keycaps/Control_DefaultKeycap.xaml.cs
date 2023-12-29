@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,10 +12,8 @@ namespace Aurora.Settings.Controls.Keycaps;
 /// <summary>
 /// Interaction logic for Control_DefaultKeycap.xaml
 /// </summary>
-public partial class Control_DefaultKeycap : IKeycap
+public partial class Control_DefaultKeycap
 {
-    private Color _currentColor = Color.FromArgb(0, 0, 0, 0);
-    private readonly DeviceKeys _associatedKey = DeviceKeys.NONE;
     private readonly bool _isImage;
     private readonly SolidColorBrush _keyCapBackground = new(Colors.Transparent);
     private readonly SolidColorBrush _keyCapForeground = new(Colors.White);
@@ -28,11 +25,9 @@ public partial class Control_DefaultKeycap : IKeycap
         InitializeComponent();
     }
 
-    public Control_DefaultKeycap(KeyboardKey key, string imagePath)
+    public Control_DefaultKeycap(KeyboardKey key, string imagePath) : base(key.Tag)
     {
         InitializeComponent();
-
-        _associatedKey = key.Tag;
 
         Width = key.Width;
         Height = key.Height;
@@ -53,7 +48,7 @@ public partial class Control_DefaultKeycap : IKeycap
         KeyCap.Foreground = _keyCapForeground;
         if (string.IsNullOrWhiteSpace(key.Image))
         {
-            KeyCap.Text = KeyUtils.GetAutomaticText(_associatedKey) ?? key.VisualName;
+            KeyCap.Text = KeyUtils.GetAutomaticText(AssociatedKey) ?? key.VisualName;
             KeyCap.Tag = key.Tag;
             KeyCap.FontSize = key.FontSize;
             KeyCap.Visibility = Visibility.Visible;
@@ -85,29 +80,8 @@ public partial class Control_DefaultKeycap : IKeycap
         }
     }
 
-    public DeviceKeys GetKey()
+    protected override void DrawColor(Color keyColor)
     {
-        return _associatedKey;
-    }
-
-    public void SetColor(Color keyColor)
-    {
-        if (Global.key_recorder?.HasRecorded(_associatedKey) ?? false)
-        {
-            _keyBorderBackground.Color =
-                Color.FromArgb(255, 0,
-                    (byte)(Math.Min(Math.Pow(Math.Cos(Time.GetMilliSeconds() / 1000.0 * Math.PI) + 0.05, 2.0), 1.0) *
-                           255), 0);
-            return;
-        }
-
-        if (keyColor.Equals(_currentColor))
-        {
-            return;
-        }
-
-        _currentColor = keyColor;
-
         if (!KeyBorder.IsEnabled) return;
 
         if (!_isImage)
@@ -125,7 +99,7 @@ public partial class Control_DefaultKeycap : IKeycap
         }
         else
         {
-            if (_associatedKey != DeviceKeys.NONE)
+            if (AssociatedKey != DeviceKeys.NONE)
                 _keyBorderBackground.Color = keyColor;
         }
     }
@@ -133,21 +107,12 @@ public partial class Control_DefaultKeycap : IKeycap
     private void keyBorder_MouseDown(object? sender, MouseButtonEventArgs e)
     {
         if (sender is Border)
-            virtualkeyboard_key_selected(_associatedKey);
-    }
-
-    private void virtualkeyboard_key_selected(DeviceKeys key)
-    {
-        if (key == DeviceKeys.NONE || Global.key_recorder == null) return;
-        if (Global.key_recorder.HasRecorded(key))
-            Global.key_recorder.RemoveKey(key);
-        else
-            Global.key_recorder.AddKey(key);
+            OnKeySelected();
     }
 
     private void keyBorder_MouseEnter(object? sender, MouseEventArgs e)
     {
         if (e.LeftButton == MouseButtonState.Pressed && sender is Border)
-            virtualkeyboard_key_selected(_associatedKey);
+            OnKeySelected();
     }
 }

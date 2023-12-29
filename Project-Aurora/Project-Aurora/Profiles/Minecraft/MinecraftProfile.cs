@@ -12,8 +12,6 @@ namespace Aurora.Profiles.Minecraft
     public class MinecraftProfile : ApplicationProfile
     {
 
-        public MinecraftProfile() : base() { }
-
         public override void Reset()
         {
             base.Reset();
@@ -65,8 +63,8 @@ namespace Aurora.Profiles.Minecraft
                     Properties = new ToolbarLayerHandlerProperties() {
                         _PrimaryColor = Color.Transparent,
                         _SecondaryColor = Color.White,
-                        _EnableScroll = true,
-                        _ScrollLoop = true,
+                        EnableScroll = true,
+                        ScrollLoop = true,
                         _Sequence = new KeySequence(new[] {
                             DK.ONE, DK.TWO, DK.THREE, DK.FOUR, DK.FIVE, DK.SIX, DK.SEVEN, DK.EIGHT, DK.NINE
                         })

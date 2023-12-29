@@ -37,7 +37,6 @@ internal static class User32
     [DllImport("user32.dll")]
     internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-    [Pure]
     [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", CharSet = CharSet.Unicode)]
     internal static extern IntPtr SetWindowLongPtr(nint hWnd, int nIndex, IntPtr dwNewLong);
 

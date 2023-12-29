@@ -340,7 +340,7 @@ public class KeyboardLayoutManager
 
     private VirtualGroup _virtualKeyboardGroup;
 
-    private readonly Dictionary<DeviceKeys, IKeycap> _virtualKeyboardMap = new();
+    private readonly Dictionary<DeviceKeys, Keycap> _virtualKeyboardMap = new();
 
     private bool _virtualKbInvalid = true;
 
@@ -835,9 +835,9 @@ public class KeyboardLayoutManager
 
             newVirtualKeyboard.Children.Add(keycap);
 
-            if (key.Tag != DeviceKeys.NONE && !_virtualKeyboardMap.ContainsKey(key.Tag) && keycap is IKeycap &&
+            if (key.Tag != DeviceKeys.NONE && !_virtualKeyboardMap.ContainsKey(key.Tag) && keycap is Keycap kc &&
                 !abstractKeycaps)
-                _virtualKeyboardMap.Add(key.Tag, keycap as IKeycap);
+                _virtualKeyboardMap.Add(key.Tag, kc);
 
             if (key.AbsoluteLocation)
                 keycap.Margin = new Thickness(key.MarginLeft, key.MarginTop, 0, 0);

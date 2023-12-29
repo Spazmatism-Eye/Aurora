@@ -4,6 +4,7 @@ using Aurora.EffectsEngine;
 using Aurora.Settings.Layers;
 using System.Drawing;
 using System.Linq;
+using Aurora.Modules;
 using Aurora.Profiles.EliteDangerous.GSI;
 using Aurora.Profiles.EliteDangerous.GSI.Nodes;
 using Aurora.Utils;
@@ -339,7 +340,7 @@ public class EliteDangerousKeyBindsLayerHandler : LayerHandler<EliteDangerousKey
                         {
                             SetKey(EffectLayer, modifierKey, Properties.ShipStuffColor);
                             leftoverBlendStates.Remove(modifierKey);
-                            if (Global.InputEvents.PressedKeys.Contains(KeyUtils.GetFormsKey(modifierKey)))
+                            if (InputsModule.InputEvents.Result.PressedKeys.Contains(KeyUtils.GetFormsKey(modifierKey)))
                                 continue;
                             allModifiersPressed = false;
                             break;

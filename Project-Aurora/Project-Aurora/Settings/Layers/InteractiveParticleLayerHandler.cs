@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using Aurora.Modules;
 using Aurora.Modules.Inputs;
 using Aurora.Profiles;
 using Common.Devices;
@@ -10,8 +12,11 @@ public sealed class InteractiveParticleLayerHandler : SimpleParticleLayerHandler
 
     private readonly ConcurrentQueue<DeviceKeys> _awaitingKeys = new();
 
-    public InteractiveParticleLayerHandler() {
-        Global.InputEvents.KeyDown += KeyDown;
+    protected override async Task Initialize()
+    {
+        await base.Initialize();
+
+        (await InputsModule.InputEvents).KeyDown += KeyDown;
     }
 
     private void KeyDown(object? sender, KeyboardKeyEvent e) {
@@ -31,6 +36,6 @@ public sealed class InteractiveParticleLayerHandler : SimpleParticleLayerHandler
     public override void Dispose()
     {
         base.Dispose();
-        Global.InputEvents.KeyDown -= KeyDown;
+        InputsModule.InputEvents.Result.KeyDown -= KeyDown;
     }
 }

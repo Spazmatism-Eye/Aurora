@@ -3,6 +3,7 @@ using Aurora.Settings;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using Aurora.Modules;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Aurora.Controls;
@@ -38,17 +39,15 @@ public partial class Control_Keybind
     public Control_Keybind()
     {
         InitializeComponent();
-
-        Global.InputEvents.KeyDown += InputEventsKeyDown;
     }
 
     private void InputEventsKeyDown(object? sender, EventArgs e)
     {
         Dispatcher.Invoke(
-            () =>
+            async () =>
             {
                 if (!Equals(_ActiveKeybind)) return;
-                var pressedKeys = Global.InputEvents.PressedKeys;
+                var pressedKeys = (await InputsModule.InputEvents).PressedKeys;
 
                 if (ContextKeybind != null)
                 {
@@ -98,5 +97,10 @@ public partial class Control_Keybind
     {
         if ((e.Key.Equals(Key.Down) || e.Key.Equals(Key.Up) || e.Key.Equals(Key.Left) || e.Key.Equals(Key.Right)) && _isRecording)
             e.Handled = true;
+    }
+
+    private async void Control_Keybind_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        (await InputsModule.InputEvents).KeyDown += InputEventsKeyDown;
     }
 }

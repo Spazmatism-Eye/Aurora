@@ -1,511 +1,293 @@
-﻿using Aurora.Devices;
-using Aurora.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Aurora.Modules.Inputs;
 using Aurora.Utils;
 using Common.Devices;
+using Xceed.Wpf.Toolkit;
+using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Profiles.Dota_2.Layers
+namespace Aurora.Profiles.Dota_2.Layers;
+
+/// <summary>
+/// Interaction logic for Control_Dota2ItemLayer.xaml
+/// </summary>
+public partial class Control_Dota2ItemLayer
 {
-    /// <summary>
-    /// Interaction logic for Control_Dota2ItemLayer.xaml
-    /// </summary>
-    public partial class Control_Dota2ItemLayer : UserControl
+    private bool _settingsSet;
+
+    public Control_Dota2ItemLayer()
     {
-        private bool settingsset = false;
-        private bool profileset = false;
+        InitializeComponent();
+    }
 
-        public Control_Dota2ItemLayer()
+    public Control_Dota2ItemLayer(Dota2ItemLayerHandler dataContext)
+    {
+        InitializeComponent();
+
+        DataContext = dataContext;
+    }
+
+    private void SetSettings()
+    {
+        if (DataContext is not Dota2ItemLayerHandler || _settingsSet) return;
+
+        ColorPicker_Item_Empty.SelectedColor = ColorUtils.DrawingColorToMediaColor(((Dota2ItemLayerHandler)DataContext).Properties._EmptyItemColor ?? System.Drawing.Color.Empty);
+        ColorPicker_Item_Cooldown.SelectedColor = ColorUtils.DrawingColorToMediaColor(((Dota2ItemLayerHandler)DataContext).Properties._ItemCooldownColor ?? System.Drawing.Color.Empty);
+        ColorPicker_Item_NoCharges.SelectedColor = ColorUtils.DrawingColorToMediaColor(((Dota2ItemLayerHandler)DataContext).Properties._ItemNoChargersColor ?? System.Drawing.Color.Empty);
+        ColorPicker_Item_Color.SelectedColor = ColorUtils.DrawingColorToMediaColor(((Dota2ItemLayerHandler)DataContext).Properties._ItemsColor ?? System.Drawing.Color.Empty);
+        CheckBox_Use_Item_Colors.IsChecked = ((Dota2ItemLayerHandler)DataContext).Properties._UseItemColors;
+
+        UIUtils.SetSingleKey(item_slot1_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 0);
+        UIUtils.SetSingleKey(item_slot2_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 1);
+        UIUtils.SetSingleKey(item_slot3_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 2);
+        UIUtils.SetSingleKey(item_slot4_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 3);
+        UIUtils.SetSingleKey(item_slot5_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 4);
+        UIUtils.SetSingleKey(item_slot6_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 5);
+        UIUtils.SetSingleKey(item_slot7_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 6);
+        UIUtils.SetSingleKey(item_slot8_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 7);
+        UIUtils.SetSingleKey(item_slot9_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 8);
+        UIUtils.SetSingleKey(stash_slot1_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 9);
+        UIUtils.SetSingleKey(stash_slot2_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 10);
+        UIUtils.SetSingleKey(stash_slot3_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 11);
+        UIUtils.SetSingleKey(stash_slot4_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 12);
+        UIUtils.SetSingleKey(stash_slot5_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 13);
+        UIUtils.SetSingleKey(stash_slot6_textblock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, 14);
+
+        _settingsSet = true;
+    }
+
+    private void UserControl_Loaded(object? sender, RoutedEventArgs e)
+    {
+        SetSettings();
+
+        Loaded -= UserControl_Loaded;
+    }
+
+    private void item_slot1_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 1 Key", (TextBlock)sender, item1_keys_callback);
+    }
+
+    private void item1_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot1_textblock, 0);
+    }
+
+    private void item_slot2_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 2 Key", (TextBlock)sender, item2_keys_callback);
+    }
+
+    private void item2_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot2_textblock, 1);
+    }
+
+    private void item_slot3_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 3 Key", (TextBlock)sender, item3_keys_callback);
+    }
+
+    private void item3_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot3_textblock, 2);
+    }
+
+    private void item_slot4_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 4 Key", (TextBlock)sender, item4_keys_callback);
+    }
+
+    private void item4_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot4_textblock, 3);
+    }
+
+    private void item_slot5_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 5 Key", (TextBlock)sender, item5_keys_callback);
+    }
+
+    private void item5_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot5_textblock, 4);
+    }
+
+    private void item_slot6_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 6 Key", (TextBlock)sender, item6_keys_callback);
+    }
+
+    private void item6_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot6_textblock, 5);
+    }
+
+
+    private void item_slot7_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 7 Key", (TextBlock)sender, item7_keys_callback);
+    }
+
+    private void item7_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot7_textblock, 6);
+    }
+
+    private void item_slot8_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 8 Key", (TextBlock)sender, item8_keys_callback);
+    }
+
+    private void item8_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot8_textblock, 7);
+    }
+
+    private void item_slot9_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Item Slot 9 Key", (TextBlock)sender, item9_keys_callback);
+    }
+
+    private void item9_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, item_slot9_textblock, 8);
+    }
+
+    private void stash_slot1_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Stash Slot 1 Key", (TextBlock)sender, stash1_keys_callback);
+    }
+
+    private void stash1_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, stash_slot1_textblock, 9);
+    }
+
+    private void stash_slot2_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Stash Slot 2 Key", (TextBlock)sender, stash2_keys_callback);
+    }
+
+    private void stash2_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, stash_slot2_textblock, 10);
+    }
+
+    private void stash_slot3_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Stash Slot 3 Key", (TextBlock)sender, stash3_keys_callback);
+    }
+
+    private void stash3_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, stash_slot3_textblock, 11);
+    }
+
+    private void stash_slot4_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Stash Slot 4 Key", (TextBlock)sender, stash4_keys_callback);
+    }
+
+    private void stash4_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, stash_slot4_textblock, 12);
+    }
+
+    private void stash_slot5_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Stash Slot 5 Key", (TextBlock)sender, stash5_keys_callback);
+    }
+
+    private void stash5_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, stash_slot5_textblock, 13);
+    }
+
+    private void stash_slot6_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
+    {
+        RecordSingleKey("Dota 2 - Stash Slot 6 Key", (TextBlock)sender, stash6_keys_callback);
+    }
+
+    private void stash6_keys_callback(DeviceKeys[] resultingKeys)
+    {
+        ChangeKeybind(resultingKeys, stash_slot6_textblock, 14);
+    }
+
+    private void ChangeKeybind(IReadOnlyList<DeviceKeys> resultingKeys, TextBlock textBlock, int itemPosition)
+    {
+        Dispatcher.Invoke(() =>
         {
-            InitializeComponent();
-        }
+            textBlock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
 
-        public Control_Dota2ItemLayer(Dota2ItemLayerHandler datacontext)
+            if (resultingKeys.Count <= 0) return;
+            if (IsLoaded)
+                ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys[itemPosition] = resultingKeys[0];
+
+            UIUtils.SetSingleKey(textBlock, ((Dota2ItemLayerHandler)DataContext).Properties._ItemKeys, itemPosition);
+        });
+    }
+
+    private void RecordSingleKey(string recorder, TextBlock textBlock, KeyRecorder.RecordingFinishedHandler callback)
+    {
+        if (Global.key_recorder.IsRecording())
         {
-            InitializeComponent();
-
-            this.DataContext = datacontext;
-        }
-
-        public void SetSettings()
-        {
-            if (this.DataContext is Dota2ItemLayerHandler && !settingsset)
+            if (Global.key_recorder.GetRecordingType().Equals(recorder))
             {
-                this.ColorPicker_Item_Empty.SelectedColor = ColorUtils.DrawingColorToMediaColor((this.DataContext as Dota2ItemLayerHandler).Properties._EmptyItemColor ?? System.Drawing.Color.Empty);
-                this.ColorPicker_Item_Cooldown.SelectedColor = ColorUtils.DrawingColorToMediaColor((this.DataContext as Dota2ItemLayerHandler).Properties._ItemCooldownColor ?? System.Drawing.Color.Empty);
-                this.ColorPicker_Item_NoCharges.SelectedColor = ColorUtils.DrawingColorToMediaColor((this.DataContext as Dota2ItemLayerHandler).Properties._ItemNoChargersColor ?? System.Drawing.Color.Empty);
-                this.ColorPicker_Item_Color.SelectedColor = ColorUtils.DrawingColorToMediaColor((this.DataContext as Dota2ItemLayerHandler).Properties._ItemsColor ?? System.Drawing.Color.Empty);
-                this.CheckBox_Use_Item_Colors.IsChecked = (this.DataContext as Dota2ItemLayerHandler).Properties._UseItemColors;
+                Global.key_recorder.StopRecording();
 
-                UIUtils.SetSingleKey(this.item_slot1_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 0);
-                UIUtils.SetSingleKey(this.item_slot2_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 1);
-                UIUtils.SetSingleKey(this.item_slot3_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 2);
-                UIUtils.SetSingleKey(this.item_slot4_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 3);
-                UIUtils.SetSingleKey(this.item_slot5_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 4);
-                UIUtils.SetSingleKey(this.item_slot6_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 5);
-                UIUtils.SetSingleKey(this.item_slot7_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 6);
-                UIUtils.SetSingleKey(this.item_slot8_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 7);
-                UIUtils.SetSingleKey(this.item_slot9_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 8);
-                UIUtils.SetSingleKey(this.stash_slot1_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 9);
-                UIUtils.SetSingleKey(this.stash_slot2_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 10);
-                UIUtils.SetSingleKey(this.stash_slot3_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 11);
-                UIUtils.SetSingleKey(this.stash_slot4_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 12);
-                UIUtils.SetSingleKey(this.stash_slot5_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 13);
-                UIUtils.SetSingleKey(this.stash_slot6_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 14);
-
-                settingsset = true;
-            }
-        }
-
-        private void UserControl_Loaded(object? sender, RoutedEventArgs e)
-        {
-            SetSettings();
-
-            this.Loaded -= UserControl_Loaded;
-        }
-
-        private void item_slot1_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 1 Key", sender as TextBlock, item1_keys_callback);
-        }
-
-        private void item1_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item1_keys_callback;
-
-            Dispatcher.Invoke(() =>
-                {
-                    item_slot1_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                    if (resulting_keys.Length > 0)
-                    {
-                        if (IsLoaded)
-                            (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[0] = resulting_keys[0];
-
-                        UIUtils.SetSingleKey(this.item_slot1_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 0);
-                    }
-                });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot2_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 2 Key", sender as TextBlock, item2_keys_callback);
-        }
-
-        private void item2_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item2_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot2_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[1] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot2_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 1);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot3_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 3 Key", sender as TextBlock, item3_keys_callback);
-        }
-
-        private void item3_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item3_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot3_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[2] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot3_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 2);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot4_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 4 Key", sender as TextBlock, item4_keys_callback);
-        }
-
-        private void item4_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item4_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot4_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[3] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot4_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 3);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot5_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 5 Key", sender as TextBlock, item5_keys_callback);
-        }
-
-        private void item5_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item5_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot5_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[4] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot5_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 4);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot6_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 6 Key", sender as TextBlock, item6_keys_callback);
-        }
-
-        private void item6_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item6_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot6_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[5] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot6_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 5);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-
-        private void item_slot7_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 7 Key", sender as TextBlock, item7_keys_callback);
-        }
-
-        private void item7_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item7_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot7_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[6] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot7_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 6);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot8_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 8 Key", sender as TextBlock, item8_keys_callback);
-        }
-
-        private void item8_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item8_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot8_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[7] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot8_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 7);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void item_slot9_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Item Slot 9 Key", sender as TextBlock, item9_keys_callback);
-        }
-
-        private void item9_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= item9_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                item_slot9_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[8] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.item_slot9_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 8);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void stash_slot1_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Stash Slot 1 Key", sender as TextBlock, stash1_keys_callback);
-        }
-
-        private void stash1_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= stash1_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                stash_slot1_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[9] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.stash_slot1_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 9);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void stash_slot2_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Stash Slot 2 Key", sender as TextBlock, stash2_keys_callback);
-        }
-
-        private void stash2_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= stash2_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                stash_slot2_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[10] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.stash_slot2_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 10);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void stash_slot3_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Stash Slot 3 Key", sender as TextBlock, stash3_keys_callback);
-        }
-
-        private void stash3_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= stash3_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                stash_slot3_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[11] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.stash_slot3_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 11);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void stash_slot4_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Stash Slot 4 Key", sender as TextBlock, stash4_keys_callback);
-        }
-
-        private void stash4_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= stash4_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                stash_slot4_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[12] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.stash_slot4_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 12);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void stash_slot5_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Stash Slot 5 Key", sender as TextBlock, stash5_keys_callback);
-        }
-
-        private void stash5_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= stash5_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                stash_slot5_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[13] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.stash_slot5_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 13);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void stash_slot6_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
-        {
-            RecordSingleKey("Dota 2 - Stash Slot 6 Key", sender as TextBlock, stash6_keys_callback);
-        }
-
-        private void stash6_keys_callback(DeviceKeys[] resulting_keys)
-        {
-            Global.key_recorder.FinishedRecording -= stash6_keys_callback;
-
-            Dispatcher.Invoke(() =>
-            {
-                stash_slot6_textblock.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-
-                if (resulting_keys.Length > 0)
-                {
-                    if (IsLoaded)
-                        (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys[14] = resulting_keys[0];
-
-                    UIUtils.SetSingleKey(this.stash_slot6_textblock, (this.DataContext as Dota2ItemLayerHandler).Properties._ItemKeys, 14);
-                }
-            });
-
-            Global.key_recorder.Reset();
-        }
-
-        private void RecordSingleKey(string whoisrecording, TextBlock textblock, KeyRecorder.RecordingFinishedHandler callback)
-        {
-            if (Global.key_recorder.IsRecording())
-            {
-
-                if (Global.key_recorder.GetRecordingType().Equals(whoisrecording))
-                {
-                    Global.key_recorder.StopRecording();
-
-                    Global.key_recorder.Reset();
-                }
-                else
-                {
-                    MessageBox.Show("You are already recording a key sequence for " + Global.key_recorder.GetRecordingType());
-                }
+                Global.key_recorder.Reset();
             }
             else
             {
-                Global.key_recorder.FinishedRecording += callback;
-                Global.key_recorder.StartRecording(whoisrecording, true);
-                textblock.Background = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                MessageBox.Show("You are already recording a key sequence for " + Global.key_recorder.GetRecordingType());
             }
         }
-
-        private void ColorPicker_Item_Empty_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
+        else
         {
-            if (IsLoaded && settingsset && this.DataContext is Dota2ItemLayerHandler && sender is Xceed.Wpf.Toolkit.ColorPicker && (sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.HasValue)
-                (this.DataContext as Dota2ItemLayerHandler).Properties._EmptyItemColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
-        }
+            Global.key_recorder.FinishedRecording += KeyRecorderOnFinishedRecording;
+            void KeyRecorderOnFinishedRecording(DeviceKeys[] resultingKeys)
+            {
+                Global.key_recorder.FinishedRecording -= KeyRecorderOnFinishedRecording;
+                callback(resultingKeys);
+                Global.key_recorder.Reset();
+            }
 
-        private void ColorPicker_Item_Cooldown_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            if (IsLoaded && settingsset && this.DataContext is Dota2ItemLayerHandler && sender is Xceed.Wpf.Toolkit.ColorPicker && (sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.HasValue)
-                (this.DataContext as Dota2ItemLayerHandler).Properties._ItemCooldownColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
-        }
-
-        private void ColorPicker_Item_NoCharges_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            if (IsLoaded && settingsset && this.DataContext is Dota2ItemLayerHandler && sender is Xceed.Wpf.Toolkit.ColorPicker && (sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.HasValue)
-                (this.DataContext as Dota2ItemLayerHandler).Properties._ItemNoChargersColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
-        }
-
-        private void ColorPicker_Item_Color_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            if (IsLoaded && settingsset && this.DataContext is Dota2ItemLayerHandler && sender is Xceed.Wpf.Toolkit.ColorPicker && (sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.HasValue)
-                (this.DataContext as Dota2ItemLayerHandler).Properties._ItemsColor = ColorUtils.MediaColorToDrawingColor((sender as Xceed.Wpf.Toolkit.ColorPicker).SelectedColor.Value);
-        }
-
-        private void CheckBox_Use_Item_Colors_Checked(object? sender, RoutedEventArgs e)
-        {
-            if (IsLoaded && settingsset && this.DataContext is Dota2ItemLayerHandler && sender is CheckBox && (sender as CheckBox).IsChecked.HasValue)
-                (this.DataContext as Dota2ItemLayerHandler).Properties._UseItemColors = (sender as CheckBox).IsChecked.Value;
+            Global.key_recorder.StartRecording(recorder, true);
+            textBlock.Background = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
         }
     }
-}
 
+    private void ColorPicker_Item_Empty_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
+    {
+        if (IsLoaded && _settingsSet && DataContext is Dota2ItemLayerHandler && sender is ColorPicker { SelectedColor: not null } colorPicker)
+            ((Dota2ItemLayerHandler)DataContext).Properties._EmptyItemColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
+    }
+
+    private void ColorPicker_Item_Cooldown_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
+    {
+        if (IsLoaded && _settingsSet && DataContext is Dota2ItemLayerHandler && sender is ColorPicker { SelectedColor: not null } colorPicker)
+            ((Dota2ItemLayerHandler)DataContext).Properties._ItemCooldownColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
+    }
+
+    private void ColorPicker_Item_NoCharges_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
+    {
+        if (IsLoaded && _settingsSet && DataContext is Dota2ItemLayerHandler && sender is ColorPicker { SelectedColor: not null } colorPicker)
+            ((Dota2ItemLayerHandler)DataContext).Properties._ItemNoChargersColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
+    }
+
+    private void ColorPicker_Item_Color_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
+    {
+        if (IsLoaded && _settingsSet && DataContext is Dota2ItemLayerHandler && sender is ColorPicker { SelectedColor: not null } colorPicker)
+            ((Dota2ItemLayerHandler)DataContext).Properties._ItemsColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
+    }
+
+    private void CheckBox_Use_Item_Colors_Checked(object? sender, RoutedEventArgs e)
+    {
+        if (IsLoaded && _settingsSet && DataContext is Dota2ItemLayerHandler && sender is CheckBox { IsChecked: not null } checkBox)
+            ((Dota2ItemLayerHandler)DataContext).Properties._UseItemColors = checkBox.IsChecked.Value;
+    }
+}

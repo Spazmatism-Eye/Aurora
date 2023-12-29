@@ -4,8 +4,10 @@ using Aurora.Settings.Overrides;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Controls;
+using Aurora.Modules;
 using Aurora.Settings.Layers.Controls;
 using Aurora.Utils;
 
@@ -47,18 +49,24 @@ namespace Aurora.Settings.Layers {
     public class TimerLayerHandler : LayerHandler<TimerLayerHandlerProperties> {
 
         private CustomTimer timer;
-        private bool isActive = false;
+        private bool isActive;
 
-        public TimerLayerHandler() : base() {
+        public TimerLayerHandler()
+        {
             timer = new CustomTimer();
             timer.Trigger += Timer_Elapsed;
-
-            Global.InputEvents.KeyDown += InputEvents_KeyDown;
         }
-        
+
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+
+            (await InputsModule.InputEvents).KeyDown += InputEvents_KeyDown;
+        }
+
         public override void Dispose() {
             base.Dispose();
-            Global.InputEvents.KeyDown -= InputEvents_KeyDown;
+            InputsModule.InputEvents.Result.KeyDown -= InputEvents_KeyDown;
         }
 
         protected override UserControl CreateControl() {

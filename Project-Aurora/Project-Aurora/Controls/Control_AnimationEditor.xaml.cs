@@ -87,7 +87,7 @@ namespace Aurora.Controls
             //Generate a new mapping
             foreach (FrameworkElement Child in virtial_kb.Children)
             {
-                if (Child is IKeycap && (Child as IKeycap).GetKey() != DeviceKeys.NONE)
+                if (Child is Keycap && (Child as Keycap).GetKey() != DeviceKeys.NONE)
                 {
                     Child.PreviewMouseLeftButtonDown += KeyboardKey_PreviewMouseLeftButtonDown;
                     Child.PreviewMouseRightButtonDown += KeyboardKey_PreviewMouseRightButtonDown;
@@ -97,9 +97,9 @@ namespace Aurora.Controls
 
         private void KeyboardKey_PreviewMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
         {
-            if (_selectedFrameItem != null && (_selectedFrameItem as Control_AnimationFrameItem).ContextFrame is AnimationManualColorFrame && sender is IKeycap)
+            if (_selectedFrameItem != null && (_selectedFrameItem as Control_AnimationFrameItem).ContextFrame is AnimationManualColorFrame && sender is Keycap)
             {
-                SetKeyColor((sender as IKeycap).GetKey(), _PrimaryManualColor);
+                SetKeyColor((sender as Keycap).GetKey(), _PrimaryManualColor);
 
                 this.animMixer.UpdatePlaybackTime();
             }
@@ -107,9 +107,9 @@ namespace Aurora.Controls
 
         private void KeyboardKey_PreviewMouseRightButtonDown(object? sender, MouseButtonEventArgs e)
         {
-            if (_selectedFrameItem != null && (_selectedFrameItem as Control_AnimationFrameItem).ContextFrame is AnimationManualColorFrame && sender is IKeycap)
+            if (_selectedFrameItem != null && (_selectedFrameItem as Control_AnimationFrameItem).ContextFrame is AnimationManualColorFrame && sender is Keycap)
             {
-                SetKeyColor((sender as IKeycap).GetKey(), _SecondaryManualColor);
+                SetKeyColor((sender as Keycap).GetKey(), _SecondaryManualColor);
 
                 this.animMixer.UpdatePlaybackTime();
             }

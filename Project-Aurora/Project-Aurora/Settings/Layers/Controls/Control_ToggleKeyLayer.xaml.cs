@@ -9,12 +9,12 @@ namespace Aurora.Settings.Layers.Controls {
             InitializeComponent();
             DataContext = context;
 
-            triggerKeyList.Keybinds = context.Properties._TriggerKeys;
+            triggerKeyList.Keybinds = context.Properties.TriggerKeys;
         }
 
         private void triggerKeyList_KeybindsChanged(object? sender) {
             if (IsLoaded && DataContext is ToggleKeyLayerHandler ctx && sender is KeyBindList kbl)
-                ctx.Properties._TriggerKeys = kbl.Keybinds;
+                ctx.Properties.TriggerKeys = kbl.Keybinds;
         }
     }
 }

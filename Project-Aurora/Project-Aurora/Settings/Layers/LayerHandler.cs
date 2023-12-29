@@ -385,7 +385,13 @@ namespace Aurora.Settings.Layers
         public virtual async void SetApplication(Application profile)
         {
             Application = profile;
+            await Initialize();
             (await Control as IProfileContainingControl)?.SetProfile(profile);
+        }
+
+        protected virtual Task Initialize()
+        {
+            return Task.CompletedTask;
         }
 
         private Task<UserControl> CreateControlOnMain()

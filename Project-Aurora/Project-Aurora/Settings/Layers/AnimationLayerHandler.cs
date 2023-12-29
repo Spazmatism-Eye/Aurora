@@ -9,7 +9,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using Aurora.Modules;
 using Aurora.Modules.Inputs;
 using Aurora.Settings.Layers.Controls;
 using Common.Devices;
@@ -111,9 +113,15 @@ namespace Aurora.Settings.Layers
         private readonly HashSet<DeviceKeys> _pressedKeys = new(); // A list of pressed keys. Used to ensure that the key down event only fires for each key when it first goes down, not as it's held
 
         public AnimationLayerHandler(): base("Animation Later") {
+        }
+
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+
             // Listen for key events for the key-based triggers
-            Global.InputEvents.KeyDown += InputEvents_KeyDown;
-            Global.InputEvents.KeyUp += InputEvents_KeyUp;
+            (await InputsModule.InputEvents).KeyDown += InputEvents_KeyDown;
+            (await InputsModule.InputEvents).KeyUp += InputEvents_KeyUp;
         }
 
         protected override UserControl CreateControl() {

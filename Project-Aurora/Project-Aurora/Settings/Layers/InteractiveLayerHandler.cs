@@ -3,8 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using Aurora.EffectsEngine;
 using Aurora.EffectsEngine.Animations;
+using Aurora.Modules;
 using Aurora.Modules.Inputs;
 using Aurora.Profiles;
 using Aurora.Profiles.Desktop;
@@ -150,11 +152,17 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
 
     public InteractiveLayerHandler(): base("Interactive Effects")
     {
-        Global.InputEvents.KeyDown += InputEventsKeyDown;
-        Global.InputEvents.KeyUp += InputEventsKeyUp;
-        Global.InputEvents.MouseButtonDown += MouseKeyDown;
-        Global.InputEvents.MouseButtonUp += MouseKeyUp;
         _keysToRemove = lengthPresses => !Properties.UsePressBuffer.GetValueOrDefault() || _currentTime - lengthPresses.Value > PressBuffer;
+    }
+
+    protected override async Task Initialize()
+    {
+        await base.Initialize();
+            
+        (await InputsModule.InputEvents).KeyDown += InputEventsKeyDown;
+        (await InputsModule.InputEvents).KeyUp += InputEventsKeyUp;
+        (await InputsModule.InputEvents).MouseButtonDown += MouseKeyDown;
+        (await InputsModule.InputEvents).MouseButtonUp += MouseKeyUp;
     }
 
     private float GetDeltaTime()

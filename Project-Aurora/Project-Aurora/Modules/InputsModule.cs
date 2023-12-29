@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Lombok.NET;
 using Aurora.Modules.Inputs;
 using Aurora.Settings;
 using Common.Devices;
@@ -9,8 +8,14 @@ using Common.Utils;
 
 namespace Aurora.Modules;
 
-public sealed partial class InputsModule : AuroraModule
+public sealed class InputsModule : AuroraModule
 {
+    private static readonly TaskCompletionSource<IInputEvents> Tcs = new();
+    /// <summary>
+    /// Input event subscriptions
+    /// </summary>
+    public static Task<IInputEvents> InputEvents { get; } = Tcs.Task;
+    
     private const bool VolumeToBrightnessReady = false;
     
     public override async Task InitializeAsync()
@@ -18,12 +23,12 @@ public sealed partial class InputsModule : AuroraModule
         await Initialize();
     }
 
-    protected override Task Initialize()
+    protected override async Task Initialize()
     {
         if (Global.Configuration.EnableInputCapture)
         {
             Global.logger.Information("Loading Input Hooking");
-            Global.InputEvents = new InputEvents();
+            Tcs.SetResult(new InputEvents());
             if (VolumeToBrightnessReady)
             {
                 Global.Configuration.PropertyChanged += SetupVolumeAsBrightness;
@@ -32,40 +37,49 @@ public sealed partial class InputsModule : AuroraModule
             }
             Global.logger.Information("Loaded Input Hooking");
         }
+        else
+        {
+            Tcs.SetResult(new NoopInputEvents());
+        }
 
         DesktopUtils.StartSessionWatch();
 
-        Global.key_recorder = new KeyRecorder(Global.InputEvents);
-        return Task.CompletedTask;
+        Global.key_recorder = new KeyRecorder(await InputEvents);
     }
 
-    [Async]
     public override void Dispose()
     {
-        Global.key_recorder?.Dispose();
-        Global.InputEvents.Dispose();
+        DisposeAsync().Wait();
     }
 
-    private static void SetupVolumeAsBrightness(object? sender, PropertyChangedEventArgs eventArgs)
+    public override async Task DisposeAsync()
+    {
+        Global.key_recorder?.Dispose();
+        if (InputEvents.IsCompletedSuccessfully)
+        {
+            (await InputEvents).Dispose();
+        }
+    }
+
+    private static async void SetupVolumeAsBrightness(object? sender, PropertyChangedEventArgs eventArgs)
     {
         if (eventArgs.PropertyName != nameof(Global.Configuration.UseVolumeAsBrightness)) return;
+
+        var inputEvents = await InputEvents;
+
+        inputEvents.KeyDown -= InterceptVolumeAsBrightness;
         if (Global.Configuration.UseVolumeAsBrightness)
         {
-            Global.InputEvents.KeyDown -= InterceptVolumeAsBrightness;
-            Global.InputEvents.KeyDown += InterceptVolumeAsBrightness;
-        }
-        else
-        {
-            Global.InputEvents.KeyDown -= InterceptVolumeAsBrightness;
+            inputEvents.KeyDown += InterceptVolumeAsBrightness;
         }
     }
     
-    private static void InterceptVolumeAsBrightness(object? sender, KeyboardKeyEvent e)
+    private static async void InterceptVolumeAsBrightness(object? sender, KeyboardKeyEvent e)
     {
-        if (!Global.InputEvents.Alt) return;
+        if (!(await InputEvents).Alt) return;
         
         e.Intercepted = true;
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
             {
                 var brightness = Global.Configuration.GlobalBrightness;
                 brightness += e.GetDeviceKey() == DeviceKeys.VOLUME_UP ? 0.05f : -0.05f;

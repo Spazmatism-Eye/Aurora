@@ -40,11 +40,6 @@ public static class Global
     /// </summary>
     public static ILogger logger;
 
-    /// <summary>
-    /// Input event subscriptions
-    /// </summary>
-    public static IInputEvents InputEvents { get; set; } = new NoopInputEvents();
-
     public static LightingStateManager? LightingStateManager { get; set; } //TODO module access
 
     public static Configuration Configuration

@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using Aurora.Controls;
-using Aurora.Modules.Inputs;
+using Aurora.Modules;
 using Aurora.Utils;
 using Keys = System.Windows.Forms.Keys;
 
@@ -32,7 +32,7 @@ public class BooleanKeyDown : Evaluatable<bool> {
             .WithBinding(Control_FieldPresenter.ValueProperty, new Binding("TargetKey") { Source = this, Mode = BindingMode.TwoWay }));
 
     /// <summary>True if the global event bus's pressed key list contains the target key.</summary>
-    protected override bool Execute(IGameState gameState) => Global.InputEvents.PressedKeys.Contains(TargetKey);
+    protected override bool Execute(IGameState gameState) => InputsModule.InputEvents.Result.PressedKeys.Contains(TargetKey);
 
     public override Evaluatable<bool> Clone() => new BooleanKeyDown { TargetKey = TargetKey };
 }
@@ -50,10 +50,9 @@ public class BooleanAnyKeyDown : Evaluatable<bool> {
     public override Visual GetControl() => new Label() { Content = "Any Key Held" };
 
     /// <summary>True if the global event bus's pressed key list contains any key.</summary>
-    protected override bool Execute(IGameState gameState) => Global.InputEvents.PressedKeys.Any();
+    protected override bool Execute(IGameState gameState) => InputsModule.InputEvents.Result.PressedKeys.Any();
     public override Evaluatable<bool> Clone() => new BooleanAnyKeyDown();
 }
-
 
 /// <summary>
 /// Condition that is true when a specific keyboard button is held down.
@@ -85,13 +84,16 @@ public class BooleanKeyDownWithTimer : Evaluatable<bool> {
 
     /// <summary>True if the global event bus's pressed key list contains the target key.</summary>
     protected override bool Execute(IGameState gameState) {
-        if (Global.InputEvents.PressedKeys.Contains(TargetKey)) {
+        if (InputsModule.InputEvents.Result.PressedKeys.Contains(TargetKey)) {
             watch.Restart();
             return true;
-        } else if (watch.IsRunning && watch.Elapsed.TotalSeconds <= Seconds) {
+        }
+
+        if (watch.IsRunning && watch.Elapsed.TotalSeconds <= Seconds) {
             return true;
-        } else
-            watch.Stop();
+        }
+
+        watch.Stop();
 
         return false;
     }
@@ -122,7 +124,7 @@ public class BooleanMouseDown : Evaluatable<bool> {
         .WithChild(new Label { Content = "mouse button down" });
 
     /// <summary>True if the global event bus's pressed mouse button list contains the target button.</summary>
-    protected override bool Execute(IGameState gameState) => Global.InputEvents.PressedButtons.Contains(TargetButton);
+    protected override bool Execute(IGameState gameState) => InputsModule.InputEvents.Result.PressedButtons.Contains(TargetButton);
 
     public override Evaluatable<bool> Clone() => new BooleanMouseDown { TargetButton = TargetButton };
 }
@@ -187,7 +189,7 @@ public class BooleanAwayTimer : Evaluatable<bool> {
 
     /// <summary>Checks to see if the duration since the last input is greater than the given inactive time.</summary>
     protected override bool Execute(IGameState gameState) {
-        var idleTime = Global.InputEvents.GetTimeSinceLastInput();
+        var idleTime = InputsModule.InputEvents.Result.GetTimeSinceLastInput();
         switch (TimeUnit) {
             case TimeUnit.Milliseconds: return idleTime.TotalMilliseconds > InactiveTime;
             case TimeUnit.Seconds: return idleTime.TotalSeconds > InactiveTime;

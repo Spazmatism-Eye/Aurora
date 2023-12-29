@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="Aurora.Settings.Controls.Keycaps.Control_DefaultKeycapBackglow"
+﻿<keycaps:Keycap x:Class="Aurora.Settings.Controls.Keycaps.Control_DefaultKeycapBackglow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:keycaps="clr-namespace:Aurora.Settings.Controls.Keycaps"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="30" HorizontalAlignment="Left" VerticalAlignment="Top">
     <Grid>
@@ -19,4 +20,4 @@
                        HorizontalAlignment="Center" FontWeight="Bold" FontFamily="Calibri" TextAlignment="Center"/>
         </Border>
     </Grid>
-</UserControl>
+</keycaps:Keycap>
