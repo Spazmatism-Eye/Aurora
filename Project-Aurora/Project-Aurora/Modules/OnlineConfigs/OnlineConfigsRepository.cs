@@ -54,7 +54,11 @@ public static class OnlineConfigsRepository
 
         return JsonSerializer.DeserializeAsync<T>(stream, JsonSerializerOptions)
             .AsTask()
-            .ContinueWith(t => t.Result ?? new T());
+            .ContinueWith(t => t.Status switch
+            {
+                TaskStatus.RanToCompletion => t.Result ?? new T(),
+                _ => new T(),
+            });
     }
 
     private static Stream GetJsonStream(string cachePath)
