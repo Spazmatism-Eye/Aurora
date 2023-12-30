@@ -737,6 +737,7 @@ public static class ProfileImporter
             jsonSerializerSettings.Converters.Add(new TypeAnnotatedObjectConverter());
             jsonSerializerSettings.Converters.Add(new DictionaryJsonConverterAdapter());
             jsonSerializerSettings.Converters.Add(new ConcurrentDictionaryJsonConverterAdapter());
+            jsonSerializerSettings.Converters.Add(new VariableRegistryDictionaryConverter());
             var inProf = (ApplicationProfile)JsonConvert.DeserializeObject(json, typeof(ApplicationProfile), jsonSerializerSettings);
 
             // Create a new profile on the current application (so that profiles can be imported from different applications)

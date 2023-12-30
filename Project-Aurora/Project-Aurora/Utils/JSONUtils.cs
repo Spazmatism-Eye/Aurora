@@ -2,8 +2,9 @@
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Aurora.Settings.Overrides.Logic;
@@ -313,3 +314,69 @@ public class DateTimeOffsetConverterUsingDateTimeParse : System.Text.Json.Serial
     }
 }
 
+public class VariableRegistryDictionaryConverter : JsonConverter<IDictionary<string, VariableRegistryItem>>
+{
+    public override bool CanWrite => false;
+
+    public override void WriteJson(JsonWriter writer, IDictionary<string, VariableRegistryItem>? value, JsonSerializer serializer)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IDictionary<string, VariableRegistryItem>? ReadJson(JsonReader reader, Type objectType, IDictionary<string, VariableRegistryItem>? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        var readerTokenType = reader.TokenType;
+        switch (readerTokenType)
+        {
+            case JsonToken.StartObject:
+                var json = serializer.Deserialize<JObject>(reader);
+                if (json == null)
+                {
+                    return existingValue;
+                }
+
+                var value = json["$values"];
+                var valueReader = value?.CreateReader();
+                if (valueReader != null)
+                    return ParsePairArray(existingValue, hasExistingValue, serializer, valueReader);
+                
+                var map = existingValue ?? new Dictionary<string, VariableRegistryItem>();
+                foreach (var prop in json.Children<JProperty>())
+                {
+                    if (prop.Name.Equals("$type"))
+                    {
+                        continue;
+                    }
+
+                    var key = prop.Name;
+                    var item = serializer.Deserialize<VariableRegistryItem>(prop.Value.CreateReader())!;
+                    map.TryAdd(key, item);
+                }
+
+                return map;
+
+            case JsonToken.StartArray:
+                return serializer.Deserialize(reader, typeof(IDictionary<dynamic, dynamic>)) as IDictionary<string, VariableRegistryItem>;
+        }
+
+        throw new JsonSerializationException("Unexpected json state");
+    }
+
+    private static IDictionary<string, VariableRegistryItem>? ParsePairArray(IDictionary<string, VariableRegistryItem>? existingValue, bool hasExistingValue, JsonSerializer serializer,
+        JsonReader valueReader)
+    {
+        var list = serializer.Deserialize(valueReader, typeof(List<(string, VariableRegistryItem)>)) as List<(string, VariableRegistryItem)>;
+        if (!hasExistingValue || existingValue == null) 
+            return list?.ToDictionary(e => e.Item1, e => e.Item2);
+
+        if (list == null)
+        {
+            return existingValue;
+        }
+        foreach (var valueTuple in list)
+        {
+            existingValue[valueTuple.Item1] = valueTuple.Item2;
+        }
+        return existingValue;
+    }
+}

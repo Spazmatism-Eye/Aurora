@@ -124,6 +124,13 @@ public class ScriptLayerHandler : LayerHandler<ScriptLayerHandlerProperties>, IN
     public override void SetApplication(Application profile)
     {
         Application = profile;
+
+        if (Application.EffectScripts.ContainsKey(Properties.Script))
+        {
+            var scriptRegistry = (VariableRegistry)Application.EffectScripts[Properties.Script].Properties.Clone();
+            Properties.ScriptProperties.Combine(scriptRegistry, true);
+        }
+
         base.SetApplication(profile);
     }
 

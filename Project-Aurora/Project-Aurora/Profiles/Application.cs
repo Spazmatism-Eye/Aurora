@@ -260,6 +260,7 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
                 jsonSerializerSettings.Converters.Add(new TypeAnnotatedObjectConverter());
                 jsonSerializerSettings.Converters.Add(new DictionaryJsonConverterAdapter());
                 jsonSerializerSettings.Converters.Add(new ConcurrentDictionaryJsonConverterAdapter());
+                jsonSerializerSettings.Converters.Add(new VariableRegistryDictionaryConverter());
 
                 var serializer = JsonSerializer.Create(jsonSerializerSettings);
 
