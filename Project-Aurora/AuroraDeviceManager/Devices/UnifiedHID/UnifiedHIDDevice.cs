@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Drawing;
 using Common.Devices;
 using Common.Utils;
-using AuroraDeviceManager.Utils;
-using OpenRGB.NET.Utils;
 
 namespace AuroraDeviceManager.Devices.UnifiedHID;
 
