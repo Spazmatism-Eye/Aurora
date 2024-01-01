@@ -1,19 +1,20 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Common.Utils;
 
 namespace Common.Devices.RGBNet;
 
 public class DeviceMappingConfig
 {
-    private static Lazy<DeviceMappingConfig> _configLoader = new(LoadConfig, LazyThreadSafetyMode.ExecutionAndPublication);
-    public static DeviceMappingConfig Config => _configLoader.Value;
+    private static readonly Lazy<DeviceMappingConfig> ConfigLoader = new(LoadConfig, LazyThreadSafetyMode.ExecutionAndPublication);
+    public static DeviceMappingConfig Config => ConfigLoader.Value;
 
     [JsonIgnore]
-    private static string _configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "DeviceMappings.json");
+    private static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "DeviceMappings.json");
 
     [JsonPropertyName("d")]
-    public List<DeviceRemap> Devices { get; init; } = new();
+    public List<DeviceRemap> Devices { get; } = new();
 
     private DeviceMappingConfig()
     {
@@ -27,14 +28,14 @@ public class DeviceMappingConfig
 
     private static DeviceMappingConfig LoadConfig()
     {
-        if (!File.Exists(_configPath))
+        if (!File.Exists(ConfigPath))
         {
             return new DeviceMappingConfig();
         }
 
-        using var file = File.OpenText(_configPath);
+        var json = File.ReadAllText(ConfigPath);
 
-        var deviceMappingConfig = JsonSerializer.Deserialize<DeviceMappingConfig>(file.ReadToEnd());
+        var deviceMappingConfig = JsonSerializer.Deserialize(json, CommonSourceGenerationContext.Default.DeviceMappingConfig);
         return deviceMappingConfig ?? new DeviceMappingConfig();
     }
 
@@ -42,7 +43,7 @@ public class DeviceMappingConfig
     {
         var content = JsonSerializer.Serialize(this, new JsonSerializerOptions{ WriteIndented = true});
 
-        Directory.CreateDirectory(Path.GetDirectoryName(_configPath) ?? throw new InvalidOperationException());
-        File.WriteAllText(_configPath, content, Encoding.UTF8);
+        Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath) ?? throw new InvalidOperationException());
+        File.WriteAllText(ConfigPath, content, Encoding.UTF8);
     }
 }

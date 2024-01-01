@@ -20,7 +20,6 @@ public static class Global
     /// </summary>
     public static ILogger Logger;
     
-    public static Devices.DeviceManager DeviceManager { get; set; }
     public static DeviceConfig DeviceConfig { get; set; }
 
     public static void Initialize()

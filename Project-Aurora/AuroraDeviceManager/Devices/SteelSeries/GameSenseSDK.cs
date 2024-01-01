@@ -1,7 +1,7 @@
 ﻿// GameSenseSDK C# beta by brainbug89 is licensed under CC BY-NC-SA 4.0
 
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace AuroraDeviceManager.Devices.SteelSeries
 {
@@ -52,7 +52,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
                 throw new FileNotFoundException($"Core Props file could not be found at \"{COREPROPS_JSON_PATH}\"");
 
             // read %PROGRAMDATA%/SteelSeries/SteelSeries Engine 3/coreProps.json
-            SSECorePropsJSON coreProps = JsonConvert.DeserializeObject<SSECorePropsJSON>(File.ReadAllText(@COREPROPS_JSON_PATH));
+            var coreProps = JsonSerializer.Deserialize<SSECorePropsJSON>(File.ReadAllText(@COREPROPS_JSON_PATH));
             sseAddress = coreProps.address;
 
             // setup "game" meda data
@@ -132,7 +132,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
         {
             payload.data += "\"keyboard\":{";
             payload.data += "\"hids\":";
-            payload.data += JsonConvert.SerializeObject(hids);
+            payload.data += JsonSerializer.Serialize(hids);
             payload.data += ",";
             payload.data += "\"colors\":[";
             foreach (Tuple<byte, byte, byte> color in colors)
@@ -151,7 +151,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             payload.data += "}";
 
             // sending POST request
-            String json = JsonConvert.SerializeObject(payload);
+            String json = JsonSerializer.Serialize(payload);
             sendPostRequest("http://" + sseAddress + "/game_event", json);
         }
 
@@ -160,7 +160,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             GameSensePayloadHeartbeatJSON payload = new GameSensePayloadHeartbeatJSON();
             payload.game = sseGameName;
             // sending POST request
-            String json = JsonConvert.SerializeObject(payload);
+            String json = JsonSerializer.Serialize(payload);
             sendPostRequest("http://" + sseAddress + "/game_heartbeat", json);
         }
 
@@ -170,7 +170,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             payload.game = sseGameName;
             payload.Event = "STOP";
             // sending POST request
-            String json = JsonConvert.SerializeObject(payload);
+            String json = JsonSerializer.Serialize(payload);
             sendPostRequest("http://" + sseAddress + "/game_event", json);
         }
 
@@ -234,7 +234,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
 (add-event-zone-use-with-specifier ""COLOR"" ""all"" ""rgb-12-zone"")
 (add-event-per-key-zone-use ""COLOR"" ""all"")
 ";
-            json = JsonConvert.SerializeObject(payload);
+            json = JsonSerializer.Serialize(payload);
             sendPostRequest("http://" + sseAddress + "/load_golisp_handlers", json);
 
             /*payload.golisp = "(handler \"STOP\" (lambda (data)    (send Generic-Initializer deinitialize:)))";
@@ -250,7 +250,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             payload.game_display_name = sseGameDisplayname;
             payload.icon_color_id = iconColorID;
             // sending POST request
-            String json = JsonConvert.SerializeObject(payload);
+            String json = JsonSerializer.Serialize(payload);
             sendPostRequest("http://" + sseAddress + "/game_metadata", json);
         }
 

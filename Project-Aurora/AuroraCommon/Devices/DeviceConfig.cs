@@ -4,8 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Common.Devices;
 
-[Serializable]
-public class DeviceConfig : INotifyPropertyChanged
+public sealed class DeviceConfig : INotifyPropertyChanged
 {
     public const string FileName = "DeviceConfig.json";
 
@@ -46,7 +45,7 @@ public class DeviceConfig : INotifyPropertyChanged
         {"Aurora.Devices.Ducky.DuckyDevice", "Ducky"},
         {"Aurora.Devices.LightFX.LightFxDevice" , "LightFX"},
         {"Aurora.Devices.Omen.OmenDevices" , "OMEN"},
-        {"Aurora.Devices.Razer.RazerDevice", "Razer"},
+        {"Aurora.Devices.Razer.RazerDevice", "Razer (RGB.NET)"},
         {"Aurora.Devices.Roccat.RoccatDevice" , "Roccat"},
         {"Aurora.Devices.SteelSeries.SteelSeriesDevice" , "SteelSeries"},
         {"Aurora.Devices.UnifiedHID.UnifiedHIDDevice" , "UnifiedHID"},
@@ -65,6 +64,8 @@ public class DeviceConfig : INotifyPropertyChanged
         {"Aurora.Devices.RGBNet.SteelSeriesRgbNetDevice", "SteelSeries (RGB.NET)"},
         {"Aurora.Devices.RGBNet.WootingRgbNetDevice", "Wooting (RGB.NET)"},
         {"Aurora.Devices.RGBNet.YeelightRgbNetDevice", "Yeelight (RGB.NET)"},
+        
+        {"Razer", "Razer (RGB.NET)"},
     };
 
     private readonly List<string> _defaultEnabledDevices = new()

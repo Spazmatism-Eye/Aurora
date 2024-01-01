@@ -12,24 +12,11 @@ public class CorsairRgbNetDevice : RgbNetDevice
 
     public override string DeviceName => "Corsair (RGB.NET)";
 
-    public CorsairRgbNetDevice()
-    {
-        const string sdkLink = "https://www.corsair.com/ww/en/s/downloads";
-    }
-
     protected override void RegisterVariables(VariableRegistry variableRegistry)
     {
         base.RegisterVariables(variableRegistry);
 
         variableRegistry.Register($"{DeviceName}_exclusive", false, "Request exclusive control");
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        
-        //give iCUE some time to initialize
-        Thread.Sleep(500);
     }
 
     protected override bool OnShutdown()
@@ -55,8 +42,11 @@ public class CorsairRgbNetDevice : RgbNetDevice
         {
             throw new DeviceProviderException(new ApplicationException("iCUE is not running!"), false);
         }
+        
+        //give iCUE some time to initialize
+        Thread.Sleep(1500);
 
-        var exclusive = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_exclusive");
+        //var exclusive = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_exclusive");
 
         //Provider.ExclusiveAccess = exclusive;
         //Provider.ConnectionTimeout = new TimeSpan(0, 0, 5);

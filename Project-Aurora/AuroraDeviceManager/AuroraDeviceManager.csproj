@@ -3,13 +3,19 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <Platforms>x64</Platforms>
+        <UseRidGraph>true</UseRidGraph>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
-        <LangVersion>11</LangVersion>
+        <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+        <LangVersion>12</LangVersion>
         <OutputType>WinExe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputPath>$(SolutionDir)..\Build\$(Configuration)\win10-x64\AuroraDeviceManager</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -66,9 +72,9 @@
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="Colore" Version="6.0.0" />
         <PackageReference Include="CS-Script" Version="4.6.2" />
         <PackageReference Include="hidlibrary" Version="3.3.40" />
+        <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
         <PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
         <PackageReference Include="OpenRGB.NET" Version="2.2.0" />
         <!--

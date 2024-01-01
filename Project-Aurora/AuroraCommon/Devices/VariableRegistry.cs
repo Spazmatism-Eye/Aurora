@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Common.Utils;
 
 namespace Common.Devices;
@@ -8,19 +11,15 @@ public class VariableRegistryItem : ICloneable
 {
     public object? Value { get; set; }
 
-    public object? Default { get; private set; }
+    public object Default { get; private set; }
 
     public object? Max { get; set; }
     public object? Min { get; set; }
-    public string Title { get; set; } = "";
-    public string Remark { get; set; } = "";
-    public VariableFlags Flags { get; set; } = VariableFlags.None;
+    public string Title { get; set; }
+    public string Remark { get; set; }
+    public VariableFlags Flags { get; set; }
 
-    public VariableRegistryItem()
-    {
-    }
-
-    public VariableRegistryItem(object? defaultValue, object? max = null, object? min = null, string title = "", string remark = "",
+    public VariableRegistryItem(object defaultValue, object? max = null, object? min = null, string title = "", string remark = "",
         VariableFlags flags = VariableFlags.None)
     {
         Value = defaultValue;
@@ -37,11 +36,17 @@ public class VariableRegistryItem : ICloneable
         Flags = flags;
     }
 
-    public VariableRegistryItem(object? value, object? defaultValue, object? max = null, object? min = null, string title = "",
+    [JsonConstructor]
+    public VariableRegistryItem(object? value, object @default, object? max = null, object? min = null, string title = "",
         string remark = "", VariableFlags flags = VariableFlags.None)
     {
-        Value = value ?? defaultValue;
-        Default = defaultValue;
+        value = UnwrapJsonNode(value);
+        @default = UnwrapJsonNode(@default);
+        max = UnwrapJsonNode(max);
+        min = UnwrapJsonNode(min);
+        
+        Value = value ?? @default;
+        Default = @default;
 
         if (Value != null && max != null && Value.GetType() == max.GetType())
             Max = max;
@@ -52,6 +57,34 @@ public class VariableRegistryItem : ICloneable
         Title = title;
         Remark = remark;
         Flags = flags;
+    }
+
+    [return: NotNullIfNotNull("value")]
+    private static object? UnwrapJsonNode(object? value)
+    {
+        if (value is JsonElement jsonElement)
+        {
+            value = jsonElement.ValueKind switch
+            {
+                JsonValueKind.Null => null,
+                JsonValueKind.Number => GetNumber(jsonElement),
+                JsonValueKind.String => jsonElement.GetString(),
+                JsonValueKind.True => true,
+                JsonValueKind.False => false,
+                JsonValueKind.Object => null,
+                _ => throw new JsonException("NOO"),
+            };
+        }
+
+        return value;
+    }
+
+    private static object GetNumber(JsonElement jsonElement)
+    {
+        if (int.TryParse(jsonElement.GetDecimal().ToString(CultureInfo.InvariantCulture), out var intVal))
+            return intVal;
+        
+        return jsonElement.GetDouble();
     }
 
     public void SetVariable(object? newValue)
@@ -72,13 +105,11 @@ public class VariableRegistryItem : ICloneable
 
         Flags = variableRegistryItem.Flags;
 
-        if (variableRegistryItem.Default == null) return;
-
         var defaultType = variableRegistryItem.Default.GetType();
-        var typ = Value.GetType();
+        var typ = (Value ?? Default).GetType();
 
         if (defaultType != typ && typ == typeof(long) && defaultType.IsEnum)
-            Value = Enum.ToObject(defaultType, Value);
+            Value = Enum.ToObject(defaultType, Value ?? Default);
         else if (defaultType != typ && Value is long && TypeUtils.IsNumericType(defaultType))
             Value = Convert.ChangeType(Value, defaultType);
         else if (Value == null && defaultType != typ)
@@ -87,7 +118,7 @@ public class VariableRegistryItem : ICloneable
 
     public object Clone()
     {
-        return new VariableRegistryItem(Value?.TryClone(), Default?.TryClone(), Max, Min, Title, Remark);
+        return new VariableRegistryItem(Value?.TryClone(), Default.TryClone(), Max, Min, Title, Remark);
     }
 }
 
@@ -172,8 +203,8 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public T GetVariable<T>(string name) where T : new()
     {
-        if (Variables.TryGetValue(name, out var value) && value.Value is T tVal)
-            return tVal;
+        if (Variables.TryGetValue(name, out var value))
+            return (T)value.Value!;
 
         return default(T) ?? new T();
     }

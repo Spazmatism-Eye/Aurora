@@ -8,14 +8,9 @@ namespace AuroraDeviceManager.Devices;
 /// <summary>
 /// Struct representing color settings being sent to devices
 /// </summary>
-public struct DeviceColorComposition
+public struct DeviceColorComposition(Dictionary<DeviceKeys, Color> keyColors)
 {
-    public Dictionary<DeviceKeys, Color> KeyColors;
-
-    public DeviceColorComposition(Dictionary<DeviceKeys, Color> keyColors)
-    {
-        KeyColors = keyColors;
-    }
+    public Dictionary<DeviceKeys, Color> KeyColors = keyColors;
 }
 
 /// <summary>

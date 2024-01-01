@@ -23,14 +23,15 @@ AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
 };
 
 Global.Logger.Information("Loading AuroraDeviceManager");
-Global.DeviceManager = new DeviceManager();
+var deviceManager = new DeviceManager();
 
 //Load config
 Global.Logger.Information("Loading Configuration");
-await ConfigManager.Load();
+var configManager = new ConfigManager(deviceManager);
+await configManager.Load();
 
 var endTaskSource = new TaskCompletionSource();
-var pipe = new AuroraPipe(Global.DeviceManager);
+var pipe = new AuroraPipe(deviceManager);
 pipe.Shutdown += (_, _) => Stop();
 
 var colors = new MemorySharedArray<SimpleColor>(Constants.DeviceLedMap);
@@ -44,10 +45,10 @@ colors.Updated += (_, _) =>
         var color = colors.ReadElement(i);
         deviceKeys[(DeviceKeys)i] = (Color)color;
     }
-    Global.DeviceManager.UpdateDevices(deviceKeys);
+    deviceManager.UpdateDevices(deviceKeys);
 };
 
-await Global.DeviceManager.InitializeDevices();
+await deviceManager.InitializeDevices();
 await endTaskSource.Task;
 
 Global.Logger.Information("Closing DeviceManager");
@@ -58,8 +59,8 @@ void Stop()
 {
     App.Closing = true;
 
-    Global.DeviceManager.ShutdownDevices().Wait(5000);
-    Global.DeviceManager.Dispose();
+    deviceManager.ShutdownDevices().Wait(5000);
+    deviceManager.Dispose();
 
     endTaskSource.TrySetResult();
 }

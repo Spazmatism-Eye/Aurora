@@ -2,8 +2,9 @@
 
 namespace AuroraDeviceManager.Utils;
 
-internal static class Kernel32
+internal static partial class Kernel32
 {
-    [DllImport("kernel32.dll")]
-    internal static extern bool SetProcessShutdownParameters(uint dwLevel, uint dwFlags);
+    [LibraryImport("kernel32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial void SetProcessShutdownParameters(uint dwLevel, uint dwFlags);
 }

@@ -9,13 +9,13 @@ using RGB.NET.Core;
 
 namespace AuroraDeviceManager;
 
-public class AuroraPipe
+public sealed class AuroraPipe : IDisposable
 {
     public event EventHandler<EventArgs>? Shutdown;
 
     private readonly DeviceManager _deviceManager;
 
-    private List<NamedPipeServerStream> _pipes = new();
+    private readonly List<NamedPipeServerStream> _pipes = [];
 
     public AuroraPipe(DeviceManager deviceManager)
     {
@@ -122,5 +122,14 @@ public class AuroraPipe
 
         await pipe.DisposeAsync();
         _pipes.Remove(pipe);
+    }
+
+    public void Dispose()
+    {
+        foreach (var namedPipe in _pipes)
+        {
+            namedPipe.Dispose();
+        }
+        _pipes.Clear();
     }
 }

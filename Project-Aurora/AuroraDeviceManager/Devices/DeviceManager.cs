@@ -1,13 +1,14 @@
 ﻿using System.IO.Pipes;
 using System.Text;
+using System.Text.Json;
 using AuroraDeviceManager.Devices.RGBNet;
 using AuroraDeviceManager.Devices.ScriptedDevice;
+using AuroraDeviceManager.Utils;
 using Common.Devices;
 using Common;
 using Common.Data;
 using Common.Devices.RGBNet;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using RGB.NET.Core;
 using Color = System.Drawing.Color;
 using RgbNetColor = RGB.NET.Core.Color;
@@ -17,11 +18,10 @@ namespace AuroraDeviceManager.Devices;
 public sealed class DeviceManager : IDisposable
 {
     private bool _suspended;
-    private bool _resumed;
     private bool _disposed;
     private readonly MemorySharedStruct<DeviceManagerInfo> _deviceInformations;
 
-    private List<DeviceContainer> DeviceContainers { get; } = new();
+    private List<DeviceContainer> DeviceContainers { get; } = [];
 
     private IEnumerable<DeviceContainer> InitializedDeviceContainers =>
         DeviceContainers.Where(d => d.Device.IsInitialized);
@@ -133,7 +133,6 @@ public sealed class DeviceManager : IDisposable
             case PowerModes.Resume:
                 Global.Logger.Information("Resuming Devices -- PowerModes.Resume");
                 Thread.Sleep(TimeSpan.FromSeconds(5));
-                _resumed = true;
                 _suspended = false;
                 await Task.Run(async () => await InitializeDevices());
                 break;
@@ -173,7 +172,7 @@ public sealed class DeviceManager : IDisposable
     private async Task BlinkKey(IRGBDevice device, LedId ledId)
     {
         if (_tokenSource is { Token.IsCancellationRequested: false })
-            _tokenSource.Cancel();
+            await _tokenSource.CancelAsync();
 
         var led = device[ledId];
         if (led == null)
@@ -225,8 +224,8 @@ public sealed class DeviceManager : IDisposable
         ).ToList();
 
         var currentDevices = new CurrentDevices(remappableDevices);
- 
-        var json = JsonConvert.SerializeObject(currentDevices, Formatting.None);
+
+        var json = JsonSerializer.Serialize(currentDevices, SourceGenerationContext.Default.CurrentDevices);
         var command = DeviceCommands.RemappableDevices + Constants.StringSplit + json;
 
         await SendCommand(command);

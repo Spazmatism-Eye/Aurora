@@ -332,7 +332,7 @@ public abstract class RgbNetDevice : DefaultDevice
 
         if (IsInitialized)
         {
-            ShutdownDevice();
+            ShutdownDevice().Wait();
         }
     }
 }
