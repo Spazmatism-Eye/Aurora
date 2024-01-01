@@ -3,6 +3,7 @@ using System.Text.Json;
 using AuroraDeviceManager.Devices;
 using AuroraDeviceManager.Utils;
 using Common.Devices;
+using Common.Utils;
 
 namespace AuroraDeviceManager;
 
@@ -49,7 +50,7 @@ public class ConfigManager(DeviceManager deviceManager)
             var content = await File.ReadAllTextAsync(ConfigFile, Encoding.UTF8);
             config = string.IsNullOrWhiteSpace(content)
                 ? CreateDefaultConfigurationFile()
-                : JsonSerializer.Deserialize(content, SourceGenerationContext.Default.DeviceConfig) ?? CreateDefaultConfigurationFile();
+                : JsonSerializer.Deserialize(content, CommonSourceGenerationContext.Default.DeviceConfig) ?? CreateDefaultConfigurationFile();
         }
         config.OnPostLoad();
 

@@ -27,10 +27,10 @@ public sealed class DeviceConfig : INotifyPropertyChanged
     [JsonPropertyName("devices_disable_headset")]
     public bool DevicesDisableHeadset { get; set; }
 
-    [JsonIgnore]
+    private ObservableCollection<string>? _enabledDevices;
     public ObservableCollection<string> EnabledDevices
     {
-        get => _enabledDevices ??= new ObservableCollection<string>(_defaultEnabledDevices);
+        get => _enabledDevices ??= new ObservableCollection<string>(DefaultEnabledDevices);
         set => _enabledDevices = value;
     }
 
@@ -68,21 +68,18 @@ public sealed class DeviceConfig : INotifyPropertyChanged
         {"Razer", "Razer (RGB.NET)"},
     };
 
-    private readonly List<string> _defaultEnabledDevices = new()
+    private static List<string> DefaultEnabledDevices => new()
     {
         "Corsair (RGB.NET)",
         "Logitech (RGB.NET)",
         "OpenRGB (RGB.NET)",
     };
 
-    [JsonPropertyName(nameof(EnabledDevices))]
-    private ObservableCollection<string>? _enabledDevices;
-
     public VariableRegistry VarRegistry { get; set; } = new();
 
     public void OnPostLoad()
     {
-        _enabledDevices ??= new ObservableCollection<string>(_defaultEnabledDevices);
+        _enabledDevices ??= new ObservableCollection<string>(DefaultEnabledDevices);
 
         MigrateDevices();
 
