@@ -9,7 +9,7 @@ namespace Common.Devices;
 [Serializable]
 public class VariableRegistryItem : ICloneable
 {
-    public object? Value { get; set; }
+    public object? Value { get; private set; }
 
     public object Default { get; private set; }
 
@@ -18,23 +18,6 @@ public class VariableRegistryItem : ICloneable
     public string Title { get; set; }
     public string Remark { get; set; }
     public VariableFlags Flags { get; set; }
-
-    public VariableRegistryItem(object defaultValue, object? max = null, object? min = null, string title = "", string remark = "",
-        VariableFlags flags = VariableFlags.None)
-    {
-        Value = defaultValue;
-        Default = defaultValue;
-
-        if (Value != null && max != null && Value.GetType() == max.GetType())
-            Max = max;
-
-        if (Value != null && min != null && Value.GetType() == min.GetType())
-            Min = min;
-
-        Title = title;
-        Remark = remark;
-        Flags = flags;
-    }
 
     [JsonConstructor]
     public VariableRegistryItem(object? value, object @default, object? max = null, object? min = null, string title = "",
@@ -120,6 +103,11 @@ public class VariableRegistryItem : ICloneable
     {
         return new VariableRegistryItem(Value?.TryClone(), Default.TryClone(), Max, Min, Title, Remark);
     }
+
+    public void Reset()
+    {
+        Value = Default;
+    }
 }
 
 public enum VariableFlags
@@ -169,7 +157,7 @@ public class VariableRegistry : ICloneable //Might want to implement something l
         VariableFlags flags = VariableFlags.None)
     {
         if (!Variables.ContainsKey(name))
-            Variables.Add(name, new VariableRegistryItem(defaultValue, max, min, title, remark, flags));
+            Variables.Add(name, new VariableRegistryItem(null, defaultValue, max, min, title, remark, flags));
     }
 
     public void Register(string name, VariableRegistryItem varItem)
@@ -187,9 +175,9 @@ public class VariableRegistry : ICloneable //Might want to implement something l
 
     public void ResetVariable(string name)
     {
-        if (Variables.ContainsKey(name))
+        if (Variables.TryGetValue(name, out var variable))
         {
-            Variables[name].Value = Variables[name].Default;
+            variable.Reset();
         }
     }
 
