@@ -57,7 +57,7 @@ public class MemorySharedDevice : IDevice
     {
         foreach (var deviceVariable in _deviceVariables)
         {
-            Func<byte[]?, object?> convert = deviceVariable.ValueType switch
+            Func<byte[]?, object> convert = deviceVariable.ValueType switch
             {
                 VariableType.None => _ => new object(),
                 VariableType.Boolean => data => BitConverter.ToBoolean(data),

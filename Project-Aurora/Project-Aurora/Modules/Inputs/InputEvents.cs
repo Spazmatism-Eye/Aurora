@@ -63,7 +63,8 @@ public sealed class InputEvents : IInputEvents
     private static readonly Keys[] WinKeys = { Keys.LWin, Keys.RWin };
     public bool Windows => WinKeys.Any(PressedKeys.Contains);
 
-    delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+    private delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable to keep reference for garbage collector
     private readonly WndProc? _fnWndProcHook;
     private readonly nint _originalWndProc;
     private readonly IntPtr _hWnd;

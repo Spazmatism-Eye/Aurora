@@ -228,7 +228,7 @@ namespace Aurora.Settings.Layers
         public Application Application { get; protected set; }
 
         [JsonIgnore]
-        protected Task<UserControl>? _Control;
+        private Task<UserControl>? _Control;
 
         [JsonIgnore]
         public Task<UserControl> Control => _Control ??= CreateControlOnMain();
@@ -387,7 +387,6 @@ namespace Aurora.Settings.Layers
         {
             Application = profile;
             await Initialize();
-            (await Control as IProfileContainingControl)?.SetProfile(profile);
         }
 
         protected virtual Task Initialize()
@@ -397,10 +396,12 @@ namespace Aurora.Settings.Layers
 
         private Task<UserControl> CreateControlOnMain()
         {
-            var tcs = new TaskCompletionSource<UserControl>();
+            var tcs = new TaskCompletionSource<UserControl>(TaskCreationOptions.RunContinuationsAsynchronously);
             System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                tcs.SetResult(CreateControl());
+                var layerControl = CreateControl();
+                (layerControl as IProfileContainingControl)?.SetProfile(Application);
+                tcs.SetResult(layerControl);
             }, DispatcherPriority.Loaded);
             return tcs.Task;
         }

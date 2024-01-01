@@ -33,18 +33,15 @@ public static class SystemUtils
         systemInfoSb.Append($"Executing Directory: {Global.ExecutingDirectory}\r\n");
         systemInfoSb.Append($"Launch Directory: {Directory.GetCurrentDirectory()}\r\n");
         systemInfoSb.Append($"Processor Count: {Environment.ProcessorCount}\r\n");
-
-        systemInfoSb.Append($"SystemPageSize: {Environment.SystemPageSize}\r\n");
         systemInfoSb.Append($"Environment Version: {Environment.Version}\r\n");
 
         var identity = WindowsIdentity.GetCurrent();
         var principal = new WindowsPrincipal(identity);
         systemInfoSb.Append($"Is Elevated: {principal.IsInRole(WindowsBuiltInRole.Administrator)}\r\n");
         systemInfoSb.Append($"Aurora Assembly Version: {Assembly.GetExecutingAssembly().GetName().Version}\r\n");
-        systemInfoSb.Append(
-            $"Aurora File Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}\r\n");
+        systemInfoSb.Append($"Aurora File Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}\r\n");
 
-        systemInfoSb.Append("========================================\r\n");
+        systemInfoSb.Append("========================================");
 
         return systemInfoSb.ToString();
     }

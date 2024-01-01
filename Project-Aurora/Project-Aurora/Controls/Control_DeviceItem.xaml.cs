@@ -133,7 +133,7 @@ public partial class Control_DeviceItem
             {
                 Global.logger.Warning(ex, "DeviceItem update error:");
             }
-        }, DispatcherPriority.Background);
+        }, DispatcherPriority.Loaded);
     }
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
@@ -154,7 +154,7 @@ public partial class Control_DeviceItem
             {
                 Global.logger.Warning(ex, "DeviceItem update error:");
             }
-        }, Background);
+        }, DispatcherPriority.DataBind);
     }
 
     private void UpdateStatic()

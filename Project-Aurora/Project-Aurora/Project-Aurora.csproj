@@ -22,6 +22,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <Configurations>Debug;Release</Configurations>
     <Nullable>enable</Nullable>
+    <StartupObject>Aurora.App</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -95,7 +96,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AuroraCommon\AuroraCommon.csproj" />
     <ProjectReference Include="..\ColorBox\ColorBox.csproj" />
-    <ProjectReference Include="..\AuroraCommon\AuroraCommon.csproj" >
+    <ProjectReference Include="..\AuroraCommon\AuroraCommon.csproj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </ProjectReference>
   </ItemGroup>
