@@ -85,7 +85,7 @@ public class LogitechSdkListener
         }
 
         var i = WTSGetActiveConsoleSessionId();
-        var lgsPipeName = "LGS_LED_SDK-" + $"{i:00000000}";
+        var lgsPipeName = "LGS_LED_SDK-" + i.ToString("x8");
         Global.logger.Information("LGS Pipe name: {PipeName}", lgsPipeName);
         var pipeListener = new PipeListener(lgsPipeName);
             
