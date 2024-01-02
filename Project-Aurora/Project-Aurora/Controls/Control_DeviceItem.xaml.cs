@@ -127,13 +127,13 @@ public partial class Control_DeviceItem
             try
             {
                 UpdateStatic();
-                UpdateDynamic();
             }
             catch (Exception ex)
             {
                 Global.logger.Warning(ex, "DeviceItem update error:");
             }
         }, DispatcherPriority.Loaded);
+        Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.Input);
     }
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
@@ -154,7 +154,7 @@ public partial class Control_DeviceItem
             {
                 Global.logger.Warning(ex, "DeviceItem update error:");
             }
-        }, DispatcherPriority.DataBind);
+        }, DispatcherPriority.Input);
     }
 
     private void UpdateStatic()

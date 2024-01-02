@@ -67,7 +67,7 @@ public partial class DeviceMapping
 
     private async void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        await (await _deviceManager).RequestRemappableDevices();
+        await ReloadDevices();
     }
 
     private void OnUnloaded(object? sender, EventArgs e)
@@ -77,7 +77,16 @@ public partial class DeviceMapping
 
     private async Task ReloadDevices()
     {
-        await (await _deviceManager).RequestRemappableDevices();
+        var deviceManager = await _deviceManager;
+
+        if (!await deviceManager.IsDeviceManagerUp())
+        {
+            _devices.Clear();
+            RemappableDeviceList.Children.Clear();
+            return;
+        }
+        
+        await deviceManager.RequestRemappableDevices();
     }
 
     private void LoadDevices(CurrentDevices remappableDevices)
@@ -92,7 +101,7 @@ public partial class DeviceMapping
 
         Dispatcher.Invoke(() =>
         {
-            AsusDeviceList.Children.Clear();
+            RemappableDeviceList.Children.Clear();
             foreach (var device in _devices)
             {
                 // create a new button for the ui
@@ -103,9 +112,9 @@ public partial class DeviceMapping
 
                 button.Click += (_, _) =>
                 {
-                    for (var i = 0; i < AsusDeviceList.Children.Count; i++)
+                    for (var i = 0; i < RemappableDeviceList.Children.Count; i++)
                     {
-                        if (AsusDeviceList.Children[i] is Button dButton)
+                        if (RemappableDeviceList.Children[i] is Button dButton)
                             dButton.IsEnabled = true;
                     }
 
@@ -113,7 +122,7 @@ public partial class DeviceMapping
                     DeviceSelect(device);
                 };
 
-                AsusDeviceList.Children.Add(button);
+                RemappableDeviceList.Children.Add(button);
             }
         }, DispatcherPriority.Loaded);
     }

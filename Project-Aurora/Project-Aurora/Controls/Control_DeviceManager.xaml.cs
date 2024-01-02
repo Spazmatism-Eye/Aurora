@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Aurora.Devices;
@@ -25,23 +26,25 @@ public partial class Control_DeviceManager
     public async Task Initialize()
     {
         var deviceManager = await _deviceManager;
-        await UpdateControls();
         deviceManager.DevicesUpdated += async (_, _) =>
         {
             await UpdateControls();
         };
     }
 
-    private async void Control_DeviceManager_Loaded(object? sender, RoutedEventArgs e)
+    private void Control_DeviceManager_Loaded(object? sender, RoutedEventArgs e)
     {
-        await UpdateControls();
+        Task.Run(UpdateControls);
     }
 
     private async Task UpdateControls()
     {
-        var deviceContainers = (await _deviceManager).DeviceContainers;
+        var deviceManager = await _deviceManager;
+        var isDeviceManagerUp = await deviceManager.IsDeviceManagerUp();
+        var deviceContainers = isDeviceManagerUp ? deviceManager.DeviceContainers : new List<DeviceContainer>();
         Dispatcher.BeginInvoke(() =>
         {
+            NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
             if (ReferenceEquals(LstDevices.ItemsSource, deviceContainers))
             {
                 LstDevices.Items.Refresh();
@@ -50,7 +53,7 @@ public partial class Control_DeviceManager
             {
                 LstDevices.ItemsSource = deviceContainers;
             }
-        }, DispatcherPriority.Input);
+        }, DispatcherPriority.Loaded);
     }
 
     private async void btnRestartAll_Click(object? sender, RoutedEventArgs e)

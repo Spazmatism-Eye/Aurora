@@ -30,5 +30,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListView>
+        <TextBlock Name="NoDevManTextBlock" Grid.Row="1">
+            Device Manager isn't up.
+            <LineBreak/>
+            Process might have been killed or desktop profile isn't active.
+        </TextBlock>
     </Grid>
 </UserControl>

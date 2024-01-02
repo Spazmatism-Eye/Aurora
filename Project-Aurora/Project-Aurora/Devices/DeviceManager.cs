@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -125,7 +126,11 @@ public sealed class DeviceManager : IDisposable
             var process = _process;
             _process = null;
 
-            await SendCommand(DeviceCommands.Quit);
+            if (await IsDeviceManagerUp())
+            {
+                await SendCommand(DeviceCommands.Quit);
+            }
+            process.Kill();
             await process.WaitForExitAsync();
         }
     }
@@ -214,6 +219,17 @@ public sealed class DeviceManager : IDisposable
     {
         var command = DeviceCommands.Recalibrate + Constants.StringSplit + deviceName + Constants.StringSplit + color.ToArgb();
         await SendCommand( command);
+    }
+
+    public Task<bool> IsDeviceManagerUp()
+    {
+        var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        Task.Run(() =>
+        {
+            var dmUp = File.Exists(@"\\.\pipe\" + Constants.DeviceManagerPipe);
+            tcs.SetResult(dmUp);
+        });
+        return tcs.Task;
     }
 
     private async Task SendCommand(string command)

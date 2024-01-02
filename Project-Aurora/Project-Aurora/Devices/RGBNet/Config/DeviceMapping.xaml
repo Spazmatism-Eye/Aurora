@@ -17,7 +17,7 @@
                 <DockPanel
                     VerticalAlignment="Stretch"
                     Height="auto">
-                    <StackPanel Orientation="Vertical" Name="AsusDeviceList">
+                    <StackPanel Orientation="Vertical" Name="RemappableDeviceList">
                         <Button Content=""></Button>
                     </StackPanel>
                 </DockPanel>

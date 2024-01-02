@@ -88,7 +88,15 @@ public partial class Control_DeviceCalibration : IDisposable
 
     private async Task RefreshLists()
     {
-        await (await DeviceManager).RequestRemappableDevices();
+        var deviceManager = await DeviceManager;
+        if (!await deviceManager.IsDeviceManagerUp())
+        {
+            DeviceCalibrations.Clear();
+            DeviceList.Items.Refresh();
+            return;
+        }
+        
+        await deviceManager.RequestRemappableDevices();
         await _devicesUpdated.WaitAsync();
     }
 
