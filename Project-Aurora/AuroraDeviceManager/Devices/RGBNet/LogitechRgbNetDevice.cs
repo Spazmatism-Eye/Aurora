@@ -23,10 +23,7 @@ public sealed class LogitechRgbNetDevice : RgbNetDevice
         return true;
     }
 
-    protected override bool IsReversed()
-    {
-        return true;
-    }
+    protected internal override bool NeedsLayout() => true;
 
     #region Event handlers
 

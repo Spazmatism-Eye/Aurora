@@ -14,6 +14,7 @@ namespace Aurora.Devices.RGBNet.Config;
 public partial class RgbNetKeyToDeviceKeyControl
 {
     public Action? BlinkCallback { get; set; }
+    private bool Disabled { get; }
 
     public DeviceKeys? DeviceKey
     {
@@ -29,10 +30,11 @@ public partial class RgbNetKeyToDeviceKeyControl
 
     public event EventHandler<DeviceKeys?>? DeviceKeyChanged;
 
-    public RgbNetKeyToDeviceKeyControl(DeviceRemap configDeviceRemap, LedId led)
+    public RgbNetKeyToDeviceKeyControl(DeviceRemap configDeviceRemap, LedId led, bool disabled)
     {
         _configDeviceRemap = configDeviceRemap;
         Led = led;
+        Disabled = disabled;
         
         InitializeComponent();
 
@@ -75,6 +77,10 @@ public partial class RgbNetKeyToDeviceKeyControl
 
     private void DeviceKeyButton_OnClick(object? sender, RoutedEventArgs e)
     {
+        if (Disabled)
+        {
+            return;
+        }
         Global.key_recorder.FinishedRecording += KeyRemapped;
         Global.key_recorder.StartRecording("DeviceRemap", true);
     }

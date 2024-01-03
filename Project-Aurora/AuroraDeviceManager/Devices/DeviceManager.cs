@@ -220,7 +220,7 @@ public sealed class DeviceManager : IDisposable
             let calibration = Global.DeviceConfig.DeviceCalibrations.GetValueOrDefault(device.DeviceInfo.DeviceName, SimpleColor.White)
             let deviceSummary = $"{rgbNetController.DeviceName}: [{device.DeviceInfo.DeviceType}] {device.DeviceInfo.DeviceName}"
             let rgbNetLeds = device.Select(l => l.Id).ToList()
-            select new RemappableDevice(device.DeviceInfo.DeviceName, deviceSummary, rgbNetLeds, calibration)
+            select new RemappableDevice(device.DeviceInfo.DeviceName, deviceSummary, rgbNetLeds, calibration, !rgbNetController.NeedsLayout())
         ).ToList();
 
         var currentDevices = new CurrentDevices(remappableDevices);

@@ -29,6 +29,7 @@ public class OpenRgbNetDevice : RgbNetDevice
             var isOpenRgbRunning = ProcessUtils.IsProcessRunning("OpenRGB");
             if (!isOpenRgbRunning)
             {
+                //TODO check sdk enabled
                 throw new DeviceProviderException(new ApplicationException("OpenRGB is not running!"), false);
             }
         }
@@ -46,7 +47,7 @@ public class OpenRgbNetDevice : RgbNetDevice
         
         variableRegistry.Register($"{DeviceName}_sleep", 0, "Sleep for", 1000, 0);
         variableRegistry.Register($"{DeviceName}_ip", "127.0.0.1", "IP Address");
-        variableRegistry.Register($"{DeviceName}_port", 6742, "Port", 1024, 65535);
+        variableRegistry.Register($"{DeviceName}_port", 6742, "Port", 65535, 1024);
         variableRegistry.Register($"{DeviceName}_fallback_key", DeviceKeys.Peripheral_Logo, "Key to use for unknown leds. Select NONE to disable");
     }
 }

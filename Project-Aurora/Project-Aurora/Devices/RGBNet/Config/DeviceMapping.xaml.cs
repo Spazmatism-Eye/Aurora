@@ -135,7 +135,8 @@ public partial class DeviceMapping
     private async void DeviceSelect(RemappableDevice remappableDevice)
     {
         // Rebuild the key area
-        AsusDeviceKeys.Children.Clear();
+        RemappableDeviceKeys.Children.Clear();
+        NotRemappableTextBlock.Visibility = remappableDevice.RemapEnabled ? Visibility.Collapsed : Visibility.Visible;
 
         await Task.Run(async () =>
         {
@@ -144,39 +145,40 @@ public partial class DeviceMapping
             var deviceRemap = GetDeviceRemap(remappableDevice);
 
             var keyControls = remappableDevice.RgbNetLeds
-                .Select(CreateKeyControl(deviceRemap))
-                .Select(kc => kc.ContinueWith(PrepareControl(remappableDevice, deviceRemap)));
+                .Select(CreateKeyControl(deviceRemap, remappableDevice.RemapEnabled))
+                .Select(kc => kc.ContinueWith(AssociateKeyControl(remappableDevice, deviceRemap)));
             foreach (var keyControlTask in keyControls)
             {
                 var keyControl = await await keyControlTask;
+                _keys.Add(keyControl);
                 Dispatcher.BeginInvoke(() =>
                 {
-                    AsusDeviceKeys.Children.Add(keyControl);
+                    RemappableDeviceKeys.Children.Add(keyControl);
                 }, DispatcherPriority.Input);
             }
         });
     }
 
-    private Func<LedId, Task<RgbNetKeyToDeviceKeyControl>> CreateKeyControl(DeviceRemap deviceRemap)
+    private Func<LedId, Task<RgbNetKeyToDeviceKeyControl>> CreateKeyControl(DeviceRemap deviceRemap, bool remappable)
     {
         return led =>
         {
             var tcs = new TaskCompletionSource<RgbNetKeyToDeviceKeyControl>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            Dispatcher.BeginInvoke(() => { tcs.SetResult(new RgbNetKeyToDeviceKeyControl(deviceRemap, led)); }, DispatcherPriority.Loaded);
+            Dispatcher.BeginInvoke(() => { tcs.SetResult(new RgbNetKeyToDeviceKeyControl(deviceRemap, led, !remappable)); }, DispatcherPriority.Loaded);
 
             return tcs.Task;
         };
     }
 
-    private Func<Task<RgbNetKeyToDeviceKeyControl>, Task<RgbNetKeyToDeviceKeyControl>> PrepareControl(RemappableDevice remappableDevice, DeviceRemap deviceRemap)
+    private Func<Task<RgbNetKeyToDeviceKeyControl>, Task<RgbNetKeyToDeviceKeyControl>> AssociateKeyControl(RemappableDevice remappableDevice, DeviceRemap deviceRemap)
     {
         return async keyControlTask =>
         {
             var keyControl = await keyControlTask;
             var led = keyControl.Led;
-            keyControl.BlinkCallback += () => { _deviceManager.Result.BlinkRemappableKey(remappableDevice, led); };
 
+            keyControl.BlinkCallback += () => { _deviceManager.Result.BlinkRemappableKey(remappableDevice, led); };
             keyControl.DeviceKeyChanged += async (_, newKey) =>
             {
                 if (newKey != null)
@@ -191,8 +193,6 @@ public partial class DeviceMapping
                 var deviceManager = await _deviceManager;
                 await deviceManager.RemapKey(remappableDevice.DeviceId, led, newKey);
             };
-
-            _keys.Add(keyControl);
 
             return keyControl;
         };

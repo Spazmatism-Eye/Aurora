@@ -9,5 +9,5 @@ public class SteelSeriesRgbNetDevice : RgbNetDevice
 
     public override string DeviceName => "SteelSeries (RGB.NET)";
 
-    protected override bool IsReversed() => true;
+    protected internal override bool NeedsLayout() => true;
 }

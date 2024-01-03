@@ -186,7 +186,7 @@ public abstract class RgbNetDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected virtual bool IsReversed()
+    protected internal virtual bool NeedsLayout()
     {
         return false;
     }
@@ -224,7 +224,7 @@ public abstract class RgbNetDevice : DefaultDevice
 
     private void UpdateDevice(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
     {
-        if (IsReversed())
+        if (NeedsLayout())
         {
             UpdateReverse(keyColors, device);
         }

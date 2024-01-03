@@ -38,7 +38,8 @@
                             <Button Content="Set All Logo" DockPanel.Dock="Top" Click="SetAllLogo_Click" ToolTip="Set all of the lights to PERIPHERAL_LOGO"/>
                         </StackPanel>
                         <Separator DockPanel.Dock="Top" Height="10"/>
-                        <StackPanel Orientation="Vertical" Name="AsusDeviceKeys">
+                        <TextBlock Name="NotRemappableTextBlock" Visibility="Collapsed" Foreground="Red">This device cannot be remapped. You need to choose a correct layout.</TextBlock>
+                        <StackPanel Orientation="Vertical" Name="RemappableDeviceKeys">
                         </StackPanel>
                     </StackPanel>
                 </DockPanel>
