@@ -187,7 +187,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private void OnAuroraCommandReceived(object? sender, string e)
     {
-        Global.logger.Information("Received command: {Command}", e);
+        Global.logger.Debug("Received command: {Command}", e);
         switch (e)
         {
             case "restore":
