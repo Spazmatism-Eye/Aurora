@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Aurora_Updater.Data;
+using Aurora_Updater.Properties;
 
 namespace Aurora_Updater;
 
@@ -17,9 +18,10 @@ public partial class MainForm : Form
 
     public MainForm()
     {
-        _updaterThread = new Thread(() => StaticStorage.Manager.RetrieveUpdate());
+        _updaterThread = new Thread(() => StaticStorage.Manager.RetrieveUpdate().Wait());
         InitializeComponent();
         StaticStorage.Manager.ClearLog();
+        Icon = Resources.Aurora_updater;
     }
 
     private void Form1_Shown(object? sender, EventArgs e)

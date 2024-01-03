@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,14 +20,13 @@ namespace Aurora_Updater;
 
 public class UpdateManager
 {
-    private readonly string[] _ignoreFiles = { };
-    private readonly ObservableCollection<LogEntry> _log = new();
+    private readonly string[] _ignoreFiles = [];
+    private readonly ObservableCollection<LogEntry> _log = [];
     private float _downloadProgress;
     private float _extractProgress;
     private int? _previousPercentage;
     private int _secondsLeft = 15;
-    private readonly UpdateInfo _updateInfo;
-    
+
     public readonly Release LatestRelease;
     private readonly LogEntry _downloadLogEntry = new("Download 0%");
 
@@ -41,10 +39,10 @@ public class UpdateManager
         }
         catch
         {
-            config = new UpdaterConfiguration();
+            config = new UpdaterConfiguration(false);
         }
 
-        _updateInfo = new UpdateInfo(version, author, repoName, config.GetDevReleases);
+        var updateInfo = new UpdateInfo(version, author, repoName, config.GetDevReleases);
 
         PerformCleanup();
         var tries = 20;
@@ -52,7 +50,8 @@ public class UpdateManager
         {
             try
             {
-                LatestRelease = _updateInfo.FetchData().Result;
+                LatestRelease = updateInfo.FetchData().Result;
+                return;
             }
             catch (AggregateException e)
             {
@@ -66,6 +65,8 @@ public class UpdateManager
                 }
             }
         } while (LatestRelease == null && tries-- != 0);
+
+        LatestRelease = new Release("Release fetch failed");
     }
 
     public void ClearLog()
@@ -106,10 +107,13 @@ public class UpdateManager
             await client.DownloadFileTaskAsync(new Uri(url), Path.Combine(Program.ExePath, "update.zip"));
 
             var releaseAssets = assets.Where(a => a.Name.EndsWith(".dll")).ToList();
-            if (releaseAssets.Any())
+            if (releaseAssets.Count != 0)
             {
                 var installDirPlugin = Path.Combine(Program.ExePath, "Plugins");
                 var userDirPlugin = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "Plugins");
+
+                var deviceInstallDirPlugin = Path.Combine(installDirPlugin, "Devices");
+                var deviceUserDirPlugin = Path.Combine(userDirPlugin, "Devices");
 
                 foreach (var pluginDll in releaseAssets)
                 {
@@ -118,8 +122,8 @@ public class UpdateManager
 
                     await pluginUpdater.UpdatePlugin(installDirPlugin);
                     await pluginUpdater.UpdatePlugin(userDirPlugin);
-                
-                    //TODO add DeviceManager plugins
+                    await pluginUpdater.UpdatePlugin(deviceInstallDirPlugin);
+                    await pluginUpdater.UpdatePlugin(deviceUserDirPlugin);
                 }
             }
 

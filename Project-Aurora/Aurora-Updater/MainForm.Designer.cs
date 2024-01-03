@@ -29,90 +29,93 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.update_progress = new System.Windows.Forms.ProgressBar();
-            this.richtextUpdateLog = new System.Windows.Forms.RichTextBox();
-            this.labelApplicationTitle = new System.Windows.Forms.Label();
-            this.pictureBoxApplicationLogo = new System.Windows.Forms.PictureBox();
-            this.labelUpdateLog = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxApplicationLogo)).BeginInit();
-            this.SuspendLayout();
+            update_progress = new System.Windows.Forms.ProgressBar();
+            richtextUpdateLog = new System.Windows.Forms.RichTextBox();
+            labelApplicationTitle = new System.Windows.Forms.Label();
+            pictureBoxApplicationLogo = new System.Windows.Forms.PictureBox();
+            labelUpdateLog = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxApplicationLogo).BeginInit();
+            SuspendLayout();
             // 
             // update_progress
             // 
-            this.update_progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.update_progress.Location = new System.Drawing.Point(12, 352);
-            this.update_progress.Name = "update_progress";
-            this.update_progress.Size = new System.Drawing.Size(560, 22);
-            this.update_progress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.update_progress.TabIndex = 0;
+            update_progress.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            update_progress.Location = new System.Drawing.Point(14, 406);
+            update_progress.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            update_progress.Name = "update_progress";
+            update_progress.Size = new System.Drawing.Size(653, 25);
+            update_progress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            update_progress.TabIndex = 0;
             // 
             // richtextUpdateLog
             // 
-            this.richtextUpdateLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richtextUpdateLog.Location = new System.Drawing.Point(12, 82);
-            this.richtextUpdateLog.Name = "richtextUpdateLog";
-            this.richtextUpdateLog.ReadOnly = true;
-            this.richtextUpdateLog.Size = new System.Drawing.Size(560, 264);
-            this.richtextUpdateLog.TabIndex = 1;
-            this.richtextUpdateLog.Text = "";
+            richtextUpdateLog.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            richtextUpdateLog.Location = new System.Drawing.Point(14, 95);
+            richtextUpdateLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            richtextUpdateLog.Name = "richtextUpdateLog";
+            richtextUpdateLog.ReadOnly = true;
+            richtextUpdateLog.Size = new System.Drawing.Size(653, 304);
+            richtextUpdateLog.TabIndex = 1;
+            richtextUpdateLog.Text = "";
             // 
             // labelApplicationTitle
             // 
-            this.labelApplicationTitle.AutoSize = true;
-            this.labelApplicationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelApplicationTitle.Location = new System.Drawing.Point(66, 12);
-            this.labelApplicationTitle.Name = "labelApplicationTitle";
-            this.labelApplicationTitle.Size = new System.Drawing.Size(156, 20);
-            this.labelApplicationTitle.TabIndex = 9;
-            this.labelApplicationTitle.Text = "Updating Aurora...";
+            labelApplicationTitle.AutoSize = true;
+            labelApplicationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            labelApplicationTitle.Location = new System.Drawing.Point(77, 14);
+            labelApplicationTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            labelApplicationTitle.Name = "labelApplicationTitle";
+            labelApplicationTitle.Size = new System.Drawing.Size(156, 20);
+            labelApplicationTitle.TabIndex = 9;
+            labelApplicationTitle.Text = "Updating Aurora...";
             // 
             // pictureBoxApplicationLogo
             // 
-            this.pictureBoxApplicationLogo.Image = global::Aurora_Updater.Properties.Resources.Aurora_updater_logo;
-            this.pictureBoxApplicationLogo.Location = new System.Drawing.Point(12, 12);
-            this.pictureBoxApplicationLogo.Name = "pictureBoxApplicationLogo";
-            this.pictureBoxApplicationLogo.Size = new System.Drawing.Size(48, 48);
-            this.pictureBoxApplicationLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBoxApplicationLogo.TabIndex = 8;
-            this.pictureBoxApplicationLogo.TabStop = false;
+            pictureBoxApplicationLogo.Image = Properties.Resources.Aurora_updater_logo;
+            pictureBoxApplicationLogo.Location = new System.Drawing.Point(14, 14);
+            pictureBoxApplicationLogo.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            pictureBoxApplicationLogo.Name = "pictureBoxApplicationLogo";
+            pictureBoxApplicationLogo.Size = new System.Drawing.Size(48, 48);
+            pictureBoxApplicationLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            pictureBoxApplicationLogo.TabIndex = 8;
+            pictureBoxApplicationLogo.TabStop = false;
             // 
             // labelUpdateLog
             // 
-            this.labelUpdateLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelUpdateLog.AutoSize = true;
-            this.labelUpdateLog.Location = new System.Drawing.Point(9, 66);
-            this.labelUpdateLog.Name = "labelUpdateLog";
-            this.labelUpdateLog.Size = new System.Drawing.Size(75, 13);
-            this.labelUpdateLog.TabIndex = 10;
-            this.labelUpdateLog.Text = "Update details";
+            labelUpdateLog.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            labelUpdateLog.AutoSize = true;
+            labelUpdateLog.Location = new System.Drawing.Point(10, 76);
+            labelUpdateLog.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            labelUpdateLog.Name = "labelUpdateLog";
+            labelUpdateLog.Size = new System.Drawing.Size(82, 15);
+            labelUpdateLog.TabIndex = 10;
+            labelUpdateLog.Text = "Update details";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 381);
-            this.Controls.Add(this.richtextUpdateLog);
-            this.Controls.Add(this.labelUpdateLog);
-            this.Controls.Add(this.labelApplicationTitle);
-            this.Controls.Add(this.pictureBoxApplicationLogo);
-            this.Controls.Add(this.update_progress);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(600, 450);
-            this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(600, 350);
-            this.Name = "MainForm";
-            this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Aurora Updater";
-            this.Shown += new System.EventHandler(this.Form1_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxApplicationLogo)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(681, 440);
+            Controls.Add(richtextUpdateLog);
+            Controls.Add(labelUpdateLog);
+            Controls.Add(labelApplicationTitle);
+            Controls.Add(pictureBoxApplicationLogo);
+            Controls.Add(update_progress);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MaximumSize = new System.Drawing.Size(697, 513);
+            MinimizeBox = false;
+            MinimumSize = new System.Drawing.Size(697, 398);
+            Name = "MainForm";
+            RightToLeft = System.Windows.Forms.RightToLeft.No;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "Aurora Updater";
+            Shown += Form1_Shown;
+            ((System.ComponentModel.ISupportInitialize)pictureBoxApplicationLogo).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

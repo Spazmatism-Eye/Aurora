@@ -1,17 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Aurora_Updater;
 
-[JsonObject]
-public class UpdaterConfiguration
+public class UpdaterConfiguration(bool getDevReleases)
 {
     private static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "Config");
     private const string ConfigExtension = ".json";
     
-    public bool GetDevReleases { get; set; }
+    public bool GetDevReleases { get; } = getDevReleases;
 
     public static UpdaterConfiguration Load()
     {
@@ -22,7 +21,7 @@ public class UpdaterConfiguration
         }
         catch (Exception)
         {
-            config = new UpdaterConfiguration();
+            config = new UpdaterConfiguration(false);
         }
 
         return config;
@@ -34,13 +33,13 @@ public class UpdaterConfiguration
         var configPath = ConfigPath + ConfigExtension;
 
         if (!File.Exists(configPath))
-            config = new UpdaterConfiguration();
+            config = new UpdaterConfiguration(false);
         else
         {
             var content = File.ReadAllText(configPath, Encoding.UTF8);
             config = string.IsNullOrWhiteSpace(content)
-                ? new UpdaterConfiguration()
-                : JsonConvert.DeserializeObject<UpdaterConfiguration>(content)!;
+                ? new UpdaterConfiguration(false)
+                : JsonSerializer.Deserialize<UpdaterConfiguration>(content)!;
         }
 
         return config;

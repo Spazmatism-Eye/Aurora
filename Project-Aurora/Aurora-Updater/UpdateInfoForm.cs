@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using Aurora_Updater.Properties;
 
 namespace Aurora_Updater;
 
@@ -19,6 +20,7 @@ public partial class UpdateInfoForm : Form
     public UpdateInfoForm()
     {
         InitializeComponent();
+        Icon = Resources.Aurora_updater;
     }
 
     private void buttonCancel_Click(object? sender, EventArgs e)
