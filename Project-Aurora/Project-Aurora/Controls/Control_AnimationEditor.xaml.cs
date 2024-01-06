@@ -65,9 +65,9 @@ namespace Aurora.Controls
         {
         }
 
-        private void UpdateVirtualKeyboard()
+        private async void UpdateVirtualKeyboard()
         {
-            Grid virtial_kb = Global.kbLayout.AbstractVirtualKeyboard;
+            Grid virtial_kb = await Global.kbLayout.AbstractVirtualKeyboard;
 
             keyboard_grid.Children.Clear();
             keyboard_grid.Children.Add(virtial_kb);

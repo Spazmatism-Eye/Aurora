@@ -59,7 +59,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private readonly Timer _virtualKeyboardTimer = new(8);
     private readonly Action _keyboardTimerCallback;
-    private Grid _virtualKb = new();
 
     public static readonly DependencyProperty FocusedApplicationProperty = DependencyProperty.Register(
         nameof(FocusedApplication), typeof(Application), typeof(ConfigUI),
@@ -72,6 +71,8 @@ partial class ConfigUI : INotifyPropertyChanged
     private readonly Task<DeviceManager> _deviceManager;
 
     private readonly TransparencyComponent _transparencyComponent;
+
+    private readonly Func<Task> _updateKeyboardLayouts;
 
     public Application? FocusedApplication
     {
@@ -105,6 +106,23 @@ partial class ConfigUI : INotifyPropertyChanged
         _deviceManager = deviceManager;
         _lightingStateManager = lightingStateManager;
         _settingsControl = new Control_Settings(rzSdkManager, pluginManager, layoutManager, httpListener, deviceManager, ipcListener);
+        
+        _updateKeyboardLayouts = async () =>
+        {
+            var keyLights = Global.effengine.GetKeyboardLights();
+            (await _layoutManager).SetKeyboardColors(keyLights);
+
+            if (Global.key_recorder?.IsRecording() ?? false)
+            {
+                KeyboardRecordMessage.Visibility = Visibility.Visible;
+                KeyboardViewBorder.BorderBrush = Brushes.Red;
+            }
+            else
+            {
+                KeyboardRecordMessage.Visibility = Visibility.Hidden;
+                KeyboardViewBorder.BorderBrush = Brushes.Transparent;
+            }
+        };
         
         InitializeComponent();
 
@@ -141,25 +159,7 @@ partial class ConfigUI : INotifyPropertyChanged
             _transparencyComponent.SetBackgroundColor(a);
         }
 
-        Dispatcher.BeginInvoke(UpdateKeyboardLayouts, DispatcherPriority.Render);
-        return;
-
-        async void UpdateKeyboardLayouts()
-        {
-            var keyLights = Global.effengine.GetKeyboardLights();
-            (await _layoutManager).SetKeyboardColors(keyLights);
-
-            if (Global.key_recorder?.IsRecording() ?? false)
-            {
-                KeyboardRecordMessage.Visibility = Visibility.Visible;
-                KeyboardViewBorder.BorderBrush = Brushes.Red;
-            }
-            else
-            {
-                KeyboardRecordMessage.Visibility = Visibility.Hidden;
-                KeyboardViewBorder.BorderBrush = Brushes.Transparent;
-            }
-        }
+        Dispatcher.BeginInvoke(_updateKeyboardLayouts, DispatcherPriority.Render);
     }
 
     public async Task Initialize()
@@ -249,20 +249,19 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private async void KbLayout_KeyboardLayoutUpdated(object? sender)
     {
-        _virtualKb = (await _layoutManager).VirtualKeyboard;
+        var keyboardLayoutManager = await _layoutManager;
+        var virtualKb = await keyboardLayoutManager.VirtualKeyboard;
 
         KeyboardGrid.Children.Clear();
-        KeyboardGrid.Children.Add(_virtualKb);
+        KeyboardGrid.Children.Add(virtualKb);
         KeyboardGrid.Children.Add(new LayerEditor());
 
-        KeyboardGrid.Width = _virtualKb.Width;
-
-        KeyboardGrid.Height = _virtualKb.Height;
-
+        KeyboardGrid.Width = virtualKb.Width;
+        KeyboardGrid.Height = virtualKb.Height;
         KeyboardGrid.UpdateLayout();
 
-        KeyboardViewbox.MaxWidth = _virtualKb.Width + 50;
-        KeyboardViewbox.MaxHeight = _virtualKb.Height + 50;
+        KeyboardViewbox.MaxWidth = virtualKb.Width + 50;
+        KeyboardViewbox.MaxHeight = virtualKb.Height + 50;
         KeyboardViewbox.UpdateLayout();
 
         UpdateLayout();
@@ -274,20 +273,21 @@ partial class ConfigUI : INotifyPropertyChanged
 
         _currentColor = _desktopColorScheme;
 
-        _virtualKb = (await _layoutManager).VirtualKeyboard;
+        var keyboardLayoutManager = await _layoutManager;
+        var virtualKb = await keyboardLayoutManager.VirtualKeyboard;
 
         KeyboardGrid.Children.Clear();
-        KeyboardGrid.Children.Add(_virtualKb);
+        KeyboardGrid.Children.Add(virtualKb);
         KeyboardGrid.Children.Add(new LayerEditor());
 
-        KeyboardGrid.Width = _virtualKb.Width;
+        KeyboardGrid.Width = virtualKb.Width;
 
-        KeyboardGrid.Height = _virtualKb.Height;
+        KeyboardGrid.Height = virtualKb.Height;
 
         KeyboardGrid.UpdateLayout();
 
-        KeyboardViewbox.MaxWidth = _virtualKb.Width + 50;
-        KeyboardViewbox.MaxHeight = _virtualKb.Height + 50;
+        KeyboardViewbox.MaxWidth = virtualKb.Width + 50;
+        KeyboardViewbox.MaxHeight = virtualKb.Height + 50;
         KeyboardViewbox.UpdateLayout();
 
         UpdateManagerStackFocus(ctrlLayerManager);

@@ -51,27 +51,27 @@
                 <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical">
                     <ComboBox SelectedValue="{Binding KeyboardLocalization}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:PreferredKeyboardLocalization}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding KeyboardBrand}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:PreferredKeyboard}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding MousePreference}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:PreferredMouse}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding MousepadPreference}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:PreferredMousepad}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding HeadsetPreference}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:PreferredHeadset}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding ChromaLedsPreference}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:PreferredChromaLeds}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding VirtualkeyboardKeycapType}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:KeycapType}}" DisplayMemberPath="Text"
@@ -79,14 +79,14 @@
                               Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding MouseOrientation}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:MouseOrientationType}}"
-                              DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="LoadBrandDefault"
+                              DisplayMemberPath="Text" SelectedValuePath="Value"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding BitmapAccuracy}" ItemsSource="{Binding BitmapAccuracies}"
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </StackPanel>
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                     <CheckBox Content="Allow Aurora wrappers to take priority over desktop profile while active"
-                              IsChecked="{Binding AllowWrappersInBackground}" Grid.Row="1" Margin="0,1,0,1"
+                              IsChecked="{Binding AllowWrappersInBackground}" Margin="0,1,0,1"
                               HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <CheckBox Content="Disable Keyboard Lighting" IsChecked="{Binding DevicesDisableKeyboard}"
                               Checked="ResetDevices" Unchecked="ResetDevices" Margin="0,1,0,1" />
@@ -178,21 +178,8 @@ ToolTip="Disabling device control will stop ChromaSDK from controlling Razer Dev
                                 Margin="5 0 5 0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                 Click="Lightsync_install_button_Click" />
 
-                        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" >
-                            <Label x:Name="LightsyncConnectionStatusLabel" Margin="5 0 5 0"
-                                   Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left" />
-                        
-                            <Border Name="LightsyncInfo" ToolTipService.InitialShowDelay="0" ToolTipService.BetweenShowDelay="0"
-                                    ToolTip="On some systems this only works after restarts!"
-                                    CornerRadius="50"
-                                    Width="18" Height="17"
-                                    Padding="1,0,1,0"
-                                    Background="Orange"
-                                    BorderBrush="Black"
-                                    BorderThickness="1">
-                                <TextBlock HorizontalAlignment="Center" Text="!" Foreground="Black" />
-                            </Border>
-                        </StackPanel>
+                        <Label x:Name="LightsyncConnectionStatusLabel" Margin="5 0 5 0" Grid.Row="1" Grid.Column="2"
+                               Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left" />
 
                         <Label Grid.Row="2" Grid.Column="0" Content="Current Application:" Margin="5 0 5 0" Padding="0"
                                VerticalAlignment="Center" />

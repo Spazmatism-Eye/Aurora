@@ -1,353 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Aurora.Devices;
 using Aurora.Settings.Controls.Keycaps;
+using Aurora.Settings.Layouts;
 using Aurora.Utils;
 using Common;
 using Common.Devices;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using RazerSdkReader;
 using Application = System.Windows.Application;
 using Color = System.Drawing.Color;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using Image = System.Windows.Controls.Image;
-using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.MessageBox;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace Aurora.Settings;
 
-[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class KeyboardKey
-{
-    private DeviceKeys? _tag;
-    private double? _marginLeft;
-    private double? _marginTop;
-    private double? _width;
-    private double? _height;
-    private double? _fontSize;
-    private bool? _lineBreak;
-    private bool? _absoluteLocation;
-
-    [JsonProperty("visualName")]
-    public string VisualName { get; private set; }
-
-    public DeviceKeys Tag
-    {
-        get => _tag.GetValueOrDefault();
-        set => _tag = value;
-    }
-
-    public bool LineBreak
-    {
-        get => _lineBreak.GetValueOrDefault();
-        set => _lineBreak = value;
-    }
-
-    public double MarginLeft
-    {
-        get => _marginLeft.GetValueOrDefault();
-        set => _marginLeft = value;
-    }
-
-    public double MarginTop
-    {
-        get => _marginTop.GetValueOrDefault();
-        set => _marginTop = value;
-    }
-
-    public double Width
-    {
-        get => _width.GetValueOrDefault(30);
-        set => _width = value;
-    }
-
-    public double Height
-    {
-        get => _height.GetValueOrDefault(30);
-        set => _height = value;
-    }
-
-    public double FontSize
-    {
-        get => _fontSize.GetValueOrDefault(12);
-        set => _fontSize = value;
-    }
-
-    public bool? Enabled { get; set; } = true;
-
-    public bool AbsoluteLocation
-    {
-        get => _absoluteLocation.GetValueOrDefault();
-        set => _absoluteLocation = value;
-    }
-
-    public string Image { get; set; } = "";
-    public int ZIndex { get; set; }
-
-    public void UpdateFromOtherKey(KeyboardKey otherKey)
-    {
-        if (otherKey == null) return;
-        if (otherKey.VisualName != null) VisualName = otherKey.VisualName;
-        if (otherKey._tag != null) Tag = otherKey.Tag;
-        if (otherKey._lineBreak != null) LineBreak = otherKey.LineBreak;
-        if (otherKey._width != null) Width = otherKey.Width;
-        if (otherKey._height != null) Height = otherKey.Height;
-        if (otherKey._fontSize != null) FontSize = otherKey.FontSize;
-        if (otherKey._marginLeft != null) MarginLeft = otherKey.MarginLeft;
-        if (otherKey._marginTop != null) MarginTop = otherKey.MarginTop;
-        if (otherKey.Enabled != null) Enabled = otherKey.Enabled;
-        if (otherKey._absoluteLocation != null) AbsoluteLocation = otherKey.AbsoluteLocation;
-    }
-}
-
-public enum KeyboardRegion
-{
-    TopLeft = 1,
-    TopRight = 2,
-    BottomLeft = 3,
-    BottomRight = 4
-}
-
-[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class VirtualGroupConfiguration
-{
-    public DeviceKeys[] KeysToRemove { get; set; } = Array.Empty<DeviceKeys>();
-
-    public Dictionary<DeviceKeys, KeyboardKey> KeyModifications { get; set; } = new();
-
-    public Dictionary<DeviceKeys, DeviceKeys> KeyConversion { get; set; } = new();
-
-    /// <summary>
-    /// A list of paths for each included group json
-    /// </summary>
-    public string[] IncludedFeatures { get; set; } = { };
-}
-
-[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class VirtualGroup
-{
-    public KeyboardRegion OriginRegion { get; set; }
-
-    public List<KeyboardKey> GroupedKeys { get; set; } = new();
-
-    private readonly Dictionary<DeviceKeys, string> _keyText = new();
-
-    private RectangleF _region = new(0, 0, 0, 0);
-
-    public RectangleF Region => _region;
-
-    public Dictionary<DeviceKeys, DeviceKeys> KeyConversion { get; set; }
-
-    public VirtualGroup()
-    {
-    }
-
-    public VirtualGroup(KeyboardKey[] keys)
-    {
-        double layoutHeight = 0;
-        double layoutWidth = 0;
-        double currentHeight = 0;
-        double currentWidth = 0;
-
-        foreach (var key in keys)
-        {
-            GroupedKeys.Add(key);
-            _keyText.Add(key.Tag, key.VisualName);
-
-            if (key.Width + key.MarginLeft > 0)
-                currentWidth += key.Width + key.MarginLeft;
-
-            if (key.MarginTop > 0)
-                currentHeight += key.MarginTop;
-
-            if (layoutWidth < currentWidth)
-                layoutWidth = currentWidth;
-
-            if (key.LineBreak)
-            {
-                currentHeight += 37;
-                currentWidth = 0;
-            }
-
-            if (layoutHeight < currentHeight)
-                layoutHeight = currentHeight;
-        }
-
-        _region.Width = (float) layoutWidth;
-        _region.Height = (float) layoutHeight;
-    }
-
-    public void AddFeature(KeyboardKey[] keys, KeyboardRegion insertionRegion = KeyboardRegion.TopLeft)
-    {
-        double locationX = 0.0D;
-        double locationY = 0.0D;
-
-        switch (insertionRegion)
-        {
-            case KeyboardRegion.TopRight:
-                locationX = _region.Width;
-                break;
-            case KeyboardRegion.BottomLeft:
-                locationY = _region.Height;
-                break;
-            case KeyboardRegion.BottomRight:
-                locationX = _region.Width;
-                locationY = _region.Height;
-                break;
-        }
-
-        float addedWidth = 0.0f;
-        float addedHeight = 0.0f;
-
-        foreach (var key in keys)
-        {
-            key.MarginLeft += locationX;
-            key.MarginTop += locationY;
-
-            GroupedKeys.Add(key);
-            if (_keyText.ContainsKey(key.Tag))
-                _keyText.Remove(key.Tag);
-            _keyText.Add(key.Tag, key.VisualName);
-
-            if (key.Width + key.MarginLeft > _region.Width)
-                _region.Width = (float) (key.Width + key.MarginLeft);
-            else if (key.MarginLeft + addedWidth < 0)
-            {
-                addedWidth = -(float) key.MarginLeft;
-                _region.Width -= (float) key.MarginLeft;
-            }
-
-            if (key.Height + key.MarginTop > _region.Height)
-                _region.Height = (float) (key.Height + key.MarginTop);
-            else if (key.MarginTop + addedHeight < 0)
-            {
-                addedHeight = -(float) key.MarginTop;
-                _region.Height -= (float) key.MarginTop;
-            }
-        }
-
-        NormalizeKeys();
-    }
-
-    private void NormalizeKeys()
-    {
-        double xCorrection = 0.0D;
-        double yCorrection = 0.0D;
-
-        foreach (var key in GroupedKeys.Where(key => key.AbsoluteLocation))
-        {
-            if (key.MarginLeft < xCorrection)
-                xCorrection = key.MarginLeft;
-
-            if (key.MarginTop < yCorrection)
-                yCorrection = key.MarginTop;
-        }
-
-        if (GroupedKeys.Count <= 0) return;
-        GroupedKeys[0].MarginTop -= yCorrection;
-
-        bool previousLinebreak = true;
-        foreach (var key in GroupedKeys)
-        {
-            if (key.AbsoluteLocation)
-            {
-                key.MarginTop -= yCorrection;
-                key.MarginLeft -= xCorrection;
-            }
-            else
-            {
-                if (previousLinebreak && !key.LineBreak)
-                {
-                    key.MarginLeft -= xCorrection;
-                }
-
-                previousLinebreak = key.LineBreak;
-            }
-        }
-    }
-
-    internal void AdjustKeys(Dictionary<DeviceKeys, KeyboardKey> keys)
-    {
-        var applicableKeys = GroupedKeys.FindAll(key => keys.ContainsKey(key.Tag));
-
-        foreach (var key in applicableKeys)
-        {
-            KeyboardKey otherKey = keys[key.Tag];
-            if (key.Tag != otherKey.Tag)
-                _keyText.Remove(key.Tag);
-            key.UpdateFromOtherKey(otherKey);
-            if (_keyText.ContainsKey(key.Tag))
-                _keyText[key.Tag] = key.VisualName;
-            else
-                _keyText.Add(key.Tag, key.VisualName);
-        }
-    }
-
-    internal void RemoveKeys(DeviceKeys[] keysToRemove)
-    {
-        GroupedKeys.RemoveAll(key => keysToRemove.Contains(key.Tag));
-
-        double layoutHeight = 0;
-        double layoutWidth = 0;
-        double currentHeight = 0;
-        double currentWidth = 0;
-
-        foreach (var key in GroupedKeys)
-        {
-            if (key.Width + key.MarginLeft > 0)
-                currentWidth += key.Width + key.MarginLeft;
-
-            if (key.MarginTop > 0)
-                currentHeight += key.MarginTop;
-
-
-            if (layoutWidth < currentWidth)
-                layoutWidth = currentWidth;
-
-            if (key.LineBreak)
-            {
-                currentHeight += 37;
-                currentWidth = 0;
-            }
-
-            if (layoutHeight < currentHeight)
-                layoutHeight = currentHeight;
-
-            _keyText.Remove(key.Tag);
-        }
-
-        _region.Width = (float) layoutWidth;
-        _region.Height = (float) layoutHeight;
-    }
-}
+[JsonSerializable(typeof(VirtualGroup))]
+[JsonSerializable(typeof(VirtualGroupConfiguration))]
+[JsonSerializable(typeof(KeyboardLayout))]
+internal partial class LayoutsSourceGenerationContext : JsonSerializerContext;
 
 public class KeyboardLayoutManager
 {
+    private static readonly SemaphoreSlim GenerateLock = new(1, 1);
+
+    private const string CulturesFolder = "kb_layouts";
+    
     public Dictionary<DeviceKeys, DeviceKeys> LayoutKeyConversion { get; private set; } = new();
 
-    private VirtualGroup _virtualKeyboardGroup;
+    private readonly VirtualGroup _virtualKeyboardGroup = new();
 
     private readonly Dictionary<DeviceKeys, Keycap> _virtualKeyboardMap = new();
 
     private bool _virtualKbInvalid = true;
 
-    public Grid VirtualKeyboard { get; private set; } = new();
+    public Task<Grid> VirtualKeyboard { get; }
 
-    public Grid AbstractVirtualKeyboard => CreateUserControl(true);
+    public Task<Grid> AbstractVirtualKeyboard => CreateUserControl(true);
 
     private bool _bitmapMapInvalid = true;
 
@@ -355,18 +53,29 @@ public class KeyboardLayoutManager
 
     public event LayoutUpdatedEventHandler? KeyboardLayoutUpdated;
 
-    private const string CulturesFolder = "kb_layouts";
-
     public PreferredKeyboardLocalization LoadedLocalization { get; private set; } = PreferredKeyboardLocalization.None;
 
     private readonly string _layoutsPath;
 
-    private Task<ChromaReader?> _rzSdk;
+    private readonly Task<ChromaReader?> _rzSdk;
 
     public KeyboardLayoutManager(Task<ChromaReader?> rzSdk)
     {
         _rzSdk = rzSdk;
         _layoutsPath = Path.Combine(Global.ExecutingDirectory, CulturesFolder);
+        var vkTcs = new TaskCompletionSource<Grid>(TaskCreationOptions.RunContinuationsAsynchronously);
+        VirtualKeyboard = vkTcs.Task;
+        Application.Current.Dispatcher.BeginInvoke(() =>
+        {
+            var grid = new Grid{ Width = 8, Height = 8, MaxWidth = double.PositiveInfinity, MaxHeight = double.PositiveInfinity };
+            vkTcs.SetResult(grid);
+        }, DispatcherPriority.Loaded);
+    }
+
+    public async Task Initialize()
+    {
+        await LoadBrandDefault();
+
         Global.Configuration.PropertyChanged += Configuration_PropertyChanged;
     }
 
@@ -394,7 +103,6 @@ public class KeyboardLayoutManager
         try
         {
 #endif
-
             //Load keyboard layout
             if (!Directory.Exists(_layoutsPath))
             {
@@ -584,14 +292,16 @@ public class KeyboardLayoutManager
         _virtualKbInvalid = true;
         CalculateBitmap();
 
-        Application.Current.Dispatcher.Invoke(() =>
+        await Application.Current.Dispatcher.BeginInvoke(async () =>
         {
-            CreateUserControl();
+            await GenerateLock.WaitAsync();
+            await CreateUserControl();
             KeyboardLayoutUpdated?.Invoke(this);
+            GenerateLock.Release();
         }, DispatcherPriority.Send);
     }
 
-    private bool LoadLayout(string path, out VirtualGroup layout)
+    private bool LoadLayout(string path, [MaybeNullWhen(false)] out VirtualGroup layout)
     {
         if (!File.Exists(path))
         {
@@ -601,8 +311,7 @@ public class KeyboardLayoutManager
         }
 
         var featureContent = File.ReadAllText(path, Encoding.UTF8);
-        layout = JsonConvert.DeserializeObject<VirtualGroup>(featureContent,
-            new JsonSerializerSettings {ObjectCreationHandling = ObjectCreationHandling.Replace})!;
+        layout = JsonSerializer.Deserialize(featureContent, LayoutsSourceGenerationContext.Default.VirtualGroup)!;
         return true;
     }
 
@@ -615,12 +324,7 @@ public class KeyboardLayoutManager
         }
 
         var content = File.ReadAllText(layoutConfigPath, Encoding.UTF8);
-        var layoutConfig = JsonConvert.DeserializeObject<VirtualGroupConfiguration>(content,
-            new JsonSerializerSettings
-            {
-                ObjectCreationHandling = ObjectCreationHandling.Replace,
-                NullValueHandling = NullValueHandling.Ignore
-            })!;
+        var layoutConfig = JsonSerializer.Deserialize(content, LayoutsSourceGenerationContext.Default.VirtualGroupConfiguration)!;
 
         _virtualKeyboardGroup.AdjustKeys(layoutConfig.KeyModifications);
         _virtualKeyboardGroup.RemoveKeys(layoutConfig.KeysToRemove);
@@ -636,15 +340,13 @@ public class KeyboardLayoutManager
 
             if (!File.Exists(featurePath)) continue;
             var featureContent = File.ReadAllText(featurePath, Encoding.UTF8);
-            var featureConfig = JsonConvert.DeserializeObject<VirtualGroup>(featureContent,
-                new JsonSerializerSettings {ObjectCreationHandling = ObjectCreationHandling.Replace})!;
+            var featureConfig = JsonSerializer.Deserialize(featureContent, LayoutsSourceGenerationContext.Default.VirtualGroup)!;
 
             _virtualKeyboardGroup.AddFeature(featureConfig.GroupedKeys.ToArray(), featureConfig.OriginRegion);
-            if (featureConfig.KeyConversion == null) continue;
-            foreach (var key in featureConfig.KeyConversion)
+
+            foreach (var key in featureConfig.KeyConversion.Where(key => !LayoutKeyConversion.ContainsKey(key.Key)))
             {
-                if (!LayoutKeyConversion.ContainsKey(key.Key))
-                    LayoutKeyConversion.Add(key.Key, key.Value);
+                LayoutKeyConversion.Add(key.Key, key.Value);
             }
         }
     }
@@ -704,16 +406,25 @@ public class KeyboardLayoutManager
 
     private void Configuration_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e is not {PropertyName: nameof(Configuration.BitmapAccuracy)}) return;
+        IEnumerable<string> relatedProperties = [
+            nameof(Configuration.BitmapAccuracy),
+            nameof(Configuration.KeyboardBrand), nameof(Configuration.KeyboardLocalization),
+            nameof(Configuration.MousePreference), nameof(Configuration.MouseOrientation),
+            nameof(Configuration.MousepadPreference),
+            nameof(Configuration.HeadsetPreference),
+            nameof(Configuration.ChromaLedsPreference)
+        ];
+        if (!relatedProperties.Contains(e.PropertyName)) return;
+ 
         _pixelToByte = DefaultPixelToByte;
 
-        Global.LightingStateManager.PreUpdate += LightingStateManager_PostUpdate;
+        Global.LightingStateManager.PreUpdate += LightingStateManager_PreUpdate;
     }
 
-    private async void LightingStateManager_PostUpdate(object? sender, EventArgs e)
+    private async void LightingStateManager_PreUpdate(object? sender, EventArgs e)
     {
         await LoadBrandDefault();
-        Global.LightingStateManager.PreUpdate -= LightingStateManager_PostUpdate;
+        Global.LightingStateManager.PreUpdate -= LightingStateManager_PreUpdate;
     }
 
     private void CalculateBitmap()
@@ -780,186 +491,23 @@ public class KeyboardLayoutManager
         Global.effengine.SetBitmapping(bitmapMap);
     }
 
-    private Grid CreateUserControl(bool abstractKeycaps = false)
+    private async Task<Grid> CreateUserControl(bool abstractKeycaps = false)
     {
         if (_virtualKbInvalid && !abstractKeycaps)
             _virtualKeyboardMap.Clear();
 
-        Grid newVirtualKeyboard = new Grid();
+        var kcg = new KeyboardControlGenerator(abstractKeycaps, _virtualKeyboardGroup, _virtualKeyboardMap, _layoutsPath, await VirtualKeyboard);
 
-        double layoutHeight = 0;
-        double layoutWidth = 0;
+        if (!_virtualKbInvalid || abstractKeycaps) return await kcg.Generate();
 
-        double baselineX = 0.0;
-        double baselineY = 0.0;
-        double currentHeight = 0;
-        double currentWidth = 0;
+        Effects.GridBaselineX = (float)kcg.BaselineX;
+        Effects.GridBaselineY = (float)kcg.BaselineY;
+        Effects.GridHeight = (float)(await VirtualKeyboard).Height;
+        Effects.GridWidth = (float)(await VirtualKeyboard).Width;
 
-        string imagesPath = Path.Combine(_layoutsPath, "Extra Features", "images");
+        _virtualKbInvalid = false;
 
-        foreach (KeyboardKey key in _virtualKeyboardGroup.GroupedKeys.OrderBy(a => a.ZIndex))
-        {
-            double keyMarginLeft = key.MarginLeft;
-            double keyMarginTop = key.MarginTop;
-
-            string imagePath = "";
-
-            if (!string.IsNullOrWhiteSpace(key.Image))
-                imagePath = Path.Combine(imagesPath, key.Image);
-
-            UserControl keycap;
-
-            //Ghost keycap is used for abstract representation of keys
-            if (abstractKeycaps)
-                keycap = new Control_GhostKeycap(key, imagePath);
-            else
-            {
-                switch (Global.Configuration.VirtualkeyboardKeycapType)
-                {
-                    case KeycapType.Default_backglow:
-                        keycap = new Control_DefaultKeycapBackglow(key, imagePath);
-                        break;
-                    case KeycapType.Default_backglow_only:
-                        keycap = new Control_DefaultKeycapBackglowOnly(key, imagePath);
-                        break;
-                    case KeycapType.Colorized:
-                        keycap = new Control_ColorizedKeycap(key, imagePath);
-                        break;
-                    case KeycapType.Colorized_blank:
-                        keycap = new Control_ColorizedKeycapBlank(key, imagePath);
-                        break;
-                    default:
-                        keycap = new Control_DefaultKeycap(key, imagePath);
-                        break;
-                }
-            }
-
-            newVirtualKeyboard.Children.Add(keycap);
-
-            if (key.Tag != DeviceKeys.NONE && !_virtualKeyboardMap.ContainsKey(key.Tag) && keycap is Keycap kc &&
-                !abstractKeycaps)
-                _virtualKeyboardMap.Add(key.Tag, kc);
-
-            if (key.AbsoluteLocation)
-                keycap.Margin = new Thickness(key.MarginLeft, key.MarginTop, 0, 0);
-            else
-                keycap.Margin = new Thickness(currentWidth + key.MarginLeft, currentHeight + key.MarginTop, 0, 0);
-
-            if (key.Tag == DeviceKeys.ESC)
-            {
-                baselineX = keycap.Margin.Left;
-                baselineY = keycap.Margin.Top;
-            }
-
-            if (!key.AbsoluteLocation)
-            {
-                if (key.Width + keyMarginLeft > 0)
-                    currentWidth += key.Width + keyMarginLeft;
-
-                if (keyMarginTop > 0)
-                    currentHeight += keyMarginTop;
-
-
-                if (layoutWidth < currentWidth)
-                    layoutWidth = currentWidth;
-
-                if (key.LineBreak)
-                {
-                    currentHeight += 37;
-                    currentWidth = 0;
-                }
-
-                if (layoutHeight < currentHeight)
-                    layoutHeight = currentHeight;
-            }
-        }
-
-        if (_virtualKeyboardGroup.GroupedKeys.Count == 0)
-        {
-            //No items, display error
-            Label errorMessage = new Label();
-
-            DockPanel infoPanel = new DockPanel();
-
-            TextBlock infoMessage = new TextBlock
-            {
-                Text = "No keyboard selected\r\nPlease select your keyboard in the settings",
-                TextAlignment = TextAlignment.Center,
-                Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 0, 0)),
-            };
-
-            DockPanel.SetDock(infoMessage, Dock.Top);
-            infoPanel.Children.Add(infoMessage);
-
-            DockPanel infoInstruction = new DockPanel();
-
-            infoInstruction.Children.Add(new TextBlock
-            {
-                Text = "Press (",
-                Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 0, 0)),
-                VerticalAlignment = VerticalAlignment.Center
-            });
-
-            infoInstruction.Children.Add(new Image
-            {
-                Source = new BitmapImage(new Uri(@"Resources/settings_icon.png", UriKind.Relative)),
-                Stretch = Stretch.Uniform,
-                Height = 40.0,
-                VerticalAlignment = VerticalAlignment.Center
-            });
-
-            infoInstruction.Children.Add(new TextBlock
-            {
-                Text = ") and go into \"Devices & Wrappers\" tab",
-                Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 255, 0, 0)),
-                VerticalAlignment = VerticalAlignment.Center
-            });
-
-            DockPanel.SetDock(infoInstruction, Dock.Bottom);
-            infoPanel.Children.Add(infoInstruction);
-
-            errorMessage.Content = infoPanel;
-
-            errorMessage.FontSize = 16.0;
-            errorMessage.FontWeight = FontWeights.Bold;
-            errorMessage.HorizontalContentAlignment = HorizontalAlignment.Center;
-            errorMessage.VerticalContentAlignment = VerticalAlignment.Center;
-
-            newVirtualKeyboard.Children.Add(errorMessage);
-
-            //Update size
-            newVirtualKeyboard.Width = 850;
-            newVirtualKeyboard.Height = 200;
-        }
-        else
-        {
-            //Update size
-            newVirtualKeyboard.Width = _virtualKeyboardGroup.Region.Width;
-            newVirtualKeyboard.Height = _virtualKeyboardGroup.Region.Height;
-        }
-
-        if (_virtualKbInvalid && !abstractKeycaps)
-        {
-            VirtualKeyboard.Children.Clear();
-            VirtualKeyboard = newVirtualKeyboard;
-
-            Effects.GridBaselineX = (float) baselineX;
-            Effects.GridBaselineY = (float) baselineY;
-            Effects.GridHeight = (float) newVirtualKeyboard.Height;
-            Effects.GridWidth = (float) newVirtualKeyboard.Width;
-
-            _virtualKbInvalid = false;
-        }
-
-        return newVirtualKeyboard;
-    }
-
-    [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-    private sealed class KeyboardLayout
-    {
-        public Dictionary<DeviceKeys, DeviceKeys> KeyConversion;
-
-        public KeyboardKey[] Keys;
+        return await kcg.Generate();
     }
 
     private void LoadCulture(string culture)
@@ -973,12 +521,11 @@ public class KeyboardLayoutManager
         }
 
         var content = File.ReadAllText(layoutPath, Encoding.UTF8);
-        var keyboard = JsonConvert.DeserializeObject<KeyboardLayout>(content,
-            new JsonSerializerSettings {ObjectCreationHandling = ObjectCreationHandling.Replace})!;
+        var keyboard = JsonSerializer.Deserialize(content, LayoutsSourceGenerationContext.Default.KeyboardLayout)!;
 
-        _virtualKeyboardGroup = new VirtualGroup(keyboard.Keys);
+        _virtualKeyboardGroup.Clear(keyboard.Keys);
 
-        LayoutKeyConversion = keyboard.KeyConversion ?? new Dictionary<DeviceKeys, DeviceKeys>();
+        LayoutKeyConversion = keyboard.KeyConversion;
     }
 
     public void SetKeyboardColors(Dictionary<DeviceKeys, SimpleColor> keyLights)

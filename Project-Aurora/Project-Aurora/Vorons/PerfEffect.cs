@@ -260,7 +260,7 @@ namespace Aurora.Vorons
 
 		private static readonly ConcurrentQueue<IntervalPerformanceCounter> NewCounters = new();
 
-		public static Tuple<string, string, string>[] InternalRegisteredCounters
+		public static IEnumerable<Tuple<string, string, string>> InternalRegisteredCounters
 		{
 			get
 			{
@@ -351,19 +351,19 @@ namespace Aurora.Vorons
 						interval.NextUpdate = time.AddMilliseconds(interval.Interval);
 						foreach (var counter in interval)
 						{
-							if (Volatile.Read(ref counter.counterUsage) > 0)
+							if (Volatile.Read(ref counter._counterUsage) > 0)
 							{
 								try
 								{
-									Volatile.Write(ref counter.lastFrame,
-										new CounterFrame(counter.lastFrame.CurrentValue, counter.newSample()));
+									Volatile.Write(ref counter._lastFrame,
+										new CounterFrame(counter._lastFrame.CurrentValue, counter._newSample()));
 								}
 								catch (Exception exc)
 								{
 									Global.logger.Error(exc, "IntervalPerformanceCounter exception in {0}/{1}/{2}/{3}: {4}",
 										counter.CategoryName, counter.CounterName, counter.InstanceName, counter.UpdateInterval);
 								}
-								counter.counterUsage--;
+								counter._counterUsage--;
 								activeCounters = true;
 							}
 						}
@@ -385,25 +385,13 @@ namespace Aurora.Vorons
 		public sealed partial class IntervalPerformanceCounter
 		{
 			public Tuple<string, string, string, long> Key { get; private set; }
-			public string CategoryName
-			{
-				get { return Key.Item1; }
-			}
+			public string CategoryName => Key.Item1;
 
-			public string CounterName
-			{
-				get { return Key.Item2; }
-			}
+			public string CounterName => Key.Item2;
 
-			public string InstanceName
-			{
-				get { return Key.Item3; }
-			}
+			public string InstanceName => Key.Item3;
 
-			public long UpdateInterval
-			{
-				get { return Key.Item4; }
-			}
+			public long UpdateInterval => Key.Item4;
 
 			public int IdleTimeout { get; private set; }
 
@@ -421,14 +409,14 @@ namespace Aurora.Vorons
 				}
 			}
 
-			private CounterFrame lastFrame = new(0, 0);
-			private readonly Func<float> newSample;
+			private CounterFrame _lastFrame = new(0, 0);
+			private readonly Func<float> _newSample;
 
-			private int counterUsage;
+			private int _counterUsage;
 
 			public float GetValue(bool easing = true)
 			{
-				Volatile.Write(ref counterUsage, IdleTimeout);
+				Volatile.Write(ref _counterUsage, IdleTimeout);
 
 				if (Volatile.Read(ref sleeping) == 1)
 				{
@@ -438,17 +426,17 @@ namespace Aurora.Vorons
 					}
 				}
 
-				var frame = Volatile.Read(ref lastFrame);
+				var frame = Volatile.Read(ref _lastFrame);
 				if (!easing)
 					return frame.CurrentValue;
 
 				return frame.PreviousValue + (frame.CurrentValue - frame.PreviousValue) *
-					   Math.Min(Utils.Time.GetMillisecondsSinceEpoch() - frame.Timestamp, UpdateInterval) / UpdateInterval;
+					   Math.Min(Time.GetMillisecondsSinceEpoch() - frame.Timestamp, UpdateInterval) / UpdateInterval;
 			}
 
 			public IntervalPerformanceCounter(Tuple<string, string, string, long> key, int idleTimeout, Func<float> newSample)
 			{
-				this.newSample = newSample;
+				_newSample = newSample;
 				Key = key;
 				IdleTimeout = idleTimeout;
 			}
