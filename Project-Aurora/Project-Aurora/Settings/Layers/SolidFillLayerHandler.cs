@@ -6,13 +6,15 @@ using System.Drawing;
 using System.Windows.Controls;
 using Aurora.Settings.Layers.Controls;
 using Common.Utils;
-using Lombok.NET;
 
 namespace Aurora.Settings.Layers;
 
-[NoArgsConstructor]
-public partial class SolidFillLayerHandlerProperties : LayerHandlerProperties<SolidFillLayerHandlerProperties>
+public class SolidFillLayerHandlerProperties : LayerHandlerProperties<SolidFillLayerHandlerProperties>
 {
+    public SolidFillLayerHandlerProperties()
+    {
+    }
+
     public SolidFillLayerHandlerProperties(bool arg = false) : base(arg)
     {
     }

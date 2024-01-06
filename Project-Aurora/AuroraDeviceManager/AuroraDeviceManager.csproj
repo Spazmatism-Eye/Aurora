@@ -75,7 +75,7 @@
         <PackageReference Include="CS-Script" Version="4.6.2" />
         <PackageReference Include="hidlibrary" Version="3.3.40" />
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
-        <PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
         <PackageReference Include="OpenRGB.NET" Version="2.2.0" />
         <!--
         Waiting for #338 and #339 on rgb.net
@@ -88,7 +88,7 @@
         <PackageReference Include="RGB.NET.Devices.SteelSeries" Version="2.0.0" />
         <PackageReference Include="RGB.NET.Devices.Wooting" Version="2.0.0" />
         <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-        <PackageReference Include="System.Management" Version="7.0.2" />
+        <PackageReference Include="System.Management" Version="8.0.0" />
         <PackageReference Include="Vulcan.NET" Version="2.2.0" />
         <PackageReference Include="Wooting.NET" Version="1.2.0" />
 
