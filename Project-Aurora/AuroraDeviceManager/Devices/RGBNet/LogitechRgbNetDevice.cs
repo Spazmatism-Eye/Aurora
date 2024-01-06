@@ -1,5 +1,4 @@
-﻿using Common.Devices;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using RGB.NET.Core;
 using RGB.NET.Devices.Logitech;
 

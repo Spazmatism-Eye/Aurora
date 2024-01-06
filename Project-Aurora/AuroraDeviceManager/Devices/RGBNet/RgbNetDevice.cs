@@ -244,7 +244,7 @@ public abstract class RgbNetDevice : DefaultDevice
         {
             if (!RgbNetKeyMappings.AuroraToRgbNet.TryGetValue(key, out var rgbNetLedId))
                 continue;
-            
+
             var led = device[rgbNetLedId];
             if (led == null)
             {
