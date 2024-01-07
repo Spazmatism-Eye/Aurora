@@ -592,10 +592,10 @@ public enum ApplicationDetectionMode
 public enum BitmapAccuracy
 {
     [UsedImplicitly]
-    Best = 1,
+    BestOld = 1,
     [UsedImplicitly]
-    Great = 3,
-    Good = 6,
-    Okay = 9,
-    Fine = 12
+    GreatOld = 3,
+    Best = 6,
+    Good = 9,
+    Lowest = 12,
 }

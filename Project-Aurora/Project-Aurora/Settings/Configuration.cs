@@ -43,7 +43,7 @@ public class Configuration : INotifyPropertyChanged
     public bool GetDevReleases { get; set; }
     public bool GetPointerUpdates { get; set; } = true;
     public bool HighPriority { get; set; }
-    public BitmapAccuracy BitmapAccuracy { get; set; } = BitmapAccuracy.Okay;
+    public BitmapAccuracy BitmapAccuracy { get; set; } = BitmapAccuracy.Good;
     public bool EnableAudioCapture { get; set; }
     public bool EnableMediaInfo { get; set; } = true;
     public bool EnableInputCapture { get; set; } = true;
@@ -95,9 +95,9 @@ public class Configuration : INotifyPropertyChanged
 
     public List<BitmapAccuracy> BitmapAccuracies { get; } = new()
     {
+        BitmapAccuracy.Best,
         BitmapAccuracy.Good,
-        BitmapAccuracy.Okay,
-        BitmapAccuracy.Fine
+        BitmapAccuracy.Lowest
     };
 
     //Blackout and Night theme
