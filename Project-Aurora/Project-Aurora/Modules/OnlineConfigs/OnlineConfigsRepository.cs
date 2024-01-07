@@ -4,8 +4,8 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Aurora.Modules.Blacklist.Model;
 using Aurora.Modules.OnlineConfigs.Model;
 using Aurora.Utils;
 
@@ -29,7 +29,8 @@ public static class OnlineConfigsRepository
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
-        Converters = { new DateTimeOffsetConverterUsingDateTimeParse() }
+        Converters = { new DateTimeOffsetConverterUsingDateTimeParse() },
+        TypeInfoResolverChain = { OnlineSettingsSourceGenerationContext.Default }
     };
 
     public static async Task<ConflictingProcesses> GetConflictingProcesses()

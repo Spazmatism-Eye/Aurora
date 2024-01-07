@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Aurora.Devices;
-using Aurora.Modules.Blacklist.Model;
 using Aurora.Modules.OnlineConfigs;
 using Aurora.Modules.OnlineConfigs.Model;
 using Aurora.Modules.ProcessMonitor;

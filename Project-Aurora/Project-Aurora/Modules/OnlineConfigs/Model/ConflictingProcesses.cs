@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace Aurora.Modules.Blacklist.Model;
+namespace Aurora.Modules.OnlineConfigs.Model;
 
-[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class ConflictingProcesses
 {
+    [JsonPropertyName("shutdownAurora")]
     public List<ShutdownProcess>? ShutdownAurora { get; set; }
 }
 
-[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class ShutdownProcess
 {
+    [JsonPropertyName("processName")]
     public string ProcessName { get; set; } = "unset";
+
+    [JsonPropertyName("reason")]
     public string? Reason { get; set; }
 }
