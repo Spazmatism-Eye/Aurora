@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Aurora.Modules.ProcessMonitor;
 
-public class RunningProcessChanged: EventArgs
+public class ProcessStarted(string processName) : EventArgs
 {
-    public string ProcessName { get; }
+    public string ProcessName { get; } = processName;
+}
 
-    public RunningProcessChanged(string processName)
-    {
-        ProcessName = processName;
-    }
+public class ProcessStopped(string processName) : EventArgs
+{
+    public string ProcessName { get; } = processName;
 }
 
 /// <summary>
@@ -27,7 +27,8 @@ public class RunningProcessChanged: EventArgs
 /// profile switching - only the overlay toggling.
 /// </summary>
 public sealed class RunningProcessMonitor : IDisposable {
-    public event EventHandler<RunningProcessChanged>? RunningProcessesChanged;
+    public event EventHandler<ProcessStarted>? ProcessStarted;
+    public event EventHandler<ProcessStopped>? ProcessStopped;
 
     private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.SupportsRecursion);
 
@@ -63,7 +64,7 @@ public sealed class RunningProcessMonitor : IDisposable {
 
         // Listen for new processes
         _startWatcher = new ManagementEventWatcher("SELECT ProcessName FROM Win32_ProcessStartTrace");
-        _startWatcher.EventArrived += ProcessStarted;
+        _startWatcher.EventArrived += OnProcessStarted;
         _startWatcher.Start();
 
         // Listen for closed processes 
@@ -78,7 +79,7 @@ public sealed class RunningProcessMonitor : IDisposable {
         _longStopWatcher.Start();
     }
 
-    private void ProcessStarted(object? sender, EventArrivedEventArgs e)
+    private void OnProcessStarted(object? sender, EventArrivedEventArgs e)
     {
         // Get the name of the started process
         if (e.NewEvent.Properties["ProcessName"].Value is not string name)
@@ -95,7 +96,7 @@ public sealed class RunningProcessMonitor : IDisposable {
             _runningProcesses[name] = _runningProcesses.TryGetValue(name, out var i) ? i + 1 : 1;
             _lock.ExitWriteLock();
         
-            RunningProcessesChanged?.Invoke(this, new RunningProcessChanged(name));
+            ProcessStarted?.Invoke(this, new ProcessStarted(name));
         });
     }
 
@@ -115,7 +116,7 @@ public sealed class RunningProcessMonitor : IDisposable {
         
         name = name.ToLower();
 
-        RemoveProcess(name);
+        OnProcessStopped(name);
     }
 
     private void LongProcessStopped(object? sender, EventArrivedEventArgs e)
@@ -139,10 +140,10 @@ public sealed class RunningProcessMonitor : IDisposable {
         
         name = name.ToLower();
 
-        RemoveProcess(name);
+        OnProcessStopped(name);
     }
 
-    private void RemoveProcess(string name)
+    private void OnProcessStopped(string name)
     {
         Task.Run(() =>
         {
@@ -158,12 +159,12 @@ public sealed class RunningProcessMonitor : IDisposable {
             }
             else
             {
-                Global.logger.Warning("Closed process {ProcessName} didn't exist in our list", name);
+                Global.logger.Warning("Closed process {ProcessName} didn't exist in the list", name);
             }
 
             _lock.ExitWriteLock();
 
-            RunningProcessesChanged?.Invoke(this, new RunningProcessChanged(name));
+            ProcessStopped?.Invoke(this, new ProcessStopped(name));
         });
     }
 
@@ -180,7 +181,7 @@ public sealed class RunningProcessMonitor : IDisposable {
 
     public void Dispose()
     {
-        _startWatcher.EventArrived -= ProcessStarted;
+        _startWatcher.EventArrived -= OnProcessStarted;
         _startWatcher.Stop();
         _startWatcher.Dispose();
         _shortStopWatcher.EventArrived -= ShortProcessStopped;

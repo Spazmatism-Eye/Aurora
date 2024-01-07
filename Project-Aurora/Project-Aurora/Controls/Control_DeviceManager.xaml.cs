@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Aurora.Devices;
+using Aurora.Modules;
 using Aurora.Modules.GameStateListen;
+using Aurora.Modules.ProcessMonitor;
 
 namespace Aurora.Controls;
 
@@ -34,14 +35,14 @@ public partial class Control_DeviceManager
 
     private void Control_DeviceManager_Loaded(object? sender, RoutedEventArgs e)
     {
-        Task.Run(UpdateControls);
+        Task.Run(UpdateControls).ConfigureAwait(false);
     }
 
     private async Task UpdateControls()
     {
         var deviceManager = await _deviceManager;
         var isDeviceManagerUp = await deviceManager.IsDeviceManagerUp();
-        var deviceContainers = isDeviceManagerUp ? deviceManager.DeviceContainers : new List<DeviceContainer>();
+        var deviceContainers = isDeviceManagerUp ? deviceManager.DeviceContainers : [];
         Dispatcher.BeginInvoke(() =>
         {
             NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
@@ -54,6 +55,31 @@ public partial class Control_DeviceManager
                 LstDevices.ItemsSource = deviceContainers;
             }
         }, DispatcherPriority.Loaded);
+
+        if (!isDeviceManagerUp)
+        {
+            await WaitForDeviceManager();
+        }
+    }
+
+    private async Task WaitForDeviceManager()
+    {
+        var runningProcessMonitor = await ProcessesModule.RunningProcessMonitor;
+        runningProcessMonitor.ProcessStarted += RunningProcessMonitorOnRunningProcessesChanged;
+        return;
+
+        async void RunningProcessMonitorOnRunningProcessesChanged(object? sender, ProcessStarted e)
+        {
+            if (e.ProcessName != DeviceManager.DeviceManagerProcess)
+            {
+                return;
+            }
+
+            await Task.Delay(1000); // wait for pipe
+            runningProcessMonitor.ProcessStarted -= RunningProcessMonitorOnRunningProcessesChanged;
+
+            await UpdateControls();
+        }
     }
 
     private async void btnRestartAll_Click(object? sender, RoutedEventArgs e)

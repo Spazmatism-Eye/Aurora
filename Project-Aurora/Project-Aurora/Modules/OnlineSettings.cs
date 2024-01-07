@@ -51,7 +51,7 @@ public sealed class OnlineSettings : AuroraModule
         //TODO update layouts
         await Refresh();
 
-        (await _runningProcessMonitor).RunningProcessesChanged += OnRunningProcessesChanged;
+        (await _runningProcessMonitor).ProcessStarted += OnRunningProcessesChanged;
 
         if (Global.Configuration.Lat == 0 && Global.Configuration.Lon == 0)
         {
@@ -177,7 +177,7 @@ public sealed class OnlineSettings : AuroraModule
         await Refresh();
     }
 
-    private void OnRunningProcessesChanged(object? sender, RunningProcessChanged e)
+    private void OnRunningProcessesChanged(object? sender, ProcessStarted e)
     {
         if (!_shutdownProcesses.TryGetValue(e.ProcessName, out var shutdownProcess)) return;
         Global.logger.Fatal("Shutting down Aurora because of a conflicted process {Process}. Reason: {Reason}",
@@ -234,7 +234,7 @@ public sealed class OnlineSettings : AuroraModule
 
     public override async Task DisposeAsync()
     {
-        (await _runningProcessMonitor).RunningProcessesChanged -= OnRunningProcessesChanged;
+        (await _runningProcessMonitor).ProcessStarted -= OnRunningProcessesChanged;
     }
 
     public override void Dispose()

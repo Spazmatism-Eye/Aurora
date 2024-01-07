@@ -11,7 +11,6 @@ namespace Aurora.Modules;
 public sealed class PerformanceMonitor : AuroraModule
 {
     private const string RzChromaStreamStartProcessName = "rzchromastreamserver.exe";
-    private const string RzChromaStreamStopProcessName = "rzchromastream";
     private const string RazerChromeServerProcessName = "RzChromaStreamServer";
 
     private static readonly bool EnableChromaMonitor = false;
@@ -76,8 +75,9 @@ public sealed class PerformanceMonitor : AuroraModule
 
     public override async Task DisposeAsync()
     {
-        (await _runningProcessMonitor).RunningProcessesChanged -= ProcessMonitorOnRunningProcessesChanged;
-        
+        (await _runningProcessMonitor).ProcessStarted -= ProcessMonitorOnProcessStarted;
+        (await _runningProcessMonitor).ProcessStopped -= ProcessMonitorOnProcessStopped;
+
         _working = false;
         _endTrigger.SetResult();
         _threadPool.Join();
@@ -107,18 +107,19 @@ public sealed class PerformanceMonitor : AuroraModule
         {
             _rzStreamCpuCounter = new PerformanceCounter("Process", "% Processor Time", RazerChromeServerProcessName, true);
         }
-        (await _runningProcessMonitor).RunningProcessesChanged += ProcessMonitorOnRunningProcessesChanged;
+        (await _runningProcessMonitor).ProcessStarted += ProcessMonitorOnProcessStarted;
+        (await _runningProcessMonitor).ProcessStopped += ProcessMonitorOnProcessStopped;
     }
 
-    private void ProcessMonitorOnRunningProcessesChanged(object? sender, RunningProcessChanged e)
+    private void ProcessMonitorOnProcessStarted(object? sender, ProcessStarted e)
     {
-        _rzStreamCpuCounter = e.ProcessName switch
-        {
-            RzChromaStreamStartProcessName => new PerformanceCounter("Process", "% Processor Time",
-                RazerChromeServerProcessName, true),
-            RzChromaStreamStopProcessName => null,
-            _ => _rzStreamCpuCounter
-        };
+        _rzStreamCpuCounter = new PerformanceCounter("Process", "% Processor Time", RazerChromeServerProcessName, true);
+    }
+
+    private void ProcessMonitorOnProcessStopped(object? sender, ProcessStopped e)
+    {
+        _rzStreamCpuCounter?.Dispose();
+        _rzStreamCpuCounter = null;
     }
 
     private void CheckRazerStreamApi()

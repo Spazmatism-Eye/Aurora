@@ -20,8 +20,9 @@ namespace Aurora.Devices;
 
 public sealed class DeviceManager : IDisposable
 {
+    public const string DeviceManagerProcess = "AuroraDeviceManager";
+
     private const string DeviceManagerFolder = @".\AuroraDeviceManager";
-    private const string DeviceManagerProcess = "AuroraDeviceManager";
     private const string DeviceManagerExe = "AuroraDeviceManager.exe";
 
     private bool _disposed;
