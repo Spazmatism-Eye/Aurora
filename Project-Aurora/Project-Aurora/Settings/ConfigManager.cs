@@ -19,7 +19,10 @@ public static class ConfigManager
         var config = TryLoad();
 
         config.OnPostLoad();
-        config.PropertyChanged += (_, _) => { Save(config, Configuration.ConfigFile); };
+        config.PropertyChanged += (_, e) =>
+        {
+            Save(config, Configuration.ConfigFile);
+        };
 
         return config;
     }
@@ -136,7 +139,7 @@ public static class ConfigManager
                 ObjectCreationHandling = ObjectCreationHandling.Replace,
                 SerializationBinder = new AuroraSerializationBinder(),
             }) ?? new DeviceConfig();
-        Save(config, DeviceConfig.ConfigFile);
+        File.Copy(Configuration.ConfigFile, Configuration.ConfigFile + ".v194");
         return config;
     }
 }

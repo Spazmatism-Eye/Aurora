@@ -94,7 +94,8 @@ public sealed class DeviceConfig : INotifyPropertyChanged
     {
         foreach (var loadedDeviceString in EnabledDevices.ToArray())
         {
-            if (!Migrations.TryGetValue(loadedDeviceString, out var migratedValue)) continue;
+            var typeName = loadedDeviceString.Split(",")[0];
+            if (!Migrations.TryGetValue(typeName, out var migratedValue)) continue;
             EnabledDevices.Remove(loadedDeviceString);
             EnabledDevices.Add(migratedValue);
         }
