@@ -444,6 +444,9 @@ public enum PreferredMouse
     [Description("Logitech - G102/G203")]
     Logitech_G102 = 102,
 
+    [Description("Logitech - G102/G203 Lightsync")]
+    Logitech_G102_Lightsync = 103,
+
     //Corsair range is 200-299
     [Description("Corsair - Sabre")]
     Corsair_Sabre = 200,

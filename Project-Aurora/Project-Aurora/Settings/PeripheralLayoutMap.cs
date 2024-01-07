@@ -82,6 +82,7 @@ public static class PeripheralLayoutMap
           {PreferredMouse.Logitech_G900, "logitech_g900_features.json"},
           {PreferredMouse.Logitech_G502, "logitech_g502_features.json"},
           {PreferredMouse.Logitech_G102, "logitech_g102_features.json"},
+          {PreferredMouse.Logitech_G102_Lightsync, "logitech_g102_lightsync_features.json"},
           {PreferredMouse.Corsair_Sabre, "corsair_sabre_features.json"},
           {PreferredMouse.Corsair_M65, "corsair_m65_features.json"},
           {PreferredMouse.Corsair_Katar, "corsair_katar_features.json"},
