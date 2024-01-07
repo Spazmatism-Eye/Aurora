@@ -26,6 +26,8 @@ public sealed class DeviceConfig : INotifyPropertyChanged
 
     [JsonPropertyName("devices_disable_headset")]
     public bool DevicesDisableHeadset { get; set; }
+    
+    public bool DangerousOpenRgbNonDirectEnable { get; set; }
 
     private ObservableCollection<string>? _enabledDevices;
     public ObservableCollection<string> EnabledDevices

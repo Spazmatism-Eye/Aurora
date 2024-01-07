@@ -34,6 +34,11 @@ public class OpenRgbNetDevice : RgbNetDevice
             }
         }
 
+        if (Global.DeviceConfig.DangerousOpenRgbNonDirectEnable)
+        {
+            Provider.ForceAddAllDevices = true;
+        }
+
         _openRgbServerDefinition.Ip = ip;
         _openRgbServerDefinition.Port = port;
 
