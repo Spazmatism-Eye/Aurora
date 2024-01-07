@@ -11,6 +11,12 @@ using Aurora.Utils;
 
 namespace Aurora.Modules.OnlineConfigs;
 
+[JsonSerializable(typeof(OnlineSettingsMeta))]
+[JsonSerializable(typeof(DeviceTooltips))]
+[JsonSerializable(typeof(ConflictingProcesses))]
+[JsonSerializable(typeof(Dictionary<string, DeviceTooltips>))]
+internal partial class OnlineSettingsSourceGenerationContext : JsonSerializerContext;
+
 public static class OnlineConfigsRepository
 {
     private const string ConflictingProcesses = "ConflictingProcesses.json";

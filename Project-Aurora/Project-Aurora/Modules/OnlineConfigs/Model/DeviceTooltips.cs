@@ -1,14 +1,19 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Aurora.Modules.OnlineConfigs.Model;
 
-[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class DeviceTooltips
 {
+    [JsonPropertyName("recommended")]
     public bool Recommended { get; }
+
+    [JsonPropertyName("beta")]
     public bool Beta { get; }
+
+    [JsonPropertyName("info")]
     public string? Info { get; }
+
+    [JsonPropertyName("sdkLink")]
     public string? SdkLink { get; }
 
     public DeviceTooltips()

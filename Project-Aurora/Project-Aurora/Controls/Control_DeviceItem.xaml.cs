@@ -122,18 +122,10 @@ public partial class Control_DeviceItem
 
     private void UserControl_Loaded(object? sender, EventArgs e)
     {
-        Dispatcher.BeginInvoke(() =>
-        {
-            try
-            {
-                UpdateStatic();
-            }
-            catch (Exception ex)
-            {
-                Global.logger.Warning(ex, "DeviceItem update error:");
-            }
-        }, DispatcherPriority.Loaded);
-        Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.Input);
+        Dispatcher.BeginInvoke(UpdateStatic, DispatcherPriority.Loaded);
+        Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.DataBind);
+
+        _updateControlsTimer.Start();
     }
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
@@ -144,17 +136,7 @@ public partial class Control_DeviceItem
 
     private void OnDeviceOnUpdated(object? o, EventArgs eventArgs)
     {
-        Dispatcher.BeginInvoke(() =>
-        {
-            try
-            {
-                UpdateDynamic();
-            }
-            catch (Exception ex)
-            {
-                Global.logger.Warning(ex, "DeviceItem update error:");
-            }
-        }, DispatcherPriority.Input);
+        Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.Input);
     }
 
     private void UpdateStatic()
@@ -199,7 +181,6 @@ public partial class Control_DeviceItem
             BtnStart.Content = "Working...";
             BtnStart.IsEnabled = false;
             BtnEnable.IsEnabled = false;
-            _updateControlsTimer.Start();
         }
         else if (Device.Device.IsInitialized)
         {
@@ -207,7 +188,6 @@ public partial class Control_DeviceItem
             BtnStart.Content = "Stop";
             BtnStart.IsEnabled = true;
             BtnEnable.IsEnabled = true;
-            _updateControlsTimer.Start();
         }
         else
         {
