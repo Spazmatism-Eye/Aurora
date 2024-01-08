@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,10 +11,16 @@ namespace Aurora.Modules;
 
 public partial class UpdateCleanup : AuroraModule
 {
-    protected override async Task Initialize()
+    protected override Task Initialize()
     {
+        if (!Global.Configuration.Migrations.Contains("net8"))
+        {
+            Net8Migration();
+            Global.Configuration.Migrations.Add("net8");
+        }
         CleanOldLogiDll();
         CleanLogs();
+        return Task.CompletedTask;
     }
 
     private static void CleanOldLogiDll()
@@ -51,5 +58,37 @@ public partial class UpdateCleanup : AuroraModule
     public override void Dispose()
     {
         //noop
+    }
+
+    private void Net8Migration()
+    {
+        IEnumerable<string> files = [
+        "Accessibility.dl",
+        "clrcompression.dl",
+        "D3DCompiler_47_cor3.dl",
+        "DirectWriteForwarder.dl",
+        "Microsoft.VisualBasic.Forms.dl",
+        "Microsoft.Win32.Registry.AccessControl.dl",
+        "Microsoft.Win32.SystemEvents.dl",
+        "System.Windows.Controls.Ribbon.dl",
+        "System.Windows.Extensions.dl",
+        "System.Windows.Forms.Design.dl",
+        "System.Windows.Forms.Design.Editors.dl",
+        "System.Windows.Forms.dl",
+        "System.Windows.Forms.Primitives.dl",
+        "System.Windows.Input.Manipulations.dl",
+        "System.Windows.Presentation.dl",
+        "System.Xaml.dl",
+        "WindowsFormsIntegration.dl",
+        "wpfgfx_cor3.dll"
+        ];
+
+        foreach (var file in files)
+        {
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+        }
     }
 }

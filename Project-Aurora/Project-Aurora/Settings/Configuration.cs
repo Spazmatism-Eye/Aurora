@@ -190,6 +190,8 @@ public class Configuration : INotifyPropertyChanged
     public double Lat { get; set; }
     public double Lon { get; set; }
 
+    public IList<string> Migrations = [];
+
     /// <summary>
     /// Called after the configuration file has been deserialized or created for the first time.
     /// </summary>
