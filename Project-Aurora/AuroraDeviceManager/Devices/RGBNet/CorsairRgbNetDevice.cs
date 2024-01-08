@@ -12,6 +12,8 @@ public class CorsairRgbNetDevice : RgbNetDevice
 
     public override string DeviceName => "Corsair (RGB.NET)";
 
+    private bool _icueDetectedOff;
+
     protected override void RegisterVariables(VariableRegistry variableRegistry)
     {
         base.RegisterVariables(variableRegistry);
@@ -40,8 +42,16 @@ public class CorsairRgbNetDevice : RgbNetDevice
         var isIcueRunning = ProcessUtils.IsProcessRunning("icue");
         if (!isIcueRunning)
         {
+            _icueDetectedOff = true;
             throw new DeviceProviderException(new ApplicationException("iCUE is not running!"), false);
         }
+
+        if (_icueDetectedOff)
+        {
+            Thread.Sleep(5000);
+        }
+
+        _icueDetectedOff = false;
         
         //give iCUE some time to initialize
         Thread.Sleep(1500);
