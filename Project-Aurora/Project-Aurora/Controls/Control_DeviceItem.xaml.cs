@@ -130,13 +130,15 @@ public partial class Control_DeviceItem
 
     private void Control_DeviceItem_OnUnloaded(object? sender, EventArgs e)
     {
-        Device.Device.Updated -= OnDeviceOnUpdated;
         _updateControlsTimer.Stop();
     }
 
     private void OnDeviceOnUpdated(object? o, EventArgs eventArgs)
     {
-        Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.Input);
+        if (IsVisible)
+        {
+            Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.DataBind);
+        }
     }
 
     private void UpdateStatic()
