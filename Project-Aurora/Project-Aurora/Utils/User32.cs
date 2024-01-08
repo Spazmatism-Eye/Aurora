@@ -4,14 +4,14 @@ using JetBrains.Annotations;
 
 namespace Aurora.Utils;
 
-internal static class User32
+internal static partial class User32
 {
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    public static extern IntPtr CallWindowProc(nint lpPrevWndFunc, IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+    [LibraryImport("user32.dll", EntryPoint = "CallWindowProcA")]
+    public static partial nint CallWindowProc(nint lpPrevWndFunc, IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
     [Pure]
-    [DllImport("user32.dll")]
-    internal static extern IntPtr CreateWindowEx(
+    [LibraryImport("user32.dll", EntryPoint = "CreateWindowExW", StringMarshalling = StringMarshalling.Utf16)]
+    internal static partial IntPtr CreateWindowEx(
         uint dwExStyle,
         string lpClassName,
         string lpWindowName,

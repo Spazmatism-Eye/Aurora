@@ -3,25 +3,16 @@ using RGB.NET.Core;
 
 namespace Common.Devices.RGBNet;
 
-public class RemappableDevice
+[method: JsonConstructor]
+public class RemappableDevice(string deviceId, string deviceSummary, List<LedId> rgbNetLeds, SimpleColor calibration, bool remapEnabled)
 {
-    public string DeviceId { get; }
-    public string DeviceSummary { get; }
-    
-    // $"[{rgbDevice.DeviceInfo.DeviceType}] {rgbDevice.DeviceInfo.DeviceName}"
-    public List<LedId> RgbNetLeds { get; }
-    
-    public SimpleColor Calibration { get; }
-    
-    public bool RemapEnabled { get; }
+    public string DeviceId { get; } = deviceId;
+    public string DeviceSummary { get; } = deviceSummary;
 
-    [JsonConstructor]
-    public RemappableDevice(string deviceId, string deviceSummary, List<LedId> rgbNetLeds, SimpleColor calibration, bool remapEnabled)
-    {
-        DeviceId = deviceId;
-        DeviceSummary = deviceSummary;
-        RgbNetLeds = rgbNetLeds;
-        Calibration = calibration;
-        RemapEnabled = remapEnabled;
-    }
+    // $"[{rgbDevice.DeviceInfo.DeviceType}] {rgbDevice.DeviceInfo.DeviceName}"
+    public List<LedId> RgbNetLeds { get; } = rgbNetLeds;
+
+    public SimpleColor Calibration { get; } = calibration;
+
+    public bool RemapEnabled { get; } = remapEnabled;
 }

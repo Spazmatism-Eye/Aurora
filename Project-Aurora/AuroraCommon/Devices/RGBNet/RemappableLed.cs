@@ -2,16 +2,9 @@
 
 namespace Common.Devices.RGBNet;
 
-public record struct RemappableLed
+public record struct RemappableLed(LedId LedId, DeviceKeys RemappedKey, SimpleColor ColorOverride)
 {
-    public LedId LedId;
-    public DeviceKeys RemappedKey;
-    public SimpleColor ColorOverride;
-
-    public RemappableLed(LedId ledId, DeviceKeys remappedKey, SimpleColor colorOverride)
-    {
-        LedId = ledId;
-        RemappedKey = remappedKey;
-        ColorOverride = colorOverride;
-    }
+    public LedId LedId = LedId;
+    public DeviceKeys RemappedKey = RemappedKey;
+    public SimpleColor ColorOverride = ColorOverride;
 }

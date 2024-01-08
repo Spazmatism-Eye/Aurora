@@ -322,23 +322,6 @@ public static class CommonColorUtils
         return Color.FromArgb(clr.ToArgb());
     }
 
-    public static bool NearlyEqual(double a, double b, double epsilon) {
-        const double minNormal = 2.2250738585072014E-308d;
-        double absA = Math.Abs(a);
-        double absB = Math.Abs(b);
-        double diff = Math.Abs(a - b);
-
-        if (a.Equals(b)) { // shortcut, handles infinities
-            return true;
-        }
-        if (a == 0 || b == 0 || absA + absB < minNormal) {
-            // a or b is zero or both are extremely close to it
-            // relative error is less meaningful here
-            return diff < epsilon * minNormal;
-        } // use relative error
-        return diff / (absA + absB) < epsilon;
-    }
-
     public static Color FastColorTransparent(byte r, byte g, byte b)
     {
         var brightness = Math.Max(b, Math.Max(g, r));

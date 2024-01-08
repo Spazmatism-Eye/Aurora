@@ -5,7 +5,7 @@ namespace Common.Utils;
 
 internal static class MemorySharedEventThread
 {
-    private static readonly List<HandlesAndThread> HandleThreads = new();
+    private static readonly List<HandlesAndThread> HandleThreads = [];
 
     internal static void AddObject(SignaledMemoryObject o)
     {
@@ -34,14 +34,14 @@ internal static class MemorySharedEventThread
         private CancellationTokenSource _cancellation = new();
         private Thread _thread = new(() => { });
         
-        private Action[] _actions = { () => { } };
+        private Action[] _actions = [() => { }];
         private WaitHandle[] _handles;
         
         private readonly SemaphoreSlim _semaphore = new(1);
 
         internal HandlesAndThread()
         {
-            _handles = new[] { _cancellation.Token.WaitHandle };
+            _handles = [_cancellation.Token.WaitHandle];
             _thread.Start();
         }
 

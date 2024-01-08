@@ -2,13 +2,8 @@
 
 namespace Common.Devices.RGBNet;
 
-public class CurrentDevices
+[method: JsonConstructor]
+public class CurrentDevices(List<RemappableDevice> devices)
 {
-    [JsonConstructor]
-    public CurrentDevices(List<RemappableDevice> devices)
-    {
-        Devices = devices;
-    }
-
-    public List<RemappableDevice> Devices { get; }
+    public List<RemappableDevice> Devices { get; } = devices;
 }

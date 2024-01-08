@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using Common.Data;
 
-namespace Common;
+namespace Common.Data;
 
 public class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> where T : struct
 {

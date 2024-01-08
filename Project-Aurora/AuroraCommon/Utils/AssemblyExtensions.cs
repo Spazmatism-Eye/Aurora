@@ -6,16 +6,13 @@ public static class AssemblyExtensions
 {
     public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
     {
-        Type?[] types;
         try
         {
-            types = assembly.GetTypes();
+            return assembly.GetTypes();
         }
         catch (ReflectionTypeLoadException e)
         {
-            types = e.Types;
+            return e.Types.Where(type => type != null);
         }
-
-        return types.Where(type => type != null);
     }
 }

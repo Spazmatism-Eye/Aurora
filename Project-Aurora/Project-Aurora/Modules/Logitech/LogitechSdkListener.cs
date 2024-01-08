@@ -12,7 +12,6 @@ using Aurora.Modules.ProcessMonitor;
 using Common.Devices;
 using Common.Utils;
 using Microsoft.Win32;
-using Microsoft.Win32.SafeHandles;
 using RGB.NET.Devices.Logitech;
 using Color = System.Drawing.Color;
 
@@ -26,10 +25,8 @@ public enum LightsyncSdkState
     Conflicted,
 }
 
-public class LogitechSdkListener
+public partial class LogitechSdkListener
 {
-    private const string RegistryPath64 = @"SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary";
-    private const string RegistryPath32 = @"SOFTWARE\Classes\WOW6432Node\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary";
     public event EventHandler? ColorsUpdated;
     public event EventHandler<string?>? ApplicationChanged;
 
@@ -81,10 +78,10 @@ public class LogitechSdkListener
         var unlocked = await DesktopUtils.WaitSessionUnlock();
         if (unlocked)
         {
-            await Task.Delay(5000);
+            await Task.Delay(1000);
         }
 
-        var i = WTSGetActiveConsoleSessionId();
+        var i = WtsGetActiveConsoleSessionId();
         var lgsPipeName = $"LGS_LED_SDK-{i:x8}";
         Global.logger.Information("LGS Pipe name: {PipeName}", lgsPipeName);
         var pipeListener = new PipeListener(lgsPipeName);
@@ -99,13 +96,16 @@ public class LogitechSdkListener
         State = IsInstalled() ? LightsyncSdkState.Waiting : LightsyncSdkState.NotInstalled;
     }
 
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern uint WTSGetActiveConsoleSessionId();
+    [LibraryImport("kernel32.dll", EntryPoint = "WTSGetActiveConsoleSessionId")]
+    private static partial uint WtsGetActiveConsoleSessionId();
 
     private static bool IsInstalled()
     {
-        using var key64 = Registry.LocalMachine.OpenSubKey(RegistryPath64);
-        using var key32 = Registry.LocalMachine.OpenSubKey(RegistryPath32);
+        const string registryPath64 = @"SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary";
+        const string registryPath32 = @"SOFTWARE\Classes\WOW6432Node\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary";
+
+        using var key64 = Registry.LocalMachine.OpenSubKey(registryPath64);
+        using var key32 = Registry.LocalMachine.OpenSubKey(registryPath32);
 
         var is64BitKeyPresent = File.Exists(key64?.GetValue(null)?.ToString()) ;
         var is32BitKeyPresent = File.Exists(key32?.GetValue(null)?.ToString());

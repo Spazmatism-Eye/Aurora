@@ -7,7 +7,4 @@ namespace Common.Utils;
 [JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(DeviceMappingConfig))]
 [JsonSerializable(typeof(DeviceConfig))]
-public partial class CommonSourceGenerationContext : JsonSerializerContext
-{
-    
-}
+public partial class CommonSourceGenerationContext : JsonSerializerContext;

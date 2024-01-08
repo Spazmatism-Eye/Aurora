@@ -4,24 +4,11 @@ using Common.Utils;
 
 namespace Common;
 
-public readonly record struct SimpleColor
+[method: JsonConstructor]
+public readonly record struct SimpleColor(byte R, byte G, byte B, byte A = 255)
 {
     public static readonly SimpleColor White = new(255, 255, 255);
     public static readonly SimpleColor Black = new(0, 0, 0);
-
-    public byte R { get; }
-    public byte G { get; }
-    public byte B { get; }
-    public byte A { get; }
-
-    [JsonConstructor]
-    public SimpleColor(byte r, byte g, byte b, byte a = 255)
-    {
-        R = r;
-        G = g;
-        B = b;
-        A = a;
-    }
 
     public int ToArgb() => (A << 24) | (R << 16) | (G << 8) | B;
 

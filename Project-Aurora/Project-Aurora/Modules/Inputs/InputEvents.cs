@@ -63,7 +63,7 @@ public sealed class InputEvents : IInputEvents
     private static readonly Keys[] WinKeys = { Keys.LWin, Keys.RWin };
     public bool Windows => WinKeys.Any(PressedKeys.Contains);
 
-    private delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+    private delegate nint WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable to keep reference for garbage collector
     private readonly WndProc? _fnWndProcHook;
     private readonly nint _originalWndProc;
@@ -84,7 +84,7 @@ public sealed class InputEvents : IInputEvents
         User32.SetWindowLongPtr(_hWnd, -4, newLong);
     }
     
-    private IntPtr Hook(IntPtr hwnd, uint msg, IntPtr wparam, IntPtr lparam)
+    private nint Hook(IntPtr hwnd, uint msg, IntPtr wparam, IntPtr lparam)
     {
         const int wmInput = 0x00FF;
 

@@ -70,12 +70,12 @@ public sealed class DeviceConfig : INotifyPropertyChanged
         {"Razer", "Razer (RGB.NET)"},
     };
 
-    private static List<string> DefaultEnabledDevices => new()
-    {
+    private static List<string> DefaultEnabledDevices =>
+    [
         "Corsair (RGB.NET)",
         "Logitech (RGB.NET)",
-        "OpenRGB (RGB.NET)",
-    };
+        "OpenRGB (RGB.NET)"
+    ];
 
     public VariableRegistry VarRegistry { get; set; } = new();
 

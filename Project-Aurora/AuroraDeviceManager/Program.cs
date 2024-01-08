@@ -3,6 +3,7 @@ using Common.Devices;
 using AuroraDeviceManager.Devices;
 using AuroraDeviceManager.Utils;
 using Common;
+using Common.Data;
 using Color = System.Drawing.Color;
 
 {

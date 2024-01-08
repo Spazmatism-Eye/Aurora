@@ -3,17 +3,8 @@ using Serilog;
 
 namespace Common.Utils;
 
-public class PluginCompiler
+public class PluginCompiler(ILogger logger, string path)
 {
-    private readonly ILogger _logger;
-    private readonly string _compilerPath;
-
-    public PluginCompiler(ILogger logger, string compilerPath)
-    {
-        _logger = logger;
-        _compilerPath = compilerPath;
-    }
-
     public async Task Compile(string scriptPath)
     {
         var scriptChangeTime = File.GetLastWriteTime(scriptPath);
@@ -22,12 +13,12 @@ public class PluginCompiler
 
         if (scriptChangeTime < dllCompileTime)
         {
-            _logger.Information("Script {Script} is up to date", scriptPath);
+            logger.Information("Script {Script} is up to date", scriptPath);
             return;
         }
 
-        _logger.Information("Compiling script: {Script}", scriptPath);
-        var compilerPath = Path.Combine(_compilerPath, "PluginCompiler.exe");
+        logger.Information("Compiling script: {Script}", scriptPath);
+        var compilerPath = Path.Combine(path, "PluginCompiler.exe");
         var compilerProc = new ProcessStartInfo
         {
             WorkingDirectory = Path.GetDirectoryName(Environment.ProcessPath),
@@ -42,7 +33,7 @@ public class PluginCompiler
 
         process.ErrorDataReceived += (_, args) =>
         {
-            _logger.Error("Compiler: {}", args.Data);
+            logger.Error("Compiler: {}", args.Data);
         };
 
         try
@@ -51,7 +42,7 @@ public class PluginCompiler
         }
         catch (Exception e)
         {
-            _logger.Error(e, "Could not load script: {Script}", scriptPath);
+            logger.Error(e, "Could not load script: {Script}", scriptPath);
         }
     }
 }

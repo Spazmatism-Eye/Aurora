@@ -14,7 +14,7 @@ public class DeviceMappingConfig
     private static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", "DeviceMappings.json");
 
     [JsonPropertyName("d")]
-    public List<DeviceRemap> Devices { get; } = new();
+    public List<DeviceRemap> Devices { get; } = [];
 
     private DeviceMappingConfig()
     {
