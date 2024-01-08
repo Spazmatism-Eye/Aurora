@@ -45,7 +45,7 @@ public class KeyboardLayoutManager
 
     public Task<Grid> VirtualKeyboard { get; }
 
-    public Task<Grid> AbstractVirtualKeyboard => CreateUserControl(true);
+    public Task<Panel> AbstractVirtualKeyboard => CreateUserControl(true);
 
     private bool _bitmapMapInvalid = true;
 
@@ -491,12 +491,13 @@ public class KeyboardLayoutManager
         Global.effengine.SetBitmapping(bitmapMap);
     }
 
-    private async Task<Grid> CreateUserControl(bool abstractKeycaps = false)
+    private async Task<Panel> CreateUserControl(bool abstractKeycaps = false)
     {
         if (_virtualKbInvalid && !abstractKeycaps)
             _virtualKeyboardMap.Clear();
 
-        var kcg = new KeyboardControlGenerator(abstractKeycaps, _virtualKeyboardGroup, _virtualKeyboardMap, _layoutsPath, await VirtualKeyboard);
+        var virtualKb = abstractKeycaps ? new Grid() : await VirtualKeyboard;
+        var kcg = new KeyboardControlGenerator(abstractKeycaps, _virtualKeyboardGroup, _virtualKeyboardMap, _layoutsPath, virtualKb);
 
         if (!_virtualKbInvalid || abstractKeycaps) return await kcg.Generate();
 

@@ -18,7 +18,7 @@ internal class KeyboardControlGenerator(
     VirtualGroup virtualKeyboardGroup,
     IDictionary<DeviceKeys, Keycap> virtualKeyboardMap,
     string layoutsPath,
-    Grid virtualKeyboard)
+    Panel virtualKeyboard)
 {
     private double _layoutHeight;
     private double _layoutWidth;
@@ -29,7 +29,7 @@ internal class KeyboardControlGenerator(
     public double BaselineX { get; private set; }
     public double BaselineY { get; private set; }
 
-    internal async Task<Grid> Generate()
+    internal async Task<Panel> Generate()
     {
         var imagesPath = Path.Combine(layoutsPath, "Extra Features", "images");
 

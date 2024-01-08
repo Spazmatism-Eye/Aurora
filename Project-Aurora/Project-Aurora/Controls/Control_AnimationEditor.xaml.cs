@@ -67,31 +67,29 @@ namespace Aurora.Controls
 
         private async void UpdateVirtualKeyboard()
         {
-            Grid virtial_kb = await Global.kbLayout.AbstractVirtualKeyboard;
+            var virtualKb = await Global.kbLayout.AbstractVirtualKeyboard;
 
             keyboard_grid.Children.Clear();
-            keyboard_grid.Children.Add(virtial_kb);
+            keyboard_grid.Children.Add(virtualKb);
             keyboard_grid.Children.Add(new LayerEditor());
 
-            keyboard_grid.Width = virtial_kb.Width;
-            keyboard_grid.Height = virtial_kb.Height;
+            keyboard_grid.Width = virtualKb.Width;
+            keyboard_grid.Height = virtualKb.Height;
 
             keyboard_grid.UpdateLayout();
 
-            viewbxAnimationView.MaxWidth = virtial_kb.Width + 50;
-            viewbxAnimationView.MaxHeight = virtial_kb.Height + 50;
+            viewbxAnimationView.MaxWidth = virtualKb.Width + 50;
+            viewbxAnimationView.MaxHeight = virtualKb.Height + 50;
             viewbxAnimationView.UpdateLayout();
 
             this.UpdateLayout();
 
             //Generate a new mapping
-            foreach (FrameworkElement Child in virtial_kb.Children)
+            foreach (FrameworkElement child in virtualKb.Children)
             {
-                if (Child is Keycap && (Child as Keycap).GetKey() != DeviceKeys.NONE)
-                {
-                    Child.PreviewMouseLeftButtonDown += KeyboardKey_PreviewMouseLeftButtonDown;
-                    Child.PreviewMouseRightButtonDown += KeyboardKey_PreviewMouseRightButtonDown;
-                }
+                if (child is not Keycap keycap || keycap.GetKey() == DeviceKeys.NONE) continue;
+                keycap.PreviewMouseLeftButtonDown += KeyboardKey_PreviewMouseLeftButtonDown;
+                keycap.PreviewMouseRightButtonDown += KeyboardKey_PreviewMouseRightButtonDown;
             }
         }
 
