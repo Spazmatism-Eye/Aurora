@@ -52,24 +52,22 @@ public partial class Control_DefaultKeycapBackglow
             KeyCap.Visibility = Visibility.Hidden;
             GridBackglow.Visibility = Visibility.Hidden;
 
-            if (File.Exists(imagePath))
+            if (!File.Exists(imagePath)) return;
+            using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = memStream;
+            image.EndInit();
+
+            if (key.Tag == DeviceKeys.NONE)
+                KeyBorder.Background = new ImageBrush(image);
+            else
             {
-                var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
-                BitmapImage image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = memStream;
-                image.EndInit();
-
-                if (key.Tag == DeviceKeys.NONE)
-                    KeyBorder.Background = new ImageBrush(image);
-                else
-                {
-                    KeyBorder.Background = Keycap.DefaultColorBrush;
-                    KeyBorder.OpacityMask = new ImageBrush(image);
-                }
-
-                _isImage = true;
+                KeyBorder.Background = Keycap.DefaultColorBrush;
+                KeyBorder.OpacityMask = new ImageBrush(image);
             }
+
+            _isImage = true;
         }
     }
 

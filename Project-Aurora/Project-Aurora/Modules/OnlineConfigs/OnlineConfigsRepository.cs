@@ -57,7 +57,7 @@ public static class OnlineConfigsRepository
 
     private static Task<T> ParseLocalJson<T>(string cachePath) where T : new()
     {
-        var stream = GetJsonStream(cachePath);
+        using var stream = GetJsonStream(cachePath);
 
         return JsonSerializer.DeserializeAsync<T>(stream, JsonSerializerOptions)
             .AsTask()

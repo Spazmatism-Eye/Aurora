@@ -14,12 +14,12 @@ public class GenericApplication : Application
         get
         {
             if (icon != null) return icon;
-            string iconPath = Path.Combine(GetProfileFolderPath(), "icon.png");
+            var iconPath = Path.Combine(GetProfileFolderPath(), "icon.png");
 
             if (File.Exists(iconPath))
             {
-                var memStream = new MemoryStream(File.ReadAllBytes(iconPath));
-                BitmapImage b = new BitmapImage();
+                using var memStream = new MemoryStream(File.ReadAllBytes(iconPath));
+                var b = new BitmapImage();
                 b.BeginInit();
                 b.StreamSource = memStream;
                 b.EndInit();

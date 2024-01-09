@@ -61,7 +61,7 @@ public partial class Control_DefaultKeycap
             KeyCap.Visibility = Visibility.Hidden;
 
             if (!File.Exists(imagePath)) return;
-            var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+            using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
             var image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = memStream;

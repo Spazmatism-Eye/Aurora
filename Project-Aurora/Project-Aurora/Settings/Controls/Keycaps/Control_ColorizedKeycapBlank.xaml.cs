@@ -47,7 +47,7 @@ public partial class Control_ColorizedKeycapBlank
 
         if (string.IsNullOrWhiteSpace(key.Image)) return;
         if (!File.Exists(imagePath)) return;
-        var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+        using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
         var image = new BitmapImage();
         image.BeginInit();
         image.StreamSource = memStream;
