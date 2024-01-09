@@ -160,8 +160,10 @@ internal static class Program
             }
             else
             {
-                var releaseAsset = StaticStorage.Manager.LatestRelease.Assets
+                var latestReleaseAssets = StaticStorage.Manager.LatestRelease.Assets;
+                var releaseAsset = latestReleaseAssets
                     .First(s => s.Name.StartsWith("release") || s.Name.StartsWith("Aurora-v"));
+                var installerAsset = latestReleaseAssets.First(s => s.Name.StartsWith("Aurora-setup-v"));
                 var userResult = new UpdateInfoForm
                 {
                     Changelog = StaticStorage.Manager.LatestRelease.Body,
@@ -171,7 +173,7 @@ internal static class Program
                     UpdateSize = releaseAsset.Size,
                     PreRelease = StaticStorage.Manager.LatestRelease.Prerelease,
                     UpdateTime = releaseAsset.CreatedAt,
-                    DownloadTime = releaseAsset.DownloadCount,
+                    DownloadTime = releaseAsset.DownloadCount + installerAsset?.DownloadCount ?? 0,
                 };
 
                 userResult.ShowDialog();
