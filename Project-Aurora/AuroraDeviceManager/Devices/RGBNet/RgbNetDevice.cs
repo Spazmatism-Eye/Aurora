@@ -12,23 +12,28 @@ namespace AuroraDeviceManager.Devices.RGBNet;
 
 public abstract class RgbNetDevice : DefaultDevice
 {
+    private readonly bool _needsLayout;
     public bool Disabled { get; set; }
-    protected abstract IRGBDeviceProvider Provider { get; }
     public ConcurrentDictionary<IRGBDevice, Dictionary<LedId, DeviceKeys>> DeviceKeyRemap { get; } = new();
-    protected string? ErrorMessage { get; set; }
+    public readonly IList<IRGBDevice> DeviceList = [];
+
     protected override string DeviceInfo => ErrorMessage ?? GetDeviceStatus();
+    protected abstract IRGBDeviceProvider Provider { get; }
 
-    protected readonly IDictionary<string, int> DeviceCountMap = new Dictionary<string, int>();
-
-    public readonly List<IRGBDevice> DeviceList = new();
-
-    public IEnumerable<IRGBDevice> Devices { get; }
-
+    private readonly Dictionary<string, int> _deviceCountMap = new();
+    private string? ErrorMessage { get; set; }
+    private readonly RgbNetDeviceUpdater _updater;
     private string? _devicesString;
 
     protected RgbNetDevice()
     {
-        Devices = DeviceList.AsReadOnly();
+        _updater = new RgbNetDeviceUpdater(DeviceKeyRemap, false);
+    }
+
+    protected RgbNetDevice(bool needsLayout)
+    {
+        _needsLayout = needsLayout;
+        _updater = new RgbNetDeviceUpdater(DeviceKeyRemap, needsLayout);
     }
 
     private string GetDeviceStatus()
@@ -39,7 +44,7 @@ public abstract class RgbNetDevice : DefaultDevice
         if (!Provider.Devices.Any())
             return "Initialized: No devices connected";
 
-        return "Initialized: " + string.Join(", ", DeviceCountMap.Select(pair => pair.Value > 1 ? pair.Key + " x" + pair.Value : pair.Key));
+        return "Initialized: " + string.Join(", ", _deviceCountMap.Select(pair => pair.Value > 1 ? pair.Key + " x" + pair.Value : pair.Key));
     }
 
     public override string? GetDevices()
@@ -92,7 +97,7 @@ public abstract class RgbNetDevice : DefaultDevice
 
                 ErrorMessage = $"{e.Message} ({remainingMillis.Seconds.ToString()})";
 
-                await Task.Delay(1000);
+                await Task.Delay(1500);
             }
         } while (true);
     }
@@ -106,6 +111,7 @@ public abstract class RgbNetDevice : DefaultDevice
     private void ProviderOnDevicesChanged(object? sender, DevicesChangedEventArgs e)
     {
         lock (DeviceList)
+        {
             switch (e.Action)
             {
                 case DevicesChangedEventArgs.DevicesChangedAction.Added:
@@ -115,8 +121,9 @@ public abstract class RgbNetDevice : DefaultDevice
                     ProviderOnDeviceRemoved(e.Device);
                     break;
             }
-        
-        _devicesString = string.Join(Constants.StringSplit, DeviceList.Select(CalibrationName));
+
+            _devicesString = string.Join(Constants.StringSplit, DeviceList.Select(device => device.DeviceInfo.DeviceName));
+        }
     }
 
     private void ProviderOnDeviceRemoved(IRGBDevice device)
@@ -124,14 +131,14 @@ public abstract class RgbNetDevice : DefaultDevice
         DeviceList.Remove(device);
 
         var deviceName = device.DeviceInfo.Manufacturer + " " + device.DeviceInfo.Model;
-        DeviceCountMap.TryGetValue(deviceName, out var count);
+        _deviceCountMap.TryGetValue(deviceName, out var count);
         if (--count == 0)
         {
-            DeviceCountMap.Remove(deviceName);
+            _deviceCountMap.Remove(deviceName);
         }
         else
         {
-            DeviceCountMap[deviceName] = count;
+            _deviceCountMap[deviceName] = count;
         }
         Global.Logger.Information("[{DeviceType}] Device removed: {DeviceName}", DeviceName, deviceName);
     }
@@ -141,13 +148,13 @@ public abstract class RgbNetDevice : DefaultDevice
         DeviceList.Add(device);
 
         var deviceName = device.DeviceInfo.Manufacturer + " " + device.DeviceInfo.Model;
-        if (DeviceCountMap.TryGetValue(deviceName, out var count))
+        if (_deviceCountMap.TryGetValue(deviceName, out var count))
         {
-            DeviceCountMap[deviceName] = count + 1;
+            _deviceCountMap[deviceName] = count + 1;
         }
         else
         {
-            DeviceCountMap.Add(deviceName, 1);
+            _deviceCountMap.Add(deviceName, 1);
         }
         Global.Logger.Information("[{DeviceType}] Device added: {DeviceName}", DeviceName, deviceName);
 
@@ -159,7 +166,7 @@ public abstract class RgbNetDevice : DefaultDevice
         });
     }
 
-    private void RemapDeviceKeys(IReadOnlyDictionary<string, DeviceRemap> rgbNetConfigDevices, IRGBDevice rgbDevice)
+    private void RemapDeviceKeys(Dictionary<string, DeviceRemap> rgbNetConfigDevices, IRGBDevice rgbDevice)
     {
         if (rgbNetConfigDevices.TryGetValue(rgbDevice.DeviceInfo.DeviceName, out var configDevice))
         {
@@ -186,9 +193,9 @@ public abstract class RgbNetDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected internal virtual bool NeedsLayout()
+    public bool NeedsLayout()
     {
-        return false;
+        return _needsLayout;
     }
 
     protected virtual Task ConfigureProvider()
@@ -214,103 +221,14 @@ public abstract class RgbNetDevice : DefaultDevice
     {
         if (Disabled) return Task.FromResult(false);
         lock (DeviceList)
-            foreach (var device in Devices)
+        {
+            foreach (var device in DeviceList)
             {
-                UpdateDevice(keyColors, device);
+                _updater.UpdateDevice(keyColors, device);
             }
+        }
 
         return Task.FromResult(true);
-    }
-
-    private void UpdateDevice(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
-    {
-        if (NeedsLayout())
-        {
-            UpdateReverse(keyColors, device);
-        }
-        else
-        {
-            UpdateStraight(keyColors, device);
-        }
-
-        device.Update();
-    }
-
-    private static void UpdateReverse(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
-    {
-        var calibrationName = CalibrationName(device);
-        var calibrated = Global.DeviceConfig.DeviceCalibrations.TryGetValue(calibrationName, out var calibration);
-        foreach (var (key, color) in keyColors)
-        {
-            if (!RgbNetKeyMappings.AuroraToRgbNet.TryGetValue(key, out var rgbNetLedId))
-                continue;
-
-            var led = device[rgbNetLedId];
-            if (led == null)
-            {
-                if (device.Size == Size.Invalid)
-                {
-                    device.Size = new Size(0, 0);
-                }
-                led = device.AddLed(rgbNetLedId, new Point(device.Size.Width, 0), new Size(10, 10));
-                device.Size = new Size(device.Size.Width + 10, 10);
-            }
-
-            if (led == null)
-                continue;
-
-            if (calibrated)
-            {
-                UpdateLedCalibrated(led, color, calibration);
-            }
-            else
-            {
-                UpdateLed(led, color);
-            }
-        }
-    }
-
-    private void UpdateStraight(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
-    {
-        var calibrationName = CalibrationName(device);
-        var calibrated = Global.DeviceConfig.DeviceCalibrations.TryGetValue(calibrationName, out var calibration);
-        foreach (var led in device)
-        {
-            DeviceKeyRemap.TryGetValue(device, out var keyRemap);
-            if (!(keyRemap != null &&
-                  keyRemap.TryGetValue(led.Id, out var dk)) && //get remapped key if device if remapped
-                !RgbNetKeyMappings.KeyNames.TryGetValue(led.Id, out dk)) continue;
-            if (!keyColors.TryGetValue(dk, out var color)) continue;
-
-            if (calibrated)
-            {
-                UpdateLedCalibrated(led, color, calibration);
-            }
-            else
-            {
-                UpdateLed(led, color);
-            }
-        }
-    }
-
-    private static void UpdateLed(Led led, Color color)
-    {
-        led.Color = new RGB.NET.Core.Color(
-            color.A,
-            color.R,
-            color.G,
-            color.B
-        );
-    }
-
-    private static void UpdateLedCalibrated(Led led, Color color, SimpleColor calibration)
-    {
-        led.Color = new RGB.NET.Core.Color(
-            (byte)(color.A * calibration.A / 255),
-            (byte)(color.R * calibration.R / 255),
-            (byte)(color.G * calibration.G / 255),
-            (byte)(color.B * calibration.B / 255)
-        );
     }
 
     protected override void RegisterVariables(VariableRegistry variableRegistry)
@@ -318,12 +236,6 @@ public abstract class RgbNetDevice : DefaultDevice
         base.RegisterVariables(variableRegistry);
 
         variableRegistry.Register($"{DeviceName}_connect_sleep_time", 40, "Connection timeout seconds");
-    }
-
-    private static string CalibrationName(IRGBDevice device)
-    {
-        //deviceSummary = $"[{device.DeviceInfo.DeviceType}] ({device.DeviceInfo.DeviceName})"
-        return device.DeviceInfo.DeviceName;
     }
 
     protected override void Dispose(bool disposing)

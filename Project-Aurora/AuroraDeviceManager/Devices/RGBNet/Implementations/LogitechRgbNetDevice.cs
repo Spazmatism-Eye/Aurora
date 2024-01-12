@@ -1,14 +1,36 @@
-﻿using Microsoft.Win32;
+﻿using AuroraDeviceManager.Utils;
+using Microsoft.Win32;
 using RGB.NET.Core;
 using RGB.NET.Devices.Logitech;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
-public sealed class LogitechRgbNetDevice : RgbNetDevice
+public sealed class LogitechRgbNetDevice() : RgbNetDevice(true)
 {
+    private bool _sdkDetectedOff;
+
     protected override IRGBDeviceProvider Provider => LogitechDeviceProvider.Instance;
 
     public override string DeviceName => "Logitech (RGB.NET)";
+
+    protected override async Task ConfigureProvider()
+    {
+        await base.ConfigureProvider();
+
+        var isSdkRunning = ProcessUtils.IsProcessRunning("lghub") || ProcessUtils.IsProcessRunning("lcore");
+        if (!isSdkRunning)
+        {
+            _sdkDetectedOff = true;
+            throw new DeviceProviderException(new ApplicationException("LGS or GHUB need to be running!"), false);
+        }
+
+        if (_sdkDetectedOff)
+        {
+            await Task.Delay(5000);
+        }
+
+        _sdkDetectedOff = false;
+    }
 
     protected override void OnInitialized()
     {
@@ -21,8 +43,6 @@ public sealed class LogitechRgbNetDevice : RgbNetDevice
 
         return true;
     }
-
-    protected internal override bool NeedsLayout() => true;
 
     #region Event handlers
 

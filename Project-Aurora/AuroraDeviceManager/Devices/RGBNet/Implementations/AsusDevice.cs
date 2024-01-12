@@ -1,8 +1,7 @@
 ﻿using AuroraDeviceManager.Utils;
-using Common.Devices;
 using RGB.NET.Core;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class AsusDevice : RgbNetDevice
 {

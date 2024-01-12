@@ -1,7 +1,7 @@
 ﻿using RGB.NET.Core;
 using RGB.NET.Devices.Bloody;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class BloodyRgbNetDevice: RgbNetDevice
 {

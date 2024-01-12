@@ -1,7 +1,7 @@
 ﻿using RGB.NET.Core;
 using RGB.NET.Devices.Wooting;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class WootingRgbNetDevice : RgbNetDevice
 {

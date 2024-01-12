@@ -1,8 +1,7 @@
-﻿using Common.Devices;
-using RGB.NET.Core;
+﻿using RGB.NET.Core;
 using RGB.NET.Devices.Razer;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class RazerRgbNetDevice : RgbNetDevice
 {

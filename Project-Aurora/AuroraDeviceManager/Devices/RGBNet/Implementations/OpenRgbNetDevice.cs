@@ -4,7 +4,7 @@ using Common.Devices;
 using RGB.NET.Core;
 using RGB.NET.Devices.OpenRGB;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class OpenRgbNetDevice : RgbNetDevice
 { 

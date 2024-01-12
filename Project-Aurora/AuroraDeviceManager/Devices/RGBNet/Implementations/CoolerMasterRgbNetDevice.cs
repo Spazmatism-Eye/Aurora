@@ -1,7 +1,7 @@
 ﻿using RGB.NET.Core;
 using RGB.NET.Devices.CoolerMaster;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class CoolerMasterRgbNetDevice : RgbNetDevice
 {

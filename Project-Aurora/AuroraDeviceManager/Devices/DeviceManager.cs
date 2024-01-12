@@ -180,6 +180,7 @@ public sealed class DeviceManager : IDisposable
             return;
         }
 
+        _tokenSource?.Dispose();
         _tokenSource = new CancellationTokenSource();
         var token = _tokenSource.Token;
         try
@@ -267,12 +268,11 @@ public sealed class DeviceManager : IDisposable
 
     private DeviceRemap GetDeviceRemap(IRGBDevice device)
     {
-        foreach (var netConfigDevice in DeviceMappingConfig.Config.Devices)
+        var remaps = DeviceMappingConfig.Config.Devices
+            .Find(netConfigDevice => netConfigDevice.Name.Equals(device.DeviceInfo.DeviceName));
+        if (remaps != null)
         {
-            if (netConfigDevice.Name.Equals(device.DeviceInfo.DeviceName))
-            {
-                return netConfigDevice;
-            }
+            return remaps;
         }
 
         var rgbNetConfigDevice = new DeviceRemap(device.DeviceInfo.DeviceName);

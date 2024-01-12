@@ -1,10 +1,10 @@
 ﻿using AuroraDeviceManager.Utils;
-using Common.Utils;
 using Common.Devices;
+using Common.Utils;
 using RGB.NET.Core;
 using RGB.NET.Devices.CorsairLegacy;
 
-namespace AuroraDeviceManager.Devices.RGBNet;
+namespace AuroraDeviceManager.Devices.RGBNet.Implementations;
 
 public class CorsairRgbNetDevice : RgbNetDevice
 {
@@ -48,13 +48,13 @@ public class CorsairRgbNetDevice : RgbNetDevice
 
         if (_icueDetectedOff)
         {
-            Thread.Sleep(5000);
+            await Task.Delay(10000);
         }
 
         _icueDetectedOff = false;
         
         //give iCUE some time to initialize
-        Thread.Sleep(1500);
+        await Task.Delay(1500);
 
         //var exclusive = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_exclusive");
 
