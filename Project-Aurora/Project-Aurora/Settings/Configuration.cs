@@ -27,6 +27,7 @@ public class Configuration : INotifyPropertyChanged
 
     public bool AllowTransparency { get; set; } = true;
     public bool ChromaDisableDeviceControl { get; set; }
+    public bool EnableLightsyncTakeover { get; set; } = true;
 
     [JsonProperty("use_volume_as_brightness")]
     public bool UseVolumeAsBrightness { get; set; }

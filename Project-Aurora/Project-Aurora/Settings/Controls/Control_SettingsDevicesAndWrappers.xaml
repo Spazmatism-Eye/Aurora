@@ -180,6 +180,8 @@ ToolTip="Disabling device control will stop ChromaSDK from controlling Razer Dev
 
                         <Label x:Name="LightsyncConnectionStatusLabel" Margin="5 0 5 0" Grid.Row="1" Grid.Column="2"
                                Padding="0" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        
+                        <CheckBox Grid.Column="0" Grid.Row="1" IsChecked="{Binding EnableLightsyncTakeover}">Enable integration takeover</CheckBox>
 
                         <Label Grid.Row="2" Grid.Column="0" Content="Current Application:" Margin="5 0 5 0" Padding="0"
                                VerticalAlignment="Center" />

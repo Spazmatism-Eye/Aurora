@@ -28,8 +28,7 @@ public partial class Control_Settings
     private readonly Control_DeviceManager _controlDeviceManager;
     private readonly DeviceMapping _deviceMapping;
 
-    public Control_Settings(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager,
-        Task<KeyboardLayoutManager> layoutManager, Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager, Task<IpcListener?> ipcListener)
+    public Control_Settings(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager, Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager, Task<IpcListener?> ipcListener)
     {
         _pluginManager = pluginManager;
         _httpListener = httpListener;
@@ -44,7 +43,7 @@ public partial class Control_Settings
         LnkRepository.NavigateUri = new Uri($"https://github.com/{o}/{r}");
         LnkContributors.NavigateUri = new Uri($"https://github.com/{o}/{r}#contributors-");
 
-        _devicesAndWrappers = new Control_SettingsDevicesAndWrappers(rzSdkManager, layoutManager, deviceManager);
+        _devicesAndWrappers = new Control_SettingsDevicesAndWrappers(rzSdkManager, deviceManager);
         _controlDeviceManager = new Control_DeviceManager(deviceManager, ipcListener);
         _deviceMapping = new DeviceMapping(deviceManager, ipcListener);
         

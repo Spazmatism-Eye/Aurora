@@ -105,7 +105,7 @@ partial class ConfigUI : INotifyPropertyChanged
         _ipcListener = ipcListener;
         _deviceManager = deviceManager;
         _lightingStateManager = lightingStateManager;
-        _settingsControl = new Control_Settings(rzSdkManager, pluginManager, layoutManager, httpListener, deviceManager, ipcListener);
+        _settingsControl = new Control_Settings(rzSdkManager, pluginManager, httpListener, deviceManager, ipcListener);
         
         _updateKeyboardLayouts = async () =>
         {

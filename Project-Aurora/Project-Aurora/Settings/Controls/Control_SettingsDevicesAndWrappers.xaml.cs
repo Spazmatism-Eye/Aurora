@@ -3,7 +3,6 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -22,15 +21,13 @@ namespace Aurora.Settings.Controls;
 
 public partial class Control_SettingsDevicesAndWrappers
 {
-    private readonly Task<KeyboardLayoutManager> _layoutManager;
     private readonly Task<ChromaReader?> _rzSdkManager;
     private readonly Task<DeviceManager> _deviceManager;
     
-    public Control_SettingsDevicesAndWrappers(Task<ChromaReader?> rzSdkManager, Task<KeyboardLayoutManager> layoutManager,
+    public Control_SettingsDevicesAndWrappers(Task<ChromaReader?> rzSdkManager,
         Task<DeviceManager> deviceManager)
     {
         _rzSdkManager = rzSdkManager;
-        _layoutManager = layoutManager;
         _deviceManager = deviceManager;
 
         InitializeComponent();
@@ -47,6 +44,12 @@ public partial class Control_SettingsDevicesAndWrappers
     }
 
     public async Task Initialize()
+    {
+        await InitializeChromaState();
+        InitializeLightsyncState();
+    }
+
+    private async Task InitializeChromaState()
     {
         var razerManager = await _rzSdkManager;
         if (razerManager != null)
@@ -66,28 +69,19 @@ public partial class Control_SettingsDevicesAndWrappers
             ChromaConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.PaleVioletRed);
             ChromaDisableDeviceControlButton.IsEnabled = false;
         }
+    }
 
+    private void InitializeLightsyncState()
+    {
         var logitechSdkListener = LogitechSdkModule.LogitechSdkListener;
-        switch (logitechSdkListener.State)
-        {
-            case LightsyncSdkState.Conflicted:
-                LightsyncConnectionStatusLabel.Content = "Conflicted";
-                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Crimson);
-                break;
-            case LightsyncSdkState.NotInstalled:
-                LightsyncConnectionStatusLabel.Content = "Not Installed";
-                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.PaleVioletRed);
-                break;
-            case LightsyncSdkState.Waiting:
-                LightsyncConnectionStatusLabel.Content = "Waiting for game";
-                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Chocolate);
-                break;
-            case LightsyncSdkState.Connected:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
         logitechSdkListener.ApplicationChanged += LogitechSdkListenerOnApplicationChanged;
+        logitechSdkListener.StateChanged += LogitechSdkListenerOnStateChanged;
+        UpdateLightsyncState();
+    }
+
+    private void LogitechSdkListenerOnStateChanged(object? sender, EventArgs e)
+    {
+        UpdateLightsyncState();
     }
 
     private void HandleChromaAppChange(object? s, in ChromaAppData appData)
@@ -125,6 +119,37 @@ public partial class Control_SettingsDevicesAndWrappers
                     LightsyncCurrentApplicationLabel.Content = Path.GetFileName(e);
                 }
             });
+    }
+
+    private void UpdateLightsyncState()
+    {
+        Dispatcher.BeginInvoke(() =>
+        {
+            var logitechSdkListener = LogitechSdkModule.LogitechSdkListener;
+            switch (logitechSdkListener.State)
+            {
+                case LightsyncSdkState.Conflicted:
+                    LightsyncConnectionStatusLabel.Content = "Conflicted";
+                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Crimson);
+                    break;
+                case LightsyncSdkState.NotInstalled:
+                    LightsyncConnectionStatusLabel.Content = "Not Installed";
+                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.PaleVioletRed);
+                    break;
+                case LightsyncSdkState.Waiting:
+                    LightsyncConnectionStatusLabel.Content = "Waiting for game";
+                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Chocolate);
+                    break;
+                case LightsyncSdkState.Connected:
+                    break;
+                case LightsyncSdkState.Disabled:
+                    LightsyncConnectionStatusLabel.Content = "Disabled";
+                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.PaleVioletRed);
+                    break;
+                default:
+                    throw new NotImplementedException("LogitechSdkListener.State: " + logitechSdkListener.State + "Unexpected Enum value");
+            }
+        });
     }
 
     private void ResetDevices(object? sender, RoutedEventArgs e) => Task.Run(async () => await (await _deviceManager).ResetDevices());
@@ -187,8 +212,6 @@ public partial class Control_SettingsDevicesAndWrappers
                 }
             })
             .ConfigureAwait(false);
-        
-        
         return;
 
         void HandleExceptions(AggregateException ae)

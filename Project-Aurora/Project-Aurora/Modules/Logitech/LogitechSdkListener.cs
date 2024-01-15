@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Aurora.Modules.Logitech.Enums;
 using Aurora.Modules.Logitech.Structs;
 using Aurora.Modules.ProcessMonitor;
+using Aurora.Utils;
 using Common.Devices;
 using Common.Utils;
 using Microsoft.Win32;
@@ -23,31 +24,39 @@ public enum LightsyncSdkState
     Waiting,
     Connected,
     Conflicted,
+    Disabled,
 }
 
-public partial class LogitechSdkListener
+public sealed class LogitechSdkListener : IDisposable
 {
     public event EventHandler? ColorsUpdated;
     public event EventHandler<string?>? ApplicationChanged;
+    public event EventHandler? StateChanged; 
 
-    public LightsyncSdkState State { get; private set; }
+    private LightsyncSdkState _state;
+    public LightsyncSdkState State
+    {
+        get => _state;
+        private set
+        {
+            _state = value;
+            StateChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
 
     public IReadOnlyDictionary<DeviceKeys, Color> Colors => _colors;
     public Color BackgroundColor { get; private set; } = Color.Empty;
 
     private LogiSetTargetDeviceType DeviceType { get; set; }
 
-    private readonly List<PipeListener> _pipeListeners = new();
+    private readonly List<PipeListener> _pipeListeners = [];
     private readonly ConcurrentDictionary<DeviceKeys, Color> _colors = new();
-    private readonly HashSet<DeviceKeys> _excluded = new();
+    private readonly HashSet<DeviceKeys> _excluded = [];
 
     private Dictionary<DeviceKeys, Color> _savedColors = new();
     private Color _savedBackground = Color.Empty;
 
-    private readonly HashSet<string> _blockedApps = new()
-    {
-        "Aurora.exe", "AuroraCommunity.exe", "AuroraDeviceManager.exe"
-    };
+    private readonly HashSet<string> _blockedApps = ["Aurora.exe", "AuroraCommunity.exe", "AuroraDeviceManager.exe"];
 
     public async Task Initialize(Task<RunningProcessMonitor> runningProcessMonitor)
     {
@@ -81,7 +90,7 @@ public partial class LogitechSdkListener
             await Task.Delay(1000);
         }
 
-        var i = WtsGetActiveConsoleSessionId();
+        var i = Kernel32.WtsGetActiveConsoleSessionId();
         var lgsPipeName = $"LGS_LED_SDK-{i:x8}";
         Global.logger.Information("LGS Pipe name: {PipeName}", lgsPipeName);
         var pipeListener = new PipeListener(lgsPipeName);
@@ -95,9 +104,6 @@ public partial class LogitechSdkListener
 
         State = IsInstalled() ? LightsyncSdkState.Waiting : LightsyncSdkState.NotInstalled;
     }
-
-    [LibraryImport("kernel32.dll", EntryPoint = "WTSGetActiveConsoleSessionId")]
-    private static partial uint WtsGetActiveConsoleSessionId();
 
     private static bool IsInstalled()
     {
@@ -181,9 +187,9 @@ public partial class LogitechSdkListener
         }
     }
 
-    private void SetLightingForKeyWithQuartzCode(ReadOnlySpan<byte> span)
+    private void SetLightingForKeyWithQuartzCode(ReadOnlySpan<byte> _)
     {
-        //_logger.Information("SetLightingForKeyWithQuartzCode");
+        //unused
     }
 
     private void RestoreLightingForKey(ReadOnlySpan<byte> span)
@@ -400,5 +406,7 @@ public partial class LogitechSdkListener
             pipeListener.Dispose();
         }
         _pipeListeners.Clear();
+
+        State = LightsyncSdkState.Disabled;
     }
 }
