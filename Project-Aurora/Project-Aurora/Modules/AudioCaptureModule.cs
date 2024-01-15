@@ -14,12 +14,6 @@ public sealed partial class AudioCaptureModule : AuroraModule
     private AudioDeviceProxy? _renderProxy;
     private AudioDeviceProxy? _captureProxy;
 
-    public override Task<bool> InitializeAsync()
-    {
-        Initialize();
-        return Task.FromResult(true);
-    }
-
     protected override Task Initialize()
     {
         InitializeLocalInfoProxies();
@@ -42,7 +36,7 @@ public sealed partial class AudioCaptureModule : AuroraModule
         {
             MessageBox.Show("Audio device could not be loaded.\n" +
                             "Audio information such as output level won't be updated.\n" +
-                            "Cause of this could be bad drivers or bad implementation", 
+                            "Cause of this could be bad drivers or bad implementation from Aurora", 
                 "Aurora - Warning");
             Global.logger.Error(e, "AudioCapture error");
         }

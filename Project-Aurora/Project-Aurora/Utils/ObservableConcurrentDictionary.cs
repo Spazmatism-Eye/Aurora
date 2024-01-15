@@ -12,6 +12,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using JetBrains.Annotations;
 using PropertyChanged;
 
@@ -35,8 +38,8 @@ public class ObservableConcurrentDictionary<TKey, TValue> : IDictionary<TKey, TV
     /// <summary>
     /// Initializes an instance of the ObservableConcurrentDictionary class.
     /// </summary>
-    public ObservableConcurrentDictionary() {
-        _context = AsyncOperationManager.SynchronizationContext;
+    public ObservableConcurrentDictionary()
+    {
         _dictionary = new ConcurrentDictionary<TKey, TValue>();
     }
 
@@ -51,15 +54,22 @@ public class ObservableConcurrentDictionary<TKey, TValue> : IDictionary<TKey, TV
     private void NotifyObserversOfChange() {
         var collectionHandler = CollectionChanged;
         var propertyHandler = PropertyChanged;
-        if (collectionHandler != null || propertyHandler != null) {
-            _context.Post(_ => {
-                collectionHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                if (propertyHandler == null) return;
-                propertyHandler(this, new PropertyChangedEventArgs("Count"));
-                propertyHandler(this, new PropertyChangedEventArgs(nameof(Keys)));
-                propertyHandler(this, new PropertyChangedEventArgs(nameof(Values)));
-            }, null);
-        }
+        if (collectionHandler == null && propertyHandler == null) return;
+
+        var tcs = new TaskCompletionSource<SynchronizationContext>();
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            tcs.SetResult(AsyncOperationManager.SynchronizationContext);
+        }, DispatcherPriority.Send);
+        var context = tcs.Task.Result;
+
+        context.Post(_ => {
+            collectionHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if (propertyHandler == null) return;
+            propertyHandler(this, new PropertyChangedEventArgs("Count"));
+            propertyHandler(this, new PropertyChangedEventArgs(nameof(Keys)));
+            propertyHandler(this, new PropertyChangedEventArgs(nameof(Values)));
+        }, null);
     }
 
     /// <summary>Attempts to add an item to the dictionary, notifying observers of any changes.</summary>

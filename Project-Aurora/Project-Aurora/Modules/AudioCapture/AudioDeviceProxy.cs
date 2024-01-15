@@ -16,7 +16,7 @@ namespace Aurora.Modules.AudioCapture;
 /// </summary>
 public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfaces.IMMNotificationClient
 {
-    static readonly BlockingCollection<Action> ThreadTasks = new();
+    private static readonly BlockingCollection<Action> ThreadTasks = new();
 
     private static readonly Thread NAudioThread = new(() =>
     {
@@ -36,7 +36,7 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
         NAudioThread.Start();
     }
     
-    public static List<AudioDeviceProxy> Instances { get; } = new();
+    public static List<AudioDeviceProxy> Instances { get; } = [];
     private readonly MMDeviceEnumerator _deviceEnumerator = new();
 
     public event EventHandler<EventArgs>? DeviceChanged;
@@ -59,7 +59,10 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
     {
         Flow = flow;
         DeviceId = deviceId ?? AudioDevices.DefaultDeviceId;
-        _deviceEnumerator.RegisterEndpointNotificationCallback(this);
+        ThreadTasks.Add(() =>
+        {
+            _deviceEnumerator.RegisterEndpointNotificationCallback(this);
+        });
         
         Instances.Add(this);
     }
@@ -126,11 +129,11 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
     {
         try
         {
-            return _deviceEnumerator.GetDefaultAudioEndpoint(Flow, Role.Multimedia);
+            return _deviceEnumerator.HasDefaultAudioEndpoint(Flow, Role.Multimedia) ? _deviceEnumerator.GetDefaultAudioEndpoint(Flow, Role.Multimedia) : null;
         }
         catch (Exception e)
         {
-            Global.logger.Error("Default audio defice could not be found.", e);
+            Global.logger.Error(e, "Default audio device could not be found");
             return null;
         }
     }

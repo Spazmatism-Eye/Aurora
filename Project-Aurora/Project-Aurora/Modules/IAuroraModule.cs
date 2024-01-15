@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using Amib.Threading;
 
 namespace Aurora.Modules;
@@ -25,7 +24,7 @@ public abstract class AuroraModule : IDisposable
     {
         _taskSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        ModuleThreadPool.QueueWorkItem(WorkItemCallback, null, PostExecuteWorkItemCallback);
+        ModuleThreadPool.QueueWorkItem(WorkItemCallback, null);
         if (ModuleThreadPool.IsIdle || ModuleThreadPool.ActiveThreads == 0)
         {
             ModuleThreadPool.Start();
@@ -39,23 +38,19 @@ public abstract class AuroraModule : IDisposable
             return action().ContinueWith(t =>
             {
                 _taskSource.SetResult();
-                Global.logger.Debug("Finished module: {Module}", GetType());
+                Global.logger.Debug("Finished loading module: {Module}", GetType());
 
                 return t;
             });
-        }
-
-        void PostExecuteWorkItemCallback(IWorkItemResult _)
-        {
         }
     }
 
     public virtual Task InitializeAsync()
     {
-        return QueueInit(InitButWait);
+        return QueueInit(InitAwait);
     }
 
-    private async Task InitButWait()
+    private async Task InitAwait()
     {
         try
         {
