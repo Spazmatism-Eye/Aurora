@@ -40,6 +40,7 @@ public sealed class TransparencyComponent : IDisposable
         _window.TintColor = Colors.Transparent;
         _window.TintOpacity = 1;
         _window.NoiseOpacity = 0;
+        _window.FallbackColor = Color.FromArgb(64, 0, 0, 0);
     }
 
     private void WindowOnLoaded(object sender, RoutedEventArgs e)
@@ -49,6 +50,7 @@ public sealed class TransparencyComponent : IDisposable
 
         // Subscribe to PresentationSource's ContentRendered event
         if (presentationSource != null) presentationSource.ContentRendered += Window_ContentRendered;
+        UpdateStyleAttributes();
     }
 
     private void Window_ContentRendered(object? sender, EventArgs e)
@@ -58,6 +60,7 @@ public sealed class TransparencyComponent : IDisposable
 
     private void UpdateStyleAttributes()
     {
+        _lightThemeRegistryWatcher.RegistryChanged -= LightThemeRegistryWatcherOnRegistryChanged;
         _lightThemeRegistryWatcher.RegistryChanged += LightThemeRegistryWatcherOnRegistryChanged;
         _lightThemeRegistryWatcher.StartWatching();
     }

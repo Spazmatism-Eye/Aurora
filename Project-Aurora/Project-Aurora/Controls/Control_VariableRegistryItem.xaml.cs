@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Common.Devices;
 using Xceed.Wpf.Toolkit;
 
@@ -53,7 +54,10 @@ public partial class Control_VariableRegistryItem
     public Control_VariableRegistryItem()
     {
         InitializeComponent();
-        Loaded += (_, _) => { UpdateControls(); };
+        Loaded += (_, _) =>
+        {
+            Dispatcher.BeginInvoke(UpdateControls, DispatcherPriority.Loaded);
+        };
     }
 
     private void UpdateControls()
@@ -74,133 +78,180 @@ public partial class Control_VariableRegistryItem
 
         grd_control.Children.Clear();
 
+        Control control;
         if (varType == typeof(bool))
         {
-            var chkbxControl = new CheckBox();
-            chkbxControl.Content = "";
-            chkbxControl.IsChecked = VarRegistry.GetVariable<bool>(VariableName);
-            chkbxControl.Checked += ChkbxControl_VarChanged;
-            chkbxControl.Unchecked += ChkbxControl_VarChanged;
-
-            grd_control.Children.Add(chkbxControl);
+            control = CreateBoolControl();
         }
         else if (varType == typeof(string))
         {
-            var txtbxControl = new TextBox();
-            txtbxControl.Text = VarRegistry.GetString(VariableName);
-            txtbxControl.TextChanged += Txtbx_control_TextChanged;
-
-            grd_control.Children.Add(txtbxControl);
+            control = CreateStringControl();
         }
         else if (varType == typeof(int))
         {
-            if (VarRegistry.GetFlags(VariableName).HasFlag(VariableFlags.UseHex))
-            {
-                var hexBox = new TextBox();
-                hexBox.PreviewTextInput += HexBoxOnPreviewTextInput;
-                hexBox.Text = $"{VarRegistry.GetVariable<int>(VariableName):X}";
-                hexBox.TextChanged += HexBox_TextChanged;
-                grd_control.Children.Add(hexBox);
-            }
-            else
-            {
-                var intUpDownControl = new IntegerUpDown();
-                intUpDownControl.Value = VarRegistry.GetVariable<int>(VariableName);
-                if (VarRegistry.GetVariableMax<int>(VariableName, out var maxVal))
-                    intUpDownControl.Maximum = maxVal;
-                if (VarRegistry.GetVariableMin<int>(VariableName, out var minVal))
-                    intUpDownControl.Minimum = minVal;
-
-                intUpDownControl.ValueChanged += VariableChanged;
-
-                grd_control.Children.Add(intUpDownControl);
-            }
+            control = CreateIntControl();
         }
         else if (varType == typeof(long))
         {
-            var longUpDownControl = new LongUpDown();
-            longUpDownControl.Value = VarRegistry.GetVariable<long>(VariableName);
-            if (VarRegistry.GetVariableMax<long>(VariableName, out var maxVal))
-                longUpDownControl.Maximum = maxVal;
-            if (VarRegistry.GetVariableMin<long>(VariableName, out var minVal))
-                longUpDownControl.Minimum = minVal;
-
-            longUpDownControl.ValueChanged += VariableChanged;
-
-            grd_control.Children.Add(longUpDownControl);
+            control = CreateLongControl();
         }
         else if (varType == typeof(double))
         {
-            var doubleUpDownControl = new DoubleUpDown();
-            doubleUpDownControl.Value = VarRegistry.GetVariable<double>(VariableName);
-            if (VarRegistry.GetVariableMax<double>(VariableName, out var maxVal))
-                doubleUpDownControl.Maximum = maxVal;
-            if (VarRegistry.GetVariableMax<double>(VariableName, out var minVal))
-                doubleUpDownControl.Minimum = minVal;
-            doubleUpDownControl.ValueChanged += VariableChanged;
-            grd_control.Children.Add(doubleUpDownControl);
+            control = CreateDoubleControl();
         }
         else if (varType == typeof(float))
         {
-            var doubleUpDownControl = new DoubleUpDown();
-            doubleUpDownControl.Value = VarRegistry.GetVariable<float>(VariableName);
-            if (VarRegistry.GetVariableMax<float>(VariableName, out var maxVal))
-                doubleUpDownControl.Maximum = maxVal;
-            if (VarRegistry.GetVariableMax<float>(VariableName, out var minVal))
-                doubleUpDownControl.Minimum = minVal;
-            doubleUpDownControl.ValueChanged += VariableChanged;
-            grd_control.Children.Add(doubleUpDownControl);
+            control = CreateFloatControl();
         }
         else if (varType == typeof(Aurora.Settings.KeySequence))
         {
-            var ctrl = new KeySequence
-            {
-                RecordingTag = varTitle,
-                Sequence = VarRegistry.GetVariable<Aurora.Settings.KeySequence>(VariableName)
-            };
-
-            ctrl.SequenceUpdated += VariableChanged;
-
-            grd_control.Children.Add(ctrl);
+            control = CreateKeySequenceControl(varTitle);
         }
         else if (varType == typeof(Utils.RealColor))
         {
-            var clr = VarRegistry.GetVariable<Utils.RealColor>(VariableName);
-            
-            var ctrl = new ColorPicker
-            {
-                ColorMode = ColorMode.ColorCanvas,
-                SelectedColor = clr.GetMediaColor()
-            };
-            ctrl.SelectedColorChanged += ColorPickerControlValueChanged;
-
-            grd_control.Children.Add(ctrl);
+            control = CreateRealColorControl();
         }
         else if (varType == typeof(DeviceKeys))
         {
-            var ctrl = new ComboBox
-            {
-                ItemsSource = Enum.GetValues(typeof(DeviceKeys)).Cast<DeviceKeys>().ToList(),
-                SelectedValue = VarRegistry.GetVariable<DeviceKeys>(VariableName)
-            };
-            ctrl.SelectionChanged += CmbbxEnum_control_SelectionChanged;
-
-            grd_control.Children.Add(ctrl);
+            control = CreateDeviceKeyControl();
         }
         else if (varType.IsEnum)
         {
-            var cmbbxEnumControl = new ComboBox
-            {
-                ItemsSource = Enum.GetValues(varType),
-                SelectedValue = VarRegistry.GetVariable<object>(VariableName)
-            };
-            cmbbxEnumControl.SelectionChanged += CmbbxEnum_control_SelectionChanged;
-
-            grd_control.Children.Add(cmbbxEnumControl);
+            control = CreateEnumControl(varType);
+        }
+        else
+        {
+            return;
         }
 
-        grd_control.UpdateLayout();
+        grd_control.Children.Add(control);
     }
+
+    private CheckBox CreateBoolControl()
+    {
+        var chkbxControl = new CheckBox();
+        chkbxControl.Content = "";
+        chkbxControl.IsChecked = VarRegistry.GetVariable<bool>(VariableName);
+        chkbxControl.Checked += ChkbxControl_VarChanged;
+        chkbxControl.Unchecked += ChkbxControl_VarChanged;
+        return chkbxControl;
+    }
+
+    private TextBox CreateStringControl()
+    {
+        var txtbxControl = new TextBox();
+        txtbxControl.Text = VarRegistry.GetString(VariableName);
+        txtbxControl.TextChanged += Txtbx_control_TextChanged;
+        return txtbxControl;
+    }
+
+    private Control CreateIntControl()
+    {
+        if (VarRegistry.GetFlags(VariableName).HasFlag(VariableFlags.UseHex))
+        {
+            var hexBox = new TextBox();
+            hexBox.PreviewTextInput += HexBoxOnPreviewTextInput;
+            hexBox.Text = $"{VarRegistry.GetVariable<int>(VariableName):X}";
+            hexBox.TextChanged += HexBox_TextChanged;
+            return hexBox;
+        }
+
+        var intUpDownControl = new IntegerUpDown();
+        intUpDownControl.Value = VarRegistry.GetVariable<int>(VariableName);
+        if (VarRegistry.GetVariableMax<int>(VariableName, out var maxVal))
+            intUpDownControl.Maximum = maxVal;
+        if (VarRegistry.GetVariableMin<int>(VariableName, out var minVal))
+            intUpDownControl.Minimum = minVal;
+
+        intUpDownControl.ValueChanged += VariableChanged;
+
+        return intUpDownControl;
+    }
+
+    private LongUpDown CreateLongControl()
+    {
+        var longUpDownControl = new LongUpDown();
+        longUpDownControl.Value = VarRegistry.GetVariable<long>(VariableName);
+        if (VarRegistry.GetVariableMax<long>(VariableName, out var maxVal))
+            longUpDownControl.Maximum = maxVal;
+        if (VarRegistry.GetVariableMin<long>(VariableName, out var minVal))
+            longUpDownControl.Minimum = minVal;
+
+        longUpDownControl.ValueChanged += VariableChanged;
+        return longUpDownControl;
+    }
+
+    private DoubleUpDown CreateDoubleControl()
+    {
+        var doubleUpDownControl = new DoubleUpDown();
+        doubleUpDownControl.Value = VarRegistry.GetVariable<double>(VariableName);
+        if (VarRegistry.GetVariableMax<double>(VariableName, out var maxVal))
+            doubleUpDownControl.Maximum = maxVal;
+        if (VarRegistry.GetVariableMax<double>(VariableName, out var minVal))
+            doubleUpDownControl.Minimum = minVal;
+        doubleUpDownControl.ValueChanged += VariableChanged;
+        return doubleUpDownControl;
+    }
+
+    private DoubleUpDown CreateFloatControl()
+    {
+        var doubleUpDownControl = new DoubleUpDown();
+        doubleUpDownControl.Value = VarRegistry.GetVariable<float>(VariableName);
+        if (VarRegistry.GetVariableMax<float>(VariableName, out var maxVal))
+            doubleUpDownControl.Maximum = maxVal;
+        if (VarRegistry.GetVariableMax<float>(VariableName, out var minVal))
+            doubleUpDownControl.Minimum = minVal;
+        doubleUpDownControl.ValueChanged += VariableChanged;
+        return doubleUpDownControl;
+    }
+
+    private KeySequence CreateKeySequenceControl(string varTitle)
+    {
+        var ctrl = new KeySequence
+        {
+            RecordingTag = varTitle,
+            Sequence = VarRegistry.GetVariable<Aurora.Settings.KeySequence>(VariableName)
+        };
+
+        ctrl.SequenceUpdated += VariableChanged;
+        return ctrl;
+    }
+
+    private ColorPicker CreateRealColorControl()
+    {
+        var clr = VarRegistry.GetVariable<Utils.RealColor>(VariableName);
+            
+        var ctrl = new ColorPicker
+        {
+            ColorMode = ColorMode.ColorCanvas,
+            SelectedColor = clr.GetMediaColor()
+        };
+        ctrl.SelectedColorChanged += ColorPickerControlValueChanged;
+        return ctrl;
+    }
+
+    private ComboBox CreateDeviceKeyControl()
+    {
+        var ctrl = new ComboBox
+        {
+            ItemsSource = Enum.GetValues(typeof(DeviceKeys)).Cast<DeviceKeys>().ToList(),
+            SelectedValue = VarRegistry.GetVariable<DeviceKeys>(VariableName)
+        };
+        ctrl.SelectionChanged += CmbbxEnum_control_SelectionChanged;
+        return ctrl;
+    }
+
+    private ComboBox CreateEnumControl(Type varType)
+    {
+        var cmbbxEnumControl = new ComboBox
+        {
+            ItemsSource = Enum.GetValues(varType),
+            SelectedValue = VarRegistry.GetVariable<object>(VariableName)
+        };
+        cmbbxEnumControl.SelectionChanged += CmbbxEnum_control_SelectionChanged;
+        return cmbbxEnumControl;
+    }
+
 
     private void CmbbxEnum_control_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {

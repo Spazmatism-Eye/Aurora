@@ -40,6 +40,12 @@ public sealed class RegistryWatcher : IDisposable
 
     public void StartWatching()
     {
+        if (_eventWatcher != null)
+        {
+            SendData();
+            return;
+        }
+
         var currentUser = WindowsIdentity.GetCurrent();
         var scope = new ManagementScope(@"\\.\root\default");
 

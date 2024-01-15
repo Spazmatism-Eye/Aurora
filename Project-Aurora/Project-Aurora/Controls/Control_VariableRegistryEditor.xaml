@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="203.81" d:DesignWidth="200" >
+             d:DesignHeight="203.81" d:DesignWidth="200"  Background="Transparent">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" >
             <StackPanel x:Name="stack_Options" />
