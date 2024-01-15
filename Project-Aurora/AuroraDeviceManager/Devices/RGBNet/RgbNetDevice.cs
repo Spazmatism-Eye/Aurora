@@ -97,7 +97,7 @@ public abstract class RgbNetDevice : DefaultDevice
 
                 ErrorMessage = $"{e.Message} ({remainingMillis.Seconds.ToString()})";
 
-                await Task.Delay(1500);
+                await Task.Delay(1800);
             }
         } while (true);
     }
@@ -235,7 +235,7 @@ public abstract class RgbNetDevice : DefaultDevice
     {
         base.RegisterVariables(variableRegistry);
 
-        variableRegistry.Register($"{DeviceName}_connect_sleep_time", 40, "Connection timeout seconds");
+        variableRegistry.Register($"{DeviceName}_connect_sleep_time", 60, "Connection timeout seconds");
     }
 
     protected override void Dispose(bool disposing)
