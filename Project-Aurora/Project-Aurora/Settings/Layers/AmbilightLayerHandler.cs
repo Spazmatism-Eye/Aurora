@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Amib.Threading;
 using Aurora.EffectsEngine;
@@ -233,7 +234,7 @@ public class AmbilightLayerHandlerProperties : LayerHandlerProperties2Color<Ambi
         _experimentalMode = false;
         _hueShiftImage = false;
         _hueShiftAngle = 0.0f;
-        _Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
+        _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
     }
 }
 
@@ -263,20 +264,22 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
 
     public AmbilightLayerHandler() : base("Ambilight Layer")
     {
-        var stpStartInfo = new STPStartInfo();
-        stpStartInfo.ApartmentState = ApartmentState.STA;
-        stpStartInfo.IdleTimeout = 1000;
-        
-        _captureWorker = new(stpStartInfo)
+        var stpStartInfo = new STPStartInfo
+        {
+            ApartmentState = ApartmentState.STA,
+            IdleTimeout = 1000
+        };
+
+        _captureWorker = new SmartThreadPool(stpStartInfo)
         {
             MaxThreads = 1,
         };
-        Initialize();
         _screenshotWork = TakeScreenshot;
     }
 
-    private void Initialize()
+    protected override async Task Initialize()
     {
+        await base.Initialize();
         _screenCapture?.Dispose();
         _screenCapture = Properties.ExperimentalMode ? new DxScreenCapture() : new GdiScreenCapture();
         _screenCapture.ScreenshotTaken += ScreenshotAction;
@@ -422,7 +425,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
     {
         base.PropertiesChanged(sender, args);
             
-        Initialize();
+        Initialize().Wait();
 
         var mtx = BitmapUtils.GetEmptyColorMatrix();
         if (Properties.BrightenImage)

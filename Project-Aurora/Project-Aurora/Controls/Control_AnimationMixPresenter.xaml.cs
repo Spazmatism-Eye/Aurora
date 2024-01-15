@@ -106,7 +106,7 @@ namespace Aurora.Controls
                         _playbackTimer.Stop();
                     }
 
-                    Bitmap newBitmap = new Bitmap((int)(Effects.CanvasWidth * AnimationScale), (int)(Effects.CanvasHeight * AnimationScale));
+                    Bitmap newBitmap = new Bitmap((int)(Effects.Canvas.Width * AnimationScale), (int)(Effects.Canvas.Height * AnimationScale));
                     RenderedBitmap = newBitmap;
 
                     using (Graphics g = Graphics.FromImage(newBitmap))
@@ -164,7 +164,7 @@ namespace Aurora.Controls
 
             this.txtblkCurrentTime.Text = $"{seconds};{milliseconds}";
 
-            Bitmap newBitmap = new Bitmap((int)(Effects.CanvasWidth / AnimationScale), (int)(Effects.CanvasHeight / AnimationScale));
+            Bitmap newBitmap = new Bitmap((int)(Effects.Canvas.Width / AnimationScale), (int)(Effects.Canvas.Height / AnimationScale));
 
             using (Graphics g = Graphics.FromImage(newBitmap))
             {

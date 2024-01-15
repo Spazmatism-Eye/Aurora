@@ -579,10 +579,10 @@ internal class GradientCascade
 	{
 		using (Graphics g = effectLayer.GetGraphics())
 		{
-			float x_pos = (float)Math.Round((freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth);
-			float y_pos = (float)Math.Round((freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight);
-			float width = (float)(freeform.Width * Effects.EditorToCanvasWidth);
-			float height = (float)(freeform.Height * Effects.EditorToCanvasHeight);
+			float x_pos = (float)Math.Round((freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
+			float y_pos = (float)Math.Round((freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
+			float width = (float)(freeform.Width * Effects.Canvas.EditorToCanvasWidth);
+			float height = (float)(freeform.Height * Effects.Canvas.EditorToCanvasHeight);
 
 			if (width < 3) width = 3;
 			if (height < 3) height = 3;

@@ -33,7 +33,7 @@ public partial class Control_ColorizedKeycapBlank
         //Keycap adjustments
         KeyBorder.BorderThickness = new Thickness(string.IsNullOrWhiteSpace(key.Image) ? 1.5 : 0.0);
 
-        var keyEnabled = key.Enabled.GetValueOrDefault(true);
+        var keyEnabled = key.Enabled;
         KeyBorder.IsEnabled = keyEnabled;
 
         if (!keyEnabled)
@@ -47,7 +47,7 @@ public partial class Control_ColorizedKeycapBlank
 
         if (string.IsNullOrWhiteSpace(key.Image)) return;
         if (!File.Exists(imagePath)) return;
-        using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+        var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
         var image = new BitmapImage();
         image.BeginInit();
         image.StreamSource = memStream;
@@ -57,7 +57,7 @@ public partial class Control_ColorizedKeycapBlank
             KeyBorder.Background = new ImageBrush(image);
         else
         {
-            KeyBorder.Background = Keycap.DefaultColorBrush;
+            KeyBorder.Background = _keyBorderBackground;
             KeyBorder.OpacityMask = new ImageBrush(image);
         }
 

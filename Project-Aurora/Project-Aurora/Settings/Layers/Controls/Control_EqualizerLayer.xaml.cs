@@ -221,10 +221,10 @@ public partial class ControlEqualizerLayer
             _previewImage.SnapsToDevicePixels = true;
             _previewImage.HorizontalAlignment = HorizontalAlignment.Stretch;
             _previewImage.VerticalAlignment = VerticalAlignment.Stretch;
-            _previewImage.MinWidth = Effects.CanvasWidth;
-            _previewImage.MinHeight = Effects.CanvasHeight;
-            _previewImage.Width = Effects.CanvasWidth * 4;
-            _previewImage.Height = Effects.CanvasHeight * 4;
+            _previewImage.MinWidth = Effects.Canvas.Width;
+            _previewImage.MinHeight = Effects.Canvas.Height;
+            _previewImage.Width = Effects.Canvas.Width * 4;
+            _previewImage.Height = Effects.Canvas.Height * 4;
 
             _previewWindow.Content = _previewImage;
 

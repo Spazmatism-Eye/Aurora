@@ -127,11 +127,6 @@ public partial class Control_SettingsDevicesAndWrappers
             });
     }
 
-    private async void LoadBrandDefault(object? sender, SelectionChangedEventArgs e)
-    {
-        await (await _layoutManager).LoadBrandDefault();
-    }
-
     private void ResetDevices(object? sender, RoutedEventArgs e) => Task.Run(async () => await (await _deviceManager).ResetDevices());
 
     private async void razer_wrapper_install_button_Click(object? sender, RoutedEventArgs e)

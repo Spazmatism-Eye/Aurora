@@ -54,7 +54,7 @@ namespace Aurora.Profiles.TModLoader {
                         _PrimaryColor = Color.Transparent,
                         _SecondaryColor = Color.Transparent,
                         PercentType = PercentEffectType.AllAtOnce,
-                        _Sequence = new KeySequence(Effects.WholeCanvasFreeForm)
+                        _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm)
                     }
                 },
                 new OverrideLogicBuilder()

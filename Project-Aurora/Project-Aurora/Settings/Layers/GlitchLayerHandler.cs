@@ -55,7 +55,7 @@ namespace Aurora.Settings.Layers
             base.Default();
             _updateInterval = 1.0;
             _allowTransparency = false;
-            _Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
+            _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
         }
     }
 

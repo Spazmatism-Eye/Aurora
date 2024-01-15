@@ -24,13 +24,13 @@ public class MinecraftBurnLayerHandler : LayerHandler<LayerHandlerProperties> {
     }
 
     private void CreateFireParticle() {
-        float randomX = (float)rnd.NextDouble() * Effects.CanvasWidth;
+        float randomX = (float)rnd.NextDouble() * Effects.Canvas.Width;
         float randomOffset = (float)rnd.NextDouble() * 15 - 7.5f;
         particles.Add(new FireParticle
         {
             mix = new AnimationMix(new[] {
                 new AnimationTrack("particle", 0)
-                    .SetFrame(0, new AnimationFilledCircle(randomX, Effects.CanvasHeight + 5, 5, Color.FromArgb(255, 230, 0)))
+                    .SetFrame(0, new AnimationFilledCircle(randomX, Effects.Canvas.Height + 5, 5, Color.FromArgb(255, 230, 0)))
                     .SetFrame(1, new AnimationFilledCircle(randomX + randomOffset, -6, 6, Color.FromArgb(0, 255, 230, 0)))
             }),
             time = 0

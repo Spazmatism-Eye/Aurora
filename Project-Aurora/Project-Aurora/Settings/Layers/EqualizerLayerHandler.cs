@@ -146,7 +146,7 @@ public class EqualizerLayerHandlerProperties : LayerHandlerProperties<EqualizerL
     public override void Default()
     {
         base.Default();
-        _Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
+        _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
         _PrimaryColor = CommonColorUtils.GenerateRandomColor();
         _secondaryColor = CommonColorUtils.GenerateRandomColor();
         _gradient = new EffectBrush(ColorSpectrum.RainbowLoop).SetBrushType(EffectBrush.BrushType.Linear);

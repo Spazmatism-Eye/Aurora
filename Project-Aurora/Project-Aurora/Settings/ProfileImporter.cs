@@ -392,8 +392,8 @@ public static class ProfileImporter
 
 
                                 var _terminalOffset = velocity * _terminalTime * 2.1f;
-                                var centerX = Effects.CanvasWidthCenter;
-                                var centerY = Effects.CanvasHeightCenter;
+                                var centerX = Effects.Canvas.WidthCenter;
+                                var centerY = Effects.Canvas.HeightCenter;
                                 var widthX = width;
                                 if (playOption.Equals("PlayFromKeyCenter"))
                                 {
@@ -417,25 +417,25 @@ public static class ProfileImporter
                                             _angleOffset = width / 2.0f - _angleOffset;
 
 
-                                            animTrack.SetFrame(terminalTime*smallest, new AnimationFilledGradientRectangle(-width - _angleOffset, 0, width, Effects.CanvasHeight * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime*smallest, new AnimationFilledGradientRectangle(-width - _angleOffset, 0, width, Effects.Canvas.Height * 10, new EffectBrush(transitions)).SetAngle(angle));
 
-                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle( _angleOffset, 0, width, Effects.CanvasHeight * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle( _angleOffset, 0, width, Effects.Canvas.Height * 10, new EffectBrush(transitions)).SetAngle(angle));
                                             break;
                                         }
                                         case > 45 and < 135:
-                                            animTrack.SetFrame(terminalTime * smallest, new AnimationFilledGradientRectangle(0,  width / 2, width, Effects.CanvasWidth * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime * smallest, new AnimationFilledGradientRectangle(0,  width / 2, width, Effects.Canvas.Width * 10, new EffectBrush(transitions)).SetAngle(angle));
 
-                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle(0, width / 2 - (Effects.CanvasWidth + width), width, Effects.CanvasWidth * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle(0, width / 2 - (Effects.Canvas.Width + width), width, Effects.Canvas.Width * 10, new EffectBrush(transitions)).SetAngle(angle));
                                             break;
                                         case >= 135 and <= 225:
-                                            animTrack.SetFrame(terminalTime * smallest, new AnimationFilledGradientRectangle( width, 0, width, Effects.CanvasHeight * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime * smallest, new AnimationFilledGradientRectangle( width, 0, width, Effects.Canvas.Height * 10, new EffectBrush(transitions)).SetAngle(angle));
 
-                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle(-width, 0, width, Effects.CanvasHeight * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle(-width, 0, width, Effects.Canvas.Height * 10, new EffectBrush(transitions)).SetAngle(angle));
                                             break;
                                         case > 225 and < 315:
-                                            animTrack.SetFrame(terminalTime * smallest, new AnimationFilledGradientRectangle(0, -width / 2, width, Effects.CanvasWidth * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime * smallest, new AnimationFilledGradientRectangle(0, -width / 2, width, Effects.Canvas.Width * 10, new EffectBrush(transitions)).SetAngle(angle));
 
-                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle(0, -width / 2 + (Effects.CanvasWidth + width), width, Effects.CanvasWidth * 10, new EffectBrush(transitions)).SetAngle(angle));
+                                            animTrack.SetFrame(terminalTime*largest, new AnimationFilledGradientRectangle(0, -width / 2 + (Effects.Canvas.Width + width), width, Effects.Canvas.Width * 10, new EffectBrush(transitions)).SetAngle(angle));
                                             break;
                                     }
 
@@ -447,7 +447,7 @@ public static class ProfileImporter
                                     var animTrack2 = new AnimationTrack(layerName + " - Side 2", duration / 1000.0f);
 
                                     var widthTime = width / (velocity * (3.0f * 0.7f)) / 2;
-                                    _terminalTime = (Effects.CanvasWidth + width) / (velocity * 2.1f);
+                                    _terminalTime = (Effects.Canvas.Width + width) / (velocity * 2.1f);
 
                                     switch (angle)
                                     {
@@ -457,63 +457,63 @@ public static class ProfileImporter
                                         {
                                             //Right Side
                                             var _initialBrushRight = new EffectBrush(transitions);
-                                            _initialBrushRight.start = new PointF(Effects.CanvasWidthCenter, 0);
-                                            _initialBrushRight.end = new PointF(Effects.CanvasWidthCenter - width, 0);
+                                            _initialBrushRight.start = new PointF(Effects.Canvas.WidthCenter, 0);
+                                            _initialBrushRight.end = new PointF(Effects.Canvas.WidthCenter - width, 0);
 
-                                            animTrack.SetFrame(0.0f, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter, 0, 0, Effects.CanvasHeight * 3, _initialBrushRight).SetAngle(angle));
+                                            animTrack.SetFrame(0.0f, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter, 0, 0, Effects.Canvas.Height * 3, _initialBrushRight).SetAngle(angle));
 
                                             if (_widthFillTime < _terminalTime)
                                             {
                                                 var _fillBrushRight = new EffectBrush(_initialBrushRight);
-                                                _fillBrushRight.start = new PointF(Effects.CanvasWidthCenter + width, 0);
-                                                _fillBrushRight.end = new PointF(Effects.CanvasWidthCenter, 0);
+                                                _fillBrushRight.start = new PointF(Effects.Canvas.WidthCenter + width, 0);
+                                                _fillBrushRight.end = new PointF(Effects.Canvas.WidthCenter, 0);
 
-                                                animTrack.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter, 0, width, Effects.CanvasHeight * 3, _fillBrushRight).SetAngle(angle));
+                                                animTrack.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter, 0, width, Effects.Canvas.Height * 3, _fillBrushRight).SetAngle(angle));
 
                                                 var _terminalBrushRight = new EffectBrush(_fillBrushRight);
-                                                _terminalBrushRight.start = new PointF(Effects.CanvasWidthCenter + _terminalOffset, 0);
-                                                _terminalBrushRight.end = new PointF(Effects.CanvasWidthCenter + _terminalOffset - width, 0);
+                                                _terminalBrushRight.start = new PointF(Effects.Canvas.WidthCenter + _terminalOffset, 0);
+                                                _terminalBrushRight.end = new PointF(Effects.Canvas.WidthCenter + _terminalOffset - width, 0);
 
-                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter + _terminalOffset - width, 0, width, Effects.CanvasHeight * 3, _terminalBrushRight).SetAngle(angle));
+                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter + _terminalOffset - width, 0, width, Effects.Canvas.Height * 3, _terminalBrushRight).SetAngle(angle));
 
                                             }
                                             else
                                             {
                                                 var _terminalBrushRight = new EffectBrush(_initialBrushRight);
-                                                _terminalBrushRight.start = new PointF(Effects.CanvasWidthCenter + _terminalOffset, 0);
-                                                _terminalBrushRight.end = new PointF(Effects.CanvasWidthCenter + _terminalOffset - width, 0);
+                                                _terminalBrushRight.start = new PointF(Effects.Canvas.WidthCenter + _terminalOffset, 0);
+                                                _terminalBrushRight.end = new PointF(Effects.Canvas.WidthCenter + _terminalOffset - width, 0);
 
-                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter, 0, _terminalOffset, Effects.CanvasHeight * 3, _terminalBrushRight).SetAngle(angle));
+                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter, 0, _terminalOffset, Effects.Canvas.Height * 3, _terminalBrushRight).SetAngle(angle));
                                             }
 
                                             //Left Side
                                             var _initialBrushLeft = new EffectBrush(transitions);
-                                            _initialBrushLeft.start = new PointF(Effects.CanvasWidthCenter, 0);
-                                            _initialBrushLeft.end = new PointF(Effects.CanvasWidthCenter + width, 0);
+                                            _initialBrushLeft.start = new PointF(Effects.Canvas.WidthCenter, 0);
+                                            _initialBrushLeft.end = new PointF(Effects.Canvas.WidthCenter + width, 0);
 
-                                            animTrack2.SetFrame(0.0f, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter, 0, 0, Effects.CanvasHeight * 3, _initialBrushLeft).SetAngle(angle));
+                                            animTrack2.SetFrame(0.0f, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter, 0, 0, Effects.Canvas.Height * 3, _initialBrushLeft).SetAngle(angle));
 
                                             if (_widthFillTime < _terminalTime)
                                             {
                                                 var _fillBrushLeft = new EffectBrush(_initialBrushLeft);
-                                                _fillBrushLeft.start = new PointF(Effects.CanvasWidthCenter - width, 0);
-                                                _fillBrushLeft.end = new PointF(Effects.CanvasWidthCenter, 0);
+                                                _fillBrushLeft.start = new PointF(Effects.Canvas.WidthCenter - width, 0);
+                                                _fillBrushLeft.end = new PointF(Effects.Canvas.WidthCenter, 0);
 
-                                                animTrack2.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter - width, 0, width, Effects.CanvasHeight * 3, _fillBrushLeft).SetAngle(angle));
+                                                animTrack2.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter - width, 0, width, Effects.Canvas.Height * 3, _fillBrushLeft).SetAngle(angle));
 
                                                 var _terminalBrushLeft = new EffectBrush(_initialBrushLeft);
-                                                _terminalBrushLeft.start = new PointF(Effects.CanvasWidthCenter - _terminalOffset, 0);
-                                                _terminalBrushLeft.end = new PointF(Effects.CanvasWidthCenter - _terminalOffset + width, 0);
+                                                _terminalBrushLeft.start = new PointF(Effects.Canvas.WidthCenter - _terminalOffset, 0);
+                                                _terminalBrushLeft.end = new PointF(Effects.Canvas.WidthCenter - _terminalOffset + width, 0);
 
-                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter - _terminalOffset, 0, width, Effects.CanvasHeight * 3, _terminalBrushLeft).SetAngle(angle));
+                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter - _terminalOffset, 0, width, Effects.Canvas.Height * 3, _terminalBrushLeft).SetAngle(angle));
                                             }
                                             else
                                             {
                                                 var _terminalBrushLeft = new EffectBrush(_initialBrushLeft);
-                                                _terminalBrushLeft.start = new PointF(Effects.CanvasWidthCenter - _terminalOffset, 0);
-                                                _terminalBrushLeft.end = new PointF(Effects.CanvasWidthCenter - _terminalOffset + width, 0);
+                                                _terminalBrushLeft.start = new PointF(Effects.Canvas.WidthCenter - _terminalOffset, 0);
+                                                _terminalBrushLeft.end = new PointF(Effects.Canvas.WidthCenter - _terminalOffset + width, 0);
 
-                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.CanvasWidthCenter - _terminalOffset, 0, _terminalOffset, Effects.CanvasHeight * 3, _terminalBrushLeft).SetAngle(angle));
+                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(Effects.Canvas.WidthCenter - _terminalOffset, 0, _terminalOffset, Effects.Canvas.Height * 3, _terminalBrushLeft).SetAngle(angle));
                                             }
 
                                             break;
@@ -525,62 +525,62 @@ public static class ProfileImporter
 
                                             //Bottom Side
                                             var _initialBrushBottom = new EffectBrush(transitions);
-                                            _initialBrushBottom.start = new PointF(0, Effects.CanvasHeightCenter);
-                                            _initialBrushBottom.end = new PointF(0, Effects.CanvasHeightCenter - width);
+                                            _initialBrushBottom.start = new PointF(0, Effects.Canvas.HeightCenter);
+                                            _initialBrushBottom.end = new PointF(0, Effects.Canvas.HeightCenter - width);
 
-                                            animTrack.SetFrame(0.0f, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter, Effects.CanvasWidth * 3, 0, _initialBrushBottom).SetAngle(angle));
+                                            animTrack.SetFrame(0.0f, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter, Effects.Canvas.Width * 3, 0, _initialBrushBottom).SetAngle(angle));
 
                                             if (_widthFillTime < _terminalTime)
                                             {
                                                 var _fillBrushBottom = new EffectBrush(_initialBrushBottom);
-                                                _fillBrushBottom.start = new PointF(0, Effects.CanvasHeightCenter + width);
-                                                _fillBrushBottom.end = new PointF(0, Effects.CanvasHeightCenter);
+                                                _fillBrushBottom.start = new PointF(0, Effects.Canvas.HeightCenter + width);
+                                                _fillBrushBottom.end = new PointF(0, Effects.Canvas.HeightCenter);
 
 
-                                                animTrack.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter, Effects.CanvasWidth * 3, width, _fillBrushBottom).SetAngle(angle));
+                                                animTrack.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter, Effects.Canvas.Width * 3, width, _fillBrushBottom).SetAngle(angle));
 
                                                 var _terminalBrushBottom = new EffectBrush(_fillBrushBottom);
-                                                _terminalBrushBottom.start = new PointF(0, Effects.CanvasHeightCenter + _terminalOffset);
-                                                _terminalBrushBottom.end = new PointF(0, Effects.CanvasHeightCenter + _terminalOffset - width);
+                                                _terminalBrushBottom.start = new PointF(0, Effects.Canvas.HeightCenter + _terminalOffset);
+                                                _terminalBrushBottom.end = new PointF(0, Effects.Canvas.HeightCenter + _terminalOffset - width);
 
-                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter + _terminalOffset - width, Effects.CanvasWidth * 3, width, _terminalBrushBottom).SetAngle(angle));
+                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter + _terminalOffset - width, Effects.Canvas.Width * 3, width, _terminalBrushBottom).SetAngle(angle));
                                             }
                                             else
                                             {
                                                 var _terminalBrushBottom = new EffectBrush(_initialBrushBottom);
-                                                _terminalBrushBottom.start = new PointF(0, Effects.CanvasHeightCenter + _terminalOffset);
-                                                _terminalBrushBottom.end = new PointF(0, Effects.CanvasHeightCenter + _terminalOffset - width);
+                                                _terminalBrushBottom.start = new PointF(0, Effects.Canvas.HeightCenter + _terminalOffset);
+                                                _terminalBrushBottom.end = new PointF(0, Effects.Canvas.HeightCenter + _terminalOffset - width);
 
-                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter, Effects.CanvasWidth * 3, _terminalOffset, _terminalBrushBottom).SetAngle(angle));
+                                                animTrack.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter, Effects.Canvas.Width * 3, _terminalOffset, _terminalBrushBottom).SetAngle(angle));
                                             }
 
                                             //Top Side
                                             var _initialBrushtTop = new EffectBrush(transitions);
-                                            _initialBrushtTop.start = new PointF(0, Effects.CanvasHeightCenter);
-                                            _initialBrushtTop.end = new PointF(0, Effects.CanvasHeightCenter + width);
+                                            _initialBrushtTop.start = new PointF(0, Effects.Canvas.HeightCenter);
+                                            _initialBrushtTop.end = new PointF(0, Effects.Canvas.HeightCenter + width);
 
-                                            animTrack2.SetFrame(0.0f, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter, Effects.CanvasWidth * 3, 0, _initialBrushtTop).SetAngle(angle));
+                                            animTrack2.SetFrame(0.0f, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter, Effects.Canvas.Width * 3, 0, _initialBrushtTop).SetAngle(angle));
 
                                             if (_widthFillTime < _terminalTime)
                                             {
                                                 var _fillBrushTop = new EffectBrush(_initialBrushtTop);
-                                                _fillBrushTop.start = new PointF(0, Effects.CanvasHeightCenter - width);
-                                                _fillBrushTop.end = new PointF(0, Effects.CanvasHeightCenter);
+                                                _fillBrushTop.start = new PointF(0, Effects.Canvas.HeightCenter - width);
+                                                _fillBrushTop.end = new PointF(0, Effects.Canvas.HeightCenter);
 
-                                                animTrack2.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter - width, Effects.CanvasWidth * 3, width, _fillBrushTop).SetAngle(angle));
+                                                animTrack2.SetFrame(_widthFillTime, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter - width, Effects.Canvas.Width * 3, width, _fillBrushTop).SetAngle(angle));
 
                                                 var _terminalBrushTop = new EffectBrush(_initialBrushtTop);
-                                                _terminalBrushTop.start = new PointF(0, Effects.CanvasHeightCenter - _terminalOffset);
-                                                _terminalBrushTop.end = new PointF(0, Effects.CanvasHeightCenter - _terminalOffset + width);
-                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter - _terminalOffset, Effects.CanvasWidth * 3, width, _terminalBrushTop).SetAngle(angle));
+                                                _terminalBrushTop.start = new PointF(0, Effects.Canvas.HeightCenter - _terminalOffset);
+                                                _terminalBrushTop.end = new PointF(0, Effects.Canvas.HeightCenter - _terminalOffset + width);
+                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter - _terminalOffset, Effects.Canvas.Width * 3, width, _terminalBrushTop).SetAngle(angle));
                                             }
                                             else
                                             {
                                                 var _terminalBrushTop = new EffectBrush(_initialBrushtTop);
-                                                _terminalBrushTop.start = new PointF(0, Effects.CanvasHeightCenter - _terminalOffset);
-                                                _terminalBrushTop.end = new PointF(0, Effects.CanvasHeightCenter - _terminalOffset + width);
+                                                _terminalBrushTop.start = new PointF(0, Effects.Canvas.HeightCenter - _terminalOffset);
+                                                _terminalBrushTop.end = new PointF(0, Effects.Canvas.HeightCenter - _terminalOffset + width);
 
-                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.CanvasHeightCenter - _terminalOffset, Effects.CanvasWidth * 3, _terminalOffset, _terminalBrushTop).SetAngle(angle));
+                                                animTrack2.SetFrame(_terminalTime, new AnimationFilledGradientRectangle(0, Effects.Canvas.HeightCenter - _terminalOffset, Effects.Canvas.Width * 3, _terminalOffset, _terminalBrushTop).SetAngle(angle));
                                             }
 
                                             break;
@@ -665,9 +665,9 @@ public static class ProfileImporter
                                 width *= 3.0f;
 
                                 var animTrack = new AnimationTrack(layerName, duration / 1000.0f);
-                                var terminalTime = Effects.CanvasWidth / (velocity * (3.0f * 0.7f)) / 2;
-                                var centerX = Effects.CanvasWidthCenter;
-                                var centerY = Effects.CanvasHeightCenter;
+                                var terminalTime = Effects.Canvas.Width / (velocity * (3.0f * 0.7f)) / 2;
+                                var centerX = Effects.Canvas.WidthCenter;
+                                var centerY = Effects.Canvas.HeightCenter;
                                 if (playOption.Equals("PlayFromKeyCenter"))
                                 {
                                     //terminalTime = duration / 1000.0f;
@@ -676,7 +676,7 @@ public static class ProfileImporter
                                 }
                                 animTrack.SetFrame(0.0f, new AnimationGradientCircle(centerX, centerY, 0, new EffectBrush(transitions).SetBrushType(EffectBrush.BrushType.Radial), (int)width));
 
-                                animTrack.SetFrame(terminalTime, new AnimationGradientCircle(centerX, centerY, Effects.CanvasBiggest, new EffectBrush(transitions).SetBrushType(EffectBrush.BrushType.Radial), (int)width));
+                                animTrack.SetFrame(terminalTime, new AnimationGradientCircle(centerX, centerY, Effects.Canvas.BiggestSize, new EffectBrush(transitions).SetBrushType(EffectBrush.BrushType.Radial), (int)width));
                                 app.Profile.Layers.Add(new Layer
                                 {
                                     Name = layerName,

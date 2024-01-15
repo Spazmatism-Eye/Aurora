@@ -65,9 +65,9 @@ namespace Aurora.EffectsEngine
         public EffectLayer(string name, Color color)
         {
             _name = name;
-            _colormap = new Bitmap(Effects.CanvasWidth, Effects.CanvasHeight);
+            _colormap = new Bitmap(Effects.Canvas.Width, Effects.Canvas.Height);
             _textureBrush = new TextureBrush(_colormap);
-            Dimension = new Rectangle(0, 0, Effects.CanvasWidth, Effects.CanvasHeight);
+            Dimension = new Rectangle(0, 0, Effects.Canvas.Width, Effects.Canvas.Height);
 
             FillOver(color);
         }
@@ -111,7 +111,7 @@ namespace Aurora.EffectsEngine
                     break;
                 case LayerEffects.RainbowShift_Horizontal:
                     effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.CanvasBiggest;
+                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
 
                     if (effectConfig.AnimationType == AnimationType.TranslateXy)
                         shift = effectConfig.ShiftAmount;
@@ -129,7 +129,7 @@ namespace Aurora.EffectsEngine
                     break;
                 case LayerEffects.RainbowShift_Vertical:
                     effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.CanvasBiggest;
+                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
 
                     if (effectConfig.AnimationType == AnimationType.TranslateXy)
                         shift = effectConfig.ShiftAmount;
@@ -147,7 +147,7 @@ namespace Aurora.EffectsEngine
                     break;
                 case LayerEffects.RainbowShift_Diagonal:
                     effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.CanvasBiggest;
+                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
 
                     if (effectConfig.AnimationType == AnimationType.TranslateXy)
                         shift = effectConfig.ShiftAmount;
@@ -165,7 +165,7 @@ namespace Aurora.EffectsEngine
                     break;
                 case LayerEffects.RainbowShift_Diagonal_Other:
                     effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.CanvasBiggest;
+                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
 
                     if (effectConfig.AnimationType == AnimationType.TranslateXy)
                         shift = effectConfig.ShiftAmount;
@@ -183,7 +183,7 @@ namespace Aurora.EffectsEngine
                     break;
                 case LayerEffects.RainbowShift_Custom_Angle:
                     effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.CanvasBiggest;
+                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
 
 
                     if (effectConfig.AnimationType == AnimationType.TranslateXy)
@@ -203,15 +203,15 @@ namespace Aurora.EffectsEngine
                 case LayerEffects.GradientShift_Custom_Angle:
                 {
                     effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 0.067f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.CanvasBiggest;
+                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
 
                     shift = effectConfig.AnimationType switch
                     {
                         AnimationType.TranslateXy => effectConfig.ShiftAmount,
                         AnimationType.ZoomIn when effectConfig.Brush.type == EffectBrush.BrushType.Radial =>
-                            (Effects.CanvasBiggest - effectConfig.ShiftAmount) * 40.0f % Effects.CanvasBiggest,
+                            (Effects.Canvas.BiggestSize - effectConfig.ShiftAmount) * 40.0f % Effects.Canvas.BiggestSize,
                         AnimationType.ZoomOut when effectConfig.Brush.type == EffectBrush.BrushType.Radial =>
-                            effectConfig.ShiftAmount * 40.0f % Effects.CanvasBiggest,
+                            effectConfig.ShiftAmount * 40.0f % Effects.Canvas.BiggestSize,
                         _ => shift
                     };
 
@@ -230,7 +230,7 @@ namespace Aurora.EffectsEngine
                             }
                             else
                             {
-                                brush.ScaleTransform(Effects.CanvasHeight * 100 / effectConfig.GradientSize, Effects.CanvasHeight * 100 / effectConfig.GradientSize);
+                                brush.ScaleTransform(Effects.Canvas.Height * 100 / effectConfig.GradientSize, Effects.Canvas.Height * 100 / effectConfig.GradientSize);
                             }
 
                             brush.RotateTransform(effectConfig.Angle);
@@ -241,9 +241,9 @@ namespace Aurora.EffectsEngine
                         {
                             if (effectConfig.AnimationType == AnimationType.ZoomIn || effectConfig.AnimationType == AnimationType.ZoomOut)
                             {
-                                float percent = shift / Effects.CanvasBiggest;
-                                float xOffset = Effects.CanvasWidth / 2.0f * percent;
-                                float yOffset = Effects.CanvasHeight / 2.0f * percent;
+                                float percent = shift / Effects.Canvas.BiggestSize;
+                                float xOffset = Effects.Canvas.Width / 2.0f * percent;
+                                float yOffset = Effects.Canvas.Height / 2.0f * percent;
 
 
                                 brush.WrapMode = WrapMode.Clamp;
@@ -258,7 +258,7 @@ namespace Aurora.EffectsEngine
                                 }
                                 else
                                 {
-                                    brush.ScaleTransform((Effects.CanvasHeight + xOffset) * 100 / effectConfig.GradientSize, (Effects.CanvasHeight + yOffset) * 100 / effectConfig.GradientSize);
+                                    brush.ScaleTransform((Effects.Canvas.Height + xOffset) * 100 / effectConfig.GradientSize, (Effects.Canvas.Height + yOffset) * 100 / effectConfig.GradientSize);
                                 }
                             }
                             else
@@ -270,7 +270,7 @@ namespace Aurora.EffectsEngine
                                 }
                                 else
                                 {
-                                    brush.ScaleTransform(Effects.CanvasHeight * 100 / effectConfig.GradientSize, Effects.CanvasHeight * 100 / effectConfig.GradientSize);
+                                    brush.ScaleTransform(Effects.Canvas.Height * 100 / effectConfig.GradientSize, Effects.Canvas.Height * 100 / effectConfig.GradientSize);
                                 }
                             }
 
@@ -307,7 +307,7 @@ namespace Aurora.EffectsEngine
         {
             var brush = new LinearGradientBrush(
                 new Point(0, 0),
-                new Point(Effects.CanvasBiggest, 0),
+                new Point(Effects.Canvas.BiggestSize, 0),
                 Color.Red, Color.Red);
             Color[] colors = {
                 Color.FromArgb(255, 0, 0),
@@ -471,10 +471,10 @@ namespace Aurora.EffectsEngine
                 }
 
                 using var g = Graphics.FromImage(_colormap);
-                var xPos = (float)Math.Round((sequence.Freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth);
-                var yPos = (float)Math.Round((sequence.Freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight);
-                var width = (float)Math.Round(sequence.Freeform.Width * Effects.EditorToCanvasWidth);
-                var height = (float)Math.Round(sequence.Freeform.Height * Effects.EditorToCanvasHeight);
+                var xPos = (float)Math.Round((sequence.Freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
+                var yPos = (float)Math.Round((sequence.Freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
+                var width = (float)Math.Round(sequence.Freeform.Width * Effects.Canvas.EditorToCanvasWidth);
+                var height = (float)Math.Round(sequence.Freeform.Height * Effects.Canvas.EditorToCanvasHeight);
 
                 if (width < 3) width = 3;
                 if (height < 3) height = 3;
@@ -583,10 +583,10 @@ namespace Aurora.EffectsEngine
             if (sequence.Type == KeySequenceType.Sequence)
             {
                 var gp = new GraphicsPath();
-                gp.AddRectangle(new Rectangle(0, 0, Effects.CanvasWidth, Effects.CanvasHeight));
+                gp.AddRectangle(new Rectangle(0, 0, Effects.Canvas.Width, Effects.Canvas.Height));
                 foreach (var k in sequence.Keys)
                 {
-                    var keyBounds = Effects.GetBitmappingFromDeviceKey(k);
+                    var keyBounds = Effects.Canvas.GetRectangle(k);
                     gp.AddRectangle(keyBounds.Rectangle); //Overlapping additons remove that shape
                 }
                 return gp;
@@ -594,7 +594,7 @@ namespace Aurora.EffectsEngine
             else
             {
                 var gp = new GraphicsPath();
-                gp.AddRectangle(new Rectangle(0, 0, Effects.CanvasWidth, Effects.CanvasHeight));
+                gp.AddRectangle(new Rectangle(0, 0, Effects.Canvas.Width, Effects.Canvas.Height));
                 gp.AddRectangle(sequence.GetAffectedRegion());
                 return gp;
             }
@@ -622,7 +622,7 @@ namespace Aurora.EffectsEngine
         /// <param name="render">An action that receives a transformed graphics context and can render whatever it needs to.</param>
         public void DrawTransformed(KeySequence sequence, Action<Graphics> render)
         {
-            DrawTransformed(sequence, render, new RectangleF(0, 0, Effects.CanvasWidth, Effects.CanvasHeight));
+            DrawTransformed(sequence, render, new RectangleF(0, 0, Effects.Canvas.Width, Effects.Canvas.Height));
         }
 
         /// <summary>
@@ -654,11 +654,11 @@ namespace Aurora.EffectsEngine
                 }
                 _keyColors[key] = solidBrush.Color;
             }
-            var keyRectangle = Effects.GetBitmappingFromDeviceKey(key);
+            var keyRectangle = Effects.Canvas.GetRectangle(key);
             _needsRender = true;
 
-            if (keyRectangle.Top < 0 || keyRectangle.Bottom > Effects.CanvasHeight ||
-                keyRectangle.Left < 0 || keyRectangle.Right > Effects.CanvasWidth)
+            if (keyRectangle.Top < 0 || keyRectangle.Bottom > Effects.Canvas.Height ||
+                keyRectangle.Left < 0 || keyRectangle.Right > Effects.Canvas.Width)
             {
                 Global.logger.Warning("Couldn't set key color {Key}. Key is outside canvas", key);
                 return;
@@ -681,7 +681,7 @@ namespace Aurora.EffectsEngine
             {
                 return color;
             }
-            var keyRectangle = Effects.GetBitmappingFromDeviceKey(key);
+            var keyRectangle = Effects.Canvas.GetRectangle(key);
 
             var keyColor = keyRectangle.IsEmpty switch
             {
@@ -974,10 +974,10 @@ namespace Aurora.EffectsEngine
                 }
             }
 
-            var xPos = (float)Math.Round((freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth);
-            var yPos = (float)Math.Round((freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight);
-            var width = freeform.Width * Effects.EditorToCanvasWidth;
-            var height = freeform.Height * Effects.EditorToCanvasHeight;
+            var xPos = (float)Math.Round((freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
+            var yPos = (float)Math.Round((freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
+            var width = freeform.Width * Effects.Canvas.EditorToCanvasWidth;
+            var height = freeform.Height * Effects.Canvas.EditorToCanvasHeight;
 
             if (width < 3) width = 3;
             if (height < 3) height = 3;
@@ -1023,10 +1023,10 @@ namespace Aurora.EffectsEngine
         private void InvalidateColorMap(object? sender, EventArgs args)
         {
             _colormap?.Dispose();
-            _colormap = new Bitmap(Effects.CanvasWidth, Effects.CanvasHeight);
+            _colormap = new Bitmap(Effects.Canvas.Width, Effects.Canvas.Height);
             _ksChanged = true;
-            Dimension.Height = Effects.CanvasHeight;
-            Dimension.Width = Effects.CanvasWidth;
+            Dimension.Height = Effects.Canvas.Height;
+            Dimension.Width = Effects.Canvas.Width;
             Invalidate();
         }
 
@@ -1059,10 +1059,10 @@ namespace Aurora.EffectsEngine
                 }
             }
 
-            var xPos = (float)Math.Round((freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth);
-            var yPos = (float)Math.Round((freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight);
-            var width = freeform.Width * Effects.EditorToCanvasWidth;
-            var height = freeform.Height * Effects.EditorToCanvasHeight;
+            var xPos = (float)Math.Round((freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
+            var yPos = (float)Math.Round((freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
+            var width = freeform.Width * Effects.Canvas.EditorToCanvasWidth;
+            var height = freeform.Height * Effects.Canvas.EditorToCanvasHeight;
 
             if (width < 2) width = 2;
             if (height < 2) height = 2;
@@ -1129,7 +1129,7 @@ namespace Aurora.EffectsEngine
                 case KeySequenceType.Sequence:
                     foreach (var k in sequence.Keys)
                     {
-                        var keyBounds = Effects.GetBitmappingFromDeviceKey(k);
+                        var keyBounds = Effects.Canvas.GetRectangle(k);
                         gp.AddRectangle(keyBounds.Rectangle); //Overlapping additions remove that shape
                         _keyColors.Remove(k, out _);
                     }
@@ -1137,10 +1137,10 @@ namespace Aurora.EffectsEngine
                 case KeySequenceType.FreeForm:
                     var freeform = sequence.Freeform;
                     
-                    var xPos = (float)Math.Round((freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth);
-                    var yPos = (float)Math.Round((freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight);
-                    var width = (float)Math.Round(freeform.Width * Effects.EditorToCanvasWidth);
-                    var height = (float)Math.Round(freeform.Height * Effects.EditorToCanvasHeight);
+                    var xPos = (float)Math.Round((freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
+                    var yPos = (float)Math.Round((freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
+                    var width = (float)Math.Round(freeform.Width * Effects.Canvas.EditorToCanvasWidth);
+                    var height = (float)Math.Round(freeform.Height * Effects.Canvas.EditorToCanvasHeight);
 
                     var rotatePoint = new PointF(xPos + width / 2.0f, yPos + height / 2.0f);
                     var myMatrix = new Matrix();

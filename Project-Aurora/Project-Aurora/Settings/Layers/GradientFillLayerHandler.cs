@@ -53,10 +53,10 @@ namespace Aurora.Settings.Layers
         {
             //Get current color
             Properties.GradientConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - Properties.GradientConfig.LastEffectCall) / 1000.0f * 5.0f * Properties.GradientConfig.Speed;
-            Properties.GradientConfig.ShiftAmount %= Effects.CanvasBiggest;
+            Properties.GradientConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
             Properties.GradientConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
 
-            var selectedColor = Properties.GradientConfig.Brush.GetColorSpectrum().GetColorAt(Properties.GradientConfig.ShiftAmount, Effects.CanvasBiggest);
+            var selectedColor = Properties.GradientConfig.Brush.GetColorSpectrum().GetColorAt(Properties.GradientConfig.ShiftAmount, Effects.Canvas.BiggestSize);
 
             if (Properties.FillEntireKeyboard)
                 EffectLayer.FillOver(selectedColor);

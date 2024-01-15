@@ -51,12 +51,12 @@ public class MinecraftRainLayerHandler : LayerHandler<MinecraftRainLayerHandlerP
     }
 
     private void CreateRainDrop() {
-        float randomX = (float)rnd.NextDouble() * Effects.CanvasWidth;
+        var randomX = (float)rnd.NextDouble() * Effects.Canvas.Width;
         raindrops.Add(new Droplet() {
             mix = new AnimationMix(new[] {
                 new AnimationTrack("raindrop", 0)
                     .SetFrame(0, new AnimationFilledRectangle(randomX, 0, 3, 6, Properties.PrimaryColor))
-                    .SetFrame(1, new AnimationFilledRectangle(randomX + 5, Effects.CanvasHeight, 2, 4, Properties.PrimaryColor))
+                    .SetFrame(1, new AnimationFilledRectangle(randomX + 5, Effects.Canvas.Height, 2, 4, Properties.PrimaryColor))
             }),
             time = 0
         });

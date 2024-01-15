@@ -7,16 +7,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Aurora.Settings.Controls.Keycaps;
 using Aurora.Settings.Layouts;
+using Aurora.Utils;
 using Common.Devices;
 
 namespace Aurora.Settings;
 
 internal class KeyboardControlGenerator(
     bool abstractKeycaps,
-    VirtualGroup virtualKeyboardGroup,
     IDictionary<DeviceKeys, Keycap> virtualKeyboardMap,
+    VirtualGroup virtualKeyboardGroup,
     string layoutsPath,
     Panel virtualKeyboard)
 {
@@ -29,72 +31,24 @@ internal class KeyboardControlGenerator(
     public double BaselineX { get; private set; }
     public double BaselineY { get; private set; }
 
+    public double GridWidth => virtualKeyboard.Width;
+    public double GridHeight => virtualKeyboard.Height;
+
     internal async Task<Panel> Generate()
     {
         var imagesPath = Path.Combine(layoutsPath, "Extra Features", "images");
 
         virtualKeyboard.Children.Clear();
-        foreach (var key in virtualKeyboardGroup.GroupedKeys.OrderBy(a => a.ZIndex))
+        var keyCreations = virtualKeyboardGroup.GroupedKeys.OrderBy(a => a.ZIndex).Select(async key =>
         {
-            await Application.Current.Dispatcher.InvokeAsync(() => { CreateKey(key, imagesPath); });
-        }
+            await Application.Current.Dispatcher.BeginInvoke(() => { CreateKey(key, imagesPath); }, DispatcherPriority.Loaded);
+        });
+        await Task.WhenAll(keyCreations);
 
         if (virtualKeyboardGroup.GroupedKeys.Count == 0)
         {
             //No items, display error
-            var errorMessage = new Label();
-
-            var infoPanel = new DockPanel();
-
-            var infoMessage = new TextBlock
-            {
-                Text = "No keyboard selected\r\nPlease select your keyboard in the settings",
-                TextAlignment = TextAlignment.Center,
-                Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
-            };
-
-            DockPanel.SetDock(infoMessage, Dock.Top);
-            infoPanel.Children.Add(infoMessage);
-
-            var infoInstruction = new DockPanel();
-
-            infoInstruction.Children.Add(new TextBlock
-            {
-                Text = "Press (",
-                Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
-                VerticalAlignment = VerticalAlignment.Center
-            });
-
-            infoInstruction.Children.Add(new Image
-            {
-                Source = new BitmapImage(new Uri(@"Resources/settings_icon.png", UriKind.Relative)),
-                Stretch = Stretch.Uniform,
-                Height = 40.0,
-                VerticalAlignment = VerticalAlignment.Center
-            });
-
-            infoInstruction.Children.Add(new TextBlock
-            {
-                Text = ") and go into \"Devices & Wrappers\" tab",
-                Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
-                VerticalAlignment = VerticalAlignment.Center
-            });
-
-            DockPanel.SetDock(infoInstruction, Dock.Bottom);
-            infoPanel.Children.Add(infoInstruction);
-
-            errorMessage.Content = infoPanel;
-
-            errorMessage.FontSize = 16.0;
-            errorMessage.FontWeight = FontWeights.Bold;
-            errorMessage.HorizontalContentAlignment = HorizontalAlignment.Center;
-            errorMessage.VerticalContentAlignment = VerticalAlignment.Center;
-
-            virtualKeyboard.Children.Add(errorMessage);
-
-            //Update size
-            virtualKeyboard.Width = 850;
-            virtualKeyboard.Height = 200;
+            DisplayNoKeyboardError();
         }
         else
         {
@@ -106,46 +60,95 @@ internal class KeyboardControlGenerator(
         return virtualKeyboard;
     }
 
+    private void DisplayNoKeyboardError()
+    {
+        var errorMessage = new Label();
+        var infoPanel = new DockPanel();
+        var infoMessage = new TextBlock
+        {
+            Text = "No keyboard selected\r\nPlease select your keyboard in the settings",
+            TextAlignment = TextAlignment.Center,
+            Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
+        };
+
+        DockPanel.SetDock(infoMessage, Dock.Top);
+        infoPanel.Children.Add(infoMessage);
+
+        var infoInstruction = new DockPanel();
+
+        infoInstruction.Children.Add(new TextBlock
+        {
+            Text = "Press (",
+            Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
+            VerticalAlignment = VerticalAlignment.Center
+        });
+
+        infoInstruction.Children.Add(new Image
+        {
+            Source = new BitmapImage(new Uri(@"Resources/settings_icon.png", UriKind.Relative)),
+            Stretch = Stretch.Uniform,
+            Height = 40.0,
+            VerticalAlignment = VerticalAlignment.Center
+        });
+
+        infoInstruction.Children.Add(new TextBlock
+        {
+            Text = ") and go into \"Devices & Wrappers\" tab",
+            Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
+            VerticalAlignment = VerticalAlignment.Center
+        });
+
+        DockPanel.SetDock(infoInstruction, Dock.Bottom);
+        infoPanel.Children.Add(infoInstruction);
+
+        errorMessage.Content = infoPanel;
+
+        errorMessage.FontSize = 16.0;
+        errorMessage.FontWeight = FontWeights.Bold;
+        errorMessage.HorizontalContentAlignment = HorizontalAlignment.Center;
+        errorMessage.VerticalContentAlignment = VerticalAlignment.Center;
+
+        virtualKeyboard.Children.Add(errorMessage);
+
+        //Update size
+        virtualKeyboard.Width = 850;
+        virtualKeyboard.Height = 200;
+    }
+
     private void CreateKey(KeyboardKey key, string imagesPath)
     {
         var keyMarginLeft = key.MarginLeft;
         var keyMarginTop = key.MarginTop;
+        var imagePath = !string.IsNullOrWhiteSpace(key.Image) ? Path.Combine(imagesPath, key.Image) : "";
 
-        var imagePath = "";
-
-        if (!string.IsNullOrWhiteSpace(key.Image))
-            imagePath = Path.Combine(imagesPath, key.Image);
-
-        UserControl keycap;
+        Keycap keycap;
 
         //Ghost keycap is used for abstract representation of keys
         if (abstractKeycaps)
             keycap = new Control_GhostKeycap(key, imagePath);
         else
         {
-            switch (Global.Configuration.VirtualkeyboardKeycapType)
+            keycap = Global.Configuration.VirtualkeyboardKeycapType switch
             {
-                case KeycapType.Default_backglow:
-                    keycap = new Control_DefaultKeycapBackglow(key, imagePath);
-                    break;
-                case KeycapType.Default_backglow_only:
-                    keycap = new Control_DefaultKeycapBackglowOnly(key, imagePath);
-                    break;
-                case KeycapType.Colorized:
-                    keycap = new Control_ColorizedKeycap(key, imagePath);
-                    break;
-                case KeycapType.Colorized_blank:
-                    keycap = new Control_ColorizedKeycapBlank(key, imagePath);
-                    break;
-                default:
-                    keycap = new Control_DefaultKeycap(key, imagePath);
-                    break;
-            }
+                KeycapType.Default_backglow => new Control_DefaultKeycapBackglow(key, imagePath),
+                KeycapType.Default_backglow_only => new Control_DefaultKeycapBackglowOnly(key, imagePath),
+                KeycapType.Colorized => new Control_ColorizedKeycap(key, imagePath),
+                KeycapType.Colorized_blank => new Control_ColorizedKeycapBlank(key, imagePath),
+                _ => new Control_DefaultKeycap(key, imagePath)
+            };
+        }
+        
+        var keyLights = Global.effengine.GetKeyboardLights();
+        if (keyLights.TryGetValue(key.Tag, out var keyColor))
+        {
+            var opaqueColor = ColorUtils.MultiplyColorByScalar(keyColor, keyColor.A / 255.0D);
+            var drawingColor = Color.FromArgb(255, opaqueColor.R, opaqueColor.G, opaqueColor.B);
+            keycap.SetColor(drawingColor);
         }
 
         virtualKeyboard.Children.Add(keycap);
 
-        if (key.Tag != DeviceKeys.NONE && !virtualKeyboardMap.ContainsKey(key.Tag) && keycap is Keycap kc && !abstractKeycaps)
+        if (key.Tag != DeviceKeys.NONE && !virtualKeyboardMap.ContainsKey(key.Tag) && keycap is { } kc && !abstractKeycaps)
             virtualKeyboardMap.Add(key.Tag, kc);
 
         if (key.AbsoluteLocation)
@@ -166,9 +169,7 @@ internal class KeyboardControlGenerator(
         if (keyMarginTop > 0)
             _currentHeight += keyMarginTop;
 
-
-        if (_layoutWidth < _currentWidth)
-            _layoutWidth = _currentWidth;
+        _layoutWidth = Math.Max(_layoutWidth, _currentWidth);
 
         if (key.LineBreak)
         {
@@ -176,7 +177,6 @@ internal class KeyboardControlGenerator(
             _currentWidth = 0;
         }
 
-        if (_layoutHeight < _currentHeight)
-            _layoutHeight = _currentHeight;
+        _layoutHeight = Math.Max(_layoutHeight, _currentHeight);
     }
 }

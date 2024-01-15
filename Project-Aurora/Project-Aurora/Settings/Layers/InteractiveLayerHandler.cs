@@ -233,7 +233,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
         }
 
         if (deviceKey == DeviceKeys.NONE || Properties.Sequence.Keys.Contains(deviceKey)) return;
-        var pt = Effects.GetBitmappingFromDeviceKey(deviceKey).Center;
+        var pt = Effects.Canvas.GetRectangle(deviceKey).Center;
         if (pt.IsEmpty) return;
 
         _timeOfLastPress.TryAdd(deviceKey, currentTime);
@@ -257,10 +257,10 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
                     new AnimationCircle(origin, 0, primaryC, Properties.EffectWidth)
                 );
                 wave.SetFrame(0.80f,
-                    new AnimationCircle(origin, Effects.CanvasWidth * 0.80f, secondaryC, Properties.EffectWidth)
+                    new AnimationCircle(origin, Effects.Canvas.Width * 0.80f, secondaryC, Properties.EffectWidth)
                 );
                 wave.SetFrame(1.00f,
-                    new AnimationCircle(origin, Effects.CanvasWidth + (float)Properties.EffectWidth / 2, Color.FromArgb(0, secondaryC), Properties.EffectWidth)
+                    new AnimationCircle(origin, Effects.Canvas.Width + (float)Properties.EffectWidth / 2, Color.FromArgb(0, secondaryC), Properties.EffectWidth)
                 );
                 animMix.AddTrack(wave);
                 break;
@@ -271,7 +271,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
 
                 rainbowWave.SetFrame(0.0f, new AnimationGradientCircle(origin, 0,
                     new EffectBrush(new ColorSpectrum(ColorSpectrum.Rainbow).Flip()).SetBrushType(EffectBrush.BrushType.Radial), Properties.EffectWidth));
-                rainbowWave.SetFrame(1.0f, new AnimationGradientCircle(origin, Effects.CanvasWidth + (float)Properties.EffectWidth / 2,
+                rainbowWave.SetFrame(1.0f, new AnimationGradientCircle(origin, Effects.Canvas.Width + (float)Properties.EffectWidth / 2,
                     new EffectBrush(new ColorSpectrum(ColorSpectrum.Rainbow).Flip()).SetBrushType(EffectBrush.BrushType.Radial), Properties.EffectWidth));
 
                 animMix.AddTrack(rainbowWave);
@@ -284,10 +284,10 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
                     new AnimationFilledCircle(origin, 0, primaryC, Properties.EffectWidth)
                 );
                 wave.SetFrame(0.80f,
-                    new AnimationFilledCircle(origin, Effects.CanvasWidth * 0.80f, secondaryC, Properties.EffectWidth)
+                    new AnimationFilledCircle(origin, Effects.Canvas.Width * 0.80f, secondaryC, Properties.EffectWidth)
                 );
                 wave.SetFrame(1.00f,
-                    new AnimationFilledCircle(origin, Effects.CanvasWidth + (float)Properties.EffectWidth / 2, Color.FromArgb(0, secondaryC), Properties.EffectWidth)
+                    new AnimationFilledCircle(origin, Effects.Canvas.Width + (float)Properties.EffectWidth / 2, Color.FromArgb(0, secondaryC), Properties.EffectWidth)
                 );
                 animMix.AddTrack(wave);
                 break;
@@ -314,24 +314,24 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
                 arrow.SetFrame(0.33f,
                     new AnimationLines(
                         new[] {
-                            new AnimationLine(origin, origin with { X = origin.X + Effects.CanvasWidth * 0.33f }, ColorUtils.BlendColors(primaryC, secondaryC, 0.33D), Properties.EffectWidth),
-                            new AnimationLine(origin, origin with { X = origin.X - Effects.CanvasWidth * 0.33f }, ColorUtils.BlendColors(primaryC, secondaryC, 0.33D), Properties.EffectWidth)
+                            new AnimationLine(origin, origin with { X = origin.X + Effects.Canvas.Width * 0.33f }, ColorUtils.BlendColors(primaryC, secondaryC, 0.33D), Properties.EffectWidth),
+                            new AnimationLine(origin, origin with { X = origin.X - Effects.Canvas.Width * 0.33f }, ColorUtils.BlendColors(primaryC, secondaryC, 0.33D), Properties.EffectWidth)
                         }
                     )
                 );
                 arrow.SetFrame(0.66f,
                     new AnimationLines(
                         new[] {
-                            new AnimationLine(origin with { X = origin.X + Effects.CanvasWidth * 0.33f }, origin with { X = origin.X + Effects.CanvasWidth * 0.66f }, secondaryC, Properties.EffectWidth),
-                            new AnimationLine(origin with { X = origin.X - Effects.CanvasWidth * 0.33f }, origin with { X = origin.X - Effects.CanvasWidth * 0.66f }, secondaryC, Properties.EffectWidth)
+                            new AnimationLine(origin with { X = origin.X + Effects.Canvas.Width * 0.33f }, origin with { X = origin.X + Effects.Canvas.Width * 0.66f }, secondaryC, Properties.EffectWidth),
+                            new AnimationLine(origin with { X = origin.X - Effects.Canvas.Width * 0.33f }, origin with { X = origin.X - Effects.Canvas.Width * 0.66f }, secondaryC, Properties.EffectWidth)
                         }
                     )
                 );
                 arrow.SetFrame(1.0f,
                     new AnimationLines(
                         new[] {
-                            new AnimationLine(origin with { X = origin.X + Effects.CanvasWidth * 0.66f }, origin with { X = origin.X + Effects.CanvasWidth }, Color.FromArgb(0, secondaryC), Properties.EffectWidth),
-                            new AnimationLine(origin with { X = origin.X - Effects.CanvasWidth * 0.66f }, origin with { X = origin.X - Effects.CanvasWidth }, Color.FromArgb(0, secondaryC), Properties.EffectWidth)
+                            new AnimationLine(origin with { X = origin.X + Effects.Canvas.Width * 0.66f }, origin with { X = origin.X + Effects.Canvas.Width }, Color.FromArgb(0, secondaryC), Properties.EffectWidth),
+                            new AnimationLine(origin with { X = origin.X - Effects.Canvas.Width * 0.66f }, origin with { X = origin.X - Effects.Canvas.Width }, Color.FromArgb(0, secondaryC), Properties.EffectWidth)
                         }
                     )
                 );
@@ -367,7 +367,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
                     case InputItem.InputType.Spectrum:
                     default:
                     {
-                        var transitionValue = input.Progress / Effects.CanvasWidth;
+                        var transitionValue = input.Progress / Effects.Canvas.Width;
 
                         if (transitionValue > 1.0f)
                             continue;
@@ -379,7 +379,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
                     }
                     case InputItem.InputType.AnimationMix:
                     {
-                        var timeValue = input.Progress / Effects.CanvasWidth;
+                        var timeValue = input.Progress / Effects.Canvas.Width;
 
                         if (timeValue > 1.0f)
                             continue;
@@ -398,7 +398,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
 
         foreach (var kv in _inputDictionary)
         {
-            if (kv.Value.Progress > Effects.CanvasWidth)
+            if (kv.Value.Progress > Effects.Canvas.Width)
                 _inputDictionary.Remove(kv.Key, out _);
             else
             {

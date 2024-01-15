@@ -54,7 +54,7 @@ namespace Aurora.EffectsEngine.Animations
 
             foreach (var kvp in _BitmapColors)
             {
-                var region = Effects.GetBitmappingFromDeviceKey(kvp.Key);
+                var region = Effects.Canvas.GetRectangle(kvp.Key);
 
                 g.FillRectangle(new SolidBrush(kvp.Value), region.Left, region.Top, region.Width, region.Height);
             }

@@ -175,8 +175,8 @@ namespace Aurora.Settings.Layers
                     // and that's our new X offset.
                     // This probably makes no sense and I'll forget how it works immediately, but hopefully it helps a little in
                     // future if this code ever needs to be revised. It's embarassing how long it took to work this equation out.
-                    offset.X = (offset.X - affectedRegion.X) * (Effects.CanvasWidth / affectedRegion.Width);
-                    offset.Y = (offset.Y - affectedRegion.Y) * (Effects.CanvasHeight / affectedRegion.Height);
+                    offset.X = (offset.X - affectedRegion.X) * (Effects.Canvas.Width / affectedRegion.Width);
+                    offset.Y = (offset.Y - affectedRegion.Y) * (Effects.Canvas.Height / affectedRegion.Height);
                 }
 
                 // Draw the animation to a temporary canvas
@@ -371,7 +371,7 @@ namespace Aurora.Settings.Layers
             public float currentTime = 0;
             public int playTimes = 0;
             public DeviceKeys assignedKey = DeviceKeys.NONE;
-            public PointF offset => assignedKey == DeviceKeys.NONE ? PointF.Empty : Effects.GetBitmappingFromDeviceKey(assignedKey).Center;
+            public PointF offset => assignedKey == DeviceKeys.NONE ? PointF.Empty : Effects.Canvas.GetRectangle(assignedKey).Center;
 
             public RunningAnimation Reset() {
                 currentTime = 0;

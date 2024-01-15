@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Windows.Controls;
 using JetBrains.Annotations;
 using static System.Linq.Expressions.Expression;
-using IDisposable = ABI.System.IDisposable;
 
 namespace Aurora.Settings.Layers {
 
@@ -28,7 +27,7 @@ namespace Aurora.Settings.Layers {
 
         public override void Default() {
             base.Default();
-            _Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
+            _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
         }
     }
 

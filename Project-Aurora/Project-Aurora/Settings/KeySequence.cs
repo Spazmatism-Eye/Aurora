@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using Aurora.Devices;
+using Aurora.EffectsEngine;
 using Aurora.Utils;
 using Common.Devices;
 using Microsoft.Scripting.Utils;
@@ -99,9 +100,9 @@ public sealed class KeySequence : ICloneable, IEquatable<KeySequence>
         switch (Type)
         {
             case KeySequenceType.FreeForm:
-                return new RectangleF((Freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth,
-                    (Freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight,
-                    Freeform.Width * Effects.EditorToCanvasWidth, Freeform.Height * Effects.EditorToCanvasHeight);
+                return new RectangleF((Freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth,
+                    (Freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight,
+                    Freeform.Width * Effects.Canvas.EditorToCanvasWidth, Freeform.Height * Effects.Canvas.EditorToCanvasHeight);
             default:
 
                 var left = 0.0f;
@@ -111,7 +112,7 @@ public sealed class KeySequence : ICloneable, IEquatable<KeySequence>
 
                 foreach (var key in Keys)
                 {
-                    BitmapRectangle keyMapping = Effects.GetBitmappingFromDeviceKey(key);
+                    BitmapRectangle keyMapping = Effects.Canvas.GetRectangle(key);
                     if (keyMapping.Left < left)
                         left = keyMapping.Left;
                     if (keyMapping.Top < top)

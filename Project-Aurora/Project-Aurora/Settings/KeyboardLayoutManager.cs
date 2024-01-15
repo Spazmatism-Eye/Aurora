@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Aurora.EffectsEngine;
 using Aurora.Settings.Controls.Keycaps;
 using Aurora.Settings.Layouts;
 using Aurora.Utils;
@@ -41,13 +42,9 @@ public class KeyboardLayoutManager
 
     private readonly Dictionary<DeviceKeys, Keycap> _virtualKeyboardMap = new();
 
-    private bool _virtualKbInvalid = true;
-
     public Task<Grid> VirtualKeyboard { get; }
 
     public Task<Panel> AbstractVirtualKeyboard => CreateUserControl(true);
-
-    private bool _bitmapMapInvalid = true;
 
     public delegate void LayoutUpdatedEventHandler(object? sender);
 
@@ -79,7 +76,7 @@ public class KeyboardLayoutManager
         Global.Configuration.PropertyChanged += Configuration_PropertyChanged;
     }
 
-    public async Task LoadBrandDefault()
+    private async Task LoadBrandDefault()
     {
         await LoadBrand(
             Global.Configuration.KeyboardBrand,
@@ -287,18 +284,11 @@ public class KeyboardLayoutManager
         }
 #endif
 
-        //Perform end of load functions
-        _bitmapMapInvalid = true;
-        _virtualKbInvalid = true;
-        CalculateBitmap();
-
-        await Application.Current.Dispatcher.BeginInvoke(async () =>
+        await Application.Current.Dispatcher.InvokeAsync(async () =>
         {
-            await GenerateLock.WaitAsync();
             await CreateUserControl();
             KeyboardLayoutUpdated?.Invoke(this);
-            GenerateLock.Release();
-        }, DispatcherPriority.Send);
+        });
     }
 
     private bool LoadLayout(string path, [MaybeNullWhen(false)] out VirtualGroup layout)
@@ -365,7 +355,7 @@ public class KeyboardLayoutManager
             else if (featureConfig.OriginRegion == KeyboardRegion.BottomRight)
                 featureConfig.OriginRegion = KeyboardRegion.BottomLeft;
 
-            double outlineWidth = 0.0;
+            var outlineWidth = 0.0;
 
             foreach (var key in featureConfig.GroupedKeys)
             {
@@ -392,44 +382,35 @@ public class KeyboardLayoutManager
         _virtualKeyboardGroup.AddFeature(featureConfig.GroupedKeys.ToArray(), featureConfig.OriginRegion);
     }
 
-    private Func<double, int> _pixelToByte = DefaultPixelToByte;
-
-    private static int DefaultPixelToByte(double pixel)
-    {
-        return (int) Math.Round(pixel / (double) Global.Configuration.BitmapAccuracy);
-    }
-
     private int PixelToByte(double pixel)
     {
-        return _pixelToByte(pixel);
+        return (int) Math.Round(pixel / (double) Global.Configuration.BitmapAccuracy);
     }
 
     private void Configuration_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         IEnumerable<string> relatedProperties = [
             nameof(Configuration.BitmapAccuracy),
+            nameof(Configuration.VirtualkeyboardKeycapType),
             nameof(Configuration.KeyboardBrand), nameof(Configuration.KeyboardLocalization),
             nameof(Configuration.MousePreference), nameof(Configuration.MouseOrientation),
             nameof(Configuration.MousepadPreference),
             nameof(Configuration.HeadsetPreference),
-            nameof(Configuration.ChromaLedsPreference)
+            nameof(Configuration.ChromaLedsPreference),
         ];
         if (!relatedProperties.Contains(e.PropertyName)) return;
- 
-        _pixelToByte = DefaultPixelToByte;
 
-        Global.LightingStateManager.PreUpdate += LightingStateManager_PreUpdate;
+        Global.LightingStateManager.PreUpdate += LightingStateManager_LoadLayout;
     }
 
-    private async void LightingStateManager_PreUpdate(object? sender, EventArgs e)
+    private async void LightingStateManager_LoadLayout(object? sender, EventArgs e)
     {
+        Global.LightingStateManager.PreUpdate -= LightingStateManager_LoadLayout;
         await LoadBrandDefault();
-        Global.LightingStateManager.PreUpdate -= LightingStateManager_PreUpdate;
     }
 
-    private void CalculateBitmap()
+    private void CalculateBitmap(KeyboardControlGenerator kcg)
     {
-        if (!_bitmapMapInvalid) return;
         double curWidth = 0;
         double curHeight = 0;
         double widthMax = 1;
@@ -451,8 +432,7 @@ public class KeyboardLayoutManager
 
             if (key.AbsoluteLocation)
             {
-                bitmapMap[key.Tag] =
-                    new BitmapRectangle(PixelToByte(xOffset), PixelToByte(yOffset), widthBit, heightBit);
+                bitmapMap[key.Tag] = new BitmapRectangle(PixelToByte(xOffset), PixelToByte(yOffset), widthBit, heightBit);
                 brX = xOffset + width;
                 brY = yOffset + height;
             }
@@ -474,41 +454,48 @@ public class KeyboardLayoutManager
                 else
                 {
                     curWidth = brX;
-                    if (y > curHeight)
-                        curHeight = y;
+                    curHeight = Math.Max(curHeight, y);
                 }
             }
 
-            if (brX > widthMax) widthMax = brX;
-            if (brY > heightMax) heightMax = brY;
+            widthMax = Math.Max(widthMax, brX);
+            heightMax = Math.Max(heightMax, brY);
         }
 
-        _bitmapMapInvalid = false;
         //+1 for rounding error, where the bitmap rectangle B(X)+B(Width) > B(X+Width)
-        Global.effengine.SetCanvasSize(
-            PixelToByte(_virtualKeyboardGroup.Region.Width) + 1,
-            PixelToByte(_virtualKeyboardGroup.Region.Height) + 1);
-        Global.effengine.SetBitmapping(bitmapMap);
+        Effects.Canvas = new EffectCanvas(
+            PixelToByte(_virtualKeyboardGroup.Region.Width),
+            PixelToByte(_virtualKeyboardGroup.Region.Height),
+            bitmapMap,
+            (float)kcg.BaselineX, (float)kcg.BaselineY,
+            (float)kcg.GridWidth, (float)kcg.GridHeight
+        );
     }
 
     private async Task<Panel> CreateUserControl(bool abstractKeycaps = false)
     {
-        if (_virtualKbInvalid && !abstractKeycaps)
+        try
+        {
+            await GenerateLock.WaitAsync();
+            return await CreateUserControlLocked(abstractKeycaps);
+        }
+        finally
+        {
+            GenerateLock.Release();
+        }
+    }
+
+    private async Task<Panel> CreateUserControlLocked(bool abstractKeycaps)
+    {
+        if (!abstractKeycaps)
             _virtualKeyboardMap.Clear();
 
         var virtualKb = abstractKeycaps ? new Grid() : await VirtualKeyboard;
-        var kcg = new KeyboardControlGenerator(abstractKeycaps, _virtualKeyboardGroup, _virtualKeyboardMap, _layoutsPath, virtualKb);
+        var kcg = new KeyboardControlGenerator(abstractKeycaps, _virtualKeyboardMap, _virtualKeyboardGroup, _layoutsPath, virtualKb);
 
-        if (!_virtualKbInvalid || abstractKeycaps) return await kcg.Generate();
-
-        Effects.GridBaselineX = (float)kcg.BaselineX;
-        Effects.GridBaselineY = (float)kcg.BaselineY;
-        Effects.GridHeight = (float)(await VirtualKeyboard).Height;
-        Effects.GridWidth = (float)(await VirtualKeyboard).Width;
-
-        _virtualKbInvalid = false;
-
-        return await kcg.Generate();
+        var keyboardControl = await kcg.Generate();
+        CalculateBitmap(kcg);
+        return keyboardControl;
     }
 
     private void LoadCulture(string culture)

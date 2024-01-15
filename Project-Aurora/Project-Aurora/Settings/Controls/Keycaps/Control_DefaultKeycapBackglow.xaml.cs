@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -32,9 +31,9 @@ public partial class Control_DefaultKeycapBackglow
 
         //Keycap adjustments
         KeyBorder.BorderThickness = new Thickness(string.IsNullOrWhiteSpace(key.Image) ? 1.5 : 0.0);
-        KeyBorder.IsEnabled = key.Enabled.GetValueOrDefault(true);
+        KeyBorder.IsEnabled = key.Enabled;
 
-        if (!key.Enabled.GetValueOrDefault(true))
+        if (!key.Enabled)
         {
             ToolTipService.SetShowOnDisabled(KeyBorder, true);
             KeyBorder.ToolTip = new ToolTip { Content = "Changes to this key are not supported" };
@@ -53,7 +52,7 @@ public partial class Control_DefaultKeycapBackglow
             GridBackglow.Visibility = Visibility.Hidden;
 
             if (!File.Exists(imagePath)) return;
-            using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+            var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
             var image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = memStream;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,7 +15,6 @@ namespace Aurora.Settings.Controls.Keycaps;
 /// </summary>
 public partial class Control_DefaultKeycapBackglowOnly
 {
-    private Color _currentColor = Color.FromArgb(0, 0, 0, 0);
     private readonly bool _isImage;
 
     public Control_DefaultKeycapBackglowOnly()
@@ -33,9 +31,9 @@ public partial class Control_DefaultKeycapBackglowOnly
 
         //Keycap adjustments
         KeyBorder.BorderThickness = new Thickness(string.IsNullOrWhiteSpace(key.Image) ? 1.5 : 0.0);
-        KeyBorder.IsEnabled = key.Enabled.Value;
+        KeyBorder.IsEnabled = key.Enabled;
 
-        if (!key.Enabled.Value)
+        if (!key.Enabled)
         {
             ToolTipService.SetShowOnDisabled(KeyBorder, true);
             KeyBorder.ToolTip = new ToolTip { Content = "Changes to this key are not supported" };

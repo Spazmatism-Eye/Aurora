@@ -10,7 +10,7 @@ namespace Aurora.Utils;
 public static class BitmapUtils
 {
     //B, G, R, A
-    private static readonly long[] ColorData = {0L, 0L, 0L, 0L};
+    private static readonly long[] ColorData = [0L, 0L, 0L, 0L];
     private static readonly Dictionary<Size, BitmapData> Bitmaps = new();
     // ReSharper disable once CollectionNeverQueried.Local //to keep reference
     private static readonly Dictionary<Size, int[]> BitmapBuffers = new();
@@ -53,7 +53,7 @@ public static class BitmapUtils
 
         var srcData = map.LockBits(
             rectangle,
-            ImageLockMode.UserInputBuffer | ImageLockMode.ReadOnly,
+            (ImageLockMode)5,   //ImageLockMode.UserInputBuffer | ImageLockMode.ReadOnly
             PixelFormat.Format32bppRgb, buff);
         var scan0 = srcData.Scan0;
 
@@ -93,14 +93,14 @@ public static class BitmapUtils
     /// </summary>
     /// <param name="b">Brightness (0..4)</param>
     /// <returns></returns>
-    public static float[][] GetBrightnessColorMatrix(float b) => new[]
-    {
-        new [] {b, 0, 0, 0, 0},//red
-        new [] {0, b, 0, 0, 0},//green
-        new [] {0, 0, b, 0, 0},//blue
-        new [] {0f, 0, 0, 1, 0},//alpha
-        new [] {0f, 0, 0, 0, 1}
-    };
+    public static float[][] GetBrightnessColorMatrix(float b) =>
+    [
+        [b, 0, 0, 0, 0],//red
+        [0, b, 0, 0, 0],//green
+        [0, 0, b, 0, 0],//blue
+        [0f, 0, 0, 1, 0],//alpha
+        [0f, 0, 0, 0, 1]
+    ];
 
     /// <summary>
     /// Returns a color matrix that when applied to an image alters its saturation.
@@ -117,13 +117,14 @@ public static class BitmapUtils
         var sg = (1 - s) * lumG;
         var sb = (1 - s) * lumB;
 
-        return new[] {
-            new [] {sr + s, sr,     sr,     0, 0},
-            new [] {sg,     sg + s, sg,     0, 0},
-            new [] {sb,     sb,     sb + s, 0, 0},
-            new [] {0f,      0,      0,     1, 0},
-            new [] {0f,      0,      0,     0, 1}
-        };
+        return
+        [
+            [sr + s, sr,     sr,     0, 0],
+            [sg,     sg + s, sg,     0, 0],
+            [sb,     sb,     sb + s, 0, 0],
+            [0f,      0,      0,     1, 0],
+            [0f,      0,      0,     0, 1]
+        ];
     }
 
     /// <summary>
@@ -150,27 +151,28 @@ public static class BitmapUtils
         var a21 = 0.072f - 0.072f * c - 0.283f * s;
         var a22 = 0.072f + 0.928f * c + 0.072f * s;
 
-        return new[]
-        {
-            new [] { a00, a01, a02, 0, 0},
-            new [] { a10, a11, a12, 0, 0},
-            new [] { a20, a21, a22, 0, 0},
-            new [] { 0f,    0,   0, 1, 0},
-            new [] { 0f,    0,   0, 0, 1}
-        };
+        return
+        [
+            [a00, a01, a02, 0, 0],
+            [a10, a11, a12, 0, 0],
+            [a20, a21, a22, 0, 0],
+            [0f,    0,   0, 1, 0],
+            [0f,    0,   0, 0, 1]
+        ];
     }
 
     /// <summary>
     /// Returns an identity matrix 5x5. Useful to perform operations on, which will then be applied at once to an image
     /// </summary>
     /// <returns></returns>
-    public static float[][] GetEmptyColorMatrix() => new [] {
-        new float[] {1, 0, 0, 0, 0},//red
-        new float[] {0, 1, 0, 0, 0},//green
-        new float[] {0, 0, 1, 0, 0},//blue
-        new float[] {0, 0, 0, 1, 0},//alpha
-        new float[] {0, 0, 0, 0, 1}
-    };
+    public static float[][] GetEmptyColorMatrix() =>
+    [
+        [1, 0, 0, 0, 0],//red
+        [0, 1, 0, 0, 0],//green
+        [0, 0, 1, 0, 0],//blue
+        [0, 0, 0, 1, 0],//alpha
+        [0, 0, 0, 0, 1]
+    ];
 
     /// <summary>
     /// Multiplies two 5x5 matrices together.
@@ -179,7 +181,7 @@ public static class BitmapUtils
     /// <param name="f1"></param>
     /// <param name="f2"></param>
     /// <returns></returns>
-    public static float[][] ColorMatrixMultiply(float[][] f1, float[][] f2)
+    public static float[][] ColorMatrixMultiply(IReadOnlyList<float[]> f1, IReadOnlyList<float[]> f2)
     {
         const int size = 5;
 

@@ -155,7 +155,7 @@ namespace Aurora.Controls
         private float _prevScale = 0;
         private void UpdateScale(double width)
         {
-            float scale = (float)(width / Effects.CanvasWidth);
+            float scale = (float)(width / Effects.Canvas.Width);
             if (scale < 1.0f)
                 scale = 1.0f;
             if(_prevScale == 0)

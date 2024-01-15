@@ -75,7 +75,7 @@
                               Margin="0,1,0,1" Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding VirtualkeyboardKeycapType}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:KeycapType}}" DisplayMemberPath="Text"
-                              SelectedValuePath="Value" SelectionChanged="LoadBrandDefault" Margin="0,1,0,1"
+                              SelectedValuePath="Value" Margin="0,1,0,1"
                               Width="192" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <ComboBox SelectedValue="{Binding MouseOrientation}"
                               ItemsSource="{utils:EnumToItemsSource {x:Type local:MouseOrientationType}}"

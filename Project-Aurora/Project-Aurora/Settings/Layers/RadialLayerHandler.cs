@@ -28,7 +28,7 @@ namespace Aurora.Settings.Layers {
 
         public override void Default() {
             base.Default();
-            _Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
+            _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
             _Brush = (SegmentedRadialBrushFactory)defaultFactory.Clone();
             _AnimationSpeed = 60;
         }

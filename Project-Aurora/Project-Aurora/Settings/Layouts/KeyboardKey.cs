@@ -10,16 +10,12 @@ public class KeyboardKey {
     private double? _width;
     private double? _height;
     private double? _fontSize;
+    private bool? _enabled;
     private bool? _lineBreak;
     private bool? _absoluteLocation;
-    private string? _visualName;
 
     [JsonPropertyName("visualName")]
-    public string? VisualName
-    {
-        get => _visualName;
-        set => _visualName = value;
-    }
+    public string? VisualName { get; set; }
 
     [JsonPropertyName("tag")]
     public DeviceKeys Tag
@@ -71,7 +67,11 @@ public class KeyboardKey {
     }
 
     [JsonPropertyName("enabled")]
-    public bool? Enabled { get; set; } = true;
+    public bool Enabled
+    {
+        get => _enabled.GetValueOrDefault(true);
+        set => _enabled = value;
+    }
 
     [JsonPropertyName("absolute_location")]
     public bool AbsoluteLocation
@@ -88,7 +88,7 @@ public class KeyboardKey {
 
     public void UpdateFromOtherKey(KeyboardKey otherKey)
     {
-        if (otherKey._visualName != null) _visualName = otherKey._visualName;
+        if (otherKey.VisualName != null) VisualName = otherKey.VisualName;
         if (otherKey._tag != null) Tag = otherKey.Tag;
         if (otherKey._lineBreak != null) LineBreak = otherKey.LineBreak;
         if (otherKey._width != null) Width = otherKey.Width;
@@ -96,7 +96,7 @@ public class KeyboardKey {
         if (otherKey._fontSize != null) FontSize = otherKey.FontSize;
         if (otherKey._marginLeft != null) MarginLeft = otherKey.MarginLeft;
         if (otherKey._marginTop != null) MarginTop = otherKey.MarginTop;
-        if (otherKey.Enabled != null) Enabled = otherKey.Enabled;
+        if (otherKey._enabled != null) Enabled = otherKey.Enabled;
         if (otherKey._absoluteLocation != null) AbsoluteLocation = otherKey.AbsoluteLocation;
     }
 }

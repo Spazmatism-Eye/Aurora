@@ -40,7 +40,7 @@ public partial class Control_ColorizedKeycap
         //Keycap adjustments
         KeyBorder.BorderThickness = new Thickness(string.IsNullOrWhiteSpace(key.Image) ? 1.5 : 0.0);
 
-        var keyEnabled = key.Enabled.GetValueOrDefault(true);
+        var keyEnabled = key.Enabled;
         KeyBorder.IsEnabled = keyEnabled;
 
         if (!keyEnabled)
@@ -64,7 +64,7 @@ public partial class Control_ColorizedKeycap
             KeyCap.Visibility = Visibility.Hidden;
 
             if (!File.Exists(imagePath)) return;
-            using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+            var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
             var image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = memStream;

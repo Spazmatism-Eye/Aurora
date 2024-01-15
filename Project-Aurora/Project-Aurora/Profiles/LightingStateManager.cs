@@ -417,7 +417,6 @@ public sealed class LightingStateManager
     private bool _profilesDisabled;
     private void Update()
     {
-        var debugTimer = new Stopwatch();
         PreUpdate?.Invoke(this, EventArgs.Empty);
         _updatedEvents.Clear();
 
@@ -439,7 +438,6 @@ public sealed class LightingStateManager
 
         UpdateProcess();
         var newFrame = new EffectsEngine.EffectFrame();
-        debugTimer.Restart();
 
         var profile = GetCurrentProfile(out var preview);
 
@@ -449,10 +447,7 @@ public sealed class LightingStateManager
             if (!_profilesDisabled)
             {
                 StopUnUpdatedEvents();
-                lock (Effects.CanvasChangedLock)
-                {
-                    Global.effengine.PushFrame(newFrame);
-                }
+                Global.effengine.PushFrame(newFrame);
                 _deviceManager.Result.ShutdownDevices();
             }
 
@@ -465,7 +460,6 @@ public sealed class LightingStateManager
             _deviceManager.Result.InitializeDevices();
             _profilesDisabled = false;
         }
-        debugTimer.Restart();
 
         //Need to do another check in case Desktop is disabled or the selected preview is disabled
         if (profile.IsEnabled)
@@ -492,14 +486,10 @@ public sealed class LightingStateManager
             }
         }
 
-        lock (Effects.CanvasChangedLock)
-        {
-            Global.effengine.PushFrame(newFrame);
-        }
+        Global.effengine.PushFrame(newFrame);
 
         StopUnUpdatedEvents();
         PostUpdate?.Invoke(this, EventArgs.Empty);
-        debugTimer.Restart();
     }
 
     /// <summary>Gets the current application.</summary>

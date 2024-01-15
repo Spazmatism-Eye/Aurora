@@ -158,8 +158,8 @@ namespace Aurora.Profiles.RocketLeague.Layers
                 tracks[i].SetFrame(
                     0.0f, 
                     new AnimationCircle(
-                        (int)(Effects.CanvasWidthCenter * 0.9),
-                        Effects.CanvasHeightCenter,
+                        (int)(Effects.Canvas.WidthCenter * 0.9),
+                        Effects.Canvas.HeightCenter,
                         0, 
                         playerColor,
                         4)
@@ -168,9 +168,9 @@ namespace Aurora.Profiles.RocketLeague.Layers
                 tracks[i].SetFrame(
                     1.0f,
                     new AnimationCircle(
-                        (int)(Effects.CanvasWidthCenter * 0.9),
-                        Effects.CanvasHeightCenter, 
-                        Effects.CanvasBiggest / 2.0f, 
+                        (int)(Effects.Canvas.WidthCenter * 0.9),
+                        Effects.Canvas.HeightCenter, 
+                        Effects.Canvas.BiggestSize / 2.0f, 
                         playerColor,
                         4)
                 );

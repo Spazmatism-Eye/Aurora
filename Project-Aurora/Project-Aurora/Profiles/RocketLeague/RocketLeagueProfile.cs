@@ -71,7 +71,7 @@ namespace Aurora.Profiles.RocketLeague
                     Properties = new PercentLayerHandlerProperties()
                     {
                         PercentType = PercentEffectType.Progressive_Gradual,
-                        _Sequence = new KeySequence(Effects.WholeCanvasFreeForm),
+                        _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm),
                         VariablePath = new VariablePath("YourTeam/Goals"),
                         MaxVariablePath = new VariablePath("Match/TotalGoals"),
                         _PrimaryColor = Color.Transparent,

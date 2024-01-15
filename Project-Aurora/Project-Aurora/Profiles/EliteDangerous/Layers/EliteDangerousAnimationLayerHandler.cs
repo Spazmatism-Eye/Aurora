@@ -232,25 +232,25 @@ public class EliteDangerousAnimationLayerHandler : LayerHandler<EliteDangerousAn
             
         _hyperspaceMix = new AnimationMix();
         _hyperspaceMix.AddTrack(GenerateHyperspaceStreak(0, 1.5f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 5, 0.1f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 12, 2.1f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 15, 2.7f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 20, 0.7f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 25, 2.4f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 30, 1.4f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 35, 0.3f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 40, 1.8f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 45, 1.0f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 50, 2.5f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 55, 1.5f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 60, 0.9f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 64, 2.3f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 68, 1.9f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 77, 0.0f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 82, 1.1f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 85, 1.3f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.CanvasWidth / 100 * 93, 2.1f, _hyperspaceMix.GetTracks().Count));
-        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak(Effects.CanvasWidth, 0.4f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 5, 0.1f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 12, 2.1f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 15, 2.7f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 20, 0.7f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 25, 2.4f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 30, 1.4f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 35, 0.3f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 40, 1.8f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 45, 1.0f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 50, 2.5f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 55, 1.5f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 60, 0.9f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 64, 2.3f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 68, 1.9f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 77, 0.0f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 82, 1.1f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 85, 1.3f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak((float)Effects.Canvas.Width / 100 * 93, 2.1f, _hyperspaceMix.GetTracks().Count));
+        _hyperspaceMix.AddTrack(GenerateHyperspaceStreak(Effects.Canvas.Width, 0.4f, _hyperspaceMix.GetTracks().Count));
     }
 
     private void RegenerateHyperspaceExitAnimation(StarClass starClass = StarClass.K)
@@ -258,21 +258,21 @@ public class EliteDangerousAnimationLayerHandler : LayerHandler<EliteDangerousAn
         if (starClass == _hyperspaceExitStar) return;
             
         _hypespaceExitMix = new AnimationMix();
-        float startingX = Effects.CanvasWidthCenter - 10;
+        float startingX = Effects.Canvas.WidthCenter - 10;
         Color hyperspaceExitColor = _starColors.ContainsKey(starClass) ? _starColors[starClass] : _starColors[StarClass.K];
             
         AnimationTrack star_entry = new AnimationTrack("Hyperspace exit", 2.0f);
         star_entry.SetFrame(0.0f,
-            new AnimationFilledCircle(startingX, Effects.CanvasHeightCenter, 0, hyperspaceExitColor)
+            new AnimationFilledCircle(startingX, Effects.Canvas.HeightCenter, 0, hyperspaceExitColor)
         );
         star_entry.SetFrame(1.0f,
-            new AnimationFilledCircle(startingX, Effects.CanvasHeightCenter, Effects.CanvasBiggest, hyperspaceExitColor)
+            new AnimationFilledCircle(startingX, Effects.Canvas.HeightCenter, Effects.Canvas.BiggestSize, hyperspaceExitColor)
         );
         star_entry.SetFrame(1.2f,
-            new AnimationFilledCircle(startingX, Effects.CanvasHeightCenter, Effects.CanvasBiggest, hyperspaceExitColor)
+            new AnimationFilledCircle(startingX, Effects.Canvas.HeightCenter, Effects.Canvas.BiggestSize, hyperspaceExitColor)
         );
         star_entry.SetFrame(2f,
-            new AnimationFilledCircle(startingX, Effects.CanvasHeightCenter, Effects.CanvasBiggest, Color.Empty)
+            new AnimationFilledCircle(startingX, Effects.Canvas.HeightCenter, Effects.Canvas.BiggestSize, Color.Empty)
         );
             
         AnimationTrack star_entry_bg = new AnimationTrack("Hyperspace exit bg", 2f);
@@ -292,7 +292,7 @@ public class EliteDangerousAnimationLayerHandler : LayerHandler<EliteDangerousAn
         Color pulseStartColor = Color.FromArgb(0, 126, 255);
         Color pulseEndColor = Color.FromArgb(200, 0, 126, 255);
 
-        float startingX = Effects.CanvasWidthCenter - 10;
+        float startingX = Effects.Canvas.WidthCenter - 10;
         int pulseStartWidth = 10;
         int pulseEndWidth = 2;
             
@@ -301,10 +301,10 @@ public class EliteDangerousAnimationLayerHandler : LayerHandler<EliteDangerousAn
             
         AnimationTrack countdown_pulse = new AnimationTrack("Fsd countdown pulse " + index, pulseFrameDuration, index);
         countdown_pulse.SetFrame(0.0f,
-            new AnimationCircle(startingX, Effects.CanvasHeightCenter, 0, pulseStartColor, pulseStartWidth)
+            new AnimationCircle(startingX, Effects.Canvas.HeightCenter, 0, pulseStartColor, pulseStartWidth)
         );
         countdown_pulse.SetFrame(pulseDuration,
-            new AnimationCircle(startingX, Effects.CanvasHeightCenter, Effects.CanvasBiggest, pulseEndColor, pulseEndWidth)
+            new AnimationCircle(startingX, Effects.Canvas.HeightCenter, Effects.Canvas.BiggestSize, pulseEndColor, pulseEndWidth)
         );
 
         return countdown_pulse;
@@ -320,7 +320,7 @@ public class EliteDangerousAnimationLayerHandler : LayerHandler<EliteDangerousAn
         int streakWidth = 3;
 
         int startPosition = -40;
-        int endPosition = Effects.CanvasHeight + streakSize * 2;
+        int endPosition = Effects.Canvas.Height + streakSize * 2;
             
         AnimationTrack streak = new AnimationTrack("Hyperspace streak " + index, animationDuration, timeShift);
         streak.SetFrame(0.0f,

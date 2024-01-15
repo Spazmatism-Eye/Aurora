@@ -11,82 +11,17 @@ using Common.Devices;
 
 namespace Aurora;
 
-public class BitmapRectangle
-{
-    public static readonly BitmapRectangle EmptyRectangle = new();
-
-    public bool IsValid { get; }
-
-    private readonly Rectangle _rectangle;
-    public Rectangle Rectangle => _rectangle;
-
-    public bool IsEmpty => _rectangle.IsEmpty || !IsValid;
-
-    public int Bottom => _rectangle.Bottom;
-    public int Top => _rectangle.Top;
-    public int Left => _rectangle.Left;
-    public int Right => _rectangle.Right;
-    public int Height => _rectangle.Height;
-    public int Width => _rectangle.Width;
-
-    public PointF Center { get; }
-
-    private BitmapRectangle()
-    {
-
-    }
-
-    public BitmapRectangle(int x, int y, int width, int height)
-    {
-        _rectangle = new Rectangle(x, y, width, height);
-        Center = new PointF(_rectangle.Left + _rectangle.Width / 2.0f, _rectangle.Top + _rectangle.Height / 2.0f);
-        IsValid = true;
-    }
-
-    public BitmapRectangle(Rectangle region)
-    {
-        _rectangle = new Rectangle(region.Location, region.Size);
-        Center = new PointF(_rectangle.Left + _rectangle.Width / 2.0f, _rectangle.Top + _rectangle.Height / 2.0f);
-        IsValid = true;
-    }
-
-    public static explicit operator BitmapRectangle(Rectangle region)
-    {
-        return new BitmapRectangle(region);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        return obj.GetType() == GetType() && Equals((BitmapRectangle)obj);
-    }
-
-    public bool Equals(BitmapRectangle p)
-    {
-        if (ReferenceEquals(null, p)) return false;
-        if (ReferenceEquals(this, p)) return true;
-
-        return Rectangle.Equals(p.Rectangle);
-    }
-
-    public override int GetHashCode()
-    {
-        return Rectangle.GetHashCode();
-    }
-}
-
 public delegate void NewLayerRendered(Bitmap bitmap);
 
-class EnumHashGetter: IEqualityComparer<Enum>
+internal class EnumHashGetter: IEqualityComparer<Enum>
 {
-    public static EnumHashGetter Instance = new();
+    public static readonly EnumHashGetter Instance = new();
 
     private EnumHashGetter()
     {
     }
 
-    public bool Equals(Enum x, Enum y)
+    public bool Equals(Enum? x, Enum? y)
     {
         return object.Equals(x, y);
     }
@@ -97,12 +32,13 @@ class EnumHashGetter: IEqualityComparer<Enum>
     }
 }
 
-public class Effects
+public class Effects(Task<DeviceManager> deviceManager)
 {
     //Optimization: used to mitigate dictionary resizing
     public static readonly int MaxDeviceId = Enum.GetValues(typeof(DeviceKeys)).Cast<int>().Max() + 1;
 
-    private static readonly DeviceKeys[] PossiblePeripheralKeys = {
+    private static readonly DeviceKeys[] PossiblePeripheralKeys =
+    [
         DeviceKeys.Peripheral,
         DeviceKeys.Peripheral_FrontLight,
         DeviceKeys.Peripheral_ScrollWheel,
@@ -164,112 +100,62 @@ public class Effects
         DeviceKeys.PERIPHERAL_LIGHT17,
         DeviceKeys.PERIPHERAL_LIGHT18,
         DeviceKeys.PERIPHERAL_LIGHT19,
-        DeviceKeys.PERIPHERAL_LIGHT20,
-    };
-
-    private Bitmap? _forcedFrame;
+        DeviceKeys.PERIPHERAL_LIGHT20
+    ];
 
     public event NewLayerRendered? NewLayerRender = delegate { };
 
+    private Bitmap? _forcedFrame;
+
     public static event EventHandler? CanvasChanged;
-    public static readonly object CanvasChangedLock = new();
+    private static readonly object CanvasChangedLock = new();
 
-    private static int _canvasWidth = 1;
-    public static int CanvasWidth
-    {
-        get => _canvasWidth;
-        private set
+    private static EffectCanvas _canvas = new(8, 8,
+        new Dictionary<DeviceKeys, BitmapRectangle>
         {
-            if (_canvasWidth == value)
+            { DeviceKeys.SPACE , new BitmapRectangle(0, 0, 8, 8)}
+        }, 0, 0, 8, 8
+    );
+    public static EffectCanvas Canvas
+    {
+        get => _canvas;
+        set
+        {
+            if (Equals(_canvas, value))
             {
                 return;
             }
             lock (CanvasChangedLock)
             {
-                _canvasWidth = value;
+                _canvas = value;
                 CanvasChanged?.Invoke(null, EventArgs.Empty);
             }
         }
     }
-    private static int _canvasHeight = 1;
-    public static int CanvasHeight
-    {
-        get => _canvasHeight;
-        private set
-        {
-            if (_canvasHeight == value)
-            {
-                return;
-            }
-            lock (CanvasChangedLock)
-            {
-                _canvasHeight = value;
-                CanvasChanged?.Invoke(null, EventArgs.Empty);
-            }
-        }
-    }
-
-    public static float GridBaselineX { get; set; }
-    public static float GridBaselineY { get; set; }
-    public static float GridWidth { get; set; } = 1.0f;
-    public static float GridHeight { get; set; } = 1.0f;
-
-    public static float CanvasWidthCenter => CanvasWidth / 2.0f;    //TODO center the keyboard
-    public static float CanvasHeightCenter => CanvasHeight / 2.0f;
-    public static float EditorToCanvasWidth => CanvasWidth / GridWidth;
-    public static float EditorToCanvasHeight => CanvasHeight / GridHeight;
-    public static int CanvasBiggest => CanvasWidth > CanvasHeight ? CanvasWidth : CanvasHeight;
-
-    /// <summary>
-    /// Creates a new FreeFormObject that perfectly occupies the entire canvas.
-    /// </summary>
-    public static Settings.FreeFormObject WholeCanvasFreeForm => new(-GridBaselineX, -GridBaselineY, GridWidth, GridHeight);
-
-    private static IReadOnlyDictionary<DeviceKeys, BitmapRectangle> _bitmapMap = new Dictionary<DeviceKeys, BitmapRectangle>();
 
     private readonly Dictionary<DeviceKeys, SimpleColor> _keyColors = new(MaxDeviceId, EnumHashGetter.Instance as IEqualityComparer<DeviceKeys>);
 
     private readonly Lazy<EffectLayer> _effectLayerFactory = new(() => new EffectLayer("Global Background", Color.Black, true));
     private EffectLayer Background => _effectLayerFactory.Value;
 
-    private readonly Task<DeviceManager> _deviceManager;
+    private readonly SolidBrush _keyboardDarknessBrush = new(Color.Empty);
+    private readonly SolidBrush _blackBrush = new(Color.Black);
 
-    public Effects(Task<DeviceManager> deviceManager)
+    public void ForceImageRender(Bitmap? forcedFrame)
     {
-        _deviceManager = deviceManager;
-        var allKeys = Enum.GetValues(typeof(DeviceKeys)).Cast<DeviceKeys>();
+        _forcedFrame?.Dispose();
+        _forcedFrame = forcedFrame?.Clone() as Bitmap;
+    }
 
-        foreach (var key in allKeys)
+    public void PushFrame(EffectFrame frame)
+    {
+        lock (CanvasChangedLock)
         {
-            _keyColors[key] = new SimpleColor(0, 0, 0);
+            PushFrameLocked(frame);
         }
     }
 
-    public void ForceImageRender(Bitmap forcedFrame)
-    {
-        _forcedFrame?.Dispose();
-        _forcedFrame = (Bitmap) forcedFrame?.Clone();
-    }
-
-    public void SetCanvasSize(int width, int height)
-    {
-        CanvasWidth = width == 0 ? 1 : width;
-        CanvasHeight = height == 0 ? 1 : height;
-    }
-
-    public static BitmapRectangle GetBitmappingFromDeviceKey(DeviceKeys key)
-    {
-        return _bitmapMap.TryGetValue(key, out var rect) ? rect : BitmapRectangle.EmptyRectangle;
-    }
-
-    public void SetBitmapping(Dictionary<DeviceKeys, BitmapRectangle> bitmapMap)
-    {
-        _bitmapMap = bitmapMap;
-    }
-
-    private readonly SolidBrush _keyboardDarknessBrush = new(Color.Empty);
-    private readonly SolidBrush _blackBrush = new(Color.Black);
-    public void PushFrame(EffectFrame frame)
+    private void PushFrameLocked(EffectFrame frame)
     {
         Background.Fill(_blackBrush);
 
@@ -285,14 +171,15 @@ public class Effects
         _keyboardDarknessBrush.Color = Color.FromArgb((int) (255.0f * keyboardDarkness), Color.Black);
         Background.FillOver(_keyboardDarknessBrush);
 
+        var renderCanvas = Canvas; // save locally in case it changes between ref calls
         if (_forcedFrame != null)
         {
             using var g = Background.GetGraphics();
             g.Clear(Color.Black);
-            g.DrawImage(_forcedFrame, 0, 0, CanvasWidth, CanvasHeight);
+            g.DrawImage(_forcedFrame, 0, 0, renderCanvas.Width, renderCanvas.Height);
         }
 
-        foreach (var key in _bitmapMap.Keys)
+        foreach (var key in renderCanvas.BitmapMap.Keys)
             _keyColors[key] = (SimpleColor)Background.Get(key);
 
         var peripheralDarkness = 1.0f - Global.Configuration.PeripheralBrightness * Global.Configuration.GlobalBrightness;
@@ -304,7 +191,7 @@ public class Effects
             }
         }
 
-        _deviceManager.Result.UpdateDevices(_keyColors);
+        deviceManager.Result.UpdateDevices(_keyColors);
 
         NewLayerRender?.Invoke(Background.GetBitmap());
 

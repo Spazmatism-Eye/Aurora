@@ -130,7 +130,7 @@ namespace Aurora.Settings.Layers {
             _DragY = 0;
             _MinSize = 6; _MaxSize = 6;
             _DeltaSize = 0;
-            _Sequence = new KeySequence(Effects.WholeCanvasFreeForm);
+            _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
         }
     }
 
@@ -211,14 +211,14 @@ namespace Aurora.Settings.Layers {
             VelocityY = (float)(Rnd.NextDouble() * (properties.MaxInitialVelocityY - properties.MinInitialVelocityY) + properties.MinInitialVelocityY);
             PositionX
                 = properties.SpawnLocation == ParticleSpawnLocations.LeftEdge ? 0 // For left edge, X should start at 0
-                : properties.SpawnLocation == ParticleSpawnLocations.RightEdge ? Effects.CanvasWidth // For right edge, X should start at maximum width
+                : properties.SpawnLocation == ParticleSpawnLocations.RightEdge ? Effects.Canvas.Width // For right edge, X should start at maximum width
                 : properties.SpawnLocation == ParticleSpawnLocations.Region ? ar.Left + (float)(Rnd.NextDouble() * ar.Width)// For region, randomly choose X in region
-                : (float)(Rnd.NextDouble() * Effects.CanvasWidth); // For top, bottom or random, randomly choose an X value
+                : (float)(Rnd.NextDouble() * Effects.Canvas.Width); // For top, bottom or random, randomly choose an X value
             PositionY
                 = properties.SpawnLocation == ParticleSpawnLocations.TopEdge ? 0 // For top edge, Y should start at 0
-                : properties.SpawnLocation == ParticleSpawnLocations.BottomEdge ? Effects.CanvasHeight // For bottom edge, Y should start at maximum height
+                : properties.SpawnLocation == ParticleSpawnLocations.BottomEdge ? Effects.Canvas.Height // For bottom edge, Y should start at maximum height
                 : properties.SpawnLocation == ParticleSpawnLocations.Region ? ar.Top + (float)(Rnd.NextDouble() * ar.Height)// For region, randomly choose Y in region
-                : (float)(Rnd.NextDouble() * Effects.CanvasHeight); // For left, right or random, randomly choose a Y value
+                : (float)(Rnd.NextDouble() * Effects.Canvas.Height); // For left, right or random, randomly choose a Y value
             Size = (float)(Rnd.NextDouble() * (properties.MaxSize - properties.MinSize)) + properties.MinSize;
         }
 

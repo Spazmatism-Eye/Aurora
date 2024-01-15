@@ -77,7 +77,7 @@ namespace Aurora.Settings.Layers
                 {
                     using (var g = temp_layer.GetGraphics())
                     {
-                        g.DrawImage(_loaded_image, new RectangleF(0, 0, Effects.CanvasWidth, Effects.CanvasHeight), new RectangleF(0, 0, _loaded_image.Width, _loaded_image.Height), GraphicsUnit.Pixel);
+                        g.DrawImage(_loaded_image, new RectangleF(0, 0, Effects.Canvas.Width, Effects.Canvas.Height), new RectangleF(0, 0, _loaded_image.Width, _loaded_image.Height), GraphicsUnit.Pixel);
                     }
 
                     foreach (var key in Properties.Sequence.Keys)
@@ -85,10 +85,10 @@ namespace Aurora.Settings.Layers
                 }
                 else
                 {
-                    var x_pos = (float)Math.Round((Properties.Sequence.Freeform.X + Effects.GridBaselineX) * Effects.EditorToCanvasWidth);
-                    var y_pos = (float)Math.Round((Properties.Sequence.Freeform.Y + Effects.GridBaselineY) * Effects.EditorToCanvasHeight);
-                    var width = (float)Math.Round((double)(Properties.Sequence.Freeform.Width * Effects.EditorToCanvasWidth));
-                    var height = (float)Math.Round((double)(Properties.Sequence.Freeform.Height * Effects.EditorToCanvasHeight));
+                    var x_pos = (float)Math.Round((Properties.Sequence.Freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
+                    var y_pos = (float)Math.Round((Properties.Sequence.Freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
+                    var width = (float)Math.Round((double)(Properties.Sequence.Freeform.Width * Effects.Canvas.EditorToCanvasWidth));
+                    var height = (float)Math.Round((double)(Properties.Sequence.Freeform.Height * Effects.Canvas.EditorToCanvasHeight));
 
                     if (width < 3) width = 3;
                     if (height < 3) height = 3;

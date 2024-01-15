@@ -52,8 +52,8 @@ public class Window_BitmapView : Window
         imgBitmap.SnapsToDevicePixels = true;
         imgBitmap.HorizontalAlignment = HorizontalAlignment.Stretch;
         imgBitmap.VerticalAlignment = VerticalAlignment.Stretch;
-        imgBitmap.MinWidth = Effects.CanvasWidth;
-        imgBitmap.MinHeight = Effects.CanvasHeight;
+        imgBitmap.MinWidth = Effects.Canvas.Width;
+        imgBitmap.MinHeight = Effects.Canvas.Height;
 
         Content = imgBitmap;
     }

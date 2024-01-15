@@ -35,9 +35,9 @@ public partial class Control_DefaultKeycap
 
         //Keycap adjustments
         KeyBorder.BorderThickness = new Thickness(string.IsNullOrWhiteSpace(key.Image) ? 1.5 : 0.0);
-        KeyBorder.IsEnabled = key.Enabled.Value;
+        KeyBorder.IsEnabled = key.Enabled;
 
-        if (!key.Enabled.Value)
+        if (!key.Enabled)
         {
             ToolTipService.SetShowOnDisabled(KeyBorder, true);
             KeyBorder.ToolTip = new ToolTip { Content = "Changes to this key are not supported" };
@@ -61,7 +61,7 @@ public partial class Control_DefaultKeycap
             KeyCap.Visibility = Visibility.Hidden;
 
             if (!File.Exists(imagePath)) return;
-            using var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
+            var memStream = new MemoryStream(File.ReadAllBytes(imagePath));
             var image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = memStream;

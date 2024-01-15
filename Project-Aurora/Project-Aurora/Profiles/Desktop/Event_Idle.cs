@@ -246,10 +246,10 @@ internal class RainFall : AwayEffect
         using var g = layer.GetGraphics();
         foreach (var raindrop in raindropsKeys)
         {
-            var pt = Effects.GetBitmappingFromDeviceKey(raindrop).Center;
+            var pt = Effects.Canvas.GetRectangle(raindrop).Center;
 
             var transitionValue = 1.0f - _raindrops[raindrop];
-            var radius = transitionValue * Effects.CanvasBiggest;
+            var radius = transitionValue * Effects.Canvas.BiggestSize;
 
             g.DrawEllipse(new Pen(_dropSpec.GetColorAt(transitionValue), 2),
                 pt.X - radius,
@@ -290,7 +290,7 @@ public class Matrix : AwayEffect
 
             for (var x = 0; x < IdleAmount; x++)
             {
-                var widthStart = _eventIdle.Randomizer.Next(Effects.CanvasWidth);
+                var widthStart = _eventIdle.Randomizer.Next(Effects.Canvas.Width);
                 var delay = _eventIdle.Randomizer.Next(550) / 100.0f;
                 var randomId = _eventIdle.Randomizer.Next(125536789);
 
@@ -303,7 +303,7 @@ public class Matrix : AwayEffect
                                 3))
                         .SetFrame(
                             0.5f * 1.0f / (0.05f * IdleSpeed),
-                            new AnimationLine(widthStart, Effects.CanvasHeight, widthStart, Effects.CanvasHeight + 3,
+                            new AnimationLine(widthStart, Effects.Canvas.Height, widthStart, Effects.Canvas.Height + 3,
                                 IdleEffectPrimaryColor, 3)).SetShift(
                             _eventIdle.CurrentTime % 1000000L / 1000.0f + delay
                         );
@@ -313,10 +313,10 @@ public class Matrix : AwayEffect
                         0.0f * 1.0f / (0.05f * IdleSpeed),
                         new AnimationLine(widthStart, -12, widthStart, -3, darkerPrimary, 3)).SetFrame(
                         0.5f * 1.0f / (0.05f * IdleSpeed),
-                        new AnimationLine(widthStart, Effects.CanvasHeight - 12, widthStart, Effects.CanvasHeight,
+                        new AnimationLine(widthStart, Effects.Canvas.Height - 12, widthStart, Effects.Canvas.Height,
                             darkerPrimary, 3)).SetFrame(
                         0.75f * 1.0f / (0.05f * IdleSpeed),
-                        new AnimationLine(widthStart, Effects.CanvasHeight, widthStart, Effects.CanvasHeight,
+                        new AnimationLine(widthStart, Effects.Canvas.Height, widthStart, Effects.Canvas.Height,
                             darkerPrimary,
                             3)).SetShift(
                         _eventIdle.CurrentTime % 1000000L / 1000.0f + delay
@@ -369,9 +369,9 @@ internal class RainFallSmooth : AwayEffect
 
         var drops = _raindrops.Keys.Select(d =>
         {
-            var pt = Effects.GetBitmappingFromDeviceKey(d).Center;
+            var pt = Effects.Canvas.GetRectangle(d).Center;
             var transitionValue = 1.0f - _raindrops[d];
-            var radius = transitionValue * Effects.CanvasBiggest;
+            var radius = transitionValue * Effects.Canvas.BiggestSize;
             _raindrops[d] -= _eventIdle.GetDeltaTime() * 0.05f * IdleSpeed;
             return new Tuple<DeviceKeys, PointF, float, float>(d, pt, transitionValue, radius);
         }).Where(d => d.Item3 <= 1.5).ToArray();
@@ -380,7 +380,7 @@ internal class RainFallSmooth : AwayEffect
 
         foreach (var key in _eventIdle.AllKeys)
         {
-            var keyInfo = Effects.GetBitmappingFromDeviceKey(key);
+            var keyInfo = Effects.Canvas.GetRectangle(key);
 
             // For easy calculation every button considered as circle with this radius
             var btnRadius = (keyInfo.Width + keyInfo.Height) / 4f;
