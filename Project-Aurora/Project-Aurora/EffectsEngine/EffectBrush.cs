@@ -1,8 +1,14 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Media;
 using Aurora.Utils;
+using Newtonsoft.Json;
+using Brush = System.Drawing.Brush;
+using Color = System.Drawing.Color;
+using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
+using Point = System.Windows.Point;
 
 namespace Aurora.EffectsEngine
 {
@@ -14,14 +20,14 @@ namespace Aurora.EffectsEngine
             Solid,
             Linear,
             Radial
-        };
+        }
 
         public enum BrushWrap
         {
             None,
             Repeat,
             Reflect
-        };
+        }
 
         public BrushType type = BrushType.None;
         public BrushWrap wrap = BrushWrap.None;
@@ -32,8 +38,8 @@ namespace Aurora.EffectsEngine
         public PointF end;
         public PointF center;
 
-        private Brush _drawingBrush = null;
-        private System.Windows.Media.Brush _mediaBrush = null;
+        private Brush _drawingBrush;
+        private System.Windows.Media.Brush _mediaBrush;
 
         public EffectBrush()
         {
@@ -81,11 +87,11 @@ namespace Aurora.EffectsEngine
 
                 wrap = BrushWrap.Repeat;
             }
-            else if (brush is System.Drawing.Drawing2D.LinearGradientBrush)
+            else if (brush is LinearGradientBrush)
             {
                 type = BrushType.Linear;
 
-                System.Drawing.Drawing2D.LinearGradientBrush lgb = (brush as System.Drawing.Drawing2D.LinearGradientBrush);
+                LinearGradientBrush lgb = (brush as LinearGradientBrush);
 
                 start = lgb.Rectangle.Location;
                 end = new PointF(lgb.Rectangle.Width, lgb.Rectangle.Height);
@@ -93,13 +99,13 @@ namespace Aurora.EffectsEngine
 
                 switch (lgb.WrapMode)
                 {
-                    case (System.Drawing.Drawing2D.WrapMode.Clamp):
+                    case (WrapMode.Clamp):
                         wrap = BrushWrap.None;
                         break;
-                    case (System.Drawing.Drawing2D.WrapMode.Tile):
+                    case (WrapMode.Tile):
                         wrap = BrushWrap.Repeat;
                         break;
-                    case (System.Drawing.Drawing2D.WrapMode.TileFlipXY):
+                    case (WrapMode.TileFlipXY):
                         wrap = BrushWrap.Reflect;
                         break;
                 }
@@ -134,11 +140,11 @@ namespace Aurora.EffectsEngine
                     }
                 }
             }
-            else if (brush is System.Drawing.Drawing2D.PathGradientBrush)
+            else if (brush is PathGradientBrush)
             {
                 type = BrushType.Radial;
 
-                System.Drawing.Drawing2D.PathGradientBrush pgb = (brush as System.Drawing.Drawing2D.PathGradientBrush);
+                PathGradientBrush pgb = (brush as PathGradientBrush);
 
                 start = pgb.Rectangle.Location;
                 end = new PointF(pgb.Rectangle.Width, pgb.Rectangle.Height);
@@ -150,13 +156,13 @@ namespace Aurora.EffectsEngine
 
                 switch (pgb.WrapMode)
                 {
-                    case (System.Drawing.Drawing2D.WrapMode.Clamp):
+                    case (WrapMode.Clamp):
                         wrap = BrushWrap.None;
                         break;
-                    case (System.Drawing.Drawing2D.WrapMode.Tile):
+                    case (WrapMode.Tile):
                         wrap = BrushWrap.Repeat;
                         break;
-                    case (System.Drawing.Drawing2D.WrapMode.TileFlipXY):
+                    case (WrapMode.TileFlipXY):
                         wrap = BrushWrap.Reflect;
                         break;
                 }
@@ -190,10 +196,6 @@ namespace Aurora.EffectsEngine
                                 );
                     }
                 }
-            }
-            else
-            {
-
             }
 
             if(colorGradients.Count > 0)
@@ -233,14 +235,14 @@ namespace Aurora.EffectsEngine
 
         public EffectBrush(System.Windows.Media.Brush brush)
         {
-            if (brush is System.Windows.Media.SolidColorBrush)
+            if (brush is SolidColorBrush)
             {
                 type = BrushType.Solid;
 
                 wrap = BrushWrap.Repeat;
 
-                colorGradients.Add(0.0f, ColorUtils.MediaColorToDrawingColor((brush as System.Windows.Media.SolidColorBrush).Color));
-                colorGradients.Add(1.0f, ColorUtils.MediaColorToDrawingColor((brush as System.Windows.Media.SolidColorBrush).Color));
+                colorGradients.Add(0.0f, ColorUtils.MediaColorToDrawingColor((brush as SolidColorBrush).Color));
+                colorGradients.Add(1.0f, ColorUtils.MediaColorToDrawingColor((brush as SolidColorBrush).Color));
             }
             else if (brush is System.Windows.Media.LinearGradientBrush)
             {
@@ -254,13 +256,13 @@ namespace Aurora.EffectsEngine
 
                 switch (lgb.SpreadMethod)
                 {
-                    case (System.Windows.Media.GradientSpreadMethod.Pad):
+                    case (GradientSpreadMethod.Pad):
                         wrap = BrushWrap.None;
                         break;
-                    case (System.Windows.Media.GradientSpreadMethod.Repeat):
+                    case (GradientSpreadMethod.Repeat):
                         wrap = BrushWrap.Repeat;
                         break;
-                    case (System.Windows.Media.GradientSpreadMethod.Reflect):
+                    case (GradientSpreadMethod.Reflect):
                         wrap = BrushWrap.Reflect;
                         break;
                 }
@@ -274,11 +276,11 @@ namespace Aurora.EffectsEngine
                             );
                 }
             }
-            else if (brush is System.Windows.Media.RadialGradientBrush)
+            else if (brush is RadialGradientBrush)
             {
                 type = BrushType.Radial;
 
-                System.Windows.Media.RadialGradientBrush rgb = (brush as System.Windows.Media.RadialGradientBrush);
+                RadialGradientBrush rgb = (brush as RadialGradientBrush);
 
                 start = new PointF(0, 0);
                 end = new PointF((float)rgb.RadiusX * 2.0f, (float)rgb.RadiusY * 2.0f);
@@ -289,13 +291,13 @@ namespace Aurora.EffectsEngine
 
                 switch (rgb.SpreadMethod)
                 {
-                    case (System.Windows.Media.GradientSpreadMethod.Pad):
+                    case (GradientSpreadMethod.Pad):
                         wrap = BrushWrap.None;
                         break;
-                    case (System.Windows.Media.GradientSpreadMethod.Repeat):
+                    case (GradientSpreadMethod.Repeat):
                         wrap = BrushWrap.Repeat;
                         break;
-                    case (System.Windows.Media.GradientSpreadMethod.Reflect):
+                    case (GradientSpreadMethod.Reflect):
                         wrap = BrushWrap.Reflect;
                         break;
                 }
@@ -308,10 +310,6 @@ namespace Aurora.EffectsEngine
                             ColorUtils.MediaColorToDrawingColor(grad.Color)
                             );
                 }
-            }
-            else
-            {
-
             }
 
             if (colorGradients.Count > 0)
@@ -361,198 +359,188 @@ namespace Aurora.EffectsEngine
 
         public Brush GetDrawingBrush()
         {
-            if (true/*_drawingbrush == null*/)
+            Brush returnBrush = type switch
             {
-                if (type == BrushType.Solid)
-                {
-                    _drawingBrush = new SolidBrush(colorGradients[0.0f]);
-                }
-                else if (type == BrushType.Linear)
-                {
-                    System.Drawing.Drawing2D.LinearGradientBrush brush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                        start,
-                        end,
-                        Color.Red,
-                        Color.Red
-                        );
-
-                    List<Color> brush_colors = new List<Color>();
-                    List<float> brush_positions = new List<float>();
-
-                    foreach (var kvp in colorGradients)
-                    {
-                        brush_positions.Add((float)kvp.Key);
-                        brush_colors.Add(kvp.Value);
-                    }
-
-                    System.Drawing.Drawing2D.ColorBlend color_blend = new System.Drawing.Drawing2D.ColorBlend();
-                    color_blend.Colors = brush_colors.ToArray();
-                    color_blend.Positions = brush_positions.ToArray();
-                    brush.InterpolationColors = color_blend;
-
-                    switch (wrap)
-                    {
-                        //case BrushWrap.None:
-                        //    brush.WrapMode = System.Drawing.Drawing2D.WrapMode.Clamp;
-                        //    break;
-                        case BrushWrap.Repeat:
-                            brush.WrapMode = System.Drawing.Drawing2D.WrapMode.Tile;
-                            break;
-                        case BrushWrap.Reflect:
-                            brush.WrapMode = System.Drawing.Drawing2D.WrapMode.TileFlipXY;
-                            break;
-                    }
-
-                    _drawingBrush = brush;
-                }
-                else if (type == BrushType.Radial)
-                {
-                    System.Drawing.Drawing2D.GraphicsPath g_path = new System.Drawing.Drawing2D.GraphicsPath();
-                    g_path.AddEllipse(
-                        new RectangleF(
-                        start.X,
-                        start.Y,
-                        end.X,
-                        end.Y
-                        ));
-
-                    System.Drawing.Drawing2D.PathGradientBrush brush = new System.Drawing.Drawing2D.PathGradientBrush(
-                        g_path
-                        );
-
-                    switch (wrap)
-                    {
-                        //// Clamp causes an exception, it's a bug in the Drawing Brush.
-                        //case BrushWrap.None:
-                        //    brush.WrapMode = System.Drawing.Drawing2D.WrapMode.Clamp;
-                        //    break;
-                        case BrushWrap.Repeat:
-                            brush.WrapMode = System.Drawing.Drawing2D.WrapMode.Tile;
-                            break;
-                        case BrushWrap.Reflect:
-                            brush.WrapMode = System.Drawing.Drawing2D.WrapMode.TileFlipXY;
-                            break;
-                    }
-
-                    List<Color> brush_colors = new List<Color>();
-                    List<float> brush_positions = new List<float>();
-
-                    foreach (var kvp in colorGradients)
-                    {
-                        brush_positions.Add(1.0f - (float)kvp.Key);
-                        brush_colors.Add(kvp.Value);
-                    }
-
-                    brush.CenterPoint = center;
-                    //brush.CenterColor = brush_colors[0];
-
-                    //brush.SurroundColors = brush_colors.ToArray();
-
-                    brush_colors.Reverse();
-                    brush_positions.Reverse();
-
-                    System.Drawing.Drawing2D.ColorBlend color_blend = new System.Drawing.Drawing2D.ColorBlend();
-                    color_blend.Colors = brush_colors.ToArray();
-                    color_blend.Positions = brush_positions.ToArray();
-                    brush.InterpolationColors = color_blend;
-
-                    _drawingBrush = brush;
-                }
-                else
-                {
-                    _drawingBrush = new SolidBrush(Color.Transparent);
-                }
-            }
+                BrushType.Solid => new SolidBrush(colorGradients[0.0f]),
+                BrushType.Linear => GetLinearBrush(),
+                BrushType.Radial => GetRadialBrush(),
+                _ => new SolidBrush(Color.Transparent)
+            };
+            
+            _drawingBrush = returnBrush;
 
             return _drawingBrush;
         }
 
+        private LinearGradientBrush GetLinearBrush()
+        {
+            var brushColors = new List<Color>();
+            var brushPositions = new List<float>();
+
+            foreach (var kvp in colorGradients)
+            {
+                brushPositions.Add((float)kvp.Key);
+                brushColors.Add(kvp.Value);
+            }
+
+            var colorBlend = new ColorBlend
+            {
+                Colors = brushColors.ToArray(),
+                Positions = brushPositions.ToArray()
+            };
+            var brush = new LinearGradientBrush(
+                start,
+                end,
+                Color.Red,
+                Color.Red
+            );
+            brush.InterpolationColors = colorBlend;
+
+            switch (wrap)
+            {
+                case BrushWrap.Repeat:
+                    brush.WrapMode = WrapMode.Tile;
+                    break;
+                case BrushWrap.Reflect:
+                    brush.WrapMode = WrapMode.TileFlipXY;
+                    break;
+            }
+
+            return brush;
+        }
+
+        private PathGradientBrush GetRadialBrush()
+        {
+            var gPath = new GraphicsPath();
+            gPath.AddEllipse(
+                new RectangleF(
+                    start.X,
+                    start.Y,
+                    end.X,
+                    end.Y
+                ));
+
+            var brush = new PathGradientBrush(
+                gPath
+            );
+
+            switch (wrap)
+            {
+                case BrushWrap.Repeat:
+                    brush.WrapMode = WrapMode.Tile;
+                    break;
+                case BrushWrap.Reflect:
+                    brush.WrapMode = WrapMode.TileFlipXY;
+                    break;
+            }
+
+            var brushColors = new List<Color>();
+            var brushPositions = new List<float>();
+
+            foreach (var kvp in colorGradients)
+            {
+                brushPositions.Add(1.0f - (float)kvp.Key);
+                brushColors.Add(kvp.Value);
+            }
+
+            brush.CenterPoint = center;
+
+            brushColors.Reverse();
+            brushPositions.Reverse();
+
+            var colorBlend = new ColorBlend
+            {
+                Colors = brushColors.ToArray(),
+                Positions = brushPositions.ToArray()
+            };
+            brush.InterpolationColors = colorBlend;
+
+            return brush;
+        }
+
         public System.Windows.Media.Brush GetMediaBrush()
         {
-            if (_mediaBrush == null)
+            if (_mediaBrush != null) return _mediaBrush;
+            switch (type)
             {
-                if (type == BrushType.Solid)
+                case BrushType.Solid:
                 {
-                    System.Windows.Media.SolidColorBrush brush = new System.Windows.Media.SolidColorBrush(
+                    var brush = new SolidColorBrush(
                         ColorUtils.DrawingColorToMediaColor(colorGradients[0.0f])
-                        );
+                    );
                     brush.Freeze();
 
                     _mediaBrush = brush;
+                    break;
                 }
-                else if (type == BrushType.Linear)
+                case BrushType.Linear:
                 {
-                    System.Windows.Media.GradientStopCollection collection = new System.Windows.Media.GradientStopCollection();
+                    var collection = new GradientStopCollection();
 
                     foreach (var kvp in colorGradients)
                     {
                         collection.Add(
-                            new System.Windows.Media.GradientStop(
+                            new GradientStop(
                                 ColorUtils.DrawingColorToMediaColor(kvp.Value),
                                 kvp.Key)
-                            );
+                        );
                     }
 
-                    System.Windows.Media.LinearGradientBrush brush = new System.Windows.Media.LinearGradientBrush(collection);
-                    brush.StartPoint = new System.Windows.Point(start.X, start.Y);
-                    brush.EndPoint = new System.Windows.Point(end.X, end.Y);
-
-                    switch (wrap)
+                    var brush = new System.Windows.Media.LinearGradientBrush(collection)
                     {
-                        case BrushWrap.None:
-                            brush.SpreadMethod = System.Windows.Media.GradientSpreadMethod.Pad;
-                            break;
-                        case BrushWrap.Repeat:
-                            brush.SpreadMethod = System.Windows.Media.GradientSpreadMethod.Repeat;
-                            break;
-                        case BrushWrap.Reflect:
-                            brush.SpreadMethod = System.Windows.Media.GradientSpreadMethod.Reflect;
-                            break;
-                    }
+                        StartPoint = new Point(start.X, start.Y),
+                        EndPoint = new Point(end.X, end.Y)
+                    };
+
+                    brush.SpreadMethod = wrap switch
+                    {
+                        BrushWrap.None => GradientSpreadMethod.Pad,
+                        BrushWrap.Repeat => GradientSpreadMethod.Repeat,
+                        BrushWrap.Reflect => GradientSpreadMethod.Reflect,
+                        _ => brush.SpreadMethod
+                    };
 
                     _mediaBrush = brush;
+                    break;
                 }
-                else if (type == BrushType.Radial)
+                case BrushType.Radial:
                 {
-                    System.Windows.Media.GradientStopCollection collection = new System.Windows.Media.GradientStopCollection();
+                    var collection = new GradientStopCollection();
 
                     foreach (var kvp in colorGradients)
                     {
                         collection.Add(
-                            new System.Windows.Media.GradientStop(
+                            new GradientStop(
                                 ColorUtils.DrawingColorToMediaColor(kvp.Value),
                                 kvp.Key)
-                            );
+                        );
                     }
 
-                    System.Windows.Media.RadialGradientBrush brush = new System.Windows.Media.RadialGradientBrush(collection);
-                    brush.Center = new System.Windows.Point(center.X, center.Y);
+                    var brush = new RadialGradientBrush(collection);
+                    brush.Center = new Point(center.X, center.Y);
                     brush.RadiusX = end.X / 2.0;
                     brush.RadiusY = end.Y / 2.0;
 
-                    switch (wrap)
+                    brush.SpreadMethod = wrap switch
                     {
-                        case BrushWrap.None:
-                            brush.SpreadMethod = System.Windows.Media.GradientSpreadMethod.Pad;
-                            break;
-                        case BrushWrap.Repeat:
-                            brush.SpreadMethod = System.Windows.Media.GradientSpreadMethod.Repeat;
-                            break;
-                        case BrushWrap.Reflect:
-                            brush.SpreadMethod = System.Windows.Media.GradientSpreadMethod.Reflect;
-                            break;
-                    }
+                        BrushWrap.None => GradientSpreadMethod.Pad,
+                        BrushWrap.Repeat => GradientSpreadMethod.Repeat,
+                        BrushWrap.Reflect => GradientSpreadMethod.Reflect,
+                        _ => brush.SpreadMethod
+                    };
 
                     _mediaBrush = brush;
+                    break;
                 }
-                else
+                default:
                 {
-                    System.Windows.Media.SolidColorBrush brush = new System.Windows.Media.SolidColorBrush(
+                    var brush = new SolidColorBrush(
                         System.Windows.Media.Color.FromArgb(255, 255, 0, 0)
-                        );
+                    );
                     brush.Freeze();
 
                     _mediaBrush = brush;
+                    break;
                 }
             }
 
@@ -586,7 +574,7 @@ namespace Aurora.EffectsEngine
         {
             if (percent <= 0.0)
                 return new EffectBrush(this);
-            else if (percent >= 1.0)
+            if (percent >= 1.0)
                 return new EffectBrush(otherBrush);
 
             ColorSpectrum currentSpectrum = new ColorSpectrum(GetColorSpectrum());
