@@ -11,19 +11,19 @@
 
 [Frequently Asked Questions](https://github.com/Aurora-RGB/Aurora/wiki)
 
-[Suported Devices](https://github.com/Aurora-RGB/Aurora/wiki/Supported-Devices)
+[Supported Devices](https://github.com/Aurora-RGB/Aurora/wiki/Supported-Devices)
 
 ## Alternatives
 In case you don't like Aurora, there are free open-source alternatives to Aurora.
 
-While Artemis is a much more advanced and cross-platform, it is currently missing some game integrations (GSI games).
+While Artemis is much more advanced and cross-platform, it is currently missing some game integrations (GSI games).
 
 | Project                                           | Main features                                                                                                                                                                                   |                                                                                                                                        |
 |---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
 | [Artemis](https://github.com/Artemis-RGB/Artemis) | * Advanced animations<br/>* Linux support (work in progress)| It is significantly harder to use but can be more powerful<br/>Many features alrady included in Aurora can be found by adding plugins. |
 
 # Project Aurora
-Project Aurora is a utility that unifies RGB lighting devices across different brands and enables them to work alongside each other, all while adding and improving RGB lighting support for various games that previous had none or little RGB lighting support. Aurora is mainly written in C#, but has C++ components to implement native support for other games.
+Project Aurora is a utility that unifies RGB lighting devices across different brands and enables them to work alongside each other, all while adding and improving RGB lighting support for various games that previously had none or little RGB lighting support. Aurora is mainly written in C#, but has C++ components to implement native support for other games.
 
 Have a look at our [website](https://www.project-aurora.com/) for a better look at Aurora and its features!
 
