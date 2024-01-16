@@ -110,7 +110,6 @@ public enum DeviceKeys
     [Description("Pause")]
     PAUSE_BREAK = 16,
 
-
     /// <summary>
     /// Half/Full width (Japanese layout) key
     /// </summary>
@@ -200,12 +199,6 @@ public enum DeviceKeys
     /// </summary>
     [Description("=")]
     EQUALS = 29,
-
-    /// <summary>
-    /// OEM 6 key
-    /// </summary>
-    [Description("OEM 6")]
-    OEM6 = 169,
 
     /// <summary>
     /// Backspace key
@@ -323,22 +316,10 @@ public enum DeviceKeys
     P = 48,
 
     /// <summary>
-    /// OEM 1 key
-    /// </summary>
-    [Description("OEM 1")]
-    OEM1 = 170,
-
-    /// <summary>
     /// Open Bracket key
     /// </summary>
     [Description("{")]
     OPEN_BRACKET = 49,
-
-    /// <summary>
-    /// OEM Plus key
-    /// </summary>
-    [Description("OEM Plus")]
-    OEMPlus = 171,
 
     /// <summary>
     /// Close Bracket key
@@ -393,7 +374,6 @@ public enum DeviceKeys
     /// </summary>
     [Description("Numpad +")]
     NUM_PLUS = 58,
-
 
     /// <summary>
     /// Caps Lock key
@@ -849,7 +829,6 @@ public enum DeviceKeys
     [Description("G20")]
     G20 = 127,
 
-
     /// <summary>
     /// Brand Logo
     /// </summary>
@@ -1295,13 +1274,7 @@ public enum DeviceKeys
     /// Calculator Key
     /// </summary>
     [Description("Calculator")]
-    CALC = 216,      
-        
-    ///<summary>
-    /// Power Key
-    /// </summary>
-    [Description("Power")]
-    POWER = 217,
+    CALC = 216,
 
     /// <summary>
     /// Peripheral Light 1

@@ -545,7 +545,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
                     return (byte)USBHIDCodes.NUM_ZERO;
                 case DeviceKeys.NUM_PERIOD:
                     return (byte)USBHIDCodes.NUM_PERIOD;
-                case DeviceKeys.POWER:
+                case DeviceKeys.PERIPHERAL_LIGHT1:
                     return (byte)USBHIDCodes.POWER;
 
                 default:
