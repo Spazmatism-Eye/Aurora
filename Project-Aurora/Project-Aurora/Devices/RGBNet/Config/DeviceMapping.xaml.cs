@@ -22,8 +22,8 @@ public partial class DeviceMapping
     private readonly Task<DeviceManager> _deviceManager;
     private readonly Task<IpcListener?> _ipcListener;
 
-    private readonly List<RemappableDevice> _devices = new();
-    private readonly List<RgbNetKeyToDeviceKeyControl> _keys = new();
+    private readonly List<RemappableDevice> _devices = [];
+    private readonly List<RgbNetKeyToDeviceKeyControl> _keys = [];
 
     private readonly Lazy<DeviceMappingConfig> _config = new(() => DeviceMappingConfig.Config);
 
@@ -110,7 +110,7 @@ public partial class DeviceMapping
                     Content = device.DeviceSummary
                 };
 
-                button.Click += (_, _) =>
+                button.Click += async (_, _) =>
                 {
                     for (var i = 0; i < RemappableDeviceList.Children.Count; i++)
                     {
@@ -119,7 +119,7 @@ public partial class DeviceMapping
                     }
 
                     button.IsEnabled = false;
-                    DeviceSelect(device);
+                    await DeviceSelect(device);
                 };
 
                 RemappableDeviceList.Children.Add(button);
@@ -129,14 +129,16 @@ public partial class DeviceMapping
 
     private static CurrentDevices ReadDevices(string json)
     {
-        return JsonSerializer.Deserialize<CurrentDevices>(json) ?? new CurrentDevices(new List<RemappableDevice>());
+        return JsonSerializer.Deserialize<CurrentDevices>(json) ?? new CurrentDevices([]);
     }
 
-    private async void DeviceSelect(RemappableDevice remappableDevice)
+    private async Task DeviceSelect(RemappableDevice remappableDevice)
     {
         // Rebuild the key area
         RemappableDeviceKeys.Children.Clear();
         NotRemappableTextBlock.Visibility = remappableDevice.RemapEnabled ? Visibility.Collapsed : Visibility.Visible;
+        SetAllNoneBtn.IsEnabled = remappableDevice.RemapEnabled;
+        SetAllLogoBtn.IsEnabled = remappableDevice.RemapEnabled;
 
         await Task.Run(async () =>
         {
@@ -200,12 +202,11 @@ public partial class DeviceMapping
 
     private DeviceRemap GetDeviceRemap(RemappableDevice device)
     {
-        foreach (var netConfigDevice in DeviceMappingConfig.Config.Devices)
+        var netConfigDevice = DeviceMappingConfig.Config.Devices
+            .Find(netConfigDevice => netConfigDevice.Name.Equals(device.DeviceId));
+        if (netConfigDevice != null)
         {
-            if (netConfigDevice.Name.Equals(device.DeviceId))
-            {
-                return netConfigDevice;
-            }
+            return netConfigDevice;
         }
 
         var rgbNetConfigDevice = new DeviceRemap(device);
