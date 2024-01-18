@@ -723,22 +723,30 @@ public static class ProfileImporter
     {
         try
         {
-            // Attempt to read and deserialise the profile
+            // Attempt to read and deserialize the profile
             var json = File.ReadAllText(filepath, Encoding.UTF8);
             var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ObjectCreationHandling = ObjectCreationHandling.Replace,
                 TypeNameHandling = TypeNameHandling.Auto,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
                 SerializationBinder = new AuroraSerializationBinder(),
+                Converters = [
+                    new ObservableCollectionJsonConverter(),
+                    new EnumConverter(),
+                    new SingleToDoubleConverter(),
+                    new OverrideTypeConverter(),
+                    new TypeAnnotatedObjectConverter(),
+                    new ObjectDictionaryJsonConverterAdapter(),
+                    new StringDictionaryJsonConverterAdapter(),
+                    new SingleDictionaryJsonConverterAdapter(),
+                    new DoubleDictionaryJsonConverterAdapter<dynamic>(),
+                    new SortedDictionaryAdapter(),
+                    new VariableRegistryDictionaryConverter(),
+                    new UltimateListJsonConverter(),
+                ],
             };
-            jsonSerializerSettings.Converters.Add(new EnumConverter());
-            jsonSerializerSettings.Converters.Add(new SingleToDoubleConverter());
-            jsonSerializerSettings.Converters.Add(new OverrideTypeConverter());
-            jsonSerializerSettings.Converters.Add(new TypeAnnotatedObjectConverter());
-            jsonSerializerSettings.Converters.Add(new DictionaryJsonConverterAdapter());
-            jsonSerializerSettings.Converters.Add(new ConcurrentDictionaryJsonConverterAdapter());
-            jsonSerializerSettings.Converters.Add(new VariableRegistryDictionaryConverter());
-            var inProf = (ApplicationProfile)JsonConvert.DeserializeObject(json, typeof(ApplicationProfile), jsonSerializerSettings);
+            var inProf = (ApplicationProfile)JsonConvert.DeserializeObject(json, typeof(ApplicationProfile), jsonSerializerSettings)!;
 
             // Create a new profile on the current application (so that profiles can be imported from different applications)
             var newProf = app.AddNewProfile(inProf.ProfileName);

@@ -9,7 +9,7 @@ namespace Aurora.EffectsEngine.Animations
     public class AnimationTrack
     {
         [JsonProperty]
-        private readonly ConcurrentDictionary<float, AnimationFrame> _animations;
+        private readonly IDictionary<float, AnimationFrame> _animations;
         [JsonProperty]
         private float _animationDuration;
         [JsonProperty]
@@ -41,6 +41,15 @@ namespace Aurora.EffectsEngine.Animations
         }
 
         public float AnimationDuration => _animationDuration;
+
+        [JsonConstructor]
+        public AnimationTrack(IDictionary<float, AnimationFrame>? animations, float animationDuration, string trackName, float shift)
+        {
+            _animations = new ConcurrentDictionary<float, AnimationFrame>(animations ?? new Dictionary<float, AnimationFrame>());
+            _animationDuration = animationDuration;
+            _track_name = trackName;
+            _shift = shift;
+        }
 
         public AnimationTrack(string trackName, float animationDuration, float shift = 0.0f)
         {
@@ -84,13 +93,13 @@ namespace Aurora.EffectsEngine.Animations
         {
             time = NormalizeTime(time);
 
-            return time <= _animationDuration && !_animations.IsEmpty;
+            return time <= _animationDuration && _animations.Count != 0;
         }
 
         public AnimationTrack SetFrame(float time, AnimationFrame animframe)
         {
             //One can retype the animation track by removing all frames
-            if (_animations.IsEmpty)
+            if (_animations.Count == 0)
             {
                 _SupportedAnimationType = animframe.GetType();
                 _SupportedTypeIdentified = true;
@@ -98,7 +107,7 @@ namespace Aurora.EffectsEngine.Animations
 
             if (_SupportedAnimationType == animframe.GetType())
             {
-                if (!_animations.IsEmpty)
+                if (_animations.Count != 0)
                 {
                     Tuple<float, float> closeValues = GetCloseValues(time);
 
@@ -120,7 +129,7 @@ namespace Aurora.EffectsEngine.Animations
             {
                 if (kvp.Key == time)
                 {
-                    _animations.TryRemove(kvp.Key, out _);
+                    _animations.Remove(kvp.Key, out _);
                     break;
                 }
             }
@@ -177,7 +186,7 @@ namespace Aurora.EffectsEngine.Animations
 
         public ConcurrentDictionary<float, AnimationFrame> GetAnimations()
         {
-            return _animations;
+            return (ConcurrentDictionary<float, AnimationFrame>)_animations;
         }
 
         private Tuple<float, float> GetCloseValues(float time)

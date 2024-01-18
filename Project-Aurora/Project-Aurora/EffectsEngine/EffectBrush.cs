@@ -33,13 +33,25 @@ namespace Aurora.EffectsEngine
         public BrushWrap wrap = BrushWrap.None;
         [JsonProperty("color_gradients")]
         [JsonConverter(typeof(SortedDictionaryAdapter))]
-        public SortedDictionary<double, Color> colorGradients = new SortedDictionary<double, Color>();
+        public SortedDictionary<double, Color> colorGradients = new();
         public PointF start;
         public PointF end;
         public PointF center;
 
         private Brush _drawingBrush;
         private System.Windows.Media.Brush _mediaBrush;
+
+        [JsonConstructor]
+        public EffectBrush(BrushType type, BrushWrap wrap, PointF start, PointF end, PointF center, Brush drawingBrush, System.Windows.Media.Brush mediaBrush)
+        {
+            this.type = type;
+            this.wrap = wrap;
+            this.start = start;
+            this.end = end;
+            this.center = center;
+            _drawingBrush = drawingBrush;
+            _mediaBrush = mediaBrush;
+        }
 
         public EffectBrush()
         {

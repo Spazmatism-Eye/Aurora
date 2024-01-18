@@ -32,7 +32,8 @@ public enum KeySequenceType
 /// </summary>
 public sealed class KeySequence : ICloneable, IEquatable<KeySequence>
 {
-    [JsonIgnore] private readonly ObservableCollection<DeviceKeys> _keys;
+    [JsonIgnore]
+    private readonly ObservableCollection<DeviceKeys> _keys;
 
     /// <summary>
     /// An array of DeviceKeys keys to be used with KeySequenceType.Sequence type.
@@ -72,6 +73,14 @@ public sealed class KeySequence : ICloneable, IEquatable<KeySequence>
         _keys = new ObservableCollection<DeviceKeys>();
         Type = KeySequenceType.Sequence;
         Freeform = new FreeFormObject();
+    }
+
+    [JsonConstructor]
+    public KeySequence(IList<DeviceKeys> keys, KeySequenceType type, FreeFormObject freeform)
+    {
+        _keys = new ObservableCollection<DeviceKeys>(keys);
+        Type = type;
+        Freeform = freeform;
     }
 
     public KeySequence(KeySequence other)

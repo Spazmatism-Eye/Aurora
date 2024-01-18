@@ -10,7 +10,7 @@ namespace Aurora.EffectsEngine.Animations;
 public sealed class AnimationMix: IEquatable<AnimationMix>
 {
     [JsonProperty]
-    private readonly ConcurrentDictionary<string, AnimationTrack> _tracks = new();
+    private readonly IDictionary<string, AnimationTrack> _tracks;
 
     /// <summary>
     /// When true, will remove Animation tracks that no longer have any animations.
@@ -20,12 +20,20 @@ public sealed class AnimationMix: IEquatable<AnimationMix>
 
     public AnimationMix()
     {
+        _tracks = new ConcurrentDictionary<string, AnimationTrack>();
     }
 
-    public AnimationMix(AnimationTrack[] tracks)
+    public AnimationMix(IEnumerable<AnimationTrack> tracks): this()
     {
         foreach (var track in tracks)
             AddTrack(track);
+    }
+
+    [JsonConstructor]
+    public AnimationMix(IDictionary<string, AnimationTrack>? tracks, bool automaticallyRemoveComplete)
+    {
+        _tracks = tracks == null ? new ConcurrentDictionary<string, AnimationTrack>() : new ConcurrentDictionary<string, AnimationTrack>(tracks);
+        _automaticallyRemoveComplete = automaticallyRemoveComplete;
     }
 
     public AnimationMix SetAutoRemove(bool value)
@@ -50,7 +58,7 @@ public sealed class AnimationMix: IEquatable<AnimationMix>
 
     private void RemoveTrack(string trackName)
     {
-        _tracks.TryRemove(trackName, out _);
+        _tracks.Remove(trackName, out _);
     }
 
     public bool ContainsTrack(string trackName)
@@ -67,7 +75,7 @@ public sealed class AnimationMix: IEquatable<AnimationMix>
 
     public ConcurrentDictionary<string, AnimationTrack> GetTracks()
     {
-        return _tracks;
+        return (ConcurrentDictionary<string, AnimationTrack>)_tracks;
     }
 
     public bool AnyActiveTracksAt(float time)

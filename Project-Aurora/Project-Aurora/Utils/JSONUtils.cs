@@ -3,7 +3,6 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -228,7 +227,7 @@ public class TypeAnnotatedObjectConverter : JsonConverter
         {
             case JsonToken.String:
                 return reader.Value.ToString().StartsWith("\"")
-                    ? JsonConvert.DeserializeObject(reader.Value.ToString(), objectType)
+                    ? serializer.Deserialize(reader, objectType)
                     : JsonConvert.DeserializeObject("\"" + reader.Value + "\"", objectType);
             case JsonToken.StartObject:
                 var item = serializer.Deserialize<JObject>(reader);

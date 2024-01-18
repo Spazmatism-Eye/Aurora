@@ -1,99 +1,30 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq.Expressions;
-using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JsonException = System.Text.Json.JsonException;
 
 namespace Aurora.Utils;
 
-public class ConcurrentDictionaryJsonConverterAdapter : JsonConverter<ConcurrentDictionary<object, object>>
+public abstract class GenericDictionaryJsonConverterAdapter<K, V> : JsonConverter<IDictionary<K, V>>
 {
-    
-    public override void WriteJson(JsonWriter writer, ConcurrentDictionary<object, object> value, JsonSerializer serializer)
+    public override bool CanWrite => false;
+
+    public override void WriteJson(JsonWriter writer, IDictionary<K, V>? value, JsonSerializer serializer)
     {
-        serializer.Serialize(writer,value);
+        throw new NotImplementedException();
     }
 
-    public override ConcurrentDictionary<object, object> ReadJson(JsonReader reader, Type objectType, ConcurrentDictionary<object, object>? existingValue,
+    public override IDictionary<K, V> ReadJson(JsonReader reader, Type objectType, IDictionary<K, V>? existingValue,
         bool hasExistingValue, JsonSerializer serializer)
     {
         var genericTypes = objectType.GenericTypeArguments;
         var keyType = genericTypes[0];
         var valueType = genericTypes[1];
 
-        var map = existingValue ?? new ConcurrentDictionary<object, object>();
-            
-        var item = serializer.Deserialize<JObject>(reader);
-        foreach (var prop in item.Children<JProperty>())
-        {
-            if (prop.Name.Equals("$type"))
-            {
-                continue;
-            }
-
-            var key = Convert.ChangeType(prop.Name, keyType, CultureInfo.InvariantCulture);
-            var value = serializer.Deserialize(prop.Value.CreateReader(), valueType);
-            map.TryAdd(key, value);
-        }
-        return map;
-    }
-}
-
-public class SortedDictionaryAdapter : JsonConverter<SortedDictionary<double, Color>>
-{
-    
-    public override void WriteJson(JsonWriter writer, SortedDictionary<double, Color> value, JsonSerializer serializer)
-    {
-        serializer.Serialize(writer,value);
-    }
-
-    public override SortedDictionary<double, Color> ReadJson(JsonReader reader, Type objectType, SortedDictionary<double, Color>? existingValue,
-        bool hasExistingValue, JsonSerializer serializer)
-    {
-        var genericTypes = objectType.GenericTypeArguments;
-        var keyType = genericTypes[0];
-        var valueType = genericTypes[1];
-
-        var map = existingValue ?? new SortedDictionary<double, Color>();
-        map.Clear();
-            
-        var item = serializer.Deserialize<JObject>(reader);
-        foreach (var prop in item.Children<JProperty>())
-        {
-            if (prop.Name.Equals("$type"))
-            {
-                continue;
-            }
-
-            var key = Convert.ChangeType(prop.Name, keyType, CultureInfo.InvariantCulture);
-            var value = serializer.Deserialize(prop.Value.CreateReader(), valueType);
-            map.TryAdd((double)key, (Color)value);
-        }
-        return map;
-    }
-}
-
-public class DictionaryJsonConverterAdapter : JsonConverter<IDictionary<dynamic, dynamic>>
-{
-    
-    public override void WriteJson(JsonWriter writer, IDictionary<dynamic, dynamic>? value, JsonSerializer serializer)
-    {
-        serializer.Serialize(writer,value);
-    }
-
-    public override IDictionary<dynamic, dynamic> ReadJson(JsonReader reader, Type objectType, IDictionary<dynamic, dynamic>? existingValue,
-        bool hasExistingValue, JsonSerializer serializer)
-    {
-        var genericTypes = objectType.GenericTypeArguments;
-        var keyType = genericTypes[0];
-        var valueType = genericTypes[1];
-
-        var map = existingValue ?? (objectType.IsAbstract ?  new Dictionary<dynamic, dynamic>() : Instance(objectType));
+        var map = existingValue ?? (objectType.IsAbstract ?  new Dictionary<K, V>() : Instance(objectType));
             
         var item = serializer.Deserialize<JObject>(reader);
         foreach (var prop in item.Children<JProperty>())
@@ -110,18 +41,44 @@ public class DictionaryJsonConverterAdapter : JsonConverter<IDictionary<dynamic,
                 key = doubleKey;
             }
             var value = serializer.Deserialize(prop.Value.CreateReader(), valueType);
-            map.TryAdd(key, value);
+            map.TryAdd((K)key, (V)value);
         }
         return map;
     }
 
-    private static IDictionary<dynamic, dynamic> Instance(Type objectType)
+    private static IDictionary<K, V> Instance(Type objectType)
     {
         var constructorInfo = objectType.GetConstructor(Type.EmptyTypes);
         if (constructorInfo == null)
         {
             throw new JsonException("Type " + objectType + " does not have parameterless constructor");
         }
-        return (IDictionary<dynamic, dynamic>)Activator.CreateInstance(objectType)!;
+        return (IDictionary<K, V>)Activator.CreateInstance(objectType)!;
+    }
+}
+
+public class ObjectDictionaryJsonConverterAdapter : GenericDictionaryJsonConverterAdapter<dynamic, dynamic>;
+
+public class StringDictionaryJsonConverterAdapter : GenericDictionaryJsonConverterAdapter<string, dynamic>;
+
+public class SingleDictionaryJsonConverterAdapter : GenericDictionaryJsonConverterAdapter<float, dynamic>;
+
+public class DoubleDictionaryJsonConverterAdapter<T> : GenericDictionaryJsonConverterAdapter<double, T>;
+
+public class SortedDictionaryAdapter : JsonConverter<SortedDictionary<double, Color>>
+{
+    private readonly DoubleDictionaryJsonConverterAdapter<Color> _genericAdapter = new();
+    public override bool CanWrite => _genericAdapter.CanWrite;
+
+    public override void WriteJson(JsonWriter writer, SortedDictionary<double, Color>? value, JsonSerializer serializer)
+    {
+        _genericAdapter.WriteJson(writer, value, serializer);
+    }
+
+    public override SortedDictionary<double, Color> ReadJson(JsonReader reader, Type objectType, SortedDictionary<double, Color>? existingValue,
+        bool hasExistingValue, JsonSerializer serializer)
+    {
+        var readJson = _genericAdapter.ReadJson(reader, objectType, existingValue, hasExistingValue, serializer);
+        return new SortedDictionary<double, Color>(readJson);
     }
 }
