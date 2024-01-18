@@ -144,7 +144,7 @@ public class DesktopProfile : ApplicationProfile
         {
             Properties = new LayerHandlerProperties
             {
-                _PrimaryColor = Color.Lime,
+                _PrimaryColor = Color.Red,
                 _Sequence = new KeySequence(new[]
                 {
                     DeviceKeys.VOLUME_MUTE,
