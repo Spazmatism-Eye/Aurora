@@ -18,7 +18,7 @@ public class GenericApplication : Application
 
             if (File.Exists(iconPath))
             {
-                using var memStream = new MemoryStream(File.ReadAllBytes(iconPath));
+                var memStream = new MemoryStream(File.ReadAllBytes(iconPath));
                 var b = new BitmapImage();
                 b.BeginInit();
                 b.StreamSource = memStream;
@@ -36,7 +36,7 @@ public class GenericApplication : Application
     public GenericApplication(string processName) : base(new LightEventConfig(new Lazy<LightEvent>(() => new Event_GenericApplication())) {
         Name = "Generic Application",
         ID = processName,
-        ProcessNames = new[] { processName },
+        ProcessNames = [processName],
         SettingsType = typeof(GenericApplicationSettings),
         ProfileType = typeof(GenericApplicationProfile),
         OverviewControlType = typeof(Control_GenericApplication),
