@@ -20,7 +20,7 @@ public sealed partial class ProcessesModule : AuroraModule
         {
             ActiveProcess.SetResult(new ActiveProcessMonitor());
             RunningProcess.SetResult(new RunningProcessMonitor());
-        }, DispatcherPriority.Background);
+        }, DispatcherPriority.Send);
     }
 
     [Async]

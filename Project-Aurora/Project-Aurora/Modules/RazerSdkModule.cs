@@ -8,16 +8,10 @@ using RazerSdkReader;
 
 namespace Aurora.Modules;
 
-public sealed partial class RazerSdkModule : AuroraModule
+public sealed partial class RazerSdkModule(Task<LightingStateManager> lsm) : AuroraModule
 {
-    private readonly Task<LightingStateManager> _lsm;
     private readonly TaskCompletionSource<ChromaReader?> _sdkTaskSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private ChromaReader? _razerSdkManager;
-
-    public RazerSdkModule(Task<LightingStateManager> lsm)
-    {
-        _lsm = lsm;
-    }
 
     public Task<ChromaReader?> RzSdkManager => _sdkTaskSource.Task;
 
@@ -28,7 +22,7 @@ public sealed partial class RazerSdkModule : AuroraModule
         {
             try
             {
-                await _lsm; //wait for ChromaApplication.Settings to load
+                await lsm; //wait for ChromaApplication.Settings to load
                 TryLoadChroma();
                 if (Global.Configuration.ChromaDisableDeviceControl)
                 {

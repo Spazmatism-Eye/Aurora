@@ -8,14 +8,12 @@ using Aurora.Utils;
 
 namespace Aurora.Modules;
 
-public sealed class PerformanceMonitor : AuroraModule
+public sealed class PerformanceMonitor(Task<RunningProcessMonitor> runningProcessMonitor) : AuroraModule
 {
     private const string RzChromaStreamStartProcessName = "rzchromastreamserver.exe";
     private const string RazerChromeServerProcessName = "RzChromaStreamServer";
 
     private static readonly bool EnableChromaMonitor = false;
-
-    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
 
     private readonly SmartThreadPool _threadPool = new(new STPStartInfo
     {
@@ -34,11 +32,6 @@ public sealed class PerformanceMonitor : AuroraModule
 
     private PerformanceCounter? _auroraMemCounter;
     private PerformanceCounter? _rzStreamCpuCounter;
-
-    public PerformanceMonitor(Task<RunningProcessMonitor> runningProcessMonitor)
-    {
-        _runningProcessMonitor = runningProcessMonitor;
-    }
 
     protected override Task Initialize()
     {
@@ -75,8 +68,8 @@ public sealed class PerformanceMonitor : AuroraModule
 
     public override async Task DisposeAsync()
     {
-        (await _runningProcessMonitor).ProcessStarted -= ProcessMonitorOnProcessStarted;
-        (await _runningProcessMonitor).ProcessStopped -= ProcessMonitorOnProcessStopped;
+        (await runningProcessMonitor).ProcessStarted -= ProcessMonitorOnProcessStarted;
+        (await runningProcessMonitor).ProcessStopped -= ProcessMonitorOnProcessStopped;
 
         _working = false;
         _endTrigger.SetResult();
@@ -103,12 +96,12 @@ public sealed class PerformanceMonitor : AuroraModule
 
     private async Task InitializeRazerStreamApi()
     {
-        if ((await _runningProcessMonitor).IsProcessRunning(RzChromaStreamStartProcessName))
+        if ((await runningProcessMonitor).IsProcessRunning(RzChromaStreamStartProcessName))
         {
             _rzStreamCpuCounter = new PerformanceCounter("Process", "% Processor Time", RazerChromeServerProcessName, true);
         }
-        (await _runningProcessMonitor).ProcessStarted += ProcessMonitorOnProcessStarted;
-        (await _runningProcessMonitor).ProcessStopped += ProcessMonitorOnProcessStopped;
+        (await runningProcessMonitor).ProcessStarted += ProcessMonitorOnProcessStarted;
+        (await runningProcessMonitor).ProcessStopped += ProcessMonitorOnProcessStopped;
     }
 
     private void ProcessMonitorOnProcessStarted(object? sender, ProcessStarted e)

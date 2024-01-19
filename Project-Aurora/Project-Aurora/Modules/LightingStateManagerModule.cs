@@ -8,54 +8,42 @@ using Lombok.NET;
 
 namespace Aurora.Modules;
 
-public sealed partial class LightingStateManagerModule : AuroraModule
+public sealed partial class LightingStateManagerModule(
+    Task<PluginManager> pluginManager,
+    Task<IpcListener?> listener,
+    Task<AuroraHttpListener?> httpListener,
+    Task<DeviceManager> deviceManager,
+    Task<ActiveProcessMonitor> activeProcessMonitor,
+    Task<RunningProcessMonitor> runningProcessMonitor
+) : AuroraModule
 {
-    private readonly Task<PluginManager> _pluginManager;
-    private readonly Task<IpcListener?> _ipcListener;
-    private readonly Task<AuroraHttpListener?> _httpListener;
-    private readonly Task<DeviceManager> _deviceManager;
-    private readonly Task<ActiveProcessMonitor> _activeProcessMonitor;
-    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
-
     private static readonly TaskCompletionSource<LightingStateManager> TaskSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     private LightingStateManager? _manager;
 
     public static Task<LightingStateManager> LightningStateManager => TaskSource.Task;
 
-    public LightingStateManagerModule(Task<PluginManager> pluginManager, Task<IpcListener?> ipcListener,
-        Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager,
-        Task<ActiveProcessMonitor> activeProcessMonitor, Task<RunningProcessMonitor> runningProcessMonitor)
-    {
-        _pluginManager = pluginManager;
-        _ipcListener = ipcListener;
-        _httpListener = httpListener;
-        _deviceManager = deviceManager;
-        _activeProcessMonitor = activeProcessMonitor;
-        _runningProcessMonitor = runningProcessMonitor;
-    }
-
     protected override async Task Initialize()
     {
         Global.logger.Information("Loading Applications");
-        var lightingStateManager = new LightingStateManager(_pluginManager, _ipcListener, _deviceManager, _activeProcessMonitor, _runningProcessMonitor);
+        var lightingStateManager = new LightingStateManager(pluginManager, listener, deviceManager, activeProcessMonitor, runningProcessMonitor);
         _manager = lightingStateManager;
         Global.LightingStateManager = lightingStateManager;
         await lightingStateManager.Initialize();
 
         TaskSource.SetResult(lightingStateManager);
 
-        var ipcListener = await _ipcListener;
+        var ipcListener = await listener;
         if (ipcListener != null)
         {
             ipcListener.NewGameState += lightingStateManager.GameStateUpdate;
             ipcListener.WrapperConnectionClosed += lightingStateManager.ResetGameState;
         }
 
-        var httpListener = await _httpListener;
-        if (httpListener != null)
+        var httpListener1 = await httpListener;
+        if (httpListener1 != null)
         {
-            httpListener.NewGameState += lightingStateManager.GameStateUpdate;
+            httpListener1.NewGameState += lightingStateManager.GameStateUpdate;
         }
         await lightingStateManager.InitUpdate();
     }

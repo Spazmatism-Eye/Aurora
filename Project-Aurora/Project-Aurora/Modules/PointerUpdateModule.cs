@@ -10,7 +10,7 @@ public sealed partial class PointerUpdateModule : AuroraModule
     {
         if (!Global.Configuration.GetPointerUpdates) return;
         Global.logger.Information("Fetching latest pointers");
-        PointerUpdateUtils.FetchDevPointers("master");
+        await PointerUpdateUtils.FetchDevPointers("master");
     }
 
     [Async]

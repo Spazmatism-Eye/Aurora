@@ -8,12 +8,14 @@ namespace Aurora.Modules;
 
 public sealed partial class HardwareMonitorModule : AuroraModule
 {
-    protected override async Task Initialize()
+    protected override Task Initialize()
     {
         if (Global.Configuration.EnableHardwareInfo)
         {
             LocalPcInformation.HardwareMonitor = new HardwareMonitor.HardwareMonitor();
         }
+
+        return Task.CompletedTask;
     }
 
 

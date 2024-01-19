@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Aurora;
 using JetBrains.Annotations;
 using PropertyChanged;
 
@@ -56,14 +57,7 @@ public class ObservableConcurrentDictionary<TKey, TValue> : IDictionary<TKey, TV
         var propertyHandler = PropertyChanged;
         if (collectionHandler == null && propertyHandler == null) return;
 
-        var tcs = new TaskCompletionSource<SynchronizationContext>();
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            tcs.SetResult(AsyncOperationManager.SynchronizationContext);
-        }, DispatcherPriority.Send);
-        var context = tcs.Task.Result;
-
-        context.Post(_ => {
+        Global.WpfSyncContext.Post(_ => {
             collectionHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             if (propertyHandler == null) return;
             propertyHandler(this, new PropertyChangedEventArgs("Count"));

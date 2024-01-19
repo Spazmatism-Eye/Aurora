@@ -24,6 +24,6 @@ public sealed partial class PluginsModule : AuroraModule
     [Async]
     public override void Dispose()
     {
-        _pluginManager.SaveSettings();
+        _pluginManager?.SaveSettings();
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using Aurora.Modules.AudioCapture;
 using Aurora.Modules.Inputs;
 using Aurora.Profiles;
 using Aurora.Settings;
 using Common.Devices;
-using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
 using RazerSdkReader;
 using Serilog;
 using Serilog.Core;
@@ -34,6 +34,8 @@ public static class Global
     public static string AppDataDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora");
 
     public static string LogsDirectory { get; } = Path.Combine(AppDataDirectory, "Logs");
+
+    public static SynchronizationContext WpfSyncContext { get; private set; }
 
     /// <summary>
     /// Output logger for errors, warnings, and information
@@ -76,6 +78,7 @@ public static class Global
 
     public static void Initialize()
     {
+        WpfSyncContext = AsyncOperationManager.SynchronizationContext;
 #if DEBUG
         isDebug = true;
 #endif

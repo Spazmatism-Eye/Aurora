@@ -2,28 +2,39 @@
 using System.Threading.Tasks;
 using System.Windows;
 using Aurora.Modules.GameStateListen;
-using Lombok.NET;
 
 namespace Aurora.Modules;
 
-public sealed partial class HttpListenerModule : AuroraModule
+public sealed class HttpListenerModule : AuroraModule
 {
     private readonly TaskCompletionSource<AuroraHttpListener?> _taskSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private AuroraHttpListener? _listener;
 
     public Task<AuroraHttpListener?> HttpListener => _taskSource.Task;
 
-    protected override async Task Initialize()
+    protected override Task Initialize()
+    {
+        _taskSource.SetResult(DoInitialize());
+        return Task.CompletedTask;
+    }
+
+    private AuroraHttpListener? DoInitialize()
     {
         if (!Global.Configuration.EnableHttpListener)
         {
             Global.logger.Information("HttpListener is disabled");
-            _taskSource.SetResult(null);
-            return;
+            return null;
         }
         try
         {
             _listener = new AuroraHttpListener(9088);
+
+            if (_listener.Start()) return _listener;
+
+            Global.logger.Error("GameStateListener could not start");
+            MessageBox.Show("HttpListener could not start. Try running this program as Administrator.\r\n" +
+                            "Http socket could not be created. Games using this integration won't work");
+            return null;
         }
         catch (Exception exc)
         {
@@ -31,18 +42,8 @@ public sealed partial class HttpListenerModule : AuroraModule
             MessageBox.Show("HttpListener Exception.\r\n" +
                             "Http socket could not be created. Games using this integration won't work" +
                             "\r\n" + exc);
-            _taskSource.SetResult(null);
+            return _listener;
         }
-
-        if (!_listener.Start())
-        {
-            Global.logger.Error("GameStateListener could not start");
-            MessageBox.Show("HttpListener could not start. Try running this program as Administrator.\r\n" +
-                            "Http socket could not be created. Games using this integration won't work");
-            _taskSource.SetResult(null);
-            return;
-        }
-        _taskSource.SetResult(_listener);
     }
 
     public override void Dispose()
@@ -52,6 +53,6 @@ public sealed partial class HttpListenerModule : AuroraModule
 
     public override async Task DisposeAsync()
     {
-        await _listener?.Stop();
+        await (_listener != null ? _listener.Stop() : Task.CompletedTask);
     }
 }

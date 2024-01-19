@@ -15,23 +15,15 @@ using Microsoft.Win32;
 
 namespace Aurora.Modules;
 
-public sealed class OnlineSettings : AuroraModule
+public sealed class OnlineSettings(Task<DeviceManager> deviceManager, Task<RunningProcessMonitor> runningProcessMonitor)
+    : AuroraModule
 {
     public static Dictionary<string, DeviceTooltips> DeviceTooltips = new();
-    
-    private readonly Task<DeviceManager> _deviceManager;
-    private readonly Task<RunningProcessMonitor> _runningProcessMonitor;
-    
+
     private Dictionary<string, ShutdownProcess> _shutdownProcesses = new();
     private readonly TaskCompletionSource _layoutUpdateTaskSource = new();
 
     public Task LayoutsUpdate => _layoutUpdateTaskSource.Task;
-
-    public OnlineSettings(Task<DeviceManager> deviceManager, Task<RunningProcessMonitor> runningProcessMonitor)
-    {
-        _deviceManager = deviceManager;
-        _runningProcessMonitor = runningProcessMonitor;
-    }
 
     protected override async Task Initialize()
     {
@@ -51,7 +43,7 @@ public sealed class OnlineSettings : AuroraModule
         //TODO update layouts
         await Refresh();
 
-        (await _runningProcessMonitor).ProcessStarted += OnRunningProcessesChanged;
+        (await runningProcessMonitor).ProcessStarted += OnRunningProcessesChanged;
 
         if (Global.Configuration.Lat == 0 && Global.Configuration.Lon == 0)
         {
@@ -188,7 +180,7 @@ public sealed class OnlineSettings : AuroraModule
     private async Task UpdateDeviceInfos()
     {
         DeviceTooltips = await OnlineConfigsRepository.GetDeviceTooltips();
-        foreach (var device in (await _deviceManager).DeviceContainers.Select(dc => dc.Device))
+        foreach (var device in (await deviceManager).DeviceContainers.Select(dc => dc.Device))
         {
             if (DeviceTooltips.TryGetValue(device.DeviceName, out var tooltips))
             {
@@ -234,7 +226,7 @@ public sealed class OnlineSettings : AuroraModule
 
     public override async Task DisposeAsync()
     {
-        (await _runningProcessMonitor).ProcessStarted -= OnRunningProcessesChanged;
+        (await runningProcessMonitor).ProcessStarted -= OnRunningProcessesChanged;
     }
 
     public override void Dispose()

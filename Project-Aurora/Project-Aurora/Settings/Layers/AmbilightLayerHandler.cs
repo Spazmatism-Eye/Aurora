@@ -421,7 +421,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
         }
     }
 
-    protected override void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
+    protected override async void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
     {
         base.PropertiesChanged(sender, args);
             
@@ -438,7 +438,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
         _imageAttributes.SetColorMatrix(new ColorMatrix(mtx));
         _imageAttributes.SetWrapMode(WrapMode.Clamp);
 
-        ClearEvents();
+        await ClearEvents();
         switch (Properties.AmbilightCaptureType)
         {
             case AmbilightCaptureType.SpecificProcess when !string.IsNullOrWhiteSpace(Properties.SpecificProcess):
@@ -449,7 +449,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
                 break;
             case AmbilightCaptureType.ForegroundApp:
                 _specificProcessHandle = User32.GetForegroundWindow();
-                ProcessesModule.ActiveProcessMonitor.Result.ActiveProcessChanged += ProcessChanged;
+                (await ProcessesModule.ActiveProcessMonitor).ActiveProcessChanged += ProcessChanged;
                 break;
             case AmbilightCaptureType.Coordinates:
             case AmbilightCaptureType.EntireMonitor:
@@ -460,9 +460,9 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
         _invalidated = true;
     }
 
-    private void ClearEvents()
+    private async Task ClearEvents()
     {
-        ProcessesModule.ActiveProcessMonitor.Result.ActiveProcessChanged -= ProcessChanged;
+        (await ProcessesModule.ActiveProcessMonitor).ActiveProcessChanged -= ProcessChanged;
         WindowListener.Instance.WindowCreated -= WindowsChanged;
         WindowListener.Instance.WindowDestroyed -= WindowsChanged;
     }
