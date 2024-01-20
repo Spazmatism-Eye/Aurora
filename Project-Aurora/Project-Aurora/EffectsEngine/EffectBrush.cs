@@ -42,10 +42,20 @@ namespace Aurora.EffectsEngine
         private System.Windows.Media.Brush _mediaBrush;
 
         [JsonConstructor]
-        public EffectBrush(BrushType type, BrushWrap wrap, PointF start, PointF end, PointF center, Brush drawingBrush, System.Windows.Media.Brush mediaBrush)
+        public EffectBrush(BrushType type, BrushWrap wrap, SortedDictionary<double, Color> colorGradients,
+            PointF start, PointF end, PointF center, Brush drawingBrush, System.Windows.Media.Brush mediaBrush)
         {
             this.type = type;
             this.wrap = wrap;
+            if (!colorGradients.ContainsKey(0.0))
+            {
+                colorGradients[0] = Color.Transparent;
+            }
+            if (!colorGradients.ContainsKey(1.0))
+            {
+                colorGradients[1] = Color.Transparent;
+            }
+            this.colorGradients = colorGradients;
             this.start = start;
             this.end = end;
             this.center = center;
