@@ -55,8 +55,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private bool _shownHiddenMessage;
 
-    private string _savedPreviewKey = "";
-
     private readonly Timer _virtualKeyboardTimer = new(8);
     private readonly Action _keyboardTimerCallback;
 
@@ -405,18 +403,9 @@ partial class ConfigUI : INotifyPropertyChanged
         Hide();
     }
 
-    private async void Window_Activated(object? sender, EventArgs e)
+    private void Window_Activated(object? sender, EventArgs e)
     {
         _lastActivated = DateTime.Now;
-        var lightingStateManager = await _lightingStateManager;
-        lightingStateManager.PreviewProfileKey = _savedPreviewKey;
-    }
-
-    private async void Window_Deactivated(object? sender, EventArgs e)
-    {
-        var lightingStateManager = await _lightingStateManager;
-        _savedPreviewKey = lightingStateManager.PreviewProfileKey;
-        lightingStateManager.PreviewProfileKey = string.Empty;
     }
 
     private readonly Image _profileAdd = new()
@@ -426,12 +415,12 @@ partial class ConfigUI : INotifyPropertyChanged
         Margin = new Thickness(0, 5, 0, 0)
     };
 
-    private Image _profileHidden;
+    private readonly Image _profileHidden;
 
     private readonly BitmapImage _visible = new(new Uri(@"Resources/Visible.png", UriKind.Relative));
     private readonly BitmapImage _notVisible = new(new Uri(@"Resources/Not Visible.png", UriKind.Relative));
         
-    private async Task GenerateProfileStack(string focusedKey = null)
+    private async Task GenerateProfileStack(string? focusedKey = null)
     {
         profiles_stack.Children.Clear();
 
@@ -441,70 +430,29 @@ partial class ConfigUI : INotifyPropertyChanged
                      .Select(profileName => (Application)lightingStateManager.Events[profileName])
                      .OrderBy(item => item.Settings.Hidden ? 1 : 0))
         {
-            var icon = application.Icon;
             if (application is GenericApplication)
             {
-                await Dispatcher.InvokeAsync(() =>
+                await Dispatcher.BeginInvoke(() => { CreateInsertGenericApplication(focusedKey, application); }, DispatcherPriority.Loaded);
+            }
+            else
+            {
+                await Dispatcher.BeginInvoke(() =>
                 {
-                    var settings = (GenericApplicationSettings)application.Settings;
                     var profileImage = new Image
                     {
                         Tag = application,
-                        Source = icon,
-                        ToolTip = settings.ApplicationName + " Settings",
-                        Margin = new Thickness(0, 0, 0, 5)
+                        Source = application.Icon,
+                        ToolTip = application.Config.Name + " Settings",
+                        Margin = new Thickness(0, 5, 0, 0),
+                        Visibility = application.Settings.Hidden ? Visibility.Collapsed : Visibility.Visible
                     };
                     profileImage.MouseDown += ProfileImage_MouseDown;
-
-                    var profileRemove = new Image
-                    {
-                        Source = new BitmapImage(new Uri(@"Resources/removeprofile_icon.png", UriKind.Relative)),
-                        ToolTip = $"Remove {settings.ApplicationName} Profile",
-                        HorizontalAlignment = HorizontalAlignment.Right,
-                        VerticalAlignment = VerticalAlignment.Bottom,
-                        Height = 16,
-                        Width = 16,
-                        Visibility = Visibility.Hidden,
-                        Tag = application.Config.ID
-                    };
-                    profileRemove.MouseDown += RemoveProfile_MouseDown;
-
-                    var profileGrid = new Grid
-                    {
-                        Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0)),
-                        Margin = new Thickness(0, 5, 0, 0),
-                        Tag = profileRemove
-                    };
-
-                    profileGrid.MouseEnter += Profile_grid_MouseEnter;
-                    profileGrid.MouseLeave += Profile_grid_MouseLeave;
-
-                    profileGrid.Children.Add(profileImage);
-                    profileGrid.Children.Add(profileRemove);
-
-                    profiles_stack.Children.Add(profileGrid);
+                    profiles_stack.Children.Add(profileImage);
 
                     if (!application.Config.ID.Equals(focusedKey)) return;
                     FocusedApplication = application;
                     TransitionToProfile(profileImage);
-                });
-            }
-            else
-            {
-                var profileImage = new Image
-                {
-                    Tag = application,
-                    Source = icon,
-                    ToolTip = application.Config.Name + " Settings",
-                    Margin = new Thickness(0, 5, 0, 0),
-                    Visibility = application.Settings.Hidden ? Visibility.Collapsed : Visibility.Visible
-                };
-                profileImage.MouseDown += ProfileImage_MouseDown;
-                profiles_stack.Children.Add(profileImage);
-
-                if (!application.Config.ID.Equals(focusedKey)) continue;
-                FocusedApplication = application;
-                TransitionToProfile(profileImage);
+                }, DispatcherPriority.Loaded);
             }
         }
 
@@ -513,6 +461,51 @@ partial class ConfigUI : INotifyPropertyChanged
         _profileAdd.MouseDown += AddProfile_MouseDown;
         profiles_stack.Children.Add(_profileAdd);
         profiles_stack.Children.Add(_profileHidden);
+    }
+
+    private void CreateInsertGenericApplication(string? focusedKey, Application application)
+    {
+        var settings = (GenericApplicationSettings)application.Settings;
+        var profileImage = new Image
+        {
+            Tag = application,
+            Source = application.Icon,
+            ToolTip = settings.ApplicationName + " Settings",
+            Margin = new Thickness(0, 0, 0, 5)
+        };
+        profileImage.MouseDown += ProfileImage_MouseDown;
+
+        var profileRemove = new Image
+        {
+            Source = new BitmapImage(new Uri(@"Resources/removeprofile_icon.png", UriKind.Relative)),
+            ToolTip = $"Remove {settings.ApplicationName} Profile",
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Height = 16,
+            Width = 16,
+            Visibility = Visibility.Hidden,
+            Tag = application.Config.ID
+        };
+        profileRemove.MouseDown += RemoveProfile_MouseDown;
+
+        var profileGrid = new Grid
+        {
+            Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0)),
+            Margin = new Thickness(0, 5, 0, 0),
+            Tag = profileRemove
+        };
+
+        profileGrid.MouseEnter += Profile_grid_MouseEnter;
+        profileGrid.MouseLeave += Profile_grid_MouseLeave;
+
+        profileGrid.Children.Add(profileImage);
+        profileGrid.Children.Add(profileRemove);
+
+        profiles_stack.Children.Add(profileGrid);
+
+        if (!application.Config.ID.Equals(focusedKey)) return;
+        FocusedApplication = application;
+        TransitionToProfile(profileImage);
     }
 
     private void HiddenProfile_MouseDown(object? sender, EventArgs e)
