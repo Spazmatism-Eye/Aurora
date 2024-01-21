@@ -52,7 +52,7 @@ public sealed class DeviceConfig : INotifyPropertyChanged
         {"Aurora.Devices.SteelSeries.SteelSeriesDevice" , "SteelSeries"},
         {"Aurora.Devices.UnifiedHID.UnifiedHIDDevice" , "UnifiedHID"},
         {"Aurora.Devices.Vulcan.VulcanDevice" , "Vulcan"},
-        {"Aurora.Devices.Wooting.WootingDevice", "Wooting"},
+        {"Aurora.Devices.Wooting.WootingDevice", "Wooting (RGB.NET)"},
         {"Aurora.Devices.YeeLight.YeeLightDevice" , "YeeLight"},
         {"Aurora.Devices.OpenRGB", "OpenRGB (RGB.NET)"},
 
@@ -68,6 +68,7 @@ public sealed class DeviceConfig : INotifyPropertyChanged
         {"Aurora.Devices.RGBNet.YeelightRgbNetDevice", "Yeelight (RGB.NET)"},
         
         {"Razer", "Razer (RGB.NET)"},
+        {"Wooting", "Wooting (RGB.NET)"},
     };
 
     private static List<string> DefaultEnabledDevices =>
