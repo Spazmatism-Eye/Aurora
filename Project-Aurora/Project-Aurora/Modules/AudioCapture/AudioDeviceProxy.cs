@@ -74,12 +74,21 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
         add
         {
             _waveInDataAvailable += value; // Update stored event listeners
-            if (WaveIn != null) WaveIn.DataAvailable += value; // If the device is valid, pass the event handler on
+            if (WaveIn == null) return;
+            WaveIn.StartRecording();
+            WaveIn.DataAvailable += value; // If the device is valid, pass the event handler on
         }
         remove
         {
             _waveInDataAvailable -= value; // Update stored event listeners
-            if (WaveIn != null) WaveIn.DataAvailable -= value; // If the device is valid, pass the event handler on
+            if (_waveInDataAvailable == null)
+            {
+                WaveIn?.StopRecording();
+            }
+            if (WaveIn != null)
+            {
+                WaveIn.DataAvailable -= value; // If the device is valid, pass the event handler on
+            }
         }
     }
 
@@ -167,12 +176,14 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
             }
             WaveIn.RecordingStopped += WaveInOnRecordingStopped;
 
-            //"Activate" device
-            //var _ = mmDevice.AudioMeterInformation?.MasterPeakValue + mmDevice.AudioEndpointVolume?.MasterVolumeLevel;
-
             Device = mmDevice;
             DeviceName = Device.FriendlyName;
-            WaveIn.StartRecording();
+            if (_waveInDataAvailable != null)
+            {
+                WaveIn.StartRecording();
+            }
+            fallbackWaveIn?.Dispose();
+            fallbackDevice?.Dispose();
             DeviceChanged?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception e)
@@ -222,7 +233,7 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
         if (WaveIn != null)
         {
             WaveIn.DataAvailable -= _waveInDataAvailable;
-            WaveIn?.Dispose();
+            WaveIn.Dispose();
         }
 
         WaveIn = null;

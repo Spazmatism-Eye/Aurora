@@ -220,7 +220,9 @@ public partial class Control_LayerList : INotifyPropertyChanged {
             MessageBox.Show(
                 $"Are you sure you want to delete Layer '{SelectedLayer.Name}'?\n\nYou cannot undo this action.",
                 "Confirm delete", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+        var layer = SelectedLayer;
         ActiveLayerCollection.Remove(SelectedLayer);
+        layer?.Dispose();
         SelectedLayer = null;
     }
 

@@ -173,7 +173,12 @@ public class EqualizerLayerHandler : LayerHandler<EqualizerLayerHandlerPropertie
     private bool _disposed;
     private AudioDeviceProxy DeviceProxy {  
         get {
-            if (_deviceProxy != null) return _deviceProxy;
+            if (_deviceProxy != null)
+            {
+                _deviceProxy.DeviceId = Properties.DeviceId;
+                return _deviceProxy;
+            }
+
             _deviceProxy = new AudioDeviceProxy(DataFlow.Render);
             DeviceChanged(this, EventArgs.Empty);
             _deviceProxy.DeviceChanged += DeviceChanged;
@@ -187,10 +192,10 @@ public class EqualizerLayerHandler : LayerHandler<EqualizerLayerHandlerPropertie
     {
         if (_deviceProxy?.Device == null || _deviceProxy.WaveIn == null)
             return;
+        _freq = _deviceProxy.Device.AudioClient.MixFormat.SampleRate;
         _channels = _deviceProxy.WaveIn.WaveFormat.Channels;
         _bitsPerSample = _deviceProxy.WaveIn.WaveFormat.BitsPerSample;
         _bufferIncrement = _deviceProxy.WaveIn.WaveFormat.BlockAlign;
-        _freq = _deviceProxy.Device.AudioClient.MixFormat.SampleRate;
     }
 
     private readonly List<float> _fluxArray = new();
@@ -206,7 +211,7 @@ public class EqualizerLayerHandler : LayerHandler<EqualizerLayerHandlerPropertie
     private Complex[] _fftsPrev;
 
     private float[]? _previousFreqResults;
-    private int _freq;
+    private int _freq = 48000;
 
     public EqualizerLayerHandler(): base("EqualizerLayer")
     {
@@ -427,12 +432,6 @@ public class EqualizerLayerHandler : LayerHandler<EqualizerLayerHandlerPropertie
             default:
                 return new SolidBrush(Properties.PrimaryColor);
         }
-    }
-
-    protected override void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
-    {
-        base.PropertiesChanged(sender, args);
-        DeviceProxy.DeviceId = Properties.DeviceId;
     }
 
     public override void Dispose()
