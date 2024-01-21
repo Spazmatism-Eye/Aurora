@@ -56,7 +56,7 @@ public sealed class AuroraPipe : IDisposable
             using var splits = command.Split(Constants.StringSplit).AsEnumerable().GetEnumerator();
 
             var word = splits.Next();
-            Global.Logger.Information("Received word: {Word}", word);
+            Global.Logger.Information("Received pipe command: {Word}", word);
             switch (word)
             {
                 case DeviceCommands.Quit:
