@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Common.Devices;
@@ -13,7 +14,7 @@ namespace Aurora.Devices.RGBNet.Config;
 /// </summary>
 public partial class RgbNetKeyToDeviceKeyControl
 {
-    public Action? BlinkCallback { get; set; }
+    public Func<Task>? BlinkCallback { get; set; }
     private bool Disabled { get; }
 
     public DeviceKeys? DeviceKey

@@ -180,7 +180,7 @@ public partial class DeviceMapping
             var keyControl = await keyControlTask;
             var led = keyControl.Led;
 
-            keyControl.BlinkCallback += () => { _deviceManager.Result.BlinkRemappableKey(remappableDevice, led); };
+            keyControl.BlinkCallback += async () => { await _deviceManager.Result.BlinkRemappableKey(remappableDevice, led); };
             keyControl.DeviceKeyChanged += async (_, newKey) =>
             {
                 if (newKey != null)

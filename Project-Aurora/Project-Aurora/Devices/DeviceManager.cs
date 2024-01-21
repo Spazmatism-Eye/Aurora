@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Aurora.Modules;
 using Common;
@@ -29,9 +27,7 @@ public sealed class DeviceManager : IDisposable
 
     public event EventHandler? DevicesUpdated;
 
-    public List<DeviceContainer> DeviceContainers { get; } = new();
-
-    private readonly CancellationTokenSource _cancel = new();
+    public List<DeviceContainer> DeviceContainers { get; } = [];
 
     private readonly Task<ChromaReader?> _rzSdkManager;
     private readonly MemorySharedArray<SimpleColor> _sharedDeviceColor;
@@ -54,7 +50,6 @@ public sealed class DeviceManager : IDisposable
     {
         await _rzSdkManager;
 
-        //TODO reduce to 1 process
         _process = Process.GetProcessesByName(DeviceManagerProcess).FirstOrDefault();
         if (_process != null)
         {
@@ -131,7 +126,10 @@ public sealed class DeviceManager : IDisposable
             {
                 await SendCommand(DeviceCommands.Quit);
             }
-            process.Kill();
+            else
+            {
+                process.Kill();
+            }
             await process.WaitForExitAsync();
         }
     }
@@ -154,7 +152,6 @@ public sealed class DeviceManager : IDisposable
 
     public void Dispose()
     {
-        _cancel.Cancel();
         if (_disposed)
         {
             return;
@@ -164,7 +161,7 @@ public sealed class DeviceManager : IDisposable
         _sharedDeviceColor.Dispose();
     }
 
-    public async void BlinkRemappableKey(RemappableDevice remappableDevice, LedId led)
+    public async Task BlinkRemappableKey(RemappableDevice remappableDevice, LedId led)
     {
         if (_process == null)
         {
