@@ -147,7 +147,7 @@ public partial class Control_VariableRegistryItem
 
     private Control CreateIntControl()
     {
-        if (VarRegistry.GetFlags(VariableName).HasFlag(VariableFlags.UseHex))
+        if (VarRegistry.GetFlags(VariableName).HasFlag(IntVariableDisplay.UseHex))
         {
             var hexBox = new TextBox();
             hexBox.PreviewTextInput += HexBoxOnPreviewTextInput;
@@ -164,6 +164,7 @@ public partial class Control_VariableRegistryItem
             intUpDownControl.Minimum = minVal;
 
         intUpDownControl.ValueChanged += VariableChanged;
+        intUpDownControl.BeginInit();
 
         return intUpDownControl;
     }

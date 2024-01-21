@@ -77,7 +77,7 @@ public class MemorySharedDevice : IDevice
                 convert(deviceVariable.Min),
                 deviceVariable.Title,
                 deviceVariable.Remark,
-                (VariableFlags)deviceVariable.Flags
+                (IntVariableDisplay)deviceVariable.Flags
             ));
         }
     }

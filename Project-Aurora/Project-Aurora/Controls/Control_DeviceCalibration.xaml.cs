@@ -17,7 +17,7 @@ using Common.Devices.RGBNet;
 
 namespace Aurora.Controls;
 
-public partial class Control_DeviceCalibration : IDisposable
+public sealed partial class Control_DeviceCalibration : IDisposable
 {
     public Task<DeviceManager> DeviceManager { get; }
 

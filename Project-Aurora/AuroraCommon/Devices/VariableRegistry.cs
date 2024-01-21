@@ -13,15 +13,15 @@ public class VariableRegistryItem : ICloneable
 
     public object Default { get; private set; }
 
-    public object? Max { get; set; }
-    public object? Min { get; set; }
-    public string Title { get; set; }
-    public string Remark { get; set; }
-    public VariableFlags Flags { get; set; }
+    public object? Max { get; private set; }
+    public object? Min { get; private set; }
+    public string Title { get; private set; }
+    public string Remark { get; private set; }
+    public IntVariableDisplay Flags { get; private set; }
 
     [JsonConstructor]
     public VariableRegistryItem(object? value, object @default, object? max = null, object? min = null, string title = "",
-        string remark = "", VariableFlags flags = VariableFlags.None)
+        string remark = "", IntVariableDisplay flags = IntVariableDisplay.None)
     {
         value = UnwrapJsonNode(value);
         @default = UnwrapJsonNode(@default);
@@ -55,7 +55,7 @@ public class VariableRegistryItem : ICloneable
                 JsonValueKind.True => true,
                 JsonValueKind.False => false,
                 JsonValueKind.Object => null,
-                _ => throw new JsonException("NOO"),
+                _ => throw new JsonException("Unexpected VariableRegistryItem type: " + jsonElement.ValueKind),
             };
         }
 
@@ -110,7 +110,7 @@ public class VariableRegistryItem : ICloneable
     }
 }
 
-public enum VariableFlags
+public enum IntVariableDisplay
 {
     None = 0,
     UseHex = 1
@@ -154,7 +154,7 @@ public class VariableRegistry : ICloneable //Might want to implement something l
     }
 
     public void Register(string name, object defaultValue, string title = "", object? max = null, object? min = null, string remark = "",
-        VariableFlags flags = VariableFlags.None)
+        IntVariableDisplay flags = IntVariableDisplay.None)
     {
         if (!Variables.ContainsKey(name))
             Variables.Add(name, new VariableRegistryItem(null, defaultValue, max, min, title, remark, flags));
@@ -239,9 +239,9 @@ public class VariableRegistry : ICloneable //Might want to implement something l
         return Variables.TryGetValue(name, out var variable) ? variable.Remark : string.Empty;
     }
 
-    public VariableFlags GetFlags(string name)
+    public IntVariableDisplay GetFlags(string name)
     {
-        return Variables.TryGetValue(name, out var variable) ? variable.Flags : VariableFlags.None;
+        return Variables.TryGetValue(name, out var variable) ? variable.Flags : IntVariableDisplay.None;
     }
 
     public object Clone()
