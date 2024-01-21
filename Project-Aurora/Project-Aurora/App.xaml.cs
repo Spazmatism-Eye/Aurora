@@ -43,8 +43,8 @@ public partial class App
     private static readonly OnlineSettings OnlineSettings = new(DevicesModule.DeviceManager, ProcessesModule.RunningProcessMonitor);
     private static readonly LayoutsModule LayoutsModule = new(RazerSdkModule.RzSdkManager, OnlineSettings.LayoutsUpdate);
 
-    private readonly List<AuroraModule> _modules = new()
-    {
+    private readonly List<AuroraModule> _modules =
+    [
         new UpdateModule(),
         new UpdateCleanup(),
         new InputsModule(),
@@ -52,18 +52,18 @@ public partial class App
         new AudioCaptureModule(),
         new PointerUpdateModule(),
         new HardwareMonitorModule(),
-        new LogitechSdkModule(ProcessesModule.RunningProcessMonitor),
-        OnlineSettings,
         PluginsModule,
         IpcListenerModule,
         HttpListenerModule,
         ProcessesModule,
-        DevicesModule,
+        new LogitechSdkModule(ProcessesModule.RunningProcessMonitor),
+        RazerSdkModule, //depends LSM
+        DevicesModule,  //depends Chroma
+        LightingStateManagerModule, //depends DeviceManager
+        OnlineSettings,
         LayoutsModule,
-        LightingStateManagerModule,
-        RazerSdkModule,
-        new PerformanceMonitor(ProcessesModule.RunningProcessMonitor),
-    };
+        new PerformanceMonitor(ProcessesModule.RunningProcessMonitor)
+    ];
 
     private static readonly SemaphoreSlim PreventShutdown = new(0);
 
@@ -106,8 +106,8 @@ public partial class App
         var configUi = new ConfigUI(RazerSdkModule.RzSdkManager, PluginsModule.PluginManager, LayoutsModule.LayoutManager,
             HttpListenerModule.HttpListener, IpcListenerModule.IpcListener, DevicesModule.DeviceManager, LightingStateManagerModule.LightningStateManager);
         Global.logger.Debug("new ConfigUI() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
+
         stopwatch.Restart();
-        
         await configUi.Initialize();
         Global.logger.Debug("configUi.Initialize() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
         stopwatch.Stop();
@@ -117,6 +117,7 @@ public partial class App
         MainWindow = configUi;
         Global.logger.Information("Modules initiated");
         ((ConfigUI)MainWindow).DisplayIfNotSilent();
+        
         WindowListener.Instance.StartListening();
 
         //Debug Windows on Startup
