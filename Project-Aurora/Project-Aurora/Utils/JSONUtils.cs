@@ -223,12 +223,17 @@ public class TypeAnnotatedObjectConverter : JsonConverter
     {
         // If this is a null token, then the original value was null.
         var readerTokenType = reader.TokenType;
+        var readerValue = reader.Value;
+        //if (readerValue == null)
+        //{
+        //    return null;
+        //}
         switch (readerTokenType)
         {
             case JsonToken.String:
-                return reader.Value.ToString().StartsWith("\"")
-                    ? serializer.Deserialize(reader, objectType)
-                    : JsonConvert.DeserializeObject("\"" + reader.Value + "\"", objectType);
+                return readerValue.ToString().StartsWith("\"")
+                    ? JsonConvert.DeserializeObject(readerValue.ToString(), objectType)
+                    : JsonConvert.DeserializeObject("\"" + readerValue + "\"", objectType);
             case JsonToken.StartObject:
                 var item = serializer.Deserialize<JObject>(reader);
                 var type = serializer.Deserialize<Type>(item["$type"].CreateReader());
@@ -261,12 +266,12 @@ public class TypeAnnotatedObjectConverter : JsonConverter
                         return JsonConvert.DeserializeObject("\"" + value + "\"", type);
                 }
             case JsonToken.Boolean:
-                return reader.Value;
+                return readerValue;
             case JsonToken.Null:
                 return existingValue;
         }
 
-        return JsonConvert.DeserializeObject(reader.Value.ToString(), objectType);
+        return JsonConvert.DeserializeObject(readerValue.ToString(), objectType);
     }
 }
 
