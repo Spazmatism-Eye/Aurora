@@ -320,9 +320,9 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
                     newPath = path + $"({copy++}).corrupted";
                 }
 
-                File.Move(path, newPath);
                 MessageBox.Show($"Default profile for {Config.Name} could not be loaded.\nMoved to {newPath}, reset to default settings.\nException={exc.Message}",
                     "Error loading default profile", MessageBoxButton.OK, MessageBoxImage.Error);
+                File.Move(path, newPath);
             }
         }
 

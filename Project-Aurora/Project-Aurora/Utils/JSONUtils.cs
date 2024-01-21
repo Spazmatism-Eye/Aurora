@@ -223,55 +223,78 @@ public class TypeAnnotatedObjectConverter : JsonConverter
     {
         // If this is a null token, then the original value was null.
         var readerTokenType = reader.TokenType;
-        var readerValue = reader.Value;
-        //if (readerValue == null)
-        //{
-        //    return null;
-        //}
+        if (readerTokenType == JsonToken.StartObject)
+        {
+            return ParseJsonNode(reader, objectType, serializer);
+        }
+        
+        var json = reader.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return null;
+        }
         switch (readerTokenType)
         {
             case JsonToken.String:
-                return readerValue.ToString().StartsWith("\"")
-                    ? JsonConvert.DeserializeObject(readerValue.ToString(), objectType)
-                    : JsonConvert.DeserializeObject("\"" + readerValue + "\"", objectType);
-            case JsonToken.StartObject:
-                var item = serializer.Deserialize<JObject>(reader);
-                var type = serializer.Deserialize<Type>(item["$type"].CreateReader());
-                var value = item["$value"];
-                if (value == null)
-                {
-                    return serializer.Deserialize(item.CreateReader(), type);
-                }
-
-                var valueReader = value.CreateReader();
-                switch (valueReader.TokenType)
-                {
-                    case JsonToken.StartObject:
-                        return serializer.Deserialize(valueReader, type);
-                    case JsonToken.String:
-                    default:
-                        var s = value.ToString();
-                        if (type == typeof(bool) || type == typeof(Color))
-                        {
-                            return JsonConvert.DeserializeObject("\"" + value + "\"", type);
-                        }
-                        if (objectType.FullName != typeof(Color).FullName && type?.FullName != typeof(Color).FullName)
-                            return JsonConvert.DeserializeObject(s, type);
-                        if (s.StartsWith("\""))
-                        {
-                            return JsonConvert.DeserializeObject(s, type);
-                        }
-
-                        Global.logger.Error("Attempting to convert unknown type: {Type}", type);
-                        return JsonConvert.DeserializeObject("\"" + value + "\"", type);
-                }
+                return json.StartsWith('\"')
+                    ? JsonConvert.DeserializeObject(json, objectType)
+                    : JsonConvert.DeserializeObject("\"" + json + "\"", objectType);
+            case JsonToken.Integer:
+                return JsonConvert.DeserializeObject(json, objectType);
             case JsonToken.Boolean:
-                return readerValue;
+                switch (json.ToLowerInvariant())
+                {
+                    case "true":
+                        return true;
+                    case "false":
+                        return false;
+                    default:
+                        return false;
+                }
             case JsonToken.Null:
                 return existingValue;
         }
 
-        return JsonConvert.DeserializeObject(readerValue.ToString(), objectType);
+        Global.logger.Warning("Unhandled json type {Token}", readerTokenType);
+        return JsonConvert.DeserializeObject(json, objectType);
+    }
+
+    private static object? ParseJsonNode(JsonReader reader, Type objectType, JsonSerializer serializer)
+    {
+        var item = serializer.Deserialize<JObject>(reader);
+        var jToken = item?["$type"];
+        if (item == null || jToken == null)
+        {
+            throw new JsonReaderException("item or $type is null");
+        }
+        var type = serializer.Deserialize<Type>(jToken.CreateReader());
+        var value = item["$value"];
+        if (value == null)
+        {
+            return serializer.Deserialize(item.CreateReader(), type);
+        }
+
+        var valueReader = value.CreateReader();
+        switch (valueReader.TokenType)
+        {
+            case JsonToken.StartObject:
+                return serializer.Deserialize(valueReader, type);
+            default:
+                var s = value.ToString();
+                if (type == typeof(bool) || type == typeof(Color))
+                {
+                    return JsonConvert.DeserializeObject("\"" + value + "\"", type);
+                }
+                if (objectType.FullName != typeof(Color).FullName && type?.FullName != typeof(Color).FullName)
+                    return JsonConvert.DeserializeObject(s, type);
+                if (s.StartsWith('\"'))
+                {
+                    return JsonConvert.DeserializeObject(s, type);
+                }
+
+                Global.logger.Error("Attempting to convert unknown type: {Type}", type);
+                return JsonConvert.DeserializeObject("\"" + value + "\"", type);
+        }
     }
 }
 
@@ -294,7 +317,7 @@ public class SingleToDoubleConverter : JsonConverter
         {
             case JsonToken.Float:
             case JsonToken.Integer:
-                return (double)reader.Value;
+                return (double)(reader.Value ?? 0.0);
             case JsonToken.String:
 
                 double.TryParse(reader.ReadAsString(), out var value);
