@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Aurora.Settings.Layers;
 using Aurora.Settings.Overrides.Logic;
 using Common.Devices;
 using Newtonsoft.Json.Linq;
@@ -54,6 +55,10 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
                 typeof(Profiles.Dota_2.Layers.Dota2AbilityLayerHandler),
             "Aurora.Profiles.Dota_2.Layers.Dota2HeroAbiltiyEffectsLayerHandler" =>
                 typeof(Profiles.Dota_2.Layers.Dota2HeroAbilityEffectsLayerHandler),
+            "Aurora.Settings.Layers.ComparisonLayerHandler" =>
+                typeof(DefaultLayerHandler),
+            "Aurora.Settings.Layers.ComparisonLayerProperties" =>
+                typeof(LayerHandlerProperties),
             "Aurora.Profiles.Dota_2.Layers.Dota2HeroAbiltiyEffectsLayerHandlerProperties" =>
                 typeof(Profiles.Dota_2.Layers.Dota2HeroAbilityEffectsLayerHandlerProperties),
             "Aurora.Profiles.TheDivision.TheDivisionSettings" =>
