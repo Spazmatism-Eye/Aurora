@@ -24,7 +24,6 @@ using Aurora.Settings;
 using Aurora.Settings.Controls;
 using Aurora.Settings.Layers;
 using Aurora.Utils;
-using Hardcodet.Wpf.TaskbarNotification;
 using PropertyChanged;
 using RazerSdkReader;
 using Application = Aurora.Profiles.Application;
@@ -42,6 +41,8 @@ partial class ConfigUI : INotifyPropertyChanged
     private readonly Control_LayerControlPresenter _layerPresenter = new();
     private readonly Control_ProfileControlPresenter _profilePresenter = new();
 
+    private readonly AuroraControlInterface _controlInterface;
+
     private DateTime _lastActivated = DateTime.Now;
     private readonly TimeSpan _renderTimeout = TimeSpan.FromMinutes(5);
     private readonly EffectColor _desktopColorScheme = new(0, 0, 0, 0);
@@ -52,8 +53,6 @@ partial class ConfigUI : INotifyPropertyChanged
     private double _transitionAmount;
 
     private FrameworkElement? _selectedManager;
-
-    private bool _shownHiddenMessage;
 
     private readonly Timer _virtualKeyboardTimer = new(8);
     private readonly Action _keyboardTimerCallback;
@@ -66,11 +65,12 @@ partial class ConfigUI : INotifyPropertyChanged
     private readonly Task<AuroraHttpListener?> _httpListener;
     private readonly Task<IpcListener?> _ipcListener;
     private readonly Task<LightingStateManager> _lightingStateManager;
-    private readonly Task<DeviceManager> _deviceManager;
 
     private readonly TransparencyComponent _transparencyComponent;
 
     private readonly Func<Task> _updateKeyboardLayouts;
+
+    private static readonly bool DisposeWindow = false;
 
     public Application? FocusedApplication
     {
@@ -96,13 +96,14 @@ partial class ConfigUI : INotifyPropertyChanged
 
     public ConfigUI(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager,
         Task<KeyboardLayoutManager> layoutManager, Task<AuroraHttpListener?> httpListener,
-        Task<IpcListener?> ipcListener, Task<DeviceManager> deviceManager, Task<LightingStateManager> lightingStateManager)
+        Task<IpcListener?> ipcListener, Task<DeviceManager> deviceManager, Task<LightingStateManager> lightingStateManager, AuroraControlInterface controlInterface)
     {
         _httpListener = httpListener;
         _layoutManager = layoutManager;
         _ipcListener = ipcListener;
-        _deviceManager = deviceManager;
         _lightingStateManager = lightingStateManager;
+        _controlInterface = controlInterface;
+
         _settingsControl = new Control_Settings(rzSdkManager, pluginManager, httpListener, deviceManager, ipcListener);
         
         _updateKeyboardLayouts = async () =>
@@ -163,42 +164,19 @@ partial class ConfigUI : INotifyPropertyChanged
     public async Task Initialize()
     {
         await GenerateProfileStack();
-
-        await _settingsControl.Initialize();
-        
-        (await _layoutManager).KeyboardLayoutUpdated += KbLayout_KeyboardLayoutUpdated;
-
-        var ipcListener = await _ipcListener;
-        if (ipcListener != null)
-        {
-            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
-        }
-    }
-
-    internal void DisplayIfNotSilent()
-    {
-        if (!App.IsSilent)
-        {
-            Display();
-        }
     }
 
     private void OnAuroraCommandReceived(object? sender, string e)
     {
-        Global.logger.Debug("Received command: {Command}", e);
         switch (e)
         {
             case "restore":
                 Dispatcher.BeginInvoke(Display, DispatcherPriority.Input);
                 break;
-            case "shutdown":
-                ShutdownDevices().Wait();
-                ExitApp();
-                break;
         }
     }
 
-    private void Display()
+    public void Display()
     {
         ShowInTaskbar = true;
         if (Top <= 0)
@@ -216,25 +194,6 @@ partial class ConfigUI : INotifyPropertyChanged
         }
         Show();
         Activate();
-        _virtualKeyboardTimer.Start();
-    }
-
-    private void Restart()
-    {
-        //so that we don't restart device manager
-        _deviceManager.Result.Detach();
-
-        var auroraPath = Path.Combine(Global.ExecutingDirectory, "Aurora.exe");
-
-        var currentProcess = Environment.ProcessId;
-        var minimizedArg = Visibility == Visibility.Visible ? "" : " -minimized";
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = auroraPath,
-            Arguments = $"-restart {currentProcess}{minimizedArg}"
-        });
-
-        ExitApp();
     }
 
     private void CtrlProfileManager_ProfileSelected(ApplicationProfile profile)
@@ -267,25 +226,30 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private async void Window_Loaded(object? sender, RoutedEventArgs e)
     {
+        (await _layoutManager).KeyboardLayoutUpdated += KbLayout_KeyboardLayoutUpdated;
+
+        var ipcListener = await _ipcListener;
+        if (ipcListener != null)
+        {
+            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
+        }
+
         KeyboardRecordMessage.Visibility = Visibility.Hidden;
 
-        _currentColor = _desktopColorScheme;
+        _currentColor = EffectColor.FromRGBA(0, 0, 0, 0);
 
         var keyboardLayoutManager = await _layoutManager;
         var virtualKb = await keyboardLayoutManager.VirtualKeyboard;
 
-        KeyboardGrid.Children.Clear();
         KeyboardGrid.Children.Add(virtualKb);
         KeyboardGrid.Children.Add(new LayerEditor());
 
         KeyboardGrid.Width = virtualKb.Width;
-
         KeyboardGrid.Height = virtualKb.Height;
-
         KeyboardGrid.UpdateLayout();
 
-        KeyboardViewbox.MaxWidth = virtualKb.Width + 50;
-        KeyboardViewbox.MaxHeight = virtualKb.Height + 50;
+        KeyboardViewbox.MaxWidth = virtualKb.Width + 30;
+        KeyboardViewbox.MaxHeight = virtualKb.Height + 30;
         KeyboardViewbox.UpdateLayout();
 
         UpdateManagerStackFocus(ctrlLayerManager);
@@ -298,6 +262,23 @@ partial class ConfigUI : INotifyPropertyChanged
             ProfileImage_MouseDown(child, null);
             break;
         }
+
+        _virtualKeyboardTimer.Start();
+    }
+
+    private async void Window_Unloaded(object sender, RoutedEventArgs e)
+    {
+        _virtualKeyboardTimer.Stop();
+
+        (await _layoutManager).KeyboardLayoutUpdated -= KbLayout_KeyboardLayoutUpdated;
+
+        var ipcListener = await _ipcListener;
+        if (ipcListener != null)
+        {
+            ipcListener.AuroraCommandReceived -= OnAuroraCommandReceived;
+        }
+
+        KeyboardGrid.Children.Clear();
     }
 
     private readonly Stopwatch _keyboardTimer = Stopwatch.StartNew();
@@ -310,42 +291,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
     ////Misc
 
-    private async void trayicon_menu_quit_Click(object? sender, RoutedEventArgs e)
-    {
-        await ShutdownDevices();
-        ExitApp();
-    }
-
-    private void trayicon_menu_settings_Click(object? sender, RoutedEventArgs e)
-    {
-        Display();
-    }
-
-    private void trayicon_menu_restart_aurora_Click(object? sender, RoutedEventArgs e)
-    {
-        Restart();
-    }
-
-    private async void trayicon_menu_restart_devices_Click(object? sender, RoutedEventArgs e)
-    {
-        await (await _deviceManager).ResetDevices();
-    }
-
-    private void trayicon_menu_quit_aurora_Click(object? sender, RoutedEventArgs e)
-    {
-        ExitApp();
-    }
-
-    private async void trayicon_menu_quit_devices_Click(object? sender, RoutedEventArgs e)
-    {
-        await ShutdownDevices();
-    }
-
-    private async Task ShutdownDevices()
-    {
-        await (await _deviceManager).ShutdownDevices();
-    }
-
     private async void Window_Closing(object? sender, CancelEventArgs e)
     {
         switch (Global.Configuration.CloseMode)
@@ -357,49 +302,38 @@ partial class ConfigUI : INotifyPropertyChanged
 
                 if (result == MessageBoxResult.No)
                 {
-                    MinimizeApp();
+                    await MinimizeApp();
                     e.Cancel = true;
                 }
                 else
                 {
-                    await ShutdownDevices();
-                    ExitApp();
+                    await _controlInterface.ShutdownDevices();
+                    _controlInterface.ExitApp();
                 }
 
                 break;
             }
             case AppExitMode.Minimize:
-                MinimizeApp();
-                e.Cancel = true;
+                await MinimizeApp();
+                if (!DisposeWindow)
+                {
+                    e.Cancel = true;
+                }
                 break;
             default:
-                await ShutdownDevices();
-                ExitApp();
+                await _controlInterface.ShutdownDevices();
+                _controlInterface.ExitApp();
                 break;
         }
     }
 
-    internal void ExitApp()
-    {
-        trayicon.Visibility = Visibility.Hidden;
-        _virtualKeyboardTimer.Stop();
-        System.Windows.Application.Current.Shutdown();
-    }
-
-    private async void MinimizeApp()
+    private async Task MinimizeApp()
     {
         FocusedApplication?.SaveAll();
-
-        if (!_shownHiddenMessage)
-        {
-            trayicon.ShowBalloonTip("Aurora", "This program is now hidden in the tray.", BalloonIcon.None);
-            _shownHiddenMessage = true;
-        }
 
         var lightingStateManager = await _lightingStateManager;
         lightingStateManager.PreviewProfileKey = string.Empty;
 
-        Visibility = Visibility.Hidden;
         Hide();
     }
 
@@ -419,7 +353,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private readonly BitmapImage _visible = new(new Uri(@"Resources/Visible.png", UriKind.Relative));
     private readonly BitmapImage _notVisible = new(new Uri(@"Resources/Not Visible.png", UriKind.Relative));
-        
+
     private async Task GenerateProfileStack(string? focusedKey = null)
     {
         profiles_stack.Children.Clear();
@@ -684,11 +618,6 @@ partial class ConfigUI : INotifyPropertyChanged
     }
     private void cmbtnOpenBitmapWindow_Clicked(object? sender, RoutedEventArgs e) => Window_BitmapView.Open();
     private void cmbtnOpenHttpDebugWindow_Clicked(object? sender, RoutedEventArgs e) =>Window_GSIHttpDebug.Open(_httpListener);
-
-    private void trayicon_TrayMouseDoubleClick(object? sender, RoutedEventArgs e)
-    {
-        Display();
-    }
 
     private void UpdateManagerStackFocus(object focusedElement, bool forced = false)
     {

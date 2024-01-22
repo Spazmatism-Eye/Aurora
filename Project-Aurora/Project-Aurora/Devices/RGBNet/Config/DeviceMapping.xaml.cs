@@ -36,15 +36,6 @@ public partial class DeviceMapping
         Unloaded += OnUnloaded;
     }
 
-    public async Task Initialize()
-    {
-        var ipcListener = await _ipcListener;
-        if (ipcListener != null)
-        {
-            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
-        }
-    }
-
     private void OnAuroraCommandReceived(object? sender, string e)
     {
         var words = e.Split(Constants.StringSplit);
@@ -67,12 +58,24 @@ public partial class DeviceMapping
 
     private async void OnLoaded(object? sender, RoutedEventArgs e)
     {
+        var ipcListener = await _ipcListener;
+        if (ipcListener != null)
+        {
+            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
+        }
+
         await ReloadDevices();
     }
 
-    private void OnUnloaded(object? sender, EventArgs e)
+    private async void OnUnloaded(object? sender, EventArgs e)
     {
         _config.Value.SaveConfig();
+        
+        var ipcListener = await _ipcListener;
+        if (ipcListener != null)
+        {
+            ipcListener.AuroraCommandReceived -= OnAuroraCommandReceived;
+        }
     }
 
     private async Task ReloadDevices()

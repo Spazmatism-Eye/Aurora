@@ -24,9 +24,6 @@ public partial class Control_Settings
 {
     private readonly Task<PluginManager> _pluginManager;
     private readonly Task<AuroraHttpListener?> _httpListener;
-    private readonly Control_SettingsDevicesAndWrappers _devicesAndWrappers;
-    private readonly Control_DeviceManager _controlDeviceManager;
-    private readonly DeviceMapping _deviceMapping;
 
     public Control_Settings(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager, Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager, Task<IpcListener?> ipcListener)
     {
@@ -43,24 +40,13 @@ public partial class Control_Settings
         LnkRepository.NavigateUri = new Uri($"https://github.com/{o}/{r}");
         LnkContributors.NavigateUri = new Uri($"https://github.com/{o}/{r}#contributors-");
 
-        _devicesAndWrappers = new Control_SettingsDevicesAndWrappers(rzSdkManager, deviceManager);
-        _controlDeviceManager = new Control_DeviceManager(deviceManager, ipcListener);
-        _deviceMapping = new DeviceMapping(deviceManager, ipcListener);
+        var devicesAndWrappers = new Control_SettingsDevicesAndWrappers(rzSdkManager, deviceManager);
+        var controlDeviceManager = new Control_DeviceManager(deviceManager, ipcListener);
+        var deviceMapping = new DeviceMapping(deviceManager, ipcListener);
         
-        DevicesAndWrappersTab.Content = _devicesAndWrappers;
-        DeviceManagerTab.Content = _controlDeviceManager;
-        RemapDevicesTab.Content = _deviceMapping;
-        
-        _devicesAndWrappers.BeginInit();
-        _controlDeviceManager.BeginInit();
-        _deviceMapping.BeginInit();
-    }
-
-    public async Task Initialize()
-    {
-        await _devicesAndWrappers.Initialize();
-        await _controlDeviceManager.Initialize();
-        await _deviceMapping.Initialize();
+        DevicesAndWrappersTab.Content = devicesAndWrappers;
+        DeviceManagerTab.Content = controlDeviceManager;
+        RemapDevicesTab.Content = deviceMapping;
     }
 
     private async void UserControl_Loaded(object? sender, RoutedEventArgs e)

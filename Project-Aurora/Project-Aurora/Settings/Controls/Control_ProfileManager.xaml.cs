@@ -36,9 +36,27 @@ public partial class Control_ProfileManager
     public Control_ProfileManager()
     {
         InitializeComponent();
+    }
 
-        lstProfiles.SelectionMode = SelectionMode.Single;
+    private void Control_ProfileManager_OnLoaded(object sender, RoutedEventArgs e)
+    {
         lstProfiles.SelectionChanged += lstProfiles_SelectionChanged;
+
+        if (FocusedApplication != null)
+        {
+            FocusedApplication.ProfileChanged -= UpdateProfiles;
+            FocusedApplication.ProfileChanged += UpdateProfiles;
+        }
+    }
+
+    private void Control_ProfileManager_OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        lstProfiles.SelectionChanged -= lstProfiles_SelectionChanged;
+
+        if (FocusedApplication != null)
+        {
+            FocusedApplication.ProfileChanged -= UpdateProfiles;
+        }
     }
 
     private static void FocusedProfileChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
@@ -49,15 +67,13 @@ public partial class Control_ProfileManager
             var prof = (Profiles.Application)e.OldValue;
             prof.ProfileChanged -= self.UpdateProfiles;
 
-            if (self._lastSelectedProfile.ContainsKey(prof))
-                self._lastSelectedProfile.Remove(prof);
-
-            self._lastSelectedProfile.Add(prof, self.lstProfiles.SelectedItem as ApplicationProfile);
+            self._lastSelectedProfile.Remove(prof);
+            self._lastSelectedProfile.Add(prof, (ApplicationProfile)self.lstProfiles.SelectedItem);
         }
         self.UpdateProfiles();
-        if (e.NewValue == null) return;
+        if (e.NewValue == null || !self.IsLoaded) return;
+        
         var profile = (Profiles.Application)e.NewValue;
-
         profile.ProfileChanged += self.UpdateProfiles;
 
         if (self._lastSelectedProfile.TryGetValue(profile, out var selectedProfile))
@@ -83,12 +99,12 @@ public partial class Control_ProfileManager
         if (e.AddedItems.Count != 1) return;
         if (lstProfiles.SelectedItem != null)
         {
-            if (lstProfiles.SelectedItem is not ApplicationProfile)
+            if (lstProfiles.SelectedItem is not ApplicationProfile profile)
                 throw new ArgumentException($"Items contained in the ListView must be of type 'ProfileSettings', not '{lstProfiles.SelectedItem.GetType()}'");
 
-            FocusedApplication?.SwitchToProfile(lstProfiles.SelectedItem as ApplicationProfile);
+            FocusedApplication?.SwitchToProfile(profile);
 
-            ProfileSelected?.Invoke(lstProfiles.SelectedItem as ApplicationProfile);
+            ProfileSelected?.Invoke(profile);
             btnDeleteProfile.IsEnabled = true;
         }
         else

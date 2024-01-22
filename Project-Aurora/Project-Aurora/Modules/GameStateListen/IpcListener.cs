@@ -150,6 +150,7 @@ public class IpcListener
         using var sr = new StreamReader(_auroraInterfacePipeStream);
         while (sr.ReadLine() is { } command)
         {
+            Global.logger.Debug("Received command: {Command}", command);
             AuroraCommandReceived?.Invoke(this, command);
         }
         if (!_isRunning)

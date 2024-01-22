@@ -34,6 +34,7 @@ public sealed class DeviceManager : IDisposable
 
     private readonly MemorySharedStruct<DeviceManagerInfo> _deviceManagerInfo;
     private Process? _process;
+    private bool _detached;
 
     private readonly byte[] _end = "\n"u8.ToArray();
 
@@ -116,6 +117,10 @@ public sealed class DeviceManager : IDisposable
 
     public async Task ShutdownDevices()
     {
+        if (_detached)
+        {
+            return;
+        }
         _process ??= Process.GetProcessesByName(DeviceManagerProcess).FirstOrDefault();
         if (_process != null)
         {
@@ -142,7 +147,7 @@ public sealed class DeviceManager : IDisposable
 
     public void Detach()
     {
-        _process = null;
+        _detached = true;
     }
 
     public void UpdateDevices(IReadOnlyDictionary<DeviceKeys, SimpleColor> keyColors)

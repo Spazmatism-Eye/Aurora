@@ -65,6 +65,9 @@ public partial class App
         new PerformanceMonitor(ProcessesModule.RunningProcessMonitor)
     ];
 
+    private static readonly AuroraControlInterface ControlInterface = new(DevicesModule.DeviceManager, IpcListenerModule.IpcListener);
+    private readonly AuroraTrayIcon _trayIcon = new(ControlInterface);
+
     private static readonly SemaphoreSlim PreventShutdown = new(0);
 
     protected override async void OnStartup(StartupEventArgs e)
@@ -99,25 +102,23 @@ public partial class App
 
         WindowListener.Instance = new WindowListener();
         var initModules = _modules.Select(async m => await m.InitializeAsync())
-            .Where(t => t!= null).ToArray();
+            .Where(t => t!= null)
+            .ToArray();
 
-        Global.logger.Information("Loading ConfigUI...");
-        var stopwatch = Stopwatch.StartNew();
-        var configUi = new ConfigUI(RazerSdkModule.RzSdkManager, PluginsModule.PluginManager, LayoutsModule.LayoutManager,
-            HttpListenerModule.HttpListener, IpcListenerModule.IpcListener, DevicesModule.DeviceManager, LightingStateManagerModule.LightningStateManager);
-        Global.logger.Debug("new ConfigUI() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
-
-        stopwatch.Restart();
-        await configUi.Initialize();
-        Global.logger.Debug("configUi.Initialize() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
-        stopwatch.Stop();
+        await ControlInterface.Initialize();
+        _trayIcon.DisplayWindow += TrayIcon_OnDisplayWindow;
+        var configUi = await CreateWindow();
 
         Global.logger.Information("Waiting for modules...");
         await Task.WhenAll(initModules);
         MainWindow = configUi;
         Global.logger.Information("Modules initiated");
-        ((ConfigUI)MainWindow).DisplayIfNotSilent();
-        
+        if (!IsSilent)
+        {
+            await DisplayWindow();
+        }
+
+        //move this to ProcessModule
         WindowListener.Instance.StartListening();
 
         //Debug Windows on Startup
@@ -129,9 +130,38 @@ public partial class App
         SessionEnding += (_, sessionEndingParams) =>
         {
             Global.logger.Information("Session ending. Reason: {Reason}", sessionEndingParams.ReasonSessionEnding);
-            configUi.ExitApp();
+            Shutdown();
             PreventShutdown.Wait();
         };
+    }
+
+    private async Task DisplayWindow()
+    {
+        if (MainWindow is not ConfigUI mainWindow)
+        {
+            var configUi = await CreateWindow();
+            MainWindow = configUi;
+            configUi.Display();
+            return;
+        }
+        mainWindow.Display();
+    }
+
+    private async Task<ConfigUI> CreateWindow()
+    {
+        Global.logger.Information("Loading ConfigUI...");
+        var stopwatch = Stopwatch.StartNew();
+        var configUi = new ConfigUI(RazerSdkModule.RzSdkManager, PluginsModule.PluginManager, LayoutsModule.LayoutManager,
+            HttpListenerModule.HttpListener, IpcListenerModule.IpcListener, DevicesModule.DeviceManager,
+            LightingStateManagerModule.LightningStateManager, ControlInterface);
+        Global.logger.Debug("new ConfigUI() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
+        
+        stopwatch.Restart();
+        await configUi.Initialize();
+        Global.logger.Debug("configUi.Initialize() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
+        stopwatch.Stop();
+
+        return configUi;
     }
 
     private void CheckRunningProcesses()
@@ -242,6 +272,7 @@ public partial class App
         await Task.WhenAll(tasks);
         forceExitTimer.GetApartmentState(); //statement just to keep referenced
         (Global.logger as Logger)?.Dispose();
+        _trayIcon.Dispose();
 
         Mutex.ReleaseMutex();
         Mutex.Dispose();
@@ -317,5 +348,10 @@ public partial class App
         //Perform exit operations
         Current?.Shutdown();
         (Global.logger as Logger)?.Dispose();
+    }
+
+    private async void TrayIcon_OnDisplayWindow(object? sender, EventArgs e)
+    {
+        await DisplayWindow();
     }
 }

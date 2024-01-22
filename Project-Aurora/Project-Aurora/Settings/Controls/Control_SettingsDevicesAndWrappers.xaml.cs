@@ -43,13 +43,25 @@ public partial class Control_SettingsDevicesAndWrappers
             ChromaUninstallButton.Visibility = Visibility.Hidden;
     }
 
-    public async Task Initialize()
+    private async void Control_SettingsDevicesAndWrappers_OnLoaded(object sender, RoutedEventArgs e)
     {
-        await InitializeChromaState();
-        InitializeLightsyncState();
+        await InitializeChromaEvents();
+        InitializeLightsyncEvents();
     }
 
-    private async Task InitializeChromaState()
+    private async void Control_SettingsDevicesAndWrappers_OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        var razerManager = await _rzSdkManager;
+        if (razerManager != null)
+        {
+            razerManager.AppDataUpdated -= HandleChromaAppChange;
+        }
+        var logitechSdkListener = LogitechSdkModule.LogitechSdkListener;
+        logitechSdkListener.ApplicationChanged -= LogitechSdkListenerOnApplicationChanged;
+        logitechSdkListener.StateChanged -= LogitechSdkListenerOnStateChanged;
+    }
+
+    private async Task InitializeChromaEvents()
     {
         var razerManager = await _rzSdkManager;
         if (razerManager != null)
@@ -71,12 +83,13 @@ public partial class Control_SettingsDevicesAndWrappers
         }
     }
 
-    private void InitializeLightsyncState()
+    private void InitializeLightsyncEvents()
     {
         var logitechSdkListener = LogitechSdkModule.LogitechSdkListener;
         logitechSdkListener.ApplicationChanged += LogitechSdkListenerOnApplicationChanged;
         logitechSdkListener.StateChanged += LogitechSdkListenerOnStateChanged;
         UpdateLightsyncState();
+        UpdateLightsyncApp(logitechSdkListener.Application);
     }
 
     private void LogitechSdkListenerOnStateChanged(object? sender, EventArgs e)
@@ -97,28 +110,32 @@ public partial class Control_SettingsDevicesAndWrappers
             break;
         }
 
-        Dispatcher.BeginInvoke(DispatcherPriority.Background, 
+        Dispatcher.BeginInvoke(DispatcherPriority.Loaded, 
             () => ChromaCurrentApplicationLabel.Content = $"{currentAppName} [{currentAppId}]");
     }
 
     private void LogitechSdkListenerOnApplicationChanged(object? sender, string? e)
     {
-        Dispatcher.BeginInvoke(DispatcherPriority.Background, 
-            () =>
+        UpdateLightsyncApp(e);
+    }
+
+    private void UpdateLightsyncApp(string? appName)
+    {
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (appName == null)
             {
-                if (e == null)
-                {
-                    LightsyncConnectionStatusLabel.Content = "Disconnected";
-                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Chocolate);
-                    LightsyncCurrentApplicationLabel.Content = "-";
-                }
-                else
-                {
-                    LightsyncConnectionStatusLabel.Content = "Connected";
-                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.LightGreen);
-                    LightsyncCurrentApplicationLabel.Content = Path.GetFileName(e);
-                }
-            });
+                LightsyncConnectionStatusLabel.Content = "Disconnected";
+                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Chocolate);
+                LightsyncCurrentApplicationLabel.Content = "-";
+            }
+            else
+            {
+                LightsyncConnectionStatusLabel.Content = "Connected";
+                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.LightGreen);
+                LightsyncCurrentApplicationLabel.Content = Path.GetFileName(appName);
+            }
+        }, DispatcherPriority.Loaded);
     }
 
     private void UpdateLightsyncState()
@@ -149,7 +166,7 @@ public partial class Control_SettingsDevicesAndWrappers
                 default:
                     throw new NotImplementedException("LogitechSdkListener.State: " + logitechSdkListener.State + "Unexpected Enum value");
             }
-        });
+        }, DispatcherPriority.Loaded);
     }
 
     private void ResetDevices(object? sender, RoutedEventArgs e) => Task.Run(async () => await (await _deviceManager).ResetDevices());

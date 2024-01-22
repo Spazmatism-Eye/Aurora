@@ -7,6 +7,8 @@
              xmlns:a="clr-namespace:Aurora"
              xmlns:utils="clr-namespace:Aurora.Utils"
              mc:Ignorable="d"
+             Loaded="Control_SettingsDevicesAndWrappers_OnLoaded"
+             Unloaded="Control_SettingsDevicesAndWrappers_OnUnloaded"
              d:DesignHeight="600" d:DesignWidth="900">
     <Grid DataContext="{x:Static a:Global.Configuration}">
         <Grid.ColumnDefinitions>

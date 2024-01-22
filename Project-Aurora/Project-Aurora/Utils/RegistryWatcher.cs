@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Management;
 using System.Security.Principal;
-using JetBrains.Annotations;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace Aurora.Utils;
 
-public class RegistryChangedEventArgs : EventArgs
+public class RegistryChangedEventArgs(object data) : EventArgs
 {
-    public readonly object? Data;
-
-    public RegistryChangedEventArgs(object data)
-    {
-        Data = data;
-    }
+    public readonly object? Data = data;
 }
 
 public enum RegistryHiveOpt
@@ -22,21 +17,11 @@ public enum RegistryHiveOpt
     LocalMachine,
 }
 
-public sealed class RegistryWatcher : IDisposable
+public sealed class RegistryWatcher(RegistryHiveOpt registryHive, string key, string value) : IDisposable
 {
     public event EventHandler<RegistryChangedEventArgs>? RegistryChanged;
 
-    private readonly RegistryHiveOpt _registryHive;
-    private readonly string _key;
-    private readonly string _value;
     private ManagementEventWatcher? _eventWatcher;
-
-    public RegistryWatcher(RegistryHiveOpt registryHive, string key, string value)
-    {
-        _registryHive = registryHive;
-        _key = key;
-        _value = value;
-    }
 
     public void StartWatching()
     {
@@ -46,25 +31,21 @@ public sealed class RegistryWatcher : IDisposable
             return;
         }
 
-        var currentUser = WindowsIdentity.GetCurrent();
-        var scope = new ManagementScope(@"\\.\root\default");
-
-        var queryString = _registryHive switch
+        var keyPath = key.Replace(@"\", @"\\");
+        var queryString = registryHive switch
         {
-            RegistryHiveOpt.LocalMachine => string.Format(
-                "SELECT * FROM RegistryValueChangeEvent WHERE Hive='HKEY_LOCAL_MACHINE' AND KeyPath='{0}' AND ValueName='{1}'",
-                _key.Replace(@"\", @"\\"), _value),
-            RegistryHiveOpt.CurrentUser => string.Format(
-                @"SELECT * FROM RegistryValueChangeEvent WHERE Hive='HKEY_USERS' AND KeyPath='{0}\\{1}' AND ValueName='{2}'",
-                currentUser.User!.Value, _key.Replace(@"\", @"\\"), _value),
+            RegistryHiveOpt.LocalMachine =>
+                $"SELECT * FROM RegistryValueChangeEvent WHERE Hive='HKEY_LOCAL_MACHINE' AND KeyPath='{keyPath}' AND ValueName='{value}'",
+            RegistryHiveOpt.CurrentUser =>
+                $@"SELECT * FROM RegistryValueChangeEvent WHERE Hive='HKEY_USERS' AND KeyPath='{WindowsIdentity.GetCurrent().User!.Value}\\{keyPath}' AND ValueName='{value}'",
         };
         var query = new WqlEventQuery(queryString);
+        var scope = new ManagementScope(@"\\.\root\default");
         _eventWatcher = new ManagementEventWatcher(scope, query);
-        _eventWatcher.EventArrived += KeyWatcherOnEventArrived;
+        WeakEventManager<ManagementEventWatcher, EventArrivedEventArgs>.AddHandler(_eventWatcher, nameof(_eventWatcher.EventArrived), KeyWatcherOnEventArrived);
         try
         {
             _eventWatcher.Start();
-
             SendData();
         }
         catch (Exception)
@@ -80,7 +61,7 @@ public sealed class RegistryWatcher : IDisposable
             return;
         }
 
-        _eventWatcher.EventArrived -= KeyWatcherOnEventArrived;
+        WeakEventManager<ManagementEventWatcher, EventArrivedEventArgs>.RemoveHandler(_eventWatcher, nameof(_eventWatcher.EventArrived), KeyWatcherOnEventArrived);
         _eventWatcher.Stop();
         _eventWatcher.Dispose();
         _eventWatcher = null;
@@ -93,13 +74,13 @@ public sealed class RegistryWatcher : IDisposable
 
     private void SendData()
     {
-        var localMachine = _registryHive switch
+        var localMachine = registryHive switch
         {
             RegistryHiveOpt.LocalMachine => Registry.LocalMachine,
             RegistryHiveOpt.CurrentUser => Registry.CurrentUser,
         };
-        using var key = localMachine.OpenSubKey(_key);
-        var data = key?.GetValue(_value);
+        using var key1 = localMachine.OpenSubKey(key);
+        var data = key1?.GetValue(value);
         if (data == null)
         {
             return;

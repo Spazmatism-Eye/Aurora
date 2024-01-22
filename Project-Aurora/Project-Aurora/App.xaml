@@ -6,7 +6,6 @@
              DispatcherUnhandledException="App_DispatcherUnhandledException"
              ShutdownMode="OnExplicitShutdown"
              >
-
     <Application.Resources>
         <ResourceDictionary>
             <!-- Global converters -->

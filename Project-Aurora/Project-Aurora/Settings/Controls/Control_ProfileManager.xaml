@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Utils="clr-namespace:Aurora.Utils"
+             Loaded="Control_ProfileManager_OnLoaded"
+             Unloaded="Control_ProfileManager_OnUnloaded"
              mc:Ignorable="d" d:DesignWidth="200" MinWidth="200" MinHeight="25" KeyDown="lstProfiles_KeyDown" d:DesignHeight="202.667" SizeChanged="UserControl_SizeChanged" >
     <UserControl.Resources>
         <ResourceDictionary>

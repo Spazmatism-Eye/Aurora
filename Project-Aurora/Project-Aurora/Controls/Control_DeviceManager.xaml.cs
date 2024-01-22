@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Aurora.Devices;
@@ -24,18 +25,23 @@ public partial class Control_DeviceManager
         InitializeComponent();
     }
 
-    public async Task Initialize()
+    private async void DeviceManagerOnDevicesUpdated(object? sender, EventArgs e)
     {
-        var deviceManager = await _deviceManager;
-        deviceManager.DevicesUpdated += async (_, _) =>
-        {
-            await UpdateControls();
-        };
+        await UpdateControls();
     }
 
-    private void Control_DeviceManager_Loaded(object? sender, RoutedEventArgs e)
+    private async void Control_DeviceManager_Loaded(object? sender, RoutedEventArgs e)
     {
-        Task.Run(UpdateControls).ConfigureAwait(false);
+        var deviceManager = await _deviceManager;
+        deviceManager.DevicesUpdated += DeviceManagerOnDevicesUpdated;
+
+        await Task.Run(UpdateControls).ConfigureAwait(false);
+    }
+
+    private async void Control_DeviceManager_Unloaded(object? sender, RoutedEventArgs e)
+    {
+        var deviceManager = await _deviceManager;
+        deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated;
     }
 
     private async Task UpdateControls()

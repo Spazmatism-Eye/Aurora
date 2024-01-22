@@ -32,6 +32,8 @@ public sealed class LogitechSdkListener : IDisposable
     public event EventHandler? ColorsUpdated;
     public event EventHandler<string?>? ApplicationChanged;
     public event EventHandler? StateChanged; 
+    
+    public string? Application { get; private set; }
 
     private LightsyncSdkState _state;
     public LightsyncSdkState State
@@ -279,7 +281,8 @@ public sealed class LogitechSdkListener : IDisposable
         }
         
         _excluded.Clear();
-        
+
+        Application = name;
         ApplicationChanged?.Invoke(this, name);
     }
 
