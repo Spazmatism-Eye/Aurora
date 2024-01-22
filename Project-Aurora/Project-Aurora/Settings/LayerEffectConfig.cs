@@ -25,7 +25,7 @@ public class LayerEffectConfig
     public Color Secondary { get; set; }
     public float Speed { get; set; }
     public float Angle { get; set; }
-    public float GradientSize { get; set; }
+    public float GradientSize { get; set; } = 100;
     public AnimationType AnimationType { get; set; }
     public bool AnimationReverse { get; set; }
     public EffectBrush Brush { get; set; }
@@ -57,8 +57,8 @@ public class LayerEffectConfig
             {
                 InterpolationColors = new System.Drawing.Drawing2D.ColorBlend(2)
                 {
-                    Colors = new[] { Primary, Secondary },
-                    Positions = new[] { 0.0f, 1.0f }
+                    Colors = [Primary, Secondary],
+                    Positions = [0.0f, 1.0f]
                 }
             }
         );
