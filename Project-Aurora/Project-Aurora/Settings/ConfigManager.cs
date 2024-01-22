@@ -49,7 +49,7 @@ public static class ConfigManager
             }
 
             App.ForceShutdownApp(-1);
-            throw new Exception();
+            throw new ApplicationException("irrelevant message");
         }
     }
 
@@ -90,8 +90,18 @@ public static class ConfigManager
     private static DeviceConfig TryLoadDevice()
     {
         if (!File.Exists(DeviceConfig.ConfigFile))
-            return MigrateDeviceConfig();
-        
+        {
+            if (File.Exists(Configuration.ConfigFile))
+                // v194 Migration
+                return MigrateDeviceConfig();
+
+            // first time start
+            var deviceConfig = new DeviceConfig();
+            Save(deviceConfig, DeviceConfig.ConfigFile);
+            return deviceConfig;
+
+        }
+
         var content = File.ReadAllText(DeviceConfig.ConfigFile, Encoding.UTF8);
         return JsonConvert.DeserializeObject<DeviceConfig>(content,
             new JsonSerializerSettings
@@ -139,7 +149,7 @@ public static class ConfigManager
                 ObjectCreationHandling = ObjectCreationHandling.Replace,
                 SerializationBinder = new AuroraSerializationBinder(),
             }) ?? new DeviceConfig();
-        File.Copy(Configuration.ConfigFile, Configuration.ConfigFile + ".v194");
+        File.Copy(Configuration.ConfigFile, Configuration.ConfigFile + ".v194", true);
         return config;
     }
 }
