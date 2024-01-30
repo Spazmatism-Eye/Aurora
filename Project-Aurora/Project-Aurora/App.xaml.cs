@@ -252,9 +252,6 @@ public partial class App
         Closing = true;
         base.OnExit(e);
 
-        if (Global.Configuration != null)
-            ConfigManager.Save(Global.Configuration, Configuration.ConfigFile);
-
         var tasks = _modules.Select(async m =>
         {
             try
