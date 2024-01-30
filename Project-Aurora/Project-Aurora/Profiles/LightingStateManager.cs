@@ -592,7 +592,6 @@ public sealed class LightingStateManager
     {
         _updateTimer?.Dispose();
         _updateTimer = null;
-        SaveAll();
         foreach (var app in Events)
             app.Value.Dispose();
     }

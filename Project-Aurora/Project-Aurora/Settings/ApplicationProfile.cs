@@ -77,9 +77,4 @@ public class ApplicationProfile : INotifyPropertyChanged, IDisposable
         foreach (var l in OverlayLayers)
             l.Dispose();
     }
-
-    ~ApplicationProfile()
-    {
-        Dispose(false);
-    }
 }
