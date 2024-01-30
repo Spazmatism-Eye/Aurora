@@ -64,7 +64,7 @@ public partial class Window_GSIHttpDebug
         // Start a timer to update the time displays for the request
         _timeDisplayTimer = new Timer(_ => Dispatcher.BeginInvoke(() => {
             if (_lastRequestTime.HasValue)
-                CurRequestTime.Text = _lastRequestTime + " (" + (DateTime.Now - _lastRequestTime).Value.TotalSeconds.ToString("0.00") + "s ago)";
+                CurRequestTime.Text = _lastRequestTime + " (" + (DateTime.UtcNow - _lastRequestTime).Value.TotalSeconds.ToString("0.00") + "s ago)";
         }, DispatcherPriority.DataBind), null, 0, 50);
     }
 
@@ -91,7 +91,7 @@ public partial class Window_GSIHttpDebug
         // Without this, an exception is thrown trying to update the text box.
         Dispatcher.BeginInvoke(() => SetJsonText(gamestate.Json), DispatcherPriority.DataBind);
         // Also record the time this request came in
-        _lastRequestTime = DateTime.Now;
+        _lastRequestTime = DateTime.UtcNow;
     }
 
     /// <summary>

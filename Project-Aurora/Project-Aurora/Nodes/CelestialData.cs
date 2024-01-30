@@ -35,11 +35,11 @@ public class CelestialData : Node
         {
             if (_invalidated)
             {
-                Coordinate = new Coordinate(Global.Configuration.Lat, Global.Configuration.Lon, DateTime.Now, El);
+                Coordinate = new Coordinate(Global.Configuration.Lat, Global.Configuration.Lon, DateTime.UtcNow, El);
                 _invalidated = false;
             }
             
-            var dateTime = DateTime.Now;
+            var dateTime = DateTime.UtcNow;
 
             if (dateTime.Hour != _currentHour)
             {

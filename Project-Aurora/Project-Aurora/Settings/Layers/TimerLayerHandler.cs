@@ -164,7 +164,7 @@ namespace Aurora.Settings.Layers {
 
         public void Reset(double t) {
             SetTimer(t);
-            startAt = DateTime.Now;
+            startAt = DateTime.UtcNow;
             max = t;
         }
 
@@ -185,18 +185,10 @@ namespace Aurora.Settings.Layers {
         }
 
         /// <summary>Gets how many milliseconds has elapsed since starting timer.</summary>
-        public int Current {
-            get {
-                return (int)(DateTime.Now - startAt).TotalMilliseconds;
-            }
-        }
+        public int Current => (int)(DateTime.UtcNow - startAt).TotalMilliseconds;
 
         /// <summary>Gets how far through the timer is as a value between 0 and 1 (for use with the fade animation mode).</summary>
-        public double InterpolationValue {
-            get {
-                return Current / max;
-            }
-        }
+        public double InterpolationValue => Current / max;
 
         public void Disponse() {
             timer.Dispose();

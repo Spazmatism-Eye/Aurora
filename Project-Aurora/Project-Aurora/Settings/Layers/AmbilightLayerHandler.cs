@@ -258,7 +258,7 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
     private bool _brushChanged = true;
 
     private readonly Stopwatch _captureStopwatch = new();
-    private DateTime _lastProcessDetectTry = DateTime.Now;
+    private DateTime _lastProcessDetectTry = DateTime.UtcNow;
 
     public IEnumerable<string> Displays => _screenCapture?.GetDisplays() ?? ImmutableList<string>.Empty;
 
@@ -299,10 +299,10 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
         //for a frame when the user alt-tabs with the foregroundapp option selected
         if (TryGetCropRegion(out var newCropRegion))
             _cropRegion = newCropRegion;
-        else if (DateTime.Now - _lastProcessDetectTry > TimeSpan.FromSeconds(2))
+        else if (DateTime.UtcNow - _lastProcessDetectTry > TimeSpan.FromSeconds(2))
         {
             UpdateSpecificProcessHandle(Properties.SpecificProcess);
-            _lastProcessDetectTry = DateTime.Now;
+            _lastProcessDetectTry = DateTime.UtcNow;
         }
         //and because of that, this should never happen 
         if (_cropRegion.IsEmpty)

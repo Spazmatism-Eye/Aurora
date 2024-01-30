@@ -7,7 +7,7 @@ namespace Aurora.Utils;
 /// </summary>
 public static class Time
 {
-    private static readonly DateTime Epoch = new(1970, 1, 1);
+    private static readonly DateTime Epoch = DateTime.UnixEpoch;
 
     /// <summary>
     /// Gets the milliseconds since the epoch
@@ -15,7 +15,7 @@ public static class Time
     /// <returns>The time, in milliseconds, since the epoch</returns>
     public static long GetMillisecondsSinceEpoch()
     {
-        var span = DateTime.Now - Epoch;
+        var span = DateTime.UtcNow - Epoch;
         return (long)span.TotalMilliseconds;
     }
 

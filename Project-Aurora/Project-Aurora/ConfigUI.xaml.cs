@@ -43,7 +43,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private readonly AuroraControlInterface _controlInterface;
 
-    private DateTime _lastActivated = DateTime.Now;
+    private DateTime _lastActivated = DateTime.UtcNow;
     private readonly TimeSpan _renderTimeout = TimeSpan.FromMinutes(5);
     private readonly EffectColor _desktopColorScheme = new(0, 0, 0, 0);
 
@@ -146,7 +146,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private void KeyboardTimerCallback()
     {
-        if (DateTime.Now - _lastActivated > _renderTimeout)
+        if (DateTime.UtcNow - _lastActivated > _renderTimeout)
         {
             return;
         }
@@ -339,7 +339,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private void Window_Activated(object? sender, EventArgs e)
     {
-        _lastActivated = DateTime.Now;
+        _lastActivated = DateTime.UtcNow;
     }
 
     private readonly Image _profileAdd = new()

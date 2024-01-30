@@ -82,7 +82,7 @@ public static class Global
 #if DEBUG
         isDebug = true;
 #endif
-        var logFile = $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}.log";
+        var logFile = $"{DateTime.UtcNow:yyyy-MM-dd HH.mm.ss}.log";
         var logPath = Path.Combine(AppDataDirectory, "Logs", logFile);
         logger = new LoggerConfiguration()
             .Enrich.FromLogContext()

@@ -39,7 +39,7 @@ public static class RzHelper
     }
 
     private static DateTime _lastFetch = DateTime.UnixEpoch;
-    private static DateTime _lastUpdate = DateTime.Now;
+    private static DateTime _lastUpdate = DateTime.UtcNow;
     private static string? _currentAppExecutable = string.Empty;
 
     /// <summary>
@@ -87,7 +87,7 @@ public static class RzHelper
         {
             return true;
         }
-        _lastFetch = DateTime.Now;
+        _lastFetch = DateTime.UtcNow;
         return false;
     }
 
@@ -106,35 +106,35 @@ public static class RzHelper
         {
             KeyboardColors.Provider = keyboard;
             KeyboardColors.IsDirty = true;
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = DateTime.UtcNow;
         };
 
         sdkManager.MouseUpdated += (object? _, in ChromaMouse mouse) =>
         {
             MouseColors.Provider = mouse;
             MouseColors.IsDirty = true;
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = DateTime.UtcNow;
         };
 
         sdkManager.MousepadUpdated += (object? _, in ChromaMousepad mousepad) =>
         {
             MousepadColors.Provider = mousepad;
             MousepadColors.IsDirty = true;
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = DateTime.UtcNow;
         };
         
         sdkManager.HeadsetUpdated += (object? _, in ChromaHeadset headset) =>
         {
             HeadsetColors.Provider = headset;
             HeadsetColors.IsDirty = true;
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = DateTime.UtcNow;
         };
 
         sdkManager.ChromaLinkUpdated += (object? _, in ChromaLink link) =>
         {
             ChromaLinkColors.Provider = link;
             ChromaLinkColors.IsDirty = true;
-            _lastUpdate = DateTime.Now;
+            _lastUpdate = DateTime.UtcNow;
         };
 
         sdkManager.AppDataUpdated += (object? _, in ChromaAppData appData) =>

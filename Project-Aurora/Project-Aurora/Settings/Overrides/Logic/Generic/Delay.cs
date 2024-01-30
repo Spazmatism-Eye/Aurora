@@ -38,13 +38,13 @@ namespace Aurora.Settings.Overrides.Logic.Generic {
             var val = Source.Evaluate(gameState);
             if (!EqualityComparer<T>.Default.Equals(val, lastValue)) {
                 // If different, record the time it changed and (add the delay so that we don't have to keep adding when checking later)
-                history.Enqueue((DateTime.Now.AddSeconds(Delay), val));
+                history.Enqueue((DateTime.UtcNow.AddSeconds(Delay), val));
                 lastValue = val;
             }
 
             // Next, check if the time next item in the queue changed has passed, update the current value
             // Note that we don't need to check other items since they are kept in order by the queue
-            if (history.Count > 0 && history.Peek().changeTime < DateTime.Now)
+            if (history.Count > 0 && history.Peek().changeTime < DateTime.UtcNow)
                 currentValue = history.Dequeue().value;
 
             return currentValue;
