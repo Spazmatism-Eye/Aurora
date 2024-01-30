@@ -485,6 +485,8 @@ internal static class LedMapping
         { 0, DeviceKeys.PERIPHERAL_LIGHT20 },
         
         { 1, DeviceKeys.Peripheral_Logo },
+        { 1, DeviceKeys.PERIPHERAL_LIGHT2 },
+        { 2, DeviceKeys.PERIPHERAL_LIGHT3 },
     };
 
     internal static readonly MultiValueDictionary<int, DeviceKeys> MousepadZoneKeys = new()

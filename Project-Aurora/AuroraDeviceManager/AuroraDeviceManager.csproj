@@ -83,8 +83,8 @@
         <PackageReference Include="RGB.NET.Devices.OpenRGB" Version="2.0.0-prerelease.83" />
         -->
         <PackageReference Include="RGB.NET.Devices.CoolerMaster" Version="2.0.0" />
-        <PackageReference Include="RGB.NET.Devices.Logitech" Version="2.0.0" />
-        <PackageReference Include="RGB.NET.Devices.Razer" Version="2.0.0" />
+        <PackageReference Include="RGB.NET.Devices.Logitech" Version="2.0.4-prerelease.14" />
+        <PackageReference Include="RGB.NET.Devices.Razer" Version="2.0.4-prerelease.14" />
         <PackageReference Include="RGB.NET.Devices.SteelSeries" Version="2.0.0" />
         <PackageReference Include="RGB.NET.Devices.Wooting" Version="2.0.0" />
         <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
