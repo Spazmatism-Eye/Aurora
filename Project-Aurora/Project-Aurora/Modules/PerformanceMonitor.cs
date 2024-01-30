@@ -40,7 +40,7 @@ public sealed class PerformanceMonitor(Task<RunningProcessMonitor> runningProces
         return Task.CompletedTask;
     }
 
-    private async void BackgroundInitialize()
+    private async Task BackgroundInitialize()
     {
         InitializeAurora();
         if (EnableChromaMonitor)
