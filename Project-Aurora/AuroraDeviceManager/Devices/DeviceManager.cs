@@ -144,6 +144,10 @@ public sealed class DeviceManager : IDisposable
     public void Dispose()
     {
         _disposed = true;
+        foreach (var deviceContainer in DeviceContainers)
+        {
+            deviceContainer.Dispose();
+        }
         DeviceContainers.Clear();
     }
 
