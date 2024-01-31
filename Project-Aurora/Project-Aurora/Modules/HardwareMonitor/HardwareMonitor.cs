@@ -51,10 +51,12 @@ public partial class HardwareMonitor: IHardwareMonitor
     static HardwareMonitor()
 #pragma warning restore CA1810 // Initialize reference type static fields inline
     {
+        var isAmd = CpuBrandFinder.IsAmd();
+        var isCpuEnabled = !isAmd || Global.Configuration.EnableAmdCpuMonitor;
         var computer = new Computer
         {
-            IsCpuEnabled = true,
-            IsGpuEnabled = true,
+            IsCpuEnabled = isCpuEnabled,
+            IsGpuEnabled = isCpuEnabled,
             IsMemoryEnabled = true,
             IsNetworkEnabled = true
         };
