@@ -55,29 +55,32 @@ public sealed class DeviceContainer : IDisposable
                 DeviceKeys => VariableType.DeviceKeys,
                 _ => VariableType.None,
             };
-            Func<object?, byte[]?> convert = vt switch
+            Func<object, byte[]?> convert = vt switch
             {
                 VariableType.None => _ => null,
-                VariableType.Boolean => data => data == null ? null : BitConverter.GetBytes((long)((bool)data ? 1 : 0)),
-                VariableType.Float => data => data == null ? null : BitConverter.GetBytes((double)(float)data),
-                VariableType.Double => data => data == null ? null : BitConverter.GetBytes((double)data),
-                VariableType.Int => data => data == null ? null : BitConverter.GetBytes((long)(int)data),
-                VariableType.Long => data => data == null ? null : BitConverter.GetBytes((long)data),
-                VariableType.DeviceKeys => data => data == null ? null : BitConverter.GetBytes((long)(int)data),
+                VariableType.Boolean => data => BitConverter.GetBytes((long)((bool)data ? 1 : 0)),
+                VariableType.Float => data => BitConverter.GetBytes((double)(float)data),
+                VariableType.Double => data => BitConverter.GetBytes((double)data),
+                VariableType.Int => data => BitConverter.GetBytes((long)(int)data),
+                VariableType.Long => data => BitConverter.GetBytes((long)data),
+                VariableType.DeviceKeys => data => BitConverter.GetBytes((long)(int)data),
                 VariableType.String => _ => null,
-                VariableType.Color => data => data == null ? null : BitConverter.GetBytes((long)((Color)data).ToArgb()),
+                VariableType.Color => data => BitConverter.GetBytes((long)((Color)data).ToArgb()),
             };
 
             var variable = new DeviceVariable(
                 Device.DeviceName, varName,
-                convert(item.Value),
-                convert(item.Default),
-                convert(item.Min),
-                convert(item.Max),
+                ConvertNullable(item.Value),
+                ConvertNullable(item.Default),
+                ConvertNullable(item.Min),
+                ConvertNullable(item.Max),
                 item.Title, item.Remark, (int)item.Flags, vt,
                 vt == VariableType.String ? item.Value as string ?? "" : ""
             );
             deviceVariables.Add(variable);
+            continue;
+
+            byte[]? ConvertNullable(object? data) => data == null ? null : convert(data);
         }
 
         return deviceVariables;

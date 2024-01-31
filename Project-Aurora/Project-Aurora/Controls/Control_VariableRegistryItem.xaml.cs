@@ -164,7 +164,6 @@ public partial class Control_VariableRegistryItem
             intUpDownControl.Minimum = minVal;
 
         intUpDownControl.ValueChanged += VariableChanged;
-        intUpDownControl.BeginInit();
 
         return intUpDownControl;
     }
