@@ -5,7 +5,6 @@ namespace Common.Devices.RGBNet;
 
 public static class RgbNetKeyMappings
 {
-
     private static readonly Dictionary<LedId, DeviceKeys> KeyNameMap = new()
     {
         { LedId.Keyboard_Escape,										DeviceKeys.ESC },
@@ -143,6 +142,9 @@ public static class RgbNetKeyMappings
         { LedId.Keyboard_Profile,										DeviceKeys.PROFILESWITCH },
         { LedId.Keyboard_Brightness,									DeviceKeys.BRIGHTNESS_SWITCH },
         { LedId.Keyboard_WinLock,										DeviceKeys.LOCK_SWITCH },
+        { LedId.Keyboard_IndicatorNumLock,								DeviceKeys.NUM_LOCK_LED },
+        { LedId.Keyboard_IndicatorCapsLock,								DeviceKeys.CAPS_LOCK_LED },
+        { LedId.Keyboard_IndicatorScrollLock,							DeviceKeys.SCROLL_LOCK_LED },
 
         { LedId.Custom1,												DeviceKeys.CL1 },
         { LedId.Custom2,												DeviceKeys.CL2 },
