@@ -76,7 +76,7 @@
         <PackageReference Include="hidlibrary" Version="3.3.40" />
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
         <PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
-        <PackageReference Include="OpenRGB.NET" Version="3.0.0" />
+        <PackageReference Include="OpenRGB.NET" Version="2.2.0" />
         <!--
         Waiting for #338 and #339 on rgb.net
         <PackageReference Include="RGB.NET.Core" Version="2.0.0-prerelease.83" />
