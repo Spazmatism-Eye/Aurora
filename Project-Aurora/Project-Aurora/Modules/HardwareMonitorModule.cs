@@ -22,6 +22,7 @@ public sealed partial class HardwareMonitorModule : AuroraModule
     [Async]
     public override void Dispose()
     {
+        LocalPcInformation.HardwareMonitor.Dispose();
         LocalPcInformation.HardwareMonitor = new NoopHardwareMonitor();
     }
 }

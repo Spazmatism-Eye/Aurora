@@ -7,7 +7,7 @@ using LibreHardwareMonitor.Hardware;
 
 namespace Aurora.Modules.HardwareMonitor;
 
-public interface IHardwareMonitor
+public interface IHardwareMonitor : IDisposable
 {
     HardwareMonitor.GpuUpdater Gpu { get; }
     HardwareMonitor.CpuUpdater Cpu { get; }
@@ -15,7 +15,7 @@ public interface IHardwareMonitor
     HardwareMonitor.NetUpdater Net { get; }
 }
 
-public class NoopHardwareMonitor : IHardwareMonitor
+public sealed class NoopHardwareMonitor : IHardwareMonitor
 {
     private readonly Lazy<HardwareMonitor.GpuUpdater> _gpu = new(() => new (new List<IHardware>()));
     private readonly Lazy<HardwareMonitor.CpuUpdater> _cpu = new(() => new (new List<IHardware>()));
@@ -29,9 +29,12 @@ public class NoopHardwareMonitor : IHardwareMonitor
     public HardwareMonitor.RamUpdater Ram => _ram.Value;
 
     public HardwareMonitor.NetUpdater Net => _net.Value;
+    public void Dispose()
+    {
+    }
 }
 
-public partial class HardwareMonitor: IHardwareMonitor
+public sealed partial class HardwareMonitor: IHardwareMonitor
 {
     private static readonly IEnumerable<IHardware> Hardware;
 
@@ -45,6 +48,7 @@ public partial class HardwareMonitor: IHardwareMonitor
     public RamUpdater Ram => _ram.Value;
 
     private static readonly Lazy<NetUpdater> _net = new(() => new NetUpdater(Hardware), LazyThreadSafetyMode.ExecutionAndPublication);
+    private static readonly Computer _computer;
     public NetUpdater Net => _net.Value;
 
 #pragma warning disable CA1810 // Initialize reference type static fields inline
@@ -53,7 +57,7 @@ public partial class HardwareMonitor: IHardwareMonitor
     {
         var isAmd = CpuBrandFinder.IsAmd();
         var isCpuEnabled = !isAmd || Global.Configuration.EnableAmdCpuMonitor;
-        var computer = new Computer
+        _computer = new Computer
         {
             IsCpuEnabled = isCpuEnabled,
             IsGpuEnabled = isCpuEnabled,
@@ -62,8 +66,8 @@ public partial class HardwareMonitor: IHardwareMonitor
         };
         try
         {
-            computer.Open();
-            Hardware = computer.Hardware;
+            _computer.Open();
+            Hardware = _computer.Hardware;
         }
         catch (Exception e)
         {
@@ -94,5 +98,10 @@ public partial class HardwareMonitor: IHardwareMonitor
             Global.logger.Error(e, "Failed to write sensors dump");
             return false;
         }
+    }
+
+    public void Dispose()
+    {
+        _computer.Close();
     }
 }
