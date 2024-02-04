@@ -32,7 +32,7 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
                 continue;
 
             var led = device[rgbNetLedId];
-            if (led == null)
+            if (led == null && LedInDeviceGroup(rgbNetLedId, device.DeviceInfo.DeviceType))
             {
                 if (device.Size == Size.Invalid)
                 {
@@ -54,6 +54,18 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
                 UpdateLed(led, color);
             }
         }
+    }
+
+    private static bool LedInDeviceGroup(LedId rgbNetLedId, RGBDeviceType deviceInfoDeviceType)
+    {
+        return deviceInfoDeviceType switch
+        {
+            RGBDeviceType.Keyboard => LedGroups.KeyboardLeds.Contains(rgbNetLedId),
+            RGBDeviceType.Mouse => LedGroups.MouseLeds.Contains(rgbNetLedId),
+            RGBDeviceType.Mousepad => LedGroups.MousepadLeds.Contains(rgbNetLedId),
+            RGBDeviceType.Headset => LedGroups.HeadsetLeds.Contains(rgbNetLedId),
+            _ => true
+        };
     }
 
     private void UpdateStraight(IReadOnlyDictionary<DeviceKeys, SimpleColor> keyColors, IRGBDevice device)
