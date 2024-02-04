@@ -127,7 +127,7 @@ public class VariableRegistryItem : ICloneable
         var defaultType = variableRegistryItem.Default.GetType();
         var typ = (Value ?? Default).GetType();
 
-        if (defaultType != typ && typ == typeof(long) && defaultType.IsEnum)
+        if (defaultType != typ && TypeUtils.IsNumericType(typ) && defaultType.IsEnum)
             Value = Enum.ToObject(defaultType, Value ?? Default);
         else if (defaultType != typ && Value is long && TypeUtils.IsNumericType(defaultType))
             Value = Convert.ChangeType(Value, defaultType);
