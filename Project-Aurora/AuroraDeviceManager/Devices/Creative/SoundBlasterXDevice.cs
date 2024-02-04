@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
+using Common;
 using Common.Devices;
 using SBAuroraReactive;
 
@@ -244,16 +244,16 @@ public class SoundBlasterXDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e,
+    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e,
         bool forced = false)
     {
         uint maxKbLength = 0;
-        Dictionary<Color, List<Keyboard_LEDIndex>> kbIndices = null;
+        Dictionary<SimpleColor, List<Keyboard_LEDIndex>> kbIndices = null;
         if (_sbKeyboard != null)
-            kbIndices = new Dictionary<Color, List<Keyboard_LEDIndex>>();
+            kbIndices = new Dictionary<SimpleColor, List<Keyboard_LEDIndex>>();
 
         LedColour[] mouseColors = null;
-        foreach (KeyValuePair<DeviceKeys, Color> kv in keyColors)
+        foreach (var kv in keyColors)
         {
             if (e.Cancel) return Task.FromResult(false);
 

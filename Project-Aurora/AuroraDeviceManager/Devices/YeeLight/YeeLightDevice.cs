@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.YeeLight;
@@ -82,7 +82,7 @@ public class YeeLightDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected override async Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+    protected override async Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
     {
         try
         {
@@ -95,7 +95,7 @@ public class YeeLightDevice : DefaultDevice
         }
     }
 
-    private bool TryUpdate(IReadOnlyDictionary<DeviceKeys, Color> keyColors)
+    private bool TryUpdate(IReadOnlyDictionary<DeviceKeys, SimpleColor> keyColors)
     {
         var sendDelay = Math.Max(5, Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_send_delay"));
         if (_updateDelayStopWatch.ElapsedMilliseconds <= sendDelay)

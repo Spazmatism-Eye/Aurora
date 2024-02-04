@@ -29,13 +29,18 @@ public partial class Control_VariableRegistryEditor
 
     public VariableRegistry VarRegistrySource
     {
-        get => GetValue(VarRegistrySourceProperty) as VariableRegistry ?? Global.DeviceConfiguration.VarRegistry;
+        get => (VariableRegistry)GetValue(VarRegistrySourceProperty);
         set => SetValue(VarRegistrySourceProperty, value);
+    }
+
+    public Control_VariableRegistryEditor()
+    {
+        InitializeComponent();
     }
 
     private void UpdateControls()
     {
-        stack_Options.Children.Clear();
+        StackOptions.Children.Clear();
         if (RegisteredVariables == null)
             return;
 
@@ -46,8 +51,8 @@ public partial class Control_VariableRegistryEditor
                 VarRegistry = VarRegistrySource,
             };
 
-            stack_Options.Children.Add(varItem);
-            stack_Options.Children.Add(new Separator { Height = 5, Opacity = 0 });
+            StackOptions.Children.Add(varItem);
+            StackOptions.Children.Add(new Separator { Height = 5, Opacity = 0 });
         }
     }
 
@@ -55,19 +60,14 @@ public partial class Control_VariableRegistryEditor
     {
         var self = (Control_VariableRegistryEditor)obj;
 
-        if (e.OldValue == e.NewValue || self.stack_Options.Children.Count == 0)
+        if (e.OldValue == e.NewValue || self.StackOptions.Children.Count == 0)
             return;
 
         var newRegistry = (VariableRegistry)e.NewValue;
-        foreach (UIElement child in self.stack_Options.Children)
+        foreach (UIElement child in self.StackOptions.Children)
         {
             if (child is Control_VariableRegistryItem item)
                 item.VarRegistry = newRegistry;
         }
-    }
-
-    public Control_VariableRegistryEditor()
-    {
-        InitializeComponent();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.LightFX
@@ -11,7 +11,7 @@ namespace AuroraDeviceManager.Devices.LightFX
         private bool peripheral_updated = false;
         uint DevNUM = 0;
 
-        private readonly object action_lock = new object();
+        private readonly object action_lock = new();
 
         public override string DeviceName => "LightFX & Alienware";
 
@@ -19,16 +19,16 @@ namespace AuroraDeviceManager.Devices.LightFX
         {
             if (usingHID) {
 
-                byte[] Buffer = new byte[byteDataLength];
+                var Buffer = new byte[byteDataLength];
 
                 Buffer[0] = 0x02;
                 Buffer[1] = 0x06;
 
 
-                bool write = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
+                var write = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
                 Buffer[0] = 0x01;
-                int status = LightFXSDK.HIDRead(Buffer, Buffer.Length);
-                bool read = LightFXSDK.getReadStatus();
+                var status = LightFXSDK.HIDRead(Buffer, Buffer.Length);
+                var read = LightFXSDK.getReadStatus();
                 if (!read) {
                     Global.Logger.Information("LightFx Error, Code: {Code}", Marshal.GetLastPInvokeError());
                     return -1;
@@ -45,7 +45,7 @@ namespace AuroraDeviceManager.Devices.LightFX
         private void SetColor(byte index, int bitmask, byte r, byte g, byte b)
         {
             if (usingHID) {
-                byte[] Buffer = new byte[byteDataLength];
+                var Buffer = new byte[byteDataLength];
                 Buffer[0] = 0x02;
                 Buffer[1] = 0x03;
                 Buffer[2] = index;
@@ -56,7 +56,7 @@ namespace AuroraDeviceManager.Devices.LightFX
                 Buffer[7] = g;
                 Buffer[8] = b;
                 // bool result = DeviceIoControl(devHandle, 0xb0195, Buffer, (uint)Buffer.Length, IntPtr.Zero, 0, ref writtenByteLength, IntPtr.Zero);
-                bool result = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
+                var result = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
                 Loop();
             }
             //bool result2 = ExecuteColors();
@@ -67,10 +67,10 @@ namespace AuroraDeviceManager.Devices.LightFX
         private void Loop()
         {
             if (usingHID) {
-                byte[] Buffer = new byte[byteDataLength];
+                var Buffer = new byte[byteDataLength];
                 Buffer[0] = 0x02;
                 Buffer[1] = 0x04;
-                bool result = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
+                var result = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
             }
         }
 
@@ -78,11 +78,11 @@ namespace AuroraDeviceManager.Devices.LightFX
         {
             if (usingHID) {
 
-                byte[] Buffer = new byte[byteDataLength];
+                var Buffer = new byte[byteDataLength];
                 Buffer[0] = 0x02;
                 Buffer[1] = 0x05;
 
-                bool result = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
+                var result = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
                 return result;
             }
             return false;
@@ -91,11 +91,11 @@ namespace AuroraDeviceManager.Devices.LightFX
         public void Reset(int status)
         {
             if (usingHID) {
-                byte[] Buffer = new byte[byteDataLength];
+                var Buffer = new byte[byteDataLength];
                 Buffer[0] = 0x02;
                 Buffer[1] = 0x07;
                 Buffer[2] = (byte)status;
-                bool read = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
+                var read = LightFXSDK.HIDWrite(Buffer, Buffer.Length);
             }
         }
 
@@ -109,7 +109,7 @@ namespace AuroraDeviceManager.Devices.LightFX
                 {
                     try
                     {
-                        int result = LightFXSDK.LightFXInitialize(0x187c);
+                        var result = LightFXSDK.LightFXInitialize(0x187c);
                         if (result != -1) {
                             byteDataLength = result;
                             usingHID = true;
@@ -217,8 +217,8 @@ namespace AuroraDeviceManager.Devices.LightFX
         public int AlienfxWaitForBusy()
         {
 
-            int status = DeviceStatus();
-            for (int i = 0; i < 5 && status != ALIENFX_BUSY; i++) {
+            var status = DeviceStatus();
+            for (var i = 0; i < 5 && status != ALIENFX_BUSY; i++) {
                 if (status == ALIENFX_DEVICE_RESET)
                     return status;
                 Thread.Sleep(2);
@@ -231,8 +231,8 @@ namespace AuroraDeviceManager.Devices.LightFX
         public int AlienfxWaitForReady()
         {
 
-            int status = DeviceStatus();
-            for (int i = 0; i < 5 && status != ALIENFX_READY; i++) {
+            var status = DeviceStatus();
+            for (var i = 0; i < 5 && status != ALIENFX_READY; i++) {
                 if (status == ALIENFX_DEVICE_RESET)
                     return status;
                 Thread.Sleep(2);
@@ -242,43 +242,58 @@ namespace AuroraDeviceManager.Devices.LightFX
             return status;
         }
 
-        DeviceKeys[] leftZoneKeys = {DeviceKeys.ESC , DeviceKeys.TAB , DeviceKeys.LEFT_FN, DeviceKeys.CAPS_LOCK, DeviceKeys.LEFT_SHIFT,
+        DeviceKeys[] leftZoneKeys =
+        [
+            DeviceKeys.ESC , DeviceKeys.TAB , DeviceKeys.LEFT_FN, DeviceKeys.CAPS_LOCK, DeviceKeys.LEFT_SHIFT,
                             DeviceKeys.LEFT_CONTROL, DeviceKeys.LEFT_FN , DeviceKeys.F1 , DeviceKeys.ONE , DeviceKeys.TWO  ,DeviceKeys.Q,
                             DeviceKeys.A , DeviceKeys.Z,  DeviceKeys.LEFT_WINDOWS,  DeviceKeys.F2 , DeviceKeys.TILDE,
                             DeviceKeys.W , DeviceKeys.E , DeviceKeys.D  ,DeviceKeys.S , DeviceKeys.X, DeviceKeys.LEFT_ALT,
-                            DeviceKeys.F3 ,DeviceKeys.THREE };
+                            DeviceKeys.F3 ,DeviceKeys.THREE
+        ];
 
-        DeviceKeys[] midLeftZoneKeys = {  DeviceKeys.F4 ,  DeviceKeys.FOUR ,  DeviceKeys.C ,  DeviceKeys.SPACE
+        DeviceKeys[] midLeftZoneKeys =
+        [
+            DeviceKeys.F4 ,  DeviceKeys.FOUR ,  DeviceKeys.C ,  DeviceKeys.SPACE
                             ,  DeviceKeys.F5 ,  DeviceKeys.FIVE ,  DeviceKeys.R ,  DeviceKeys.F ,  DeviceKeys.V
                             ,  DeviceKeys.F6 ,  DeviceKeys.SIX ,  DeviceKeys.T ,  DeviceKeys.G ,  DeviceKeys.B
-                           ,  DeviceKeys.F7 ,  DeviceKeys.SEVEN ,  DeviceKeys.Y, DeviceKeys.H ,  DeviceKeys.N};
+                           ,  DeviceKeys.F7 ,  DeviceKeys.SEVEN ,  DeviceKeys.Y, DeviceKeys.H ,  DeviceKeys.N
+        ];
 
-        DeviceKeys[] midRightZoneKeys = { DeviceKeys.F8 ,  DeviceKeys.F9 ,  DeviceKeys.F10 ,  DeviceKeys.F11 ,  DeviceKeys.F12 ,  DeviceKeys.HOME
+        DeviceKeys[] midRightZoneKeys =
+        [
+            DeviceKeys.F8 ,  DeviceKeys.F9 ,  DeviceKeys.F10 ,  DeviceKeys.F11 ,  DeviceKeys.F12 ,  DeviceKeys.HOME
                          ,  DeviceKeys.EIGHT ,  DeviceKeys.NINE ,  DeviceKeys.ZERO ,  DeviceKeys.MINUS
                              ,  DeviceKeys.U ,  DeviceKeys.I ,  DeviceKeys.O ,  DeviceKeys.P ,  DeviceKeys.OPEN_BRACKET
                            ,  DeviceKeys.J ,  DeviceKeys.K ,  DeviceKeys.L ,  DeviceKeys.SEMICOLON ,  DeviceKeys.APOSTROPHE
                          ,  DeviceKeys.M ,  DeviceKeys.COMMA ,  DeviceKeys.PERIOD ,  DeviceKeys.FORWARD_SLASH
-                             ,  DeviceKeys.RIGHT_CONTROL ,  DeviceKeys.RIGHT_ALT };
+                             ,  DeviceKeys.RIGHT_CONTROL ,  DeviceKeys.RIGHT_ALT
+        ];
 
-        DeviceKeys[] rightZoneKeys = { DeviceKeys.END ,  DeviceKeys.DELETE ,  DeviceKeys.BACKSPACE ,  DeviceKeys.BACKSLASH
+        DeviceKeys[] rightZoneKeys =
+        [
+            DeviceKeys.END ,  DeviceKeys.DELETE ,  DeviceKeys.BACKSPACE ,  DeviceKeys.BACKSLASH
                                       ,  DeviceKeys.RIGHT_SHIFT ,  DeviceKeys.ARROW_UP ,  DeviceKeys.ARROW_DOWN
                                      ,  DeviceKeys.ARROW_RIGHT ,  DeviceKeys.ARROW_LEFT ,  DeviceKeys.ENTER ,  DeviceKeys.PAGE_DOWN
-                                     ,  DeviceKeys.PAGE_UP ,  DeviceKeys.PAGE_DOWN ,  DeviceKeys.CLOSE_BRACKET };
+                                     ,  DeviceKeys.PAGE_UP ,  DeviceKeys.PAGE_DOWN ,  DeviceKeys.CLOSE_BRACKET
+        ];
 
-        DeviceKeys[] numpadZone = { DeviceKeys.NUM_ONE ,  DeviceKeys.NUM_TWO ,  DeviceKeys.NUM_THREE ,  DeviceKeys.NUM_FOUR
+        DeviceKeys[] numpadZone =
+        [
+            DeviceKeys.NUM_ONE ,  DeviceKeys.NUM_TWO ,  DeviceKeys.NUM_THREE ,  DeviceKeys.NUM_FOUR
                                       ,  DeviceKeys.NUM_FIVE ,  DeviceKeys.NUM_SIX ,  DeviceKeys.NUM_SEVEN
                                      ,  DeviceKeys.NUM_EIGHT ,  DeviceKeys.NUM_NINE ,  DeviceKeys.NUM_ZERO ,  DeviceKeys.NUM_PERIOD
-                                     ,  DeviceKeys.NUM_LOCK ,  DeviceKeys.NUM_ENTER ,  DeviceKeys.NUM_ASTERISK, DeviceKeys.NUM_SLASH};
+                                     ,  DeviceKeys.NUM_LOCK ,  DeviceKeys.NUM_ENTER ,  DeviceKeys.NUM_ASTERISK, DeviceKeys.NUM_SLASH
+        ];
 
 
         bool NumLock = (((ushort)LightFXSDK.GetKeyState(0x90)) & 0xffff) != 0;
 
-        private readonly List<Color> leftColor = new List<Color>();
-        private readonly List<Color> midleftColor = new List<Color>();
-        private readonly List<Color> midRightColor = new List<Color>();
-        private readonly List<Color> rightColor = new List<Color>();
-        private readonly List<Color> numpadColor = new List<Color>();
-        protected override async Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        private readonly List<SimpleColor> leftColor = [];
+        private readonly List<SimpleColor> midleftColor = [];
+        private readonly List<SimpleColor> midRightColor = [];
+        private readonly List<SimpleColor> rightColor = [];
+        private readonly List<SimpleColor> numpadColor = [];
+        protected override async Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (e.Cancel) return false;
 
@@ -289,7 +304,7 @@ namespace AuroraDeviceManager.Devices.LightFX
                 LightFXSDK.ResetColors();
 
                 if (usingHID) {
-                    int status = AlienfxWaitForBusy();
+                    var status = AlienfxWaitForBusy();
 
                     if (status == ALIENFX_DEVICE_RESET) {
                         Thread.Sleep(1000);
@@ -336,7 +351,7 @@ namespace AuroraDeviceManager.Devices.LightFX
                     LightFXSDK.LFX_Reset();
                 }
 
-                foreach (KeyValuePair<DeviceKeys, Color> key in keyColors) {
+                foreach (var key in keyColors) {
                     if (e.Cancel) return false;
                     if (IsInitialized) {
                         //left

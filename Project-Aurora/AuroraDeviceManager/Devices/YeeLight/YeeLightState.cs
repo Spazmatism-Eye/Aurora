@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using YeeLightAPI.YeeLightConstants;
+﻿using Common;
+using Constants = YeeLightAPI.YeeLightConstants.Constants;
 
 namespace AuroraDeviceManager.Devices.YeeLight;
 
@@ -7,7 +7,7 @@ public interface IYeeLightState
 {
     void InitState();
         
-    IYeeLightState Update(Color color);
+    IYeeLightState Update(SimpleColor color);
 }
 
 static class YeeLightStateBuilder
@@ -28,23 +28,16 @@ static class YeeLightStateBuilder
     }
 }
 
-internal class YeeLightStateOff : IYeeLightState
+internal class YeeLightStateOff(List<YeeLightAPI.YeeLightDevice> lights) : IYeeLightState
 {
     public IYeeLightState ColorState;
-
-    private readonly List<YeeLightAPI.YeeLightDevice> _lights;
-
-    public YeeLightStateOff(List<YeeLightAPI.YeeLightDevice> lights)
-    {
-        _lights = lights;
-    }
 
     public void InitState()
     {
         TurnOff();
     }
 
-    public IYeeLightState Update(Color color)
+    public IYeeLightState Update(SimpleColor color)
     {
         if (Utils.IsBlack(color))
         {
@@ -59,39 +52,30 @@ internal class YeeLightStateOff : IYeeLightState
         
     private void TurnOff()
     {
-        _lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.OFF));
+        lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.OFF));
     }
         
     private void TurnOn()
     {
-        _lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.ON));
+        lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.ON));
     }
 }
     
-internal class YeeLightStateColor : IYeeLightState
+internal class YeeLightStateColor(List<YeeLightAPI.YeeLightDevice> lights, int whiteCounterStart) : IYeeLightState
 {
     public IYeeLightState WhiteState;
     public IYeeLightState OffState;
 
-    private readonly List<YeeLightAPI.YeeLightDevice> _lights;
-    private readonly int _whiteCounterStart;
-
     private int _previousBrightness;
-    private Color _previousColor;
+    private SimpleColor _previousColor;
     private int _whiteCounter;
-
-    public YeeLightStateColor(List<YeeLightAPI.YeeLightDevice> lights, int whiteCounterStart)
-    {
-        _lights = lights;
-        _whiteCounterStart = whiteCounterStart;
-    }
 
     public void InitState()
     {
         //noop
     }
 
-    public IYeeLightState Update(Color color)
+    public IYeeLightState Update(SimpleColor color)
     {
         if (Utils.IsWhiteTone(color)) // && Global.LightingStateManager.GetCurrentProfile() == Global.LightingStateManager.DesktopProfile
         {
@@ -108,12 +92,12 @@ internal class YeeLightStateColor : IYeeLightState
         }
         else
         {
-            _whiteCounter = _whiteCounterStart;
+            _whiteCounter = whiteCounterStart;
         }
 
         if (Utils.ShouldSendKeepAlive())
         {
-            _lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.ON));
+            lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.ON));
         }
             
         if (_previousColor == color)
@@ -125,18 +109,18 @@ internal class YeeLightStateColor : IYeeLightState
         return this;
     }
 
-    private IYeeLightState ProceedSameColor(Color targetColor)
+    private IYeeLightState ProceedSameColor(SimpleColor targetColor)
     {
         if (!Utils.ShouldSendKeepAlive()) return this;
-        _lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.ON));
+        lights.ForEach(device => device.SetPower(Constants.PowerStateParamValues.ON));
         UpdateLights(targetColor);
         return this;
     }
 
-    private List<Task> _tasks = new();
-    private void UpdateLights(Color color)
+    private readonly List<Task> _tasks = [];
+    private void UpdateLights(SimpleColor color)
     {
-        _lights.ForEach(x =>
+        lights.ForEach(x =>
         {
             var colorAsync = x.SetColorAsync(color.R, color.G, color.B);
             _tasks.Add(colorAsync);
@@ -151,14 +135,14 @@ internal class YeeLightStateColor : IYeeLightState
     }
 }
     
-internal partial class YeeLightStateWhite : IYeeLightState
+internal class YeeLightStateWhite : IYeeLightState
 {
     public IYeeLightState ColorState;
     public IYeeLightState OffState;
 
     private readonly List<YeeLightAPI.YeeLightDevice> _lights;
 
-    private Color _previousColor;
+    private SimpleColor _previousColor;
 
     public YeeLightStateWhite(List<YeeLightAPI.YeeLightDevice> lights)
     {
@@ -171,7 +155,7 @@ internal partial class YeeLightStateWhite : IYeeLightState
         Task.WhenAll(tasks).Wait();
     }
 
-    public IYeeLightState Update(Color color)
+    public IYeeLightState Update(SimpleColor color)
     {
         if (!Utils.IsWhiteTone(color))
         {
@@ -202,20 +186,20 @@ internal partial class YeeLightStateWhite : IYeeLightState
         return this;
     }
 
-    private void UpdateLights(Color color)
+    private void UpdateLights(SimpleColor color)
     {
         var tasks = _lights.ConvertAll(x => x.SetBrightnessAsync(color.R * 100 / 255));
         Task.WhenAll(tasks).Wait();
     }
 }
 
-static class Utils
+internal static class Utils
 {
-    internal static bool IsWhiteTone(Color color)
+    internal static bool IsWhiteTone(SimpleColor color)
     {
         return color.R == color.G && color.G == color.B;
     }
-    internal static bool IsBlack(Color color)
+    internal static bool IsBlack(SimpleColor color)
     {
         return color is { R: 0, G: 0, B: 0 };
     }

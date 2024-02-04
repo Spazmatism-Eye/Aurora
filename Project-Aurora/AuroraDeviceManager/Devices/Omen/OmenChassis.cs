@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.Omen
@@ -39,7 +39,7 @@ namespace AuroraDeviceManager.Devices.Omen
             }
         }
 
-        private void SetLight(DeviceKeys key, Color color)
+        private void SetLight(DeviceKeys key, SimpleColor color)
         {
             if (hChassis != IntPtr.Zero)
             {
@@ -68,7 +68,7 @@ namespace AuroraDeviceManager.Devices.Omen
             return (hChassis != IntPtr.Zero ? "Chassis Connected" : string.Empty);
         }
 
-        public void SetLights(Dictionary<DeviceKeys, Color> keyColors)
+        public void SetLights(Dictionary<DeviceKeys, SimpleColor> keyColors)
         {
             if (hChassis != IntPtr.Zero)
             {

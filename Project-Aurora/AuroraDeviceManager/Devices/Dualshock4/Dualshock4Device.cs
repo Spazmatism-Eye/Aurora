@@ -1,6 +1,7 @@
 ﻿using DS4Windows;
 using System.ComponentModel;
 using System.Drawing;
+using Common;
 using Common.Devices;
 using Common.Utils;
 
@@ -10,16 +11,16 @@ internal class DS4Container
 {
     public readonly DS4Device Device;
     private readonly ConnectionType _connectionType;
-    private readonly Color _restoreColor;
+    private readonly SimpleColor _restoreColor;
 
     public int Battery { get; private set; }
     public double Latency { get; private set; }
     public bool Charging { get; private set; }
 
-    public Color SendColor;
+    public SimpleColor SendColor;
     public DS4HapticState State;
 
-    public DS4Container(DS4Device device, Color restoreColor)
+    public DS4Container(DS4Device device, SimpleColor restoreColor)
     {
         Device = device;
         _connectionType = Device.getConnectionType();
@@ -37,8 +38,8 @@ internal class DS4Container
         if (ColorsEqual(SendColor, State.LightBarColor))
             return;
 
-        State.LightBarExplicitlyOff = SendColor.R == 0 && SendColor.G == 0 && SendColor.B == 0;
-        State.LightBarColor = new DS4Color(SendColor);
+        State.LightBarExplicitlyOff = SendColor is { R: 0, G: 0, B: 0 };
+        State.LightBarColor = new DS4Color((Color)SendColor);
         Device.pushHapticState(State);
     }
 
@@ -69,7 +70,7 @@ internal class DS4Container
         return $"over {connectionString} {(Charging ? "⚡" : "")}🔋{Battery}% Latency: {Latency:0.00}ms";
     }
 
-    private bool ColorsEqual(Color clr, DS4Color ds4Clr)
+    private bool ColorsEqual(SimpleColor clr, DS4Color ds4Clr)
     {
         return clr.R == ds4Clr.red &&
                clr.G == ds4Clr.green &&
@@ -106,7 +107,7 @@ public class DualshockDevice : DefaultDevice
         _key = Global.DeviceConfig.VarRegistry.GetVariable<DeviceKeys>($"{DeviceName}_devicekey");
         DS4Devices.findControllers();
 
-        var restore = Global.DeviceConfig.VarRegistry.GetVariable<Color>($"{DeviceName}_restore_dualshock");
+        var restore = Global.DeviceConfig.VarRegistry.GetVariable<SimpleColor>($"{DeviceName}_restore_dualshock");
 
         foreach (var controller in DS4Devices.getDS4Controllers())
             devices.Add(new DS4Container(controller, restore));
@@ -130,7 +131,7 @@ public class DualshockDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected override async Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+    protected override async Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
     {
         if (!keyColors.TryGetValue(_key, out var clr)) return false;
         foreach (var dev in devices)
@@ -147,7 +148,7 @@ public class DualshockDevice : DefaultDevice
 
     protected override void RegisterVariables(VariableRegistry variableRegistry)
     {
-        variableRegistry.Register($"{DeviceName}_restore_dualshock", Color.FromArgb(0, 0, 255), "Restore Color");
+        variableRegistry.Register($"{DeviceName}_restore_dualshock", SimpleColor.FromArgb(0, 0, 255), "Restore Color");
         variableRegistry.Register($"{DeviceName}_devicekey", DeviceKeys.Peripheral, "Key to Use", DeviceKeys.MOUSEPADLIGHT15, DeviceKeys.Peripheral_Logo);
         variableRegistry.Register($"{DeviceName}_disconnect_when_stop", false, "Disconnect when Stopping");
         variableRegistry.Register($"{DeviceName}_auto_init", false, "Initialize automatically when plugged in");

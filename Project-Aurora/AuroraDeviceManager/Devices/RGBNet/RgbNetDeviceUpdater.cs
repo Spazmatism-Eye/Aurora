@@ -3,13 +3,12 @@ using Common;
 using Common.Devices;
 using Common.Devices.RGBNet;
 using RGB.NET.Core;
-using Color = System.Drawing.Color;
 
 namespace AuroraDeviceManager.Devices.RGBNet;
 
 public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<LedId, DeviceKeys>> deviceKeyRemap, bool needsLayout)
 {
-    internal void UpdateDevice(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
+    internal void UpdateDevice(IReadOnlyDictionary<DeviceKeys, SimpleColor> keyColors, IRGBDevice device)
     {
         if (needsLayout)
         {
@@ -23,7 +22,7 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
         device.Update();
     }
 
-    private static void UpdateReverse(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
+    private static void UpdateReverse(IReadOnlyDictionary<DeviceKeys, SimpleColor> keyColors, IRGBDevice device)
     {
         var calibrationName = CalibrationName(device);
         var calibrated = Global.DeviceConfig.DeviceCalibrations.TryGetValue(calibrationName, out var calibration);
@@ -57,7 +56,7 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
         }
     }
 
-    private void UpdateStraight(IReadOnlyDictionary<DeviceKeys, Color> keyColors, IRGBDevice device)
+    private void UpdateStraight(IReadOnlyDictionary<DeviceKeys, SimpleColor> keyColors, IRGBDevice device)
     {
         var calibrationName = CalibrationName(device);
         var calibrated = Global.DeviceConfig.DeviceCalibrations.TryGetValue(calibrationName, out var calibration);
@@ -80,7 +79,7 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
         }
     }
 
-    private static void UpdateLed(Led led, Color color)
+    private static void UpdateLed(Led led, SimpleColor color)
     {
         led.Color = new RGB.NET.Core.Color(
             color.A,
@@ -90,7 +89,7 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
         );
     }
 
-    private static void UpdateLedCalibrated(Led led, Color color, SimpleColor calibration)
+    private static void UpdateLedCalibrated(Led led, SimpleColor color, SimpleColor calibration)
     {
         led.Color = new RGB.NET.Core.Color(
             (byte)(color.A * calibration.A / 255),

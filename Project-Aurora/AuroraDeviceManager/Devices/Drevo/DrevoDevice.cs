@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.Drevo
@@ -52,7 +52,7 @@ namespace AuroraDeviceManager.Devices.Drevo
             return Task.CompletedTask;
         }
 
-        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (!IsInitialized)
                 return Task.FromResult(false);

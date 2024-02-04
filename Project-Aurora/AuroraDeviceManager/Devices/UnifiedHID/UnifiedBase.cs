@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Common;
 using Common.Devices;
 using HidLibrary;
 
@@ -9,7 +9,7 @@ namespace AuroraDeviceManager.Devices.UnifiedHID
         protected HidDevice device = null;
 
         public Dictionary<DeviceKeys, Func<byte, byte, byte, bool>> DeviceFuncMap { get; protected set; } = new Dictionary<DeviceKeys, Func<byte, byte, byte, bool>>();
-        public Dictionary<DeviceKeys, Color> DeviceColorMap { get; protected set; } = new Dictionary<DeviceKeys, Color>();
+        public Dictionary<DeviceKeys, SimpleColor> DeviceColorMap { get; protected set; } = new();
 
         public virtual bool IsConnected => device?.IsOpen ?? false;
         public virtual string PrettyName => "DeviceBase";
@@ -37,7 +37,7 @@ namespace AuroraDeviceManager.Devices.UnifiedHID
                         foreach (var key in DeviceFuncMap)
                         {
                             // Set black as default color
-                            DeviceColorMap.Add(key.Key, Color.Black);
+                            DeviceColorMap.Add(key.Key, SimpleColor.Black);
                         }
                     }
                     else

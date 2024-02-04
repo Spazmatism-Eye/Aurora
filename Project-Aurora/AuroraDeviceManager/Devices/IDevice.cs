@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
+using Common;
 using Common.Devices;
 using JetBrains.Annotations;
 
@@ -8,9 +8,9 @@ namespace AuroraDeviceManager.Devices;
 /// <summary>
 /// Struct representing color settings being sent to devices
 /// </summary>
-public struct DeviceColorComposition(Dictionary<DeviceKeys, Color> keyColors)
+public struct DeviceColorComposition(Dictionary<DeviceKeys, SimpleColor> keyColors)
 {
-    public Dictionary<DeviceKeys, Color> KeyColors = keyColors;
+    public Dictionary<DeviceKeys, SimpleColor> KeyColors { get; set; } = keyColors;
 }
 
 /// <summary>

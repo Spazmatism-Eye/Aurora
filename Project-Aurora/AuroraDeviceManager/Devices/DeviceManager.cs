@@ -10,7 +10,6 @@ using Common.Data;
 using Common.Devices.RGBNet;
 using Microsoft.Win32;
 using RGB.NET.Core;
-using Color = System.Drawing.Color;
 using RgbNetColor = RGB.NET.Core.Color;
 
 namespace AuroraDeviceManager.Devices;
@@ -109,7 +108,7 @@ public sealed class DeviceManager : IDisposable
         return Task.WhenAll(shutdownTasks);
     }
 
-    public void UpdateDevices(Dictionary<DeviceKeys, Color> composition)
+    public void UpdateDevices(Dictionary<DeviceKeys, SimpleColor> composition)
     {
         if (_disposed)
             return;

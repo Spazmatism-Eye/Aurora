@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using Bloody.NET;
+using Common;
 using Common.Devices;
 using Common.Utils;
 
@@ -15,7 +16,7 @@ public class BloodyDevice : DefaultDevice
 
     private BloodyKeyboard? _keyboard;
 
-    private event EventHandler<Dictionary<DeviceKeys, Color>> DeviceUpdated;
+    private event EventHandler<Dictionary<DeviceKeys, SimpleColor>> DeviceUpdated;
 
     protected override Task<bool> DoInitialize()
     {
@@ -42,7 +43,7 @@ public class BloodyDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
     {
         var sendDelay = Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_send_delay");
         if (_updateDelayStopWatch.ElapsedMilliseconds <= sendDelay)
@@ -57,12 +58,12 @@ public class BloodyDevice : DefaultDevice
         variableRegistry.Register($"{DeviceName}_send_delay", 32, "Send delay (ms)");
     }
 
-    private void UpdateKeyboard(object? sender, Dictionary<DeviceKeys, Color> keyColors)
+    private void UpdateKeyboard(object? sender, Dictionary<DeviceKeys, SimpleColor> keyColors)
     {
         foreach (var key in keyColors)
         {
             if (BloodyKeyMap.KeyMap.TryGetValue(key.Key, out var bloodyKey))
-                _keyboard.SetKeyColor(bloodyKey, CommonColorUtils.CorrectWithAlpha(key.Value));
+                _keyboard.SetKeyColor(bloodyKey, (Color)CommonColorUtils.CorrectWithAlpha(key.Value));
         }
 
         _keyboard.Update();

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.Omen
@@ -10,7 +10,7 @@ namespace AuroraDeviceManager.Devices.Omen
         private const string OmenLightingSdkDll = "x64\\OmenLightingSDK.dll";
         private IntPtr hMousePad = IntPtr.Zero;
 
-        ConcurrentDictionary<int, Color> cachedColors = new ConcurrentDictionary<int, Color>();
+        ConcurrentDictionary<int, SimpleColor> cachedColors = new();
 
         private OmenMousePad(IntPtr hMousePad)
         {
@@ -47,11 +47,11 @@ namespace AuroraDeviceManager.Devices.Omen
             return (key == DeviceKeys.MOUSEPADLIGHT15 ? (int)MousePadZone.MOUSE_PAD_ZONE_LOGO : (int)MousePadZone.MOUSE_PAD_ZONE_0 + ((int)key - (int)DeviceKeys.MOUSEPADLIGHT1));
         }
 
-        public void SetLights(Dictionary<DeviceKeys, Color> keyColors)
+        public void SetLights(Dictionary<DeviceKeys, SimpleColor> keyColors)
         {
             if (hMousePad != IntPtr.Zero)
             {
-                foreach (KeyValuePair<DeviceKeys, Color> keyColor in keyColors)
+                foreach (var keyColor in keyColors)
                 {
                     if (keyColor.Key >= DeviceKeys.MOUSEPADLIGHT1 && keyColor.Key <= DeviceKeys.MOUSEPADLIGHT15)
                     {
@@ -61,11 +61,11 @@ namespace AuroraDeviceManager.Devices.Omen
             }
         }
 
-        private void SetLight(DeviceKeys key, Color color)
+        private void SetLight(DeviceKeys key, SimpleColor color)
         {
             if (hMousePad != IntPtr.Zero)
             {
-                int zone = GetZone(key);
+                var zone = GetZone(key);
                 cachedColors.AddOrUpdate(zone, color, (_, oldValue) => color);
 
                 Task.Run(() =>
@@ -76,15 +76,14 @@ namespace AuroraDeviceManager.Devices.Omen
                         {
                             foreach (var item in cachedColors)
                             {
-                                LightingColor c = LightingColor.FromColor(item.Value);
-                                int res = OmenLighting_MousePad_SetStatic(hMousePad, item.Key, c, IntPtr.Zero);
+                                var c = LightingColor.FromColor(item.Value);
+                                var res = OmenLighting_MousePad_SetStatic(hMousePad, item.Key, c, IntPtr.Zero);
                                 if (res != 0)
                                 {
                                     Global.Logger.Error("OMEN MousePad, Set static effect fail: " + res);
                                 }
 
-                                Color outColor;
-                                cachedColors.TryRemove(item.Key, out outColor);
+                                cachedColors.TryRemove(item.Key, out _);
                             }
                         }
                         finally

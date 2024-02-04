@@ -3,26 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Aurora.Controls"
-        xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
         xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         AcrylicWindowStyle="NoIcon"
         FallbackColor="#09000000"
         mc:Ignorable="d"
         Loaded="Control_DeviceCalibration_OnLoaded"
-        Unloaded="Control_DeviceCalibration_OnUnloaded"
         Title="Device Calibrations" Height="800" Width="800">
 
     <ScrollViewer>
-        <ListView
-            Name="DeviceList"
-            ItemsSource="{Binding DeviceCalibrations, Mode=OneWay}">
-            <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type generic:KeyValuePair}">
-                    <local:Control_DeviceCalibrationItem
-                        DeviceManager="{Binding DeviceManager, RelativeSource={RelativeSource AncestorType=local:Control_DeviceCalibration}}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <StackPanel Orientation="Vertical" Name="DeviceList" />
     </ScrollViewer>
 </fluentWpf:AcrylicWindow>

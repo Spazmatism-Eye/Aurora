@@ -15,14 +15,14 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
-            <TextBlock Text="{Binding Key.DeviceSummary}" />
+            <TextBlock Name="DeviceText" />
         </DockPanel>
         <StackPanel Orientation="Horizontal" Grid.Column="1">
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
         </StackPanel>
         <DockPanel Grid.Column="2">
             <xctk:ColorPicker Name="ColorPicker"
-                SelectedColor="{Binding Path=Value, Mode=OneTime, Converter={StaticResource DrawingToMediaColorConv}}"
+                SelectedColor="{Binding Path=Color, Mode=OneTime, Converter={StaticResource DrawingToMediaColorConv}}"
                 Width="123" Height="24"
                 ColorMode="ColorCanvas"
                 UsingAlphaChannel="False" 

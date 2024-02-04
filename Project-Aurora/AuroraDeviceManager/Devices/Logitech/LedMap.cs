@@ -135,19 +135,19 @@ namespace AuroraDeviceManager.Devices.Logitech
             //500
         };
 
-        public static readonly Dictionary<DeviceKeys, keyboardNames> KeyMap = new Dictionary<DeviceKeys, keyboardNames>()
+        public static readonly Dictionary<DeviceKeys, KeyboardNames> KeyMap = new Dictionary<DeviceKeys, KeyboardNames>()
         {
-            [DeviceKeys.G1] = keyboardNames.G_1,
-            [DeviceKeys.G2] = keyboardNames.G_2,
-            [DeviceKeys.G3] = keyboardNames.G_3,
-            [DeviceKeys.G4] = keyboardNames.G_4,
-            [DeviceKeys.G5] = keyboardNames.G_5,
-            [DeviceKeys.G6] = keyboardNames.G_6,
-            [DeviceKeys.G7] = keyboardNames.G_7,
-            [DeviceKeys.G8] = keyboardNames.G_8,
-            [DeviceKeys.G9] = keyboardNames.G_9,
-            [DeviceKeys.LOGO] = keyboardNames.G_LOGO,
-            [DeviceKeys.LOGO2] = keyboardNames.G_BADGE,
+            [DeviceKeys.G1] = KeyboardNames.G_1,
+            [DeviceKeys.G2] = KeyboardNames.G_2,
+            [DeviceKeys.G3] = KeyboardNames.G_3,
+            [DeviceKeys.G4] = KeyboardNames.G_4,
+            [DeviceKeys.G5] = KeyboardNames.G_5,
+            [DeviceKeys.G6] = KeyboardNames.G_6,
+            [DeviceKeys.G7] = KeyboardNames.G_7,
+            [DeviceKeys.G8] = KeyboardNames.G_8,
+            [DeviceKeys.G9] = KeyboardNames.G_9,
+            [DeviceKeys.LOGO] = KeyboardNames.G_LOGO,
+            [DeviceKeys.LOGO2] = KeyboardNames.G_BADGE,
         };
 
         public static readonly Dictionary<DeviceKeys, (DeviceType type, int zone)> PeripheralMap = new Dictionary<DeviceKeys, (DeviceType, int)>()

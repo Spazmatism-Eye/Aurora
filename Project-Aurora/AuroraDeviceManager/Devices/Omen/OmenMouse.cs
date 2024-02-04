@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.Omen
@@ -10,7 +10,7 @@ namespace AuroraDeviceManager.Devices.Omen
         private const string OmenLightingSdkDll = "OmenLightingSDK.dll";
         private IntPtr hMouse = IntPtr.Zero;
 
-        ConcurrentDictionary<int, Color> cachedColors = new ConcurrentDictionary<int, Color>();
+        ConcurrentDictionary<int, SimpleColor> cachedColors = new();
 
         private OmenMouse(IntPtr hMouse)
         {
@@ -55,11 +55,11 @@ namespace AuroraDeviceManager.Devices.Omen
             MOUSE_LIGHTING_ZONE_WHEEL = 2,                          /* Wheel zone */
         }
 
-        public void SetLights(Dictionary<DeviceKeys, Color> keyColors)
+        public void SetLights(Dictionary<DeviceKeys, SimpleColor> keyColors)
         {
             if (hMouse != IntPtr.Zero)
             {
-                foreach (KeyValuePair<DeviceKeys, Color> keyColor in keyColors)
+                foreach (var keyColor in keyColors)
                 {
                     switch (keyColor.Key)
                     {
@@ -73,7 +73,7 @@ namespace AuroraDeviceManager.Devices.Omen
             }
         }
 
-        public void SetLight(DeviceKeys key, Color color)
+        public void SetLight(DeviceKeys key, SimpleColor color)
         {
             if (hMouse != IntPtr.Zero)
             {
@@ -94,8 +94,7 @@ namespace AuroraDeviceManager.Devices.Omen
                                     Global.Logger.Error("OMEN Mouse, Set static effect fail: " + res);
                                 }
 
-                                Color outColor;
-                                cachedColors.TryRemove(item.Key, out outColor);
+                                cachedColors.TryRemove(item.Key, out _);
                             }
                         }
                         catch (Exception exc)

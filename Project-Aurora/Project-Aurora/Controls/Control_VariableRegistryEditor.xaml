@@ -7,7 +7,7 @@
              d:DesignHeight="203.81" d:DesignWidth="200"  Background="Transparent">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" >
-            <StackPanel x:Name="stack_Options" />
+            <StackPanel x:Name="StackOptions" />
         </ScrollViewer>
     </Grid>
 </UserControl>

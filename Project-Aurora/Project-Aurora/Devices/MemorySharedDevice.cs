@@ -25,7 +25,7 @@ public class MemorySharedDevice : IDevice
     private readonly MemorySharedStruct<DeviceInformation> _sharedDeviceInfo;
     private readonly MemorySharedArray<DeviceVariable> _deviceVariables;
 
-    public MemorySharedDevice(string memoryName, VariableRegistry variableRegistry)
+    public MemorySharedDevice(string memoryName)
     {
         _sharedDeviceInfo = new MemorySharedStruct<DeviceInformation>(memoryName);
         _sharedDeviceInfo.Updated += OnSharedDeviceInfoOnUpdated;
@@ -65,20 +65,35 @@ public class MemorySharedDevice : IDevice
                 VariableType.Long => data => BitConverter.ToInt64(data),
                 VariableType.Float => data => BitConverter.ToSingle(data),
                 VariableType.Double => data => BitConverter.ToDouble(data),
-                VariableType.String => _ => deviceVariable.StringValue,
                 VariableType.Color => data => Color.FromArgb(BitConverter.ToInt32(data)),
                 VariableType.DeviceKeys => data => (DeviceKeys)BitConverter.ToInt32(data),
+                VariableType.String => _ => string.Empty,
             };
 
-            RegisteredVariables.Register(deviceVariable.Name, new VariableRegistryItem(
-                deviceVariable.ValueType == VariableType.String ? deviceVariable.StringValue : convert(deviceVariable.Value),
-                convert(deviceVariable.Default),
-                convert(deviceVariable.Max),
-                convert(deviceVariable.Min),
-                deviceVariable.Title,
-                deviceVariable.Remark,
-                (IntVariableDisplay)deviceVariable.Flags
-            ));
+            if (deviceVariable.ValueType == VariableType.String)
+            {
+                RegisteredVariables.Register(deviceVariable.Name, new VariableRegistryItem(
+                    deviceVariable.StringValue,
+                    deviceVariable.DefaultStringValue,
+                    null,
+                    null,
+                    deviceVariable.Title,
+                    deviceVariable.Remark,
+                    (IntVariableDisplay)deviceVariable.Flags
+                ));
+            }
+            else
+            {
+                RegisteredVariables.Register(deviceVariable.Name, new VariableRegistryItem(
+                    convert(deviceVariable.Value),
+                    convert(deviceVariable.Default),
+                    convert(deviceVariable.Max),
+                    convert(deviceVariable.Min),
+                    deviceVariable.Title,
+                    deviceVariable.Remark,
+                    (IntVariableDisplay)deviceVariable.Flags
+                ));
+            }
         }
     }
 

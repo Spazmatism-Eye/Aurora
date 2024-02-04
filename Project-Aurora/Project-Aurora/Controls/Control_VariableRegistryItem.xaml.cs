@@ -7,8 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Common;
 using Common.Devices;
 using Xceed.Wpf.Toolkit;
+using MediaColor = System.Windows.Media.Color;
 
 namespace Aurora.Controls;
 
@@ -107,9 +109,9 @@ public partial class Control_VariableRegistryItem
         {
             control = CreateKeySequenceControl(varTitle);
         }
-        else if (varType == typeof(Utils.RealColor))
+        else if (varType == typeof(SimpleColor))
         {
-            control = CreateRealColorControl();
+            control = CreateColorControl();
         }
         else if (varType == typeof(DeviceKeys))
         {
@@ -121,7 +123,7 @@ public partial class Control_VariableRegistryItem
         }
         else
         {
-            return;
+            control = new TextBox{ Text = "Unsupported type", IsEnabled = false};
         }
 
         grd_control.Children.Add(control);
@@ -217,14 +219,15 @@ public partial class Control_VariableRegistryItem
         return ctrl;
     }
 
-    private ColorPicker CreateRealColorControl()
+    private ColorPicker CreateColorControl()
     {
-        var clr = VarRegistry.GetVariable<Utils.RealColor>(VariableName);
-            
+        var clr = VarRegistry.GetVariable<SimpleColor>(VariableName);
+        var mediaColor = MediaColor.FromArgb(clr.A, clr.R, clr.G, clr.B);
+
         var ctrl = new ColorPicker
         {
             ColorMode = ColorMode.ColorCanvas,
-            SelectedColor = clr.GetMediaColor()
+            SelectedColor = mediaColor
         };
         ctrl.SelectedColorChanged += ColorPickerControlValueChanged;
         return ctrl;
@@ -265,9 +268,8 @@ public partial class Control_VariableRegistryItem
         {
             return;
         }
-        var clr = VarRegistry.GetVariable<Utils.RealColor>(VariableName);
-        clr.SetMediaColor(ctrlClr.Value);
-        VarRegistry.SetVariable(VariableName, clr);
+        var clr = ctrlClr.Value;
+        VarRegistry.SetVariable(VariableName, new SimpleColor(clr.A, clr.R, clr.G, clr.B));
     }
 
     private void VariableChanged<T>(object? sender, RoutedPropertyChangedEventArgs<T> e) where T : notnull

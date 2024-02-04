@@ -4,13 +4,8 @@ using AuroraDeviceManager.Devices;
 using AuroraDeviceManager.Utils;
 using Common;
 using Common.Data;
-using Color = System.Drawing.Color;
 
-{
-    const uint shutdownNotorietry = 0x00000001;
-    //with this, DeviceManager shutdown will be called after Aurora, default priority is 280
-    Kernel32.SetProcessShutdownParameters(0x210, shutdownNotorietry);
-}
+SetShutdownPriority();
 
 Global.Initialize();
 
@@ -36,9 +31,7 @@ var pipe = new AuroraPipe(deviceManager);
 pipe.Shutdown += (_, _) => endTaskSource.TrySetResult();
 
 var colors = new MemorySharedArray<SimpleColor>(Constants.DeviceLedMap);
-
-var deviceKeys = new Dictionary<DeviceKeys, Color>();
-
+var deviceKeys = new Dictionary<DeviceKeys, SimpleColor>();
 colors.Updated += OnColorsOnUpdated;
 
 await deviceManager.InitializeDevices();
@@ -54,7 +47,7 @@ void OnColorsOnUpdated(object? o, EventArgs eventArgs)
     for (var i = 0; i < colors.Count; i++)
     {
         var color = colors.ReadElement(i);
-        deviceKeys[(DeviceKeys)i] = (Color)color;
+        deviceKeys[(DeviceKeys)i] = color;
     }
 
     deviceManager.UpdateDevices(deviceKeys);
@@ -68,4 +61,11 @@ void Stop()
     deviceManager.Dispose();
 
     endTaskSource.TrySetResult();
+}
+
+void SetShutdownPriority()
+{
+    const uint shutdownNotoriety = 0x00000001;
+    //with this, DeviceManager shutdown will be called after Aurora, default priority is 280
+    Kernel32.SetProcessShutdownParameters(0x210, shutdownNotoriety);
 }

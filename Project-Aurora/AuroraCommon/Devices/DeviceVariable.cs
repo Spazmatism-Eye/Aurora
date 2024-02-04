@@ -16,7 +16,7 @@ public enum VariableType
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public readonly record struct DeviceVariable(string StringValue)
+public readonly record struct DeviceVariable(string StringValue, string DefaultStringValue)
 {
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
     public readonly string DeviceName;
@@ -48,11 +48,14 @@ public readonly record struct DeviceVariable(string StringValue)
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
     public readonly string StringValue = StringValue;
 
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+    public readonly string DefaultStringValue = DefaultStringValue;
+
     public DeviceVariable(
         string deviceName, string name,
         byte[]? value, byte[]? dDefault, byte[]? max, byte[]? min, 
         string title, string remark, int flags,
-        VariableType valueType, string stringValue = "") : this(stringValue)
+        VariableType valueType, string stringValue = "", string defaultStringValue = "") : this(stringValue, defaultStringValue)
     {
         DeviceName = deviceName;
         Name = name;

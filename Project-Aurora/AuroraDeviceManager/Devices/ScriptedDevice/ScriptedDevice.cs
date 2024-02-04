@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.ScriptedDevice;
@@ -99,7 +99,7 @@ public class ScriptedDevice : DefaultDevice
         }
     }
 
-    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
     {
         if (!_isInitialized) return Task.FromResult(false);
         try

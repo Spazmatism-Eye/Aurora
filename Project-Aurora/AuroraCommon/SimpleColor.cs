@@ -36,4 +36,9 @@ public readonly record struct SimpleColor(byte R, byte G, byte B, byte A = 255)
 
         return new SimpleColor(r, g, b, a);
     }
+
+    public static SimpleColor FromArgb(byte red, byte green, byte blue, byte alpha = 255)
+    {
+        return new SimpleColor(red, green, blue, alpha);
+    }
 }

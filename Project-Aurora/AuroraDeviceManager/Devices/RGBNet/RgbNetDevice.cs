@@ -6,7 +6,6 @@ using Common.Devices;
 using Common;
 using Common.Devices.RGBNet;
 using RGB.NET.Core;
-using Color = System.Drawing.Color;
 
 namespace AuroraDeviceManager.Devices.RGBNet;
 
@@ -216,7 +215,7 @@ public abstract class RgbNetDevice : DefaultDevice
         return true;
     }
 
-    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e,
+    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e,
         bool forced = false)
     {
         if (Disabled) return Task.FromResult(false);
@@ -235,7 +234,7 @@ public abstract class RgbNetDevice : DefaultDevice
     {
         base.RegisterVariables(variableRegistry);
 
-        variableRegistry.Register($"{DeviceName}_connect_sleep_time", 60, "Connection timeout seconds");
+        variableRegistry.Register($"{DeviceName}_connect_sleep_time", 120, "Connection timeout seconds");
     }
 
     protected override void Dispose(bool disposing)

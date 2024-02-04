@@ -75,12 +75,11 @@ public sealed class DeviceManager : IDisposable
         DeviceContainers.Clear();
         DeviceContainers.AddRange(deviceNames.Select(deviceName =>
         {
-            var device = new MemorySharedDevice(deviceName, Global.DeviceConfiguration.VarRegistry);
+            var device = new MemorySharedDevice(deviceName);
             if (OnlineSettings.DeviceTooltips.TryGetValue(deviceName, out var tooltips))
             {
                 device.Tooltips = tooltips;
             }
-            Global.DeviceConfiguration.VarRegistry.Combine(device.RegisteredVariables);
             return new DeviceContainer(device, this);
         }));
 
@@ -136,6 +135,7 @@ public sealed class DeviceManager : IDisposable
                 process.Kill();
             }
             await process.WaitForExitAsync();
+            DevicesUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 

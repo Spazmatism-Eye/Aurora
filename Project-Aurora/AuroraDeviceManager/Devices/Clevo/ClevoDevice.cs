@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
+using Common;
 using Common.Devices;
 using Microsoft.Win32;
 
@@ -17,15 +17,15 @@ namespace AuroraDeviceManager.Devices.Clevo
         private ClevoSetKBLED _clevo = new();
 
         // Color Variables
-        private Color _colorKbCenter = Color.Black;
-        private Color _colorKbLeft = Color.Black;
-        private Color _colorKbRight = Color.Black;
-        private Color _colorTouchpad = Color.Black;
+        private SimpleColor _colorKbCenter = SimpleColor.Black;
+        private SimpleColor _colorKbLeft = SimpleColor.Black;
+        private SimpleColor _colorKbRight = SimpleColor.Black;
+        private SimpleColor _colorTouchpad = SimpleColor.Black;
         private bool _colorUpdated;
-        private Color _lastColorKbCenter = Color.Black;
-        private Color _lastColorKbLeft = Color.Black;
-        private Color _lastColorKbRight = Color.Black;
-        private Color _lastColorTouchpad = Color.Black;
+        private SimpleColor _lastColorKbCenter = SimpleColor.Black;
+        private SimpleColor _lastColorKbLeft = SimpleColor.Black;
+        private SimpleColor _lastColorKbRight = SimpleColor.Black;
+        private SimpleColor _lastColorTouchpad = SimpleColor.Black;
 
         // Session Switch Handler
         private SessionSwitchEventHandler _sseh;
@@ -94,7 +94,7 @@ namespace AuroraDeviceManager.Devices.Clevo
             return Task.CompletedTask;
         }
 
-        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (e.Cancel) return Task.FromResult(false);
             bool updateResult;
@@ -102,7 +102,7 @@ namespace AuroraDeviceManager.Devices.Clevo
             if (e.Cancel) return Task.FromResult(false);
             try
             {
-                foreach (KeyValuePair<DeviceKeys, Color> pair in keyColors)
+                foreach (KeyValuePair<DeviceKeys, SimpleColor> pair in keyColors)
                 {
                     if (e.Cancel) return Task.FromResult(false);
                     if (_useGlobalPeriphericColors)
@@ -133,7 +133,7 @@ namespace AuroraDeviceManager.Devices.Clevo
                     // Clevo 3 region keyboard
 
                     // Left Side (From ESC to Half Spacebar)
-                    Color regionLeftColor = keyColors[DeviceKeys.ADDITIONALLIGHT1];
+                    var regionLeftColor = keyColors[DeviceKeys.ADDITIONALLIGHT1];
 
                     if (!_colorKbLeft.Equals(regionLeftColor))
                     {
@@ -144,7 +144,7 @@ namespace AuroraDeviceManager.Devices.Clevo
                     if (e.Cancel) return Task.FromResult(false);
 
                     // Center (Other Half of Spacebar to F11) - Clevo keyboards are very compact and the right side color bleeds over to the up/left/right/down keys)
-                    Color regionCenterColor = keyColors[DeviceKeys.ADDITIONALLIGHT2];
+                    var regionCenterColor = keyColors[DeviceKeys.ADDITIONALLIGHT2];
 
                     if (!_colorKbCenter.Equals(regionCenterColor))
                     {
@@ -155,7 +155,7 @@ namespace AuroraDeviceManager.Devices.Clevo
                     if (e.Cancel) return Task.FromResult(false);
 
                     // Right Side
-                    Color regionRightColor = keyColors[DeviceKeys.ADDITIONALLIGHT3];
+                    var regionRightColor = keyColors[DeviceKeys.ADDITIONALLIGHT3];
 
                     if (!_colorKbRight.Equals(regionRightColor))
                     {

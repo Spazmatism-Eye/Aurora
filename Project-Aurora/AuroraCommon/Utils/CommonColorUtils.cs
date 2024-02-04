@@ -105,13 +105,7 @@ public static class CommonColorUtils
             (byte)((int) (1 - backgroundA / 255d * (255 - foreground.A) / 255d) * 255));
     }
 
-    /// <summary>
-    /// Multiplies all non-alpha values by alpha/255.
-    /// Device integrations don't support alpha values, so we correct them here
-    /// </summary>
-    /// <param name="color">Color to correct</param>
-    /// <returns>Corrected Color</returns>
-    public static Color CorrectWithAlpha(Color color)
+    public static SimpleColor CorrectWithAlpha(SimpleColor color)
     {
         var scalar = color.A / 255.0f;
 
@@ -119,7 +113,7 @@ public static class CommonColorUtils
         var green = ColorByteMultiplication(color.G, scalar);
         var blue = ColorByteMultiplication(color.B, scalar);
 
-        return FastColor(red, green, blue);
+        return new SimpleColor(red, green, blue);
     }
 
     /// <summary>

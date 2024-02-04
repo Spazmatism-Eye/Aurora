@@ -45,6 +45,10 @@ public partial class Control_SettingsDevicesAndWrappers
 
     private async void Control_SettingsDevicesAndWrappers_OnLoaded(object sender, RoutedEventArgs e)
     {
+        if (!IsVisible)
+        {
+            return;
+        }
         await InitializeChromaEvents();
         InitializeLightsyncEvents();
     }

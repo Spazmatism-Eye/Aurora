@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
+using Common;
 using Common.Devices;
 using Common.Utils;
 
@@ -26,7 +26,7 @@ public class UnifiedHIDDevice : DefaultDevice
 
         variableRegistry.Register($"{DeviceName}_update_interval", 0, "Update interval", null, 0);
         variableRegistry.Register($"{DeviceName}_enable_shutdown_color", false, "Enable shutdown color");
-        variableRegistry.Register($"{DeviceName}_shutdown_color", Color.FromArgb(255, 255, 255, 255), "Shutdown color");
+        variableRegistry.Register($"{DeviceName}_shutdown_color", SimpleColor.FromArgb(255, 255, 255, 255), "Shutdown color");
 
         foreach (var device in allDevices)
             variableRegistry.Register($"UnifiedHID_{device.GetType().Name}_enable", false, 
@@ -80,7 +80,7 @@ public class UnifiedHIDDevice : DefaultDevice
             if (IsInitialized)
             {
                 var enableShutdownColor = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_enable_shutdown_color");
-                var shutdownColor = Global.DeviceConfig.VarRegistry.GetVariable<Color>($"{DeviceName}_shutdown_color");
+                var shutdownColor = Global.DeviceConfig.VarRegistry.GetVariable<SimpleColor>($"{DeviceName}_shutdown_color");
 
                 foreach (UnifiedBase dev in connectedDevices)
                 {
@@ -104,7 +104,7 @@ public class UnifiedHIDDevice : DefaultDevice
         return Task.CompletedTask;
     }
 
-    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+    protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
     {
         var sleep = Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_update_interval");
         sleepWatch.Stop();
@@ -128,10 +128,9 @@ public class UnifiedHIDDevice : DefaultDevice
             {
                 foreach (var device in connectedDevices)
                 {
-                    if (!device.DeviceColorMap.TryGetValue(key.Key, out Color currentColor) ||
-                        currentColor == key.Value) continue;
+                    if (!device.DeviceColorMap.TryGetValue(key.Key, out var currentColor) || currentColor == key.Value) continue;
                     // Apply and strip Alpha
-                    var color = Color.FromArgb(255, CommonColorUtils.MultiplyColorByScalar(key.Value, key.Value.A / 255.0D));
+                    var color = CommonColorUtils.MultiplyColorByScalar(key.Value, key.Value.A / 255.0D);
 
                     // Update current color
                     device.DeviceColorMap[key.Key] = color;

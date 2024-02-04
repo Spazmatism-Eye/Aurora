@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
+using Common;
 using Common.Devices;
 using Common.Utils;
 using HidSharp;
@@ -9,7 +9,7 @@ namespace AuroraDeviceManager.Devices.Ducky
 {
     class DuckyDevice : DefaultDevice
     {
-        private Color processedColor;
+        private SimpleColor processedColor;
         private (int PacketNum, int OffsetNum) currentKeyOffset;
         private Stopwatch packetDelay = new Stopwatch(); //Stopwatch used for timer resolution, System.Timer.Timer resolution is ~15ms, Stopwatch in HiRes mode is 10,000,000 per ms.
         private int progress; //A helper number for the progress of sending the packet using the Stopwatch.
@@ -84,9 +84,9 @@ namespace AuroraDeviceManager.Devices.Ducky
             return Task.CompletedTask;
         }
 
-        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
-            foreach (KeyValuePair<DeviceKeys, Color> kc in keyColors)
+            foreach (var kc in keyColors)
             {
                 //This keyboard doesn't take alpha (transparency) values, so we do this:
                 processedColor = CommonColorUtils.CorrectWithAlpha(kc.Value);

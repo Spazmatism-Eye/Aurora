@@ -35,7 +35,7 @@ public class ExampleDeviceScript
         //Perform necessary actions to shutdown your device
     }
     
-    public bool UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, bool forced)
+    public bool UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, bool forced)
     {
         try
         {

@@ -51,15 +51,51 @@ public class VariableRegistryItem : ICloneable
             {
                 JsonValueKind.Null => null,
                 JsonValueKind.Number => GetNumber(jsonElement),
-                JsonValueKind.String => jsonElement.GetString(),
+                JsonValueKind.String => GetStringOrColor(jsonElement),
                 JsonValueKind.True => true,
                 JsonValueKind.False => false,
-                JsonValueKind.Object => null,
+                JsonValueKind.Object => GetColor(jsonElement),
                 _ => throw new JsonException("Unexpected VariableRegistryItem type: " + jsonElement.ValueKind),
             };
         }
 
         return value;
+    }
+
+    private static object GetColor(JsonElement jsonElement)
+    {
+        return jsonElement.Deserialize<SimpleColor>();
+    }
+
+    private static object? GetStringOrColor(JsonElement jsonElement)
+    {
+        var str = jsonElement.GetString();
+        var args = str?.Split(',');
+
+        if (args == null)
+        {
+            return null;
+        }
+        
+        var colors = args.Select(byte.Parse);
+        return args.Length switch
+        {
+            3 => FromRgb(),
+            4 => FromArgb(),
+            _ => str
+        };
+
+
+        SimpleColor FromRgb()
+        {
+            var rgb = colors.ToArray();
+            return SimpleColor.FromArgb(rgb[0], rgb[1], rgb[2]);
+        }
+        SimpleColor FromArgb()
+        {
+            var argb = colors.ToArray();
+            return SimpleColor.FromArgb(argb[0], argb[1], argb[2], argb[3]);
+        }
     }
 
     private static object GetNumber(JsonElement jsonElement)
@@ -97,6 +133,8 @@ public class VariableRegistryItem : ICloneable
             Value = Convert.ChangeType(Value, defaultType);
         else if (Value == null && defaultType != typ)
             Value = variableRegistryItem.Default;
+        else if (defaultType != typ)
+            Value = Default;
     }
 
     public object Clone()

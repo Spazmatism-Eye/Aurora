@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using Common;
 using Common.Devices;
 using HidLibrary;
 
@@ -80,7 +80,7 @@ namespace AuroraDeviceManager.Devices.UnifiedHID
                         foreach (var key in DeviceFuncMap)
                         {
                             // Set black as default color
-                            DeviceColorMap.Add(key.Key, Color.Black);
+                            DeviceColorMap.Add(key.Key, SimpleColor.Black);
                         }
                     }
                 }

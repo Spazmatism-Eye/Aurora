@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices;
@@ -95,7 +96,7 @@ public abstract class DefaultDevice : IDevice, IDisposable
 
     protected abstract Task<bool> DoInitialize();
 
-    protected abstract Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false);
+    protected abstract Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false);
 
     protected virtual void Dispose(bool disposing)
     {

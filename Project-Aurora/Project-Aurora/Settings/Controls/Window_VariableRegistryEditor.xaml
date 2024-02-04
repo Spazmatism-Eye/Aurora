@@ -6,6 +6,8 @@
                xmlns:controls="clr-namespace:Aurora.Controls"
                xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
                mc:Ignorable="d" 
+               Loaded="Window_VariableRegistryEditor_OnLoaded"
+               Unloaded="Window_VariableRegistryEditor_OnUnloaded"
                SizeToContent="WidthAndHeight" MinWidth="450" MinHeight="200" MaxHeight="600" MaxWidth="800">
     <Grid>
         <controls:Control_VariableRegistryEditor x:Name="VarRegistryEditor" Margin="10"/>

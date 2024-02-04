@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using Aurora.Devices;
 using Aurora.Modules;
 using Aurora.Modules.GameStateListen;
 using Aurora.Modules.ProcessMonitor;
+using Aurora.Settings;
+using Common.Devices;
 
 namespace Aurora.Controls;
 
@@ -25,50 +28,69 @@ public partial class Control_DeviceManager
         InitializeComponent();
     }
 
-    private async void DeviceManagerOnDevicesUpdated(object? sender, EventArgs e)
-    {
-        await UpdateControls();
-    }
-
     private async void Control_DeviceManager_Loaded(object? sender, RoutedEventArgs e)
     {
-        var deviceManager = await _deviceManager;
-        deviceManager.DevicesUpdated += DeviceManagerOnDevicesUpdated;
+        if (!IsVisible)
+        {
+            return;
+        }
 
-        await Task.Run(UpdateControls).ConfigureAwait(false);
+        await LoadDeviceManager();
     }
 
-    private async void Control_DeviceManager_Unloaded(object? sender, RoutedEventArgs e)
+    private async Task LoadDeviceManager()
     {
+        var deviceConfig = await ConfigManager.LoadDeviceConfig();
+
+        await Task.Run(() => UpdateControls(deviceConfig)).ConfigureAwait(false);
+        
         var deviceManager = await _deviceManager;
-        deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated;
+        deviceManager.DevicesUpdated += DeviceManagerOnDevicesUpdated();
+        Loaded += (_, _) => deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated();
+        Unloaded += (_, _) => deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated();
+        return;
+
+        EventHandler DeviceManagerOnDevicesUpdated()
+        {
+            return ManagerOnDevicesUpdated;
+
+            async void ManagerOnDevicesUpdated(object? o, EventArgs eventArgs)
+            {
+                await UpdateControls(deviceConfig);
+            }
+        }
     }
 
-    private async Task UpdateControls()
+    private async Task UpdateControls(DeviceConfig deviceConfig)
     {
         var deviceManager = await _deviceManager;
         var isDeviceManagerUp = await deviceManager.IsDeviceManagerUp();
         var deviceContainers = isDeviceManagerUp ? deviceManager.DeviceContainers : [];
         Dispatcher.BeginInvoke(() =>
         {
+            LstDevices.Children.Clear();
             NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
-            if (ReferenceEquals(LstDevices.ItemsSource, deviceContainers))
+        });
+        foreach (var deviceContainer in deviceContainers)
+        {
+            Dispatcher.BeginInvoke(() =>
             {
-                LstDevices.Items.Refresh();
-            }
-            else
-            {
-                LstDevices.ItemsSource = deviceContainers;
-            }
-        }, DispatcherPriority.Loaded);
+                var controlDeviceItem = new Control_DeviceItem(deviceConfig, deviceContainer);
+                var listViewItem = new ListViewItem
+                {
+                    Content = controlDeviceItem,
+                };
+                LstDevices.Children.Add(listViewItem);
+            }, DispatcherPriority.Loaded);
+        }
 
         if (!isDeviceManagerUp)
         {
-            await WaitForDeviceManager();
+            await WaitForDeviceManager(deviceConfig);
         }
     }
 
-    private async Task WaitForDeviceManager()
+    private async Task WaitForDeviceManager(DeviceConfig deviceConfig)
     {
         var runningProcessMonitor = await ProcessesModule.RunningProcessMonitor;
         runningProcessMonitor.ProcessStarted += RunningProcessMonitorOnRunningProcessesChanged;
@@ -84,7 +106,7 @@ public partial class Control_DeviceManager
             await Task.Delay(1000); // wait for pipe
             runningProcessMonitor.ProcessStarted -= RunningProcessMonitorOnRunningProcessesChanged;
 
-            await UpdateControls();
+            await UpdateControls(deviceConfig);
         }
     }
 
@@ -93,13 +115,11 @@ public partial class Control_DeviceManager
         var devManager = await _deviceManager;
         await devManager.ShutdownDevices();
         await devManager.InitializeDevices();
-        await UpdateControls();
     }
 
-    private async void btnCalibrate_Click(object? sender, RoutedEventArgs e)
+    private void btnCalibrate_Click(object? sender, RoutedEventArgs e)
     {
         var calibration = new Control_DeviceCalibration(_deviceManager, _ipcListener);
-        await calibration.Initialize();
         calibration.Show();
     }
 }

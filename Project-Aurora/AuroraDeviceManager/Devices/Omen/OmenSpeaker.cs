@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using Common;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.Omen
@@ -39,7 +39,7 @@ namespace AuroraDeviceManager.Devices.Omen
             }
         }
 
-        public void SetLights(Dictionary<DeviceKeys, Color> keyColors)
+        public void SetLights(Dictionary<DeviceKeys, SimpleColor> keyColors)
         {
             if (hSpeaker != IntPtr.Zero)
             {
@@ -51,7 +51,7 @@ namespace AuroraDeviceManager.Devices.Omen
             }
         }
 
-        private void SetLight(DeviceKeys keys, Color color)
+        private void SetLight(DeviceKeys keys, SimpleColor color)
         {
             if (hSpeaker != IntPtr.Zero)
             {

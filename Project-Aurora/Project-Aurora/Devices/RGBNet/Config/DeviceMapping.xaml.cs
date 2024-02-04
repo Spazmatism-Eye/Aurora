@@ -32,8 +32,6 @@ public partial class DeviceMapping
         _deviceManager = deviceManager;
         _ipcListener = ipcListener;
         InitializeComponent();
-        Loaded += OnLoaded;
-        Unloaded += OnUnloaded;
     }
 
     private void OnAuroraCommandReceived(object? sender, string e)
@@ -58,6 +56,10 @@ public partial class DeviceMapping
 
     private async void OnLoaded(object? sender, RoutedEventArgs e)
     {
+        if (!IsVisible)
+        {
+            return;
+        }
         var ipcListener = await _ipcListener;
         if (ipcListener != null)
         {

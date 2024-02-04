@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
+using Common;
 using Common.Devices;
 using Common.Utils;
 
@@ -31,7 +31,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
         private Stopwatch keepaliveTimer = new Stopwatch();
 
         //Previous data
-        private Color previous_peripheral_Color = Color.Black;
+        private SimpleColor previous_peripheral_Color = SimpleColor.Black;
 
         protected override Task<bool> DoInitialize()
         {
@@ -107,7 +107,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             throw new NotImplementedException();
         }
 
-        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (e.Cancel) return Task.FromResult(false);
 
@@ -118,27 +118,26 @@ namespace AuroraDeviceManager.Devices.SteelSeries
 
                 if (e.Cancel) return Task.FromResult(false);
 
-                List<byte> hids = new List<byte>();
+                var hids = new List<byte>();
                 List<Tuple<byte, byte, byte>> colors = new List<Tuple<byte, byte, byte>>();
                 List<Tuple<byte, byte, byte>> colorsMousepad = new List<Tuple<byte, byte, byte>>();
                 //Tuple<byte, byte, byte>[] colors_mousepad = new Tuple<byte, byte, byte>[12];
 
                 // Create a new color event, we'll pass this on to whatever should add to it
 
-                GameSensePayloadPeripheryColorEventJSON payload = new GameSensePayloadPeripheryColorEventJSON();
+                var payload = new GameSensePayloadPeripheryColorEventJSON();
                 gameSenseSDK.setupEvent(payload);
 
-                foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
+                foreach (var key in keyColors)
                 {
 
 
                     if (e.Cancel) return Task.FromResult(false);
                     //CorsairLedId localKey = ToCorsair(key.Key);
 
-                    Color color = (Color)key.Value;
+                    var color = key.Value;
                     //Apply and strip Alpha
-                    color = Color.FromArgb(255,
-                        CommonColorUtils.MultiplyColorByScalar(color, color.A / 255.0D));
+                    color = CommonColorUtils.MultiplyColorByScalar(color, color.A / 255.0D);
 
                     if (e.Cancel) return Task.FromResult(false);
 
@@ -168,7 +167,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
                             colorsMousepad.Add(Tuple.Create(color.R, color.G, color.B));
                             break;
                         default:
-                            byte hid = GetHIDCode(key.Key);
+                            var hid = GetHIDCode(key.Key);
 
                             if (hid != (byte)USBHIDCodes.ERROR)
                             {
@@ -195,7 +194,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             }
         }
 
-        private void SendColorToPeripheral(Color color, GameSensePayloadPeripheryColorEventJSON payload, bool forced = false)
+        private void SendColorToPeripheral(SimpleColor color, GameSensePayloadPeripheryColorEventJSON payload, bool forced = false)
         {
             if (!previous_peripheral_Color.Equals(color) || forced)
             {
@@ -228,7 +227,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
             }
         }
 
-        private void SendColorToPeripheralZone(DeviceKeys zone, Color color, GameSensePayloadPeripheryColorEventJSON payload)
+        private void SendColorToPeripheralZone(DeviceKeys zone, SimpleColor color, GameSensePayloadPeripheryColorEventJSON payload)
         {
             if (Global.DeviceConfig.AllowPeripheralDevices && !Global.DeviceConfig.DevicesDisableMouse)
             {

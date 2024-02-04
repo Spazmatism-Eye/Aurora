@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using AuroraDeviceManager.Devices.RGBNet;
 using Common;
 using Common.Data;
@@ -14,7 +13,7 @@ public sealed class DeviceContainer : IDisposable
 
     private readonly SingleConcurrentThread _worker;
 
-    private DeviceColorComposition _currentComp = new(new Dictionary<DeviceKeys, Color>());
+    private DeviceColorComposition _currentComp = new(new Dictionary<DeviceKeys, SimpleColor>());
 
     private readonly SemaphoreSlim _actionLock = new(1);
 
@@ -33,12 +32,12 @@ public sealed class DeviceContainer : IDisposable
         _deviceInformation = new MemorySharedStruct<DeviceInformation>(SharedObjectName, GetSharedDeviceInformation());
         _deviceInformation.UpdateRequested += (_, _) => { UpdateSharedMemory(); };
 
-        var deviceVariables = CreateDeviceVariables();
+        var deviceVariables = CreateSharedDeviceVariables();
         _deviceVariables = new MemorySharedArray<DeviceVariable>(SharedObjectName + "-vars", deviceVariables.Count);
         _deviceVariables.WriteCollection(deviceVariables);
     }
 
-    private List<DeviceVariable> CreateDeviceVariables()
+    private List<DeviceVariable> CreateSharedDeviceVariables()
     {
         var deviceVariables = new List<DeviceVariable>();
         foreach (var (varName, item) in Device.RegisteredVariables.Variables)
@@ -51,7 +50,7 @@ public sealed class DeviceContainer : IDisposable
                 float => VariableType.Float,
                 double => VariableType.Double,
                 string => VariableType.String,
-                Color => VariableType.Color,
+                SimpleColor => VariableType.Color,
                 DeviceKeys => VariableType.DeviceKeys,
                 _ => VariableType.None,
             };
@@ -65,7 +64,7 @@ public sealed class DeviceContainer : IDisposable
                 VariableType.Long => data => BitConverter.GetBytes((long)data),
                 VariableType.DeviceKeys => data => BitConverter.GetBytes((long)(int)data),
                 VariableType.String => _ => null,
-                VariableType.Color => data => BitConverter.GetBytes((long)((Color)data).ToArgb()),
+                VariableType.Color => data => BitConverter.GetBytes((long)((SimpleColor)data).ToArgb()),
             };
 
             var variable = new DeviceVariable(
@@ -75,7 +74,8 @@ public sealed class DeviceContainer : IDisposable
                 ConvertNullable(item.Min),
                 ConvertNullable(item.Max),
                 item.Title, item.Remark, (int)item.Flags, vt,
-                vt == VariableType.String ? item.Value as string ?? "" : ""
+                vt == VariableType.String ? item.Value as string ?? "" : "",
+                vt == VariableType.String ? item.Default as string ?? "" : ""
             );
             deviceVariables.Add(variable);
             continue;
@@ -110,7 +110,7 @@ public sealed class DeviceContainer : IDisposable
         return Task.CompletedTask;
     }
 
-    public void UpdateDevice(Dictionary<DeviceKeys, Color> keyColors)
+    public void UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors)
     {
         _currentComp.KeyColors = keyColors;
         if (!Device.IsDoingWork)
@@ -153,7 +153,7 @@ public sealed class DeviceContainer : IDisposable
     {
         Global.DeviceConfig.VarRegistry.Combine(Device.RegisteredVariables);
 
-        var deviceVariables = CreateDeviceVariables();
+        var deviceVariables = CreateSharedDeviceVariables();
         _deviceVariables.WriteCollection(deviceVariables);
     }
 

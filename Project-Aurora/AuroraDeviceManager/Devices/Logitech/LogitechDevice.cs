@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using AuroraDeviceManager.Utils;
+using Common;
 using Common.Devices;
 using Common.Devices.Logitech;
 using Microsoft.Win32;
@@ -12,10 +12,10 @@ namespace AuroraDeviceManager.Devices.Logitech
         public override string DeviceName => "Logitech";
 
         private readonly byte[] logitechBitmap = new byte[LogitechGSDK.LOGI_LED_BITMAP_SIZE];
-        private Color speakers;
-        private Color mousepad;
-        private readonly Color[] mouse = new Color[3];
-        private readonly Color[] headset = new Color[3];
+        private SimpleColor speakers;
+        private SimpleColor mousepad;
+        private readonly SimpleColor[] mouse = new SimpleColor[3];
+        private readonly SimpleColor[] headset = new SimpleColor[3];
         private DeviceKeys genericKey;
 
         protected override async Task<bool> DoInitialize()
@@ -44,7 +44,7 @@ namespace AuroraDeviceManager.Devices.Logitech
                 //fix some weird issues without any noticeable disadvantages
                 await Task.Delay(100).ConfigureAwait(false);
                 if (Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_set_default"))
-                    LogitechGSDK.LogiLedSetLighting(Global.DeviceConfig.VarRegistry.GetVariable<Color>($"{DeviceName}_default_color"));
+                    LogitechGSDK.LogiLedSetLighting(Global.DeviceConfig.VarRegistry.GetVariable<SimpleColor>($"{DeviceName}_default_color"));
                 IsInitialized = true;
                 return true;
             }
@@ -86,7 +86,7 @@ namespace AuroraDeviceManager.Devices.Logitech
             }
         }
 
-        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (!IsInitialized)
                 return Task.FromResult(false);
@@ -172,7 +172,7 @@ namespace AuroraDeviceManager.Devices.Logitech
         protected override void RegisterVariables(VariableRegistry variableRegistry)
         {
             variableRegistry.Register($"{DeviceName}_set_default", false, "Set Default Color");
-            variableRegistry.Register($"{DeviceName}_default_color", Color.FromArgb(255, 255, 255, 255), "Default Color");
+            variableRegistry.Register($"{DeviceName}_default_color", SimpleColor.FromArgb(255, 255, 255), "Default Color");
             variableRegistry.Register($"{DeviceName}_override_dll", false, "Override DLL", null, null, "Requires restart to take effect");
             variableRegistry.Register($"{DeviceName}_override_dll_option", LGDLL.GHUB, "Override DLL Selection", null, null, "Requires restart to take effect");
             variableRegistry.Register($"{DeviceName}_devicekey", DeviceKeys.Peripheral_Logo, "Key to Use", DeviceKeys.MOUSEPADLIGHT15, DeviceKeys.Peripheral);

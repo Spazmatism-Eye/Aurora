@@ -3,7 +3,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:a="clr-namespace:Aurora"
-             xmlns:local="clr-namespace:Aurora.Settings"
              xmlns:Controls="clr-namespace:Aurora.Controls"
              xmlns:utils="clr-namespace:Aurora.Utils"
              xmlns:events="clr-namespace:Serilog.Events;assembly=Serilog"
@@ -13,11 +12,11 @@
              d:DesignHeight="400" d:DesignWidth="403.521"
              Height="Auto" Width="Auto"
              MinHeight="300" MinWidth="850"
-             Loaded="UserControl_Loaded"
-             x:Name="ctrlSettings">
+             Loaded="UserControl_Loaded">
 
     <TabControl Margin="0,7,0,0" DataContext="{x:Static a:Global.Configuration}">
         <TabItem x:Name="DevicesAndWrappersTab" Header="Devices &amp; Wrappers">
+            <!-- <Controls:Control_SettingsDevicesAndWrappers Margin="10"/> Added by constructor -->
         </TabItem>
         <TabItem Name="DeviceManagerTab" Header="Device Manager">
             <!-- <Controls:Control_DeviceManager Margin="10"/> Added by constructor -->

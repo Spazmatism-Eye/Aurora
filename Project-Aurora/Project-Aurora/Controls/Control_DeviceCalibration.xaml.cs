@@ -19,31 +19,20 @@ namespace Aurora.Controls;
 
 public sealed partial class Control_DeviceCalibration : IDisposable
 {
-    public Task<DeviceManager> DeviceManager { get; }
+    private readonly Task<DeviceManager> _deviceManager;
 
     private readonly TransparencyComponent _transparencyComponent;
     private readonly Task<IpcListener?> _ipcListener;
     private readonly SemaphoreSlim _devicesUpdated = new(0);
 
-    private Dictionary<RemappableDevice, Color> DeviceCalibrations { get; set; } = new();
-
     public Control_DeviceCalibration(Task<DeviceManager> deviceManager, Task<IpcListener?> ipcListener)
     {
-        DeviceManager = deviceManager;
+        _deviceManager = deviceManager;
         _ipcListener = ipcListener;
 
         InitializeComponent();
 
         _transparencyComponent = new TransparencyComponent(this, null);
-    }
-
-    public async Task Initialize()
-    {
-        var ipcListener = await _ipcListener;
-        if (ipcListener != null)
-        {
-            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
-        }
     }
 
     private void OnAuroraCommandReceived(object? sender, string e)
@@ -59,40 +48,52 @@ public sealed partial class Control_DeviceCalibration : IDisposable
         switch (command)
         {
             case DeviceCommands.RemappableDevices:
-                var remappableDevices = ReadDevices(json);
-
-                DeviceCalibrations = remappableDevices.Devices.ToDictionary(
-                    device => device,
-                    device => Color.FromArgb(device.Calibration.ToArgb())
-                );
-
-                Dispatcher.BeginInvoke(() =>
-                {
-                    DeviceList.ItemsSource = DeviceCalibrations;
-                    DeviceList.Items.Refresh();
-                }, DispatcherPriority.Loaded);
-
-                //release lock
-                if (_devicesUpdated.CurrentCount > 0)
-                {
-                    _devicesUpdated.Release(_devicesUpdated.CurrentCount);
-                }
+                LoadDevices(json);
                 break;
+        }
+    }
+
+    private void LoadDevices(string json)
+    {
+        Dispatcher.BeginInvoke(() => DeviceList.Children.Clear(), DispatcherPriority.Loaded);
+        var remappableDevices = ReadDevices(json);
+        var loadDeviceConfig = ConfigManager.LoadDeviceConfig();
+
+        foreach (var device in remappableDevices.Devices)
+        {
+            var color = SimpleColor.FromArgb(device.Calibration.ToArgb());
+            Dispatcher.BeginInvoke(async () =>
+            {
+                var calibrationItem = new Control_DeviceCalibrationItem(await _deviceManager, await loadDeviceConfig, device, color);
+                DeviceList.Children.Add(calibrationItem);
+            }, DispatcherPriority.Loaded);
+        }
+
+        Unloaded += OnUnloaded;
+
+        //release lock
+        if (_devicesUpdated.CurrentCount > 0)
+        {
+            _devicesUpdated.Release(_devicesUpdated.CurrentCount);
+        }
+
+        async void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            ConfigManager.Save(await loadDeviceConfig, DeviceConfig.ConfigFile);
         }
     }
 
     private static CurrentDevices ReadDevices(string json)
     {
-        return JsonSerializer.Deserialize<CurrentDevices>(json) ?? new CurrentDevices(new List<RemappableDevice>());
+        return JsonSerializer.Deserialize<CurrentDevices>(json) ?? new CurrentDevices([]);
     }
 
     private async Task RefreshLists()
     {
-        var deviceManager = await DeviceManager;
+        var deviceManager = await _deviceManager;
         if (!await deviceManager.IsDeviceManagerUp())
         {
-            DeviceCalibrations.Clear();
-            DeviceList.Items.Refresh();
+            DeviceList.Children.Clear();
             return;
         }
         
@@ -102,6 +103,13 @@ public sealed partial class Control_DeviceCalibration : IDisposable
 
     private async void Control_DeviceCalibration_OnLoaded(object sender, RoutedEventArgs e)
     {
+        var ipcListener = await _ipcListener;
+        if (ipcListener != null)
+        {
+            ipcListener.AuroraCommandReceived -= OnAuroraCommandReceived;
+            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
+        }
+
         await RefreshLists();
     }
 
@@ -114,10 +122,5 @@ public sealed partial class Control_DeviceCalibration : IDisposable
         {
             ipcListener.AuroraCommandReceived -= OnAuroraCommandReceived;
         }
-    }
-
-    private void Control_DeviceCalibration_OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        ConfigManager.Save(Global.DeviceConfiguration, DeviceConfig.ConfigFile);
     }
 }

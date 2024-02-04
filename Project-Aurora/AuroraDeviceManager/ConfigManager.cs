@@ -61,6 +61,7 @@ public class ConfigManager(DeviceManager deviceManager)
 
         Global.DeviceConfig = config;
         deviceManager.RegisterVariables();
+        Save(config, DeviceConfig.ConfigFile);
     }
 
     private async Task<DeviceConfig> CreateDefaultConfigurationFile()

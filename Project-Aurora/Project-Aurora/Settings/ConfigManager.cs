@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using Aurora.Utils;
 using Common.Devices;
@@ -14,12 +16,12 @@ public static class ConfigManager
     private static readonly Dictionary<string, long> LastSaveTimes = new();
     private const long SaveInterval = 300L;
 
-    public static Configuration Load()
+    public static async Task<Configuration> Load()
     {
-        var config = TryLoad();
+        var config = await TryLoad();
 
         config.OnPostLoad();
-        config.PropertyChanged += (_, e) =>
+        config.PropertyChanged += (_, _) =>
         {
             Save(config, Configuration.ConfigFile);
         };
@@ -27,11 +29,11 @@ public static class ConfigManager
         return config;
     }
 
-    private static Configuration TryLoad()
+    private static async Task<Configuration> TryLoad()
     {
         try
         {
-            return Parse();
+            return await Parse();
         }
         catch (Exception exc)
         {
@@ -49,16 +51,16 @@ public static class ConfigManager
             }
 
             App.ForceShutdownApp(-1);
-            throw new ApplicationException("irrelevant message");
+            throw new UnreachableException();
         }
     }
 
-    private static Configuration Parse()
+    private static async Task<Configuration> Parse()
     {
         if (!File.Exists(Configuration.ConfigFile))
             return CreateDefaultConfigurationFile();
         
-        var content = File.ReadAllText(Configuration.ConfigFile, Encoding.UTF8);
+        var content = await File.ReadAllTextAsync(Configuration.ConfigFile, Encoding.UTF8);
         return string.IsNullOrWhiteSpace(content)
             ? CreateDefaultConfigurationFile()
             : JsonConvert.DeserializeObject<Configuration>(content,
@@ -68,12 +70,12 @@ public static class ConfigManager
                 })!;
     }
 
-    public static DeviceConfig LoadDeviceConfig()
+    public static async Task<DeviceConfig> LoadDeviceConfig()
     {
         DeviceConfig config;
         try
         {
-            config = TryLoadDevice();
+            config = await TryLoadDevice();
         }
         catch (Exception exc)
         {
@@ -87,13 +89,13 @@ public static class ConfigManager
         return config;
     }
 
-    private static DeviceConfig TryLoadDevice()
+    private static async Task<DeviceConfig> TryLoadDevice()
     {
         if (!File.Exists(DeviceConfig.ConfigFile))
         {
             if (File.Exists(Configuration.ConfigFile))
                 // v194 Migration
-                return MigrateDeviceConfig();
+                return await MigrateDeviceConfig();
 
             // first time start
             var deviceConfig = new DeviceConfig();
@@ -102,12 +104,8 @@ public static class ConfigManager
 
         }
 
-        var content = File.ReadAllText(DeviceConfig.ConfigFile, Encoding.UTF8);
-        return JsonConvert.DeserializeObject<DeviceConfig>(content,
-            new JsonSerializerSettings
-            {
-                ObjectCreationHandling = ObjectCreationHandling.Replace,
-            }) ?? MigrateDeviceConfig();
+        var content = await File.ReadAllTextAsync(DeviceConfig.ConfigFile, Encoding.UTF8);
+        return System.Text.Json.JsonSerializer.Deserialize<DeviceConfig>(content) ?? await MigrateDeviceConfig();
     }
 
     public static void Save(object configuration, string path)
@@ -139,10 +137,10 @@ public static class ConfigManager
         return config;
     }
 
-    private static DeviceConfig MigrateDeviceConfig()
+    private static async Task<DeviceConfig> MigrateDeviceConfig()
     {
         Global.logger.Information("Migrating default device configuration");
-        var content = File.ReadAllText(Configuration.ConfigFile, Encoding.UTF8);
+        var content = await File.ReadAllTextAsync(Configuration.ConfigFile, Encoding.UTF8);
         var config = JsonConvert.DeserializeObject<DeviceConfig>(content,
             new JsonSerializerSettings
             {

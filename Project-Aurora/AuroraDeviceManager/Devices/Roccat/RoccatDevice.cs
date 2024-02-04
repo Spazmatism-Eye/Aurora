@@ -24,11 +24,11 @@
 
 
 using System.ComponentModel;
+using Common;
 using Common.Devices;
 using Common.Utils;
 using Roccat_Talk.RyosTalkFX;
 using Roccat_Talk.TalkFX;
-using Color = System.Drawing.Color;
 
 namespace AuroraDeviceManager.Devices.Roccat
 {
@@ -40,7 +40,7 @@ namespace AuroraDeviceManager.Devices.Roccat
         private bool generic_deactivated_first_time = true;
         private bool generic_activated_first_time = true;
 
-        private Color previous_peripheral_Color = Color.Black;
+        private SimpleColor previous_peripheral_Color = SimpleColor.Black;
         public static Dictionary<DeviceKeys, byte> DeviceKeysMap = new Dictionary<DeviceKeys, byte>
         {
             {DeviceKeys.ESC, 0 },
@@ -247,16 +247,16 @@ namespace AuroraDeviceManager.Devices.Roccat
             talkFX.RestoreLedRgb();
         }
 
-        private void send_to_roccat_generic(Color color)
+        private void send_to_roccat_generic(SimpleColor color)
         {
             //Alpha necessary for Global Brightness modifier
-            color = Color.FromArgb(255, CommonColorUtils.MultiplyColorByScalar(color, color.A / 255.0D));
+            color = CommonColorUtils.MultiplyColorByScalar(color, color.A / 255.0D);
             talkFX.SetLedRgb(Zone.Event, KeyEffect.On, Speed.Fast, new Roccat_Talk.TalkFX.Color(color.R, color.G, color.B)); ;
         }
 
         byte[] stateStruct = new byte[110];
         Roccat_Talk.TalkFX.Color[] colorStruct = new Roccat_Talk.TalkFX.Color[110];
-        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, Color> keyColors, DoWorkEventArgs e, bool forced = false)
+        protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
         {
             if (RyosTalkFX == null || !RyosInitialized)
                 return Task.FromResult(false);
@@ -265,7 +265,7 @@ namespace AuroraDeviceManager.Devices.Roccat
 
             try
             {
-                foreach (KeyValuePair<DeviceKeys, Color> key in keyColors)
+                foreach (KeyValuePair<DeviceKeys, SimpleColor> key in keyColors)
                 {
                     if (e.Cancel) return Task.FromResult(false);
                     var devKey = key.Key;
@@ -331,7 +331,7 @@ namespace AuroraDeviceManager.Devices.Roccat
             return 1;
         }
 
-        private Roccat_Talk.TalkFX.Color ConvertToRoccatColor(Color color)
+        private Roccat_Talk.TalkFX.Color ConvertToRoccatColor(SimpleColor color)
         {
             return new Roccat_Talk.TalkFX.Color(color.R, color.G, color.B);
         }
