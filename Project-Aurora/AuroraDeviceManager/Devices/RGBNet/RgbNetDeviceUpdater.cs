@@ -32,7 +32,7 @@ public class RgbNetDeviceUpdater(ConcurrentDictionary<IRGBDevice, Dictionary<Led
                 continue;
 
             var led = device[rgbNetLedId];
-            if (led == null && LedInDeviceGroup(rgbNetLedId, device.DeviceInfo.DeviceType))
+            if (led == null && LedInDeviceGroup(rgbNetLedId, device.DeviceInfo.DeviceType) && color.A != 0)
             {
                 if (device.Size == Size.Invalid)
                 {
