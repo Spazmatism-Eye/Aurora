@@ -236,6 +236,9 @@ public enum PreferredKeyboard
     [Description("Razer - Blade")]
     Razer_Blade = 303,
 
+    [Description("Razer - Blackwidow V3 TKL")]
+    Razer_Blackwidow_V3_Tkl = 304,
+
     //Clevo range is 400-499
     [Description("Clevo 3 Zone Keyboard")]
     Clevo_3_Zone = 400,

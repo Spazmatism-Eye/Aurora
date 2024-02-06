@@ -1763,6 +1763,12 @@ public enum DeviceKeys
     [Description("Scroll Lock Led")]
     SCROLL_LOCK_LED = 303,
 
+    [Description("Scroll Lock Led")]
+    MACRO_INDICATOR = 304,
+
+    [Description("Scroll Lock Led")]
+    WIN_LOCK_INDICATOR = 305,
+
     /// <summary>
     /// None
     /// </summary>

@@ -28,6 +28,7 @@ public static class PeripheralLayoutMap
         {PreferredKeyboard.Razer_Blackwidow_X, "razer_blackwidow_x.json"},
         {PreferredKeyboard.Razer_Blackwidow_TE, "razer_blackwidow_te.json"},
         {PreferredKeyboard.Razer_Blade, "razer_blade.json"},
+        {PreferredKeyboard.Razer_Blackwidow_V3_Tkl, "razer_blackwidow_v3_tkl.json"},
         {PreferredKeyboard.Clevo_3_Zone, "clevo_3_zone.json"},
         {PreferredKeyboard.Masterkeys_Pro_L, "masterkeys_pro_l.json"},
         {PreferredKeyboard.Masterkeys_Pro_S, "masterkeys_pro_s.json"},

@@ -145,6 +145,8 @@ public static class RgbNetKeyMappings
         { LedId.Keyboard_IndicatorNumLock,								DeviceKeys.NUM_LOCK_LED },
         { LedId.Keyboard_IndicatorCapsLock,								DeviceKeys.CAPS_LOCK_LED },
         { LedId.Keyboard_IndicatorScrollLock,							DeviceKeys.SCROLL_LOCK_LED },
+        { LedId.Keyboard_IndicatorMacro,								DeviceKeys.MACRO_INDICATOR },
+        { LedId.Keyboard_IndicatorWinLock,								DeviceKeys.WIN_LOCK_INDICATOR },
 
         { LedId.Custom1,												DeviceKeys.CL1 },
         { LedId.Custom2,												DeviceKeys.CL2 },
