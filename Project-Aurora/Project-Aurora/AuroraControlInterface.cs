@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using Aurora.Devices;
 using Aurora.Modules.GameStateListen;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace Aurora;
 
-public sealed class AuroraControlInterface(Task<DeviceManager> deviceManager, Task<IpcListener?> listener)
+public sealed class AuroraControlInterface(Task<IpcListener?> listener)
 {
+    public TaskbarIcon? TrayIcon { private get; set; }
+    public DeviceManager? DeviceManager { private get; set; }
+
     public async Task Initialize()
     {
         var ipcListener = await listener;
@@ -17,6 +21,11 @@ public sealed class AuroraControlInterface(Task<DeviceManager> deviceManager, Ta
         {
             ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
         }
+    }
+
+    public void ShowErrorNotification(string message)
+    {
+        TrayIcon?.ShowBalloonTip("Aurora", message, BalloonIcon.Error);
     }
 
     private void OnAuroraCommandReceived(object? sender, string e)
@@ -34,24 +43,32 @@ public sealed class AuroraControlInterface(Task<DeviceManager> deviceManager, Ta
     public void ExitApp()
     {
         //to only shutdown Aurora itself
-        deviceManager.Result.Detach();
+        DeviceManager?.Detach();
         Application.Current.Shutdown();
     }
 
     public async Task RestartDevices()
     {
-        await (await deviceManager).ResetDevices();
+        if (DeviceManager == null)
+        {
+            return;
+        }
+        await DeviceManager.ResetDevices();
     }
 
     public async Task ShutdownDevices()
     {
-        await (await deviceManager).ShutdownDevices();
+        if (DeviceManager == null)
+        {
+            return;
+        }
+        await DeviceManager.ShutdownDevices();
     }
 
     public void RestartAurora()
     {
         //so that we don't restart device manager
-        deviceManager.Result.Detach();
+        DeviceManager?.Detach();
 
         var auroraPath = Path.Combine(Global.ExecutingDirectory, "Aurora.exe");
 

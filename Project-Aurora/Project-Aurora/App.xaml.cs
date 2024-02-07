@@ -28,14 +28,17 @@ public partial class App
     public static bool Closing { get; private set; }
     private static readonly Mutex Mutex = new(false, "{C88D62B0-DE49-418E-835D-CE213D58444C}");
 
-    public static bool IsSilent { get; private set; }
+    private static bool IsSilent { get; set; }
 
     private static readonly PluginsModule PluginsModule = new();
     private static readonly IpcListenerModule IpcListenerModule = new();
+    
+    private static readonly AuroraControlInterface ControlInterface = new(IpcListenerModule.IpcListener);
+    
     private static readonly HttpListenerModule HttpListenerModule = new();
     private static readonly ProcessesModule ProcessesModule = new();
     private static readonly RazerSdkModule RazerSdkModule = new(LightingStateManagerModule.LightningStateManager);
-    private static readonly DevicesModule DevicesModule = new(RazerSdkModule.RzSdkManager);
+    private static readonly DevicesModule DevicesModule = new(RazerSdkModule.RzSdkManager, ControlInterface);
     private static readonly LightingStateManagerModule LightingStateManagerModule = new(
         PluginsModule.PluginManager, IpcListenerModule.IpcListener, HttpListenerModule.HttpListener,
         DevicesModule.DeviceManager, ProcessesModule.ActiveProcessMonitor, ProcessesModule.RunningProcessMonitor
@@ -65,7 +68,6 @@ public partial class App
         new PerformanceMonitor(ProcessesModule.RunningProcessMonitor)
     ];
 
-    private static readonly AuroraControlInterface ControlInterface = new(DevicesModule.DeviceManager, IpcListenerModule.IpcListener);
     private readonly AuroraTrayIcon _trayIcon = new(ControlInterface);
 
     private static readonly SemaphoreSlim PreventShutdown = new(0);
@@ -104,6 +106,8 @@ public partial class App
             .Where(t => t!= null)
             .ToArray();
 
+        ControlInterface.TrayIcon = _trayIcon.TrayIcon;
+        ControlInterface.DeviceManager = await DevicesModule.DeviceManager;
         await ControlInterface.Initialize();
         _trayIcon.DisplayWindow += TrayIcon_OnDisplayWindow;
         var configUi = await CreateWindow();
@@ -267,11 +271,11 @@ public partial class App
         });
         
         var forceExitTimer = StartForceExitTimer();
+        _trayIcon.Dispose();
 
         await Task.WhenAll(tasks);
-        forceExitTimer.GetApartmentState(); //statement just to keep referenced
         (Global.logger as Logger)?.Dispose();
-        _trayIcon.Dispose();
+        forceExitTimer.GetApartmentState(); //statement just to keep referenced
 
         Mutex.ReleaseMutex();
         Mutex.Dispose();

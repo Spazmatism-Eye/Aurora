@@ -4,7 +4,7 @@ using RazerSdkReader;
 
 namespace Aurora.Modules;
 
-public sealed class DevicesModule(Task<ChromaReader?> rzSdkManager) : AuroraModule
+public sealed class DevicesModule(Task<ChromaReader?> rzSdkManager, AuroraControlInterface auroraControlInterface) : AuroraModule
 {
     public Task<DeviceManager> DeviceManager => _taskSource.Task;
 
@@ -15,7 +15,7 @@ public sealed class DevicesModule(Task<ChromaReader?> rzSdkManager) : AuroraModu
     {
         Global.logger.Information("Loading Device Manager...");
 
-        _deviceManager = new DeviceManager(rzSdkManager);
+        _deviceManager = new DeviceManager(rzSdkManager, auroraControlInterface);
         _taskSource.SetResult(_deviceManager);
 
         await _deviceManager.InitializeDevices();

@@ -30,7 +30,10 @@ public sealed class DeviceManager : IDisposable
     public List<DeviceContainer> DeviceContainers { get; } = [];
 
     private readonly Task<ChromaReader?> _rzSdkManager;
+    private readonly AuroraControlInterface _auroraControlInterface;
     private readonly MemorySharedArray<SimpleColor> _sharedDeviceColor;
+
+    private int _dmStartCount;
 
     private readonly MemorySharedStruct<DeviceManagerInfo> _deviceManagerInfo;
     private Process? _process;
@@ -38,9 +41,10 @@ public sealed class DeviceManager : IDisposable
 
     private readonly byte[] _end = "\n"u8.ToArray();
 
-    public DeviceManager(Task<ChromaReader?> rzSdkManager)
+    public DeviceManager(Task<ChromaReader?> rzSdkManager, AuroraControlInterface auroraControlInterface)
     {
         _rzSdkManager = rzSdkManager;
+        _auroraControlInterface = auroraControlInterface;
         _sharedDeviceColor = new MemorySharedArray<SimpleColor>(Constants.DeviceLedMap, Constants.MaxKeyId);
 
         _deviceManagerInfo = new MemorySharedStruct<DeviceManagerInfo>(Constants.DeviceInformations);
@@ -49,8 +53,14 @@ public sealed class DeviceManager : IDisposable
 
     public async Task InitializeDevices()
     {
+        _dmStartCount = 0;
         await _rzSdkManager;
 
+        AttachOrCreateProcess();
+    }
+
+    private void AttachOrCreateProcess()
+    {
         _process = Process.GetProcessesByName(DeviceManagerProcess).FirstOrDefault();
         if (_process != null)
         {
@@ -58,7 +68,7 @@ public sealed class DeviceManager : IDisposable
         }
         else
         {
-            _process = StartDmProcess();
+            StartDmProcess();
         }
     }
 
@@ -86,7 +96,7 @@ public sealed class DeviceManager : IDisposable
         DevicesUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private Process? StartDmProcess()
+    private void StartDmProcess()
     {
         var updaterProc = new ProcessStartInfo
         {
@@ -94,23 +104,28 @@ public sealed class DeviceManager : IDisposable
             WorkingDirectory = DeviceManagerFolder,
             ErrorDialog = true,
         };
-        var process = Process.Start(updaterProc);
-        process?.WaitForExitAsync().ContinueWith(DeviceManagerClosed);
-
-        return process;
+        _process = Process.Start(updaterProc);
+        _process?.WaitForExitAsync().ContinueWith(DeviceManagerClosed);
+        UpdateDevices();
     }
 
-    private async Task DeviceManagerClosed(Task processTask)
+    private void DeviceManagerClosed(Task processTask)
     {
         if (processTask.IsFaulted)
         {
             Global.logger.Error(processTask.Exception, "Device Manager closed unexpectedly");
         }
 
-        //TODO get process stack if fails
+        if (_dmStartCount++ > 4)
+        {
+            Global.logger.Error("Device manager failed too much. Stopping initializing");
+            _auroraControlInterface.ShowErrorNotification("Device Manager cannot be started. Check logs for more information");
+            return;
+        }
+
         if (_process != null)
         {
-            await InitializeDevices();
+            AttachOrCreateProcess();
         }
     }
 
