@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Media;
 using Aurora.Utils;
 using Newtonsoft.Json;
@@ -47,6 +48,10 @@ namespace Aurora.EffectsEngine
         {
             this.type = type;
             this.wrap = wrap;
+            if (colorGradients.Any(kv => kv.Key > 1))
+            {
+                colorGradients.Clear();
+            }
             if (!colorGradients.ContainsKey(0.0))
             {
                 colorGradients[0] = Color.Transparent;
