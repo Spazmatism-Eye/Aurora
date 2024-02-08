@@ -5,26 +5,20 @@ using Microsoft.Scripting.Hosting;
 
 namespace AuroraDeviceManager.Devices.ScriptedDevice;
 
-internal sealed class ScriptDeviceLoader : IDeviceLoader
+internal sealed class ScriptDeviceLoader(string scriptFolder) : IDeviceLoader
 {
     private readonly Lazy<ScriptEngine> _pythonEngine = new(Python.CreateEngine);
-    private readonly string _scriptFolder;
-
-    public ScriptDeviceLoader(string scriptFolder)
-    {
-        _scriptFolder = scriptFolder;
-    }
 
     public IEnumerable<IDevice?> LoadDevices()
     {
-        if (!Directory.Exists(_scriptFolder))
-            Directory.CreateDirectory(_scriptFolder);
+        if (!Directory.Exists(scriptFolder))
+            Directory.CreateDirectory(scriptFolder);
 
-        var files = Directory.GetFiles(_scriptFolder);
+        var files = Directory.GetFiles(scriptFolder);
         if (files.Length == 0)
             yield break;
 
-        Global.Logger.Information("Loading device scripts from {ScriptFolder}", _scriptFolder);
+        Global.Logger.Information("Loading device scripts from {ScriptFolder}", scriptFolder);
 
         foreach (var deviceScript in files.OrderBy(s => s))
         {
@@ -32,7 +26,7 @@ internal sealed class ScriptDeviceLoader : IDeviceLoader
         }
     }
 
-    private readonly List<string> _loadedScripts = new();
+    private readonly HashSet<string> _loadedScripts = [];
 
     private IDevice? LoadScript(string deviceScript)
     {

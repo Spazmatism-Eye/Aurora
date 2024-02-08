@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Controls;
-using Aurora.Devices;
 using Aurora.EffectsEngine;
 using Aurora.Profiles.Dota_2.GSI;
 using Aurora.Profiles.Dota_2.GSI.Nodes;
@@ -15,50 +14,54 @@ namespace Aurora.Profiles.Dota_2.Layers;
 
 public class Dota2AbilityLayerHandlerProperties : LayerHandlerProperties2Color<Dota2AbilityLayerHandlerProperties>
 {
-    public Color? _CanCastAbilityColor { get; set; }
+    private Color? _canCastAbilityColor;
+    [JsonProperty("_CanCastAbilityColor")]
+    public Color CanCastAbilityColor
+    {
+        get => Logic._canCastAbilityColor ?? _canCastAbilityColor ?? Color.Empty;
+        set => _canCastAbilityColor = value;
+    }
 
-    [JsonIgnore]
-    public Color CanCastAbilityColor => Logic._CanCastAbilityColor ?? _CanCastAbilityColor ?? Color.Empty;
+    private Color? _canNotCastAbilityColor;
+    [JsonProperty("_CanNotCastAbilityColor")]
+    public Color CanNotCastAbilityColor
+    {
+        get => Logic._canNotCastAbilityColor ?? _canNotCastAbilityColor ?? Color.Empty;
+        set => _canNotCastAbilityColor = value;
+    }
 
-    public Color? _CanNotCastAbilityColor { get; set; }
-
-    [JsonIgnore]
-    public Color CanNotCastAbilityColor => Logic._CanNotCastAbilityColor ?? _CanNotCastAbilityColor ?? Color.Empty;
-
-    public List<DeviceKeys> _AbilityKeys { get; set; }
-
-    [JsonIgnore]
-    public List<DeviceKeys> AbilityKeys => Logic._AbilityKeys ?? _AbilityKeys ?? new List<DeviceKeys>();
+    private List<DeviceKeys>? _abilityKeys;
+    [JsonProperty("_AbilityKeys")]
+    public List<DeviceKeys> AbilityKeys
+    {
+        get => Logic._abilityKeys ?? _abilityKeys ?? [];
+        set => _abilityKeys = value;
+    }
 
     public Dota2AbilityLayerHandlerProperties()
     { }
 
-    public Dota2AbilityLayerHandlerProperties(bool assign_default = false) : base(assign_default) { }
+    public Dota2AbilityLayerHandlerProperties(bool assignDefault = false) : base(assignDefault) { }
 
     public override void Default()
     {
         base.Default();
 
-        _CanCastAbilityColor = Color.FromArgb(0, 255, 0);
-        _CanNotCastAbilityColor = Color.FromArgb(255, 0, 0);
-        _AbilityKeys = new List<DeviceKeys> { DeviceKeys.Q, DeviceKeys.W, DeviceKeys.E, DeviceKeys.D, DeviceKeys.F, DeviceKeys.R };
+        _canCastAbilityColor = Color.FromArgb(0, 255, 0);
+        _canNotCastAbilityColor = Color.FromArgb(255, 0, 0);
+        _abilityKeys = new List<DeviceKeys> { DeviceKeys.Q, DeviceKeys.W, DeviceKeys.E, DeviceKeys.D, DeviceKeys.F, DeviceKeys.R };
     }
 }
 
-public class Dota2AbilityLayerHandler : LayerHandler<Dota2AbilityLayerHandlerProperties>
+public class Dota2AbilityLayerHandler() : LayerHandler<Dota2AbilityLayerHandlerProperties>("Dota 2 - Abilities")
 {
     protected override UserControl CreateControl()
     {
         return new Control_Dota2AbilityLayer(this);
     }
 
-    private readonly List<string> _ignoredAbilities = new() { "seasonal", "high_five" };
+    private readonly HashSet<string> _ignoredAbilities = ["seasonal", "high_five"];
 
-    public Dota2AbilityLayerHandler(): base("Dota 2 - Abilities")
-    {
-    }
-
-    private bool _empty = true;
     public override EffectLayer Render(IGameState state)
     {
         if (state is not GameState_Dota2 dota2State) return EffectLayer.EmptyLayer;
@@ -71,19 +74,22 @@ public class Dota2AbilityLayerHandler : LayerHandler<Dota2AbilityLayerHandlerPro
             if (_ignoredAbilities.Any(ignoredAbilityName => ability.Name.Contains(ignoredAbilityName)))
                 continue;
 
-            _empty = false;
-
             if (index >= Properties.AbilityKeys.Count) continue;
             var key = Properties.AbilityKeys[index];
 
-            if (ability.CanCast && ability.Cooldown == 0 && ability.Level > 0)
-                EffectLayer.Set(key, Properties.CanCastAbilityColor);
-            else if (ability.Cooldown <= 5 && ability.Level > 0)
-                EffectLayer.Set(key, ColorUtils.BlendColors(Properties.CanCastAbilityColor, Properties.CanNotCastAbilityColor, ability.Cooldown / 5.0));
-            else
-                EffectLayer.Set(key, Properties.CanNotCastAbilityColor);
+            switch (ability)
+            {
+                case { CanCast: true, Cooldown: 0, Level: > 0 }:
+                    EffectLayer.Set(key, Properties.CanCastAbilityColor);
+                    break;
+                case { Cooldown: <= 5, Level: > 0 }:
+                    EffectLayer.Set(key, ColorUtils.BlendColors(Properties.CanCastAbilityColor, Properties.CanNotCastAbilityColor, ability.Cooldown / 5.0));
+                    break;
+                default:
+                    EffectLayer.Set(key, Properties.CanNotCastAbilityColor);
+                    break;
+            }
         }
         return EffectLayer;
-
     }
 }

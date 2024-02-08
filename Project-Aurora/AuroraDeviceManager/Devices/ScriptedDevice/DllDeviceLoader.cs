@@ -3,27 +3,20 @@ using System.Reflection;
 
 namespace AuroraDeviceManager.Devices.ScriptedDevice;
 
-internal sealed class DllDeviceLoader : IDeviceLoader
+internal sealed class DllDeviceLoader(string dllFolder) : IDeviceLoader
 {
-    private readonly string _dllFolder;
-
-    private readonly List<Assembly> _deviceAssemblies = new();
-
-    public DllDeviceLoader(string dllFolder)
-    {
-        _dllFolder = dllFolder;
-    }
+    private readonly HashSet<Assembly> _deviceAssemblies = [];
 
     public IEnumerable<IDevice> LoadDevices()
     {
-        if (!Directory.Exists(_dllFolder))
-            Directory.CreateDirectory(_dllFolder);
+        if (!Directory.Exists(dllFolder))
+            Directory.CreateDirectory(dllFolder);
 
-        var files = Directory.GetFiles(_dllFolder, "*.dll");
+        var files = Directory.GetFiles(dllFolder, "*.dll");
         if (files.Length == 0)
             return ImmutableList<IDevice>.Empty;
 
-        Global.Logger.Information("Loading devices plugins from {DllFolder}", _dllFolder);
+        Global.Logger.Information("Loading devices plugins from {DllFolder}", dllFolder);
 
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 

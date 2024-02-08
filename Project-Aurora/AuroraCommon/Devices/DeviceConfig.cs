@@ -71,7 +71,7 @@ public sealed class DeviceConfig : INotifyPropertyChanged
         {"Wooting", "Wooting (RGB.NET)"},
     };
 
-    private static List<string> DefaultEnabledDevices =>
+    private static HashSet<string> DefaultEnabledDevices =>
     [
         "Corsair (RGB.NET)",
         "Logitech (RGB.NET)",
