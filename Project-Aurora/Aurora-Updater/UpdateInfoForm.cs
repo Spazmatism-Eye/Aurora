@@ -42,7 +42,7 @@ public partial class UpdateInfoForm : Form
         labelCurrentVersion.Text = $"Installed Version: {CurrentVersion}";
         richTextBoxChangelog.Text = Changelog;
         labelUpdateSize.Text = $"Update Download Size: {SizeSuffix(UpdateSize, 2)}";
-        lblUpdateTime.Text = $"Release date: {UpdateTime.ToLocalTime()}";
+        lblUpdateTime.Text = $"Release date: {UpdateTime.ToLocalTime():dd/MM/yyyy hh:mm}";
         lblDownloadCount.Text = $"Download Count: {DownloadTime}";
     }
 
@@ -54,7 +54,7 @@ public partial class UpdateInfoForm : Form
     }
 
     // Source: http://stackoverflow.com/questions/14488796/does-net-provide-an-easy-way-convert-bytes-to-kb-mb-gb-etc
-    private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+    private static readonly string[] SizeSuffixes = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
     private static string SizeSuffix(long value, int decimalPlaces = 1)
     {
@@ -81,10 +81,5 @@ public partial class UpdateInfoForm : Form
         File.WriteAllText("skipversion.txt", UpdateVersion);
         DialogResult = DialogResult.Cancel;
         Close();
-    }
-
-    private void richTextBoxChangelog_TextChanged(object sender, EventArgs e)
-    {
-
     }
 }

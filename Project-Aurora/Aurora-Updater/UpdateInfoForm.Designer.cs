@@ -78,7 +78,6 @@
             richTextBoxChangelog.Size = new System.Drawing.Size(653, 351);
             richTextBoxChangelog.TabIndex = 1;
             richTextBoxChangelog.Text = "";
-            richTextBoxChangelog.TextChanged += richTextBoxChangelog_TextChanged;
             // 
             // labelChangelogTitle
             // 
