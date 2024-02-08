@@ -10,7 +10,7 @@ public static class LedGroups
         .ToImmutableHashSet();
 
     public static readonly ImmutableHashSet<LedId> MouseLeds = Enum.GetValues(typeof(LedId)).Cast<LedId>()
-        .Where(id => id.ToString().StartsWith("Mouse"))
+        .Where(id => id.ToString().StartsWith("Mouse") && !id.ToString().StartsWith("Mousepad"))
         .ToImmutableHashSet();
 
     public static readonly ImmutableHashSet<LedId> MousepadLeds = Enum.GetValues(typeof(LedId)).Cast<LedId>()
