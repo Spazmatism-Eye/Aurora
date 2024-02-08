@@ -127,18 +127,7 @@ public partial class Control_SettingsDevicesAndWrappers
     {
         Dispatcher.BeginInvoke(() =>
         {
-            if (appName == null)
-            {
-                LightsyncConnectionStatusLabel.Content = "Disconnected";
-                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Chocolate);
-                LightsyncCurrentApplicationLabel.Content = "-";
-            }
-            else
-            {
-                LightsyncConnectionStatusLabel.Content = "Connected";
-                LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.LightGreen);
-                LightsyncCurrentApplicationLabel.Content = Path.GetFileName(appName);
-            }
+            LightsyncCurrentApplicationLabel.Content = appName == null ? "-" : Path.GetFileName(appName);
         }, DispatcherPriority.Loaded);
     }
 
