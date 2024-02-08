@@ -61,6 +61,8 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
                 typeof(LayerHandlerProperties),
             "Aurora.Profiles.Dota_2.Layers.Dota2HeroAbiltiyEffectsLayerHandlerProperties" =>
                 typeof(Profiles.Dota_2.Layers.Dota2HeroAbilityEffectsLayerHandlerProperties),
+            "Aurora.Profiles.GTA5.Layers.GTA5PoliceSirenLayerHandlerProperties" =>
+                typeof(Profiles.GTA5.Layers.Gta5PoliceSirenLayerHandlerProperties),
             "Aurora.Profiles.TheDivision.TheDivisionSettings" =>
                 typeof(Settings.ApplicationProfile),
             "Aurora.Profiles.Overwatch.OverwatchProfile" =>
@@ -288,6 +290,11 @@ public class TypeAnnotatedObjectConverter : JsonConverter
                 var s = value.ToString();
                 if (type == typeof(bool) || type == typeof(Color))
                 {
+                    var colorString = value.ToString();
+                    if (colorString.StartsWith('"'))
+                    {
+                        return JsonConvert.DeserializeObject(value.ToString(), type);
+                    }
                     return JsonConvert.DeserializeObject("\"" + value + "\"", type);
                 }
                 if (objectType.FullName != typeof(Color).FullName && type?.FullName != typeof(Color).FullName)

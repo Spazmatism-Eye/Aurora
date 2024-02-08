@@ -174,7 +174,8 @@ namespace Aurora.Profiles.LeagueOfLegends.GSI.Nodes
         Ziggs,
         Zilean,
         Zoe,
-        Zyra
+        Zyra,
+        Wukong,
     }
 
     public enum Team
