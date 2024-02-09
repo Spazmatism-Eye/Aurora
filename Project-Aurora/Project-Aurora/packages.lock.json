@@ -144,6 +144,15 @@
         "resolved": "0.1.3",
         "contentHash": "NSDy0QP+XAucd5n7x8NeS2f0MVjEBAqlQ/0XpJ8IjgfRyOoKUKmNHvkN02XkhxV8tqAOPDBB8C36AjFm1Gq92w=="
       },
+      "RGB.NET.Devices.CorsairLegacy": {
+        "type": "Direct",
+        "requested": "[2.0.4-prerelease.14, )",
+        "resolved": "2.0.4-prerelease.14",
+        "contentHash": "zE4KNv5lwmaUwM6RNf24DezkbpoLIvdCbcfAJzxMBlw85mrskF+Te93OXUEPjXQHpXBhZZdlgT1i5HiN4GaNZQ==",
+        "dependencies": {
+          "RGB.NET.Core": "2.0.4-prerelease.14"
+        }
+      },
       "SemanticVersioning": {
         "type": "Direct",
         "requested": "[2.0.2, )",
@@ -472,16 +481,8 @@
       },
       "RGB.NET.Core": {
         "type": "Transitive",
-        "resolved": "2.0.0",
-        "contentHash": "Uunb3LX984q8atiQfie8qmAE00nc/wNduKQXIWasbIjACvAO5WT+VXXLdI74M4gpMsgf3x7w3n9uWkkxgM1lzg=="
-      },
-      "RGB.NET.Devices.CorsairLegacy": {
-        "type": "Transitive",
-        "resolved": "2.0.0",
-        "contentHash": "S2MDVvdg+A1Pxaa+HgneC5Fo4f31WIEPuxhV5goOCCGw46Obob56W+8s7TgKvj+fhrg4EJwNh86F66ULGmVCPQ==",
-        "dependencies": {
-          "RGB.NET.Core": "2.0.0"
-        }
+        "resolved": "2.0.4-prerelease.14",
+        "contentHash": "jqpC9T1BAy4q0yFtmWjxhreNOTYEUElxGPJVfKsAoPj7q1rArq2d+KMlLS24nz+lU9/6pfIPzmgVN9q1yesvXA=="
       },
       "RGB.NET.Devices.Logitech": {
         "type": "Transitive",
@@ -1588,7 +1589,6 @@
         "dependencies": {
           "IronPython": "[3.4.1, )",
           "Microsoft.Win32.SystemEvents": "[8.0.0, )",
-          "RGB.NET.Devices.CorsairLegacy": "[2.0.0, )",
           "RGB.NET.Devices.Logitech": "[2.0.0-prerelease.111, )",
           "Serilog": "[2.10.0, )",
           "SmartThreadPool.dll": "[2.3.0, )",
