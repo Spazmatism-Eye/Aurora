@@ -34,14 +34,14 @@ public partial class Control_Dota2AbilityLayer
     {
         if (DataContext is not Dota2AbilityLayerHandler layerHandler || _settingsSet) return;
 
-        ColorPicker_CanCastAbility.SelectedColor = ColorUtils.DrawingColorToMediaColor(layerHandler.Properties._CanCastAbilityColor ?? System.Drawing.Color.Empty);
-        ColorPicker_CanNotCastAbility.SelectedColor = ColorUtils.DrawingColorToMediaColor(layerHandler.Properties._CanNotCastAbilityColor ?? System.Drawing.Color.Empty);
-        UIUtils.SetSingleKey(ability_key1_textblock, layerHandler.Properties._AbilityKeys, 0);
-        UIUtils.SetSingleKey(ability_key2_textblock, layerHandler.Properties._AbilityKeys, 1);
-        UIUtils.SetSingleKey(ability_key3_textblock, layerHandler.Properties._AbilityKeys, 2);
-        UIUtils.SetSingleKey(ability_key4_textblock, layerHandler.Properties._AbilityKeys, 3);
-        UIUtils.SetSingleKey(ability_key5_textblock, layerHandler.Properties._AbilityKeys, 4);
-        UIUtils.SetSingleKey(ability_key6_textblock, layerHandler.Properties._AbilityKeys, 5);
+        ColorPicker_CanCastAbility.SelectedColor = ColorUtils.DrawingColorToMediaColor(layerHandler.Properties.CanCastAbilityColor);
+        ColorPicker_CanNotCastAbility.SelectedColor = ColorUtils.DrawingColorToMediaColor(layerHandler.Properties.CanNotCastAbilityColor);
+        UIUtils.SetSingleKey(ability_key1_textblock, layerHandler.Properties.AbilityKeys, 0);
+        UIUtils.SetSingleKey(ability_key2_textblock, layerHandler.Properties.AbilityKeys, 1);
+        UIUtils.SetSingleKey(ability_key3_textblock, layerHandler.Properties.AbilityKeys, 2);
+        UIUtils.SetSingleKey(ability_key4_textblock, layerHandler.Properties.AbilityKeys, 3);
+        UIUtils.SetSingleKey(ability_key5_textblock, layerHandler.Properties.AbilityKeys, 4);
+        UIUtils.SetSingleKey(ability_key6_textblock, layerHandler.Properties.AbilityKeys, 5);
 
         _settingsSet = true;
     }
@@ -56,13 +56,13 @@ public partial class Control_Dota2AbilityLayer
     private void abilities_canuse_colorpicker_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
     {
         if (IsLoaded && _settingsSet && DataContext is Dota2AbilityLayerHandler layerHandler && sender is ColorPicker { SelectedColor: not null } colorPicker)
-            layerHandler.Properties._CanCastAbilityColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
+            layerHandler.Properties.CanCastAbilityColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
     }
 
     private void abilities_cannotuse_colorpicker_SelectedColorChanged(object? sender, RoutedPropertyChangedEventArgs<Color?> e)
     {
         if (IsLoaded && _settingsSet && DataContext is Dota2AbilityLayerHandler layerHandler && sender is ColorPicker { SelectedColor: not null } colorPicker)
-            layerHandler.Properties._CanNotCastAbilityColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
+            layerHandler.Properties.CanNotCastAbilityColor = ColorUtils.MediaColorToDrawingColor(colorPicker.SelectedColor.Value);
     }
 
     private void ability_key1_textblock_MouseDown(object? sender, MouseButtonEventArgs e)
@@ -133,9 +133,9 @@ public partial class Control_Dota2AbilityLayer
 
             if (resultingKeys.Count <= 0) return;
             if (IsLoaded)
-                ((Dota2AbilityLayerHandler)DataContext).Properties._AbilityKeys[abilityPosition] = resultingKeys[0];
+                ((Dota2AbilityLayerHandler)DataContext).Properties.AbilityKeys[abilityPosition] = resultingKeys[0];
 
-            UIUtils.SetSingleKey(textBlock, ((Dota2AbilityLayerHandler)DataContext).Properties._AbilityKeys, abilityPosition);
+            UIUtils.SetSingleKey(textBlock, ((Dota2AbilityLayerHandler)DataContext).Properties.AbilityKeys, abilityPosition);
         });
     }
 
