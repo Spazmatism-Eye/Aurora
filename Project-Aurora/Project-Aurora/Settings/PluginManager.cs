@@ -109,7 +109,7 @@ namespace Aurora.Settings
         }
     }
 
-    public class PluginManager : ObjectSettings<PluginManagerSettings>, IInit, IPluginHost
+    public class PluginManager : ObjectSettings<PluginManagerSettings>, IInitializableProfile, IPluginHost
     {
         public const string PluginDirectory = "Plugins";
 

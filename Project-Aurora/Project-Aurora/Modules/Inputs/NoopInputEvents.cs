@@ -13,13 +13,13 @@ public sealed class NoopInputEvents : IInputEvents
         //noop
     }
 
-    public event EventHandler<KeyboardKeyEvent>? KeyDown;
-    public event EventHandler<KeyboardKeyEvent>? KeyUp;
-    public event EventHandler<MouseKeyEvent>? MouseButtonDown;
-    public event EventHandler<MouseKeyEvent>? MouseButtonUp;
-    public event EventHandler<MouseScrollEvent>? Scroll;
-    public IReadOnlyList<Keys> PressedKeys { get; } = Array.Empty<Keys>();
-    public IReadOnlyList<MouseButtons> PressedButtons { get; } = Array.Empty<MouseButtons>();
+    public event EventHandler<KeyboardKeyEventArgs>? KeyDown;
+    public event EventHandler<KeyboardKeyEventArgs>? KeyUp;
+    public event EventHandler<MouseKeyEventArgs>? MouseButtonDown;
+    public event EventHandler<MouseKeyEventArgs>? MouseButtonUp;
+    public event EventHandler<MouseScrollEventArgs>? Scroll;
+    public IReadOnlyCollection<Keys> PressedKeys { get; } = new HashSet<Keys>();
+    public IReadOnlyCollection<MouseButtons> PressedMouseButtons { get; } = new HashSet<MouseButtons>();
     public bool Shift => false;
     public bool Alt => false;
     public bool Control => false;

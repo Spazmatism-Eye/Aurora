@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Aurora.Settings.Layers;
 
-public class ToggleKeyLayerHandlerProperties : LayerHandlerProperties2Color<ToggleKeyLayerHandlerProperties> {
+public sealed class ToggleKeyLayerHandlerProperties : LayerHandlerProperties2Color<ToggleKeyLayerHandlerProperties> {
 
     public ToggleKeyLayerHandlerProperties()
     { }
@@ -20,17 +20,17 @@ public class ToggleKeyLayerHandlerProperties : LayerHandlerProperties2Color<Togg
     [JsonProperty("_TriggerKeys")]
     public Keybind[] TriggerKeys
     {
-        get { return Logic._triggerKeys ?? _triggerKeys ?? new Keybind[] { }; }
+        get => Logic._triggerKeys ?? _triggerKeys ?? [];
         set => _triggerKeys = value;
     }
 
     public override void Default() {
         base.Default();
-        _triggerKeys = new Keybind[] { };
+        _triggerKeys = [];
     }
 }
 
-public class ToggleKeyLayerHandler : LayerHandler<ToggleKeyLayerHandlerProperties>
+public sealed class ToggleKeyLayerHandler : LayerHandler<ToggleKeyLayerHandlerProperties>
 {
     private bool _state = true;
     private readonly SolidBrush _primaryBrush;
@@ -52,8 +52,8 @@ public class ToggleKeyLayerHandler : LayerHandler<ToggleKeyLayerHandlerPropertie
 
     public override void Dispose()
     {
-        base.Dispose();
         InputsModule.InputEvents.Result.KeyDown -= InputEvents_KeyDown;
+        base.Dispose();
     }
 
     protected override System.Windows.Controls.UserControl CreateControl()

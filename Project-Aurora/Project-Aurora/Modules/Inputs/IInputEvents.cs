@@ -7,47 +7,31 @@ using JetBrains.Annotations;
 
 namespace Aurora.Modules.Inputs;
 
-public abstract class AuroraInputEvent : EventArgs
+public abstract class AuroraInputEventArgs : EventArgs
 {
     public bool Intercepted { get; set; }
 }
 
-public class KeyboardKeyEvent : AuroraInputEvent
+public class KeyboardKeyEventArgs(Keys key, bool isExtended, IReadOnlyCollection<Keys> pressedKeys) : AuroraInputEventArgs
 {
-    public Keys Key { get; }
-    private bool IsExtended { get; }
-    private DeviceKeys? _deviceKey;
-
-    public KeyboardKeyEvent(Keys key, bool isExtended)
-    {
-        Key = key;
-        IsExtended = isExtended;
-    }
+    public Keys Key { get; } = key;
+    private bool IsExtended { get; } = isExtended;
+    public IReadOnlyCollection<Keys> PressedKeys { get; } = pressedKeys;
 
     public DeviceKeys GetDeviceKey()
     {
-        return _deviceKey ??= KeyUtils.GetDeviceKey(Key, IsExtended);
+        return KeyUtils.GetDeviceKey(Key, IsExtended);
     }
 }
 
-public class MouseKeyEvent : AuroraInputEvent
+public class MouseKeyEventArgs(MouseButtons key) : AuroraInputEventArgs
 {
-    public MouseButtons Key { get; }
-
-    public MouseKeyEvent(MouseButtons key)
-    {
-        Key = key;
-    }
+    public MouseButtons Key { get; } = key;
 }
 
-public class MouseScrollEvent : AuroraInputEvent
+public class MouseScrollEventArgs(int wheelDelta) : AuroraInputEventArgs
 {
-    public int WheelDelta { get; }
-
-    public MouseScrollEvent(int wheelDelta)
-    {
-        WheelDelta = wheelDelta;
-    }
+    public int WheelDelta { get; } = wheelDelta;
 }
 
 public interface IInputEvents : IDisposable
@@ -55,30 +39,30 @@ public interface IInputEvents : IDisposable
     /// <summary>
     /// Event for a Key pressed Down on a keyboard
     /// </summary>
-    event EventHandler<KeyboardKeyEvent> KeyDown;
+    event EventHandler<KeyboardKeyEventArgs> KeyDown;
 
     /// <summary>
     /// Event for a Key released on a keyboard
     /// </summary>
-    event EventHandler<KeyboardKeyEvent> KeyUp;
+    event EventHandler<KeyboardKeyEventArgs> KeyUp;
 
     /// <summary>
     /// Event that fires when a mouse button is pressed down.
     /// </summary>
-    event EventHandler<MouseKeyEvent> MouseButtonDown;
+    event EventHandler<MouseKeyEventArgs> MouseButtonDown;
 
     /// <summary>
     /// Event that fires when a mouse button is released.
     /// </summary>
-    event EventHandler<MouseKeyEvent> MouseButtonUp;
+    event EventHandler<MouseKeyEventArgs> MouseButtonUp;
 
     /// <summary>
     /// Event that fires when the mouse scroll wheel is scrolled.
     /// </summary>
-    event EventHandler<MouseScrollEvent> Scroll;
+    event EventHandler<MouseScrollEventArgs> Scroll;
 
-    IReadOnlyList<Keys> PressedKeys { get; }
-    IReadOnlyList<MouseButtons> PressedButtons { get; }
+    IReadOnlyCollection<Keys> PressedKeys { get; }
+    IReadOnlyCollection<MouseButtons> PressedMouseButtons { get; }
     bool Shift { get; }
     bool Alt { get; }
     bool Control { get; }

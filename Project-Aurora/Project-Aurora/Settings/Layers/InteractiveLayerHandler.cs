@@ -183,7 +183,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
         DeviceKeyUp(Properties.MouseEffectKey);
     }
 
-    private void InputEventsKeyUp(object? sender, KeyboardKeyEvent e)
+    private void InputEventsKeyUp(object? sender, KeyboardKeyEventArgs e)
     {
         var deviceKey = e.GetDeviceKey();
         DeviceKeyUp(deviceKey);
@@ -210,7 +210,7 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
         DeviceKeyDown(Properties.MouseEffectKey);
     }
 
-    private void InputEventsKeyDown(object? sender, KeyboardKeyEvent e)
+    private void InputEventsKeyDown(object? sender, KeyboardKeyEventArgs e)
     {
         var deviceKey = e.GetDeviceKey();
 
@@ -413,6 +413,12 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
 
     public override void Dispose()
     {
+        var inputEvents = InputsModule.InputEvents.Result;
+        inputEvents.KeyDown -= InputEventsKeyDown;
+        inputEvents.KeyUp -= InputEventsKeyUp;
+        inputEvents.MouseButtonDown -= MouseKeyDown;
+        inputEvents.MouseButtonUp -= MouseKeyUp;
+
         EffectLayer.Dispose();
         base.Dispose();
     }

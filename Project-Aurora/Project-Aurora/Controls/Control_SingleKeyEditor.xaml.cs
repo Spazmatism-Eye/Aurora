@@ -37,17 +37,18 @@ public partial class Control_SingleKeyEditor
         assignButton.Content = assigning ? "Press a key" : "Assign";
     }
 
-    private static void InputEvents_KeyDown(object? sender, KeyboardKeyEvent e) {
-        if (_listeningEditor != null)
-            _listeningEditor.Dispatcher.BeginInvoke(() => {
-                _listeningEditor.SelectedKey = e.Key;
-                _listeningEditor.UpdateButtonText(false);
-                _listeningEditor = null;
-            }, DispatcherPriority.Input);
+    private static void InputEvents_KeyDown(object? sender, KeyboardKeyEventArgs e)
+    {
+        _listeningEditor?.Dispatcher.BeginInvoke(() => {
+            _listeningEditor.SelectedKey = e.Key;
+            _listeningEditor.UpdateButtonText(false);
+            _listeningEditor = null;
+        }, DispatcherPriority.Input);
     }
 
     // Dependency Property
-    public static readonly DependencyProperty SelectedKeyProperty = DependencyProperty.Register("SelectedKey", typeof(Keys), typeof(Control_SingleKeyEditor), new FrameworkPropertyMetadata(default(Keys), FrameworkPropertyMetadataOptions.AffectsRender));
+    public static readonly DependencyProperty SelectedKeyProperty = DependencyProperty.Register(nameof(SelectedKey), typeof(Keys),
+        typeof(Control_SingleKeyEditor), new FrameworkPropertyMetadata(default(Keys), FrameworkPropertyMetadataOptions.AffectsRender));
 
     public Keys SelectedKey {
         get => (Keys)GetValue(SelectedKeyProperty);
@@ -57,5 +58,10 @@ public partial class Control_SingleKeyEditor
     private async void Control_SingleKeyEditor_OnLoaded(object sender, RoutedEventArgs e)
     {
         (await InputsModule.InputEvents).KeyDown += InputEvents_KeyDown;
+    }
+
+    private async void Control_SingleKeyEditor_OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        (await InputsModule.InputEvents).KeyDown -= InputEvents_KeyDown;
     }
 }

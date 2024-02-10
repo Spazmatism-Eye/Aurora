@@ -6,7 +6,7 @@ using Aurora.Settings;
 
 namespace Aurora.Profiles
 {
-    public interface ILightEvent : IInit
+    public interface ILightEvent : IInitializableProfile
     {
         void UpdateLights(EffectFrame frame);
 

@@ -124,7 +124,7 @@ public class BooleanMouseDown : Evaluatable<bool> {
         .WithChild(new Label { Content = "mouse button down" });
 
     /// <summary>True if the global event bus's pressed mouse button list contains the target button.</summary>
-    protected override bool Execute(IGameState gameState) => InputsModule.InputEvents.Result.PressedButtons.Contains(TargetButton);
+    protected override bool Execute(IGameState gameState) => InputsModule.InputEvents.Result.PressedMouseButtons.Contains(TargetButton);
 
     public override Evaluatable<bool> Clone() => new BooleanMouseDown { TargetButton = TargetButton };
 }

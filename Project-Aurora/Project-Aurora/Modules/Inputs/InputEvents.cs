@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Aurora.Utils;
@@ -19,49 +17,42 @@ public sealed class InputEvents : IInputEvents
     /// <summary>
     /// Event for a Key pressed Down on a keyboard
     /// </summary>
-    public event EventHandler<KeyboardKeyEvent>? KeyDown;
+    public event EventHandler<KeyboardKeyEventArgs>? KeyDown;
 
     /// <summary>
     /// Event for a Key released on a keyboard
     /// </summary>
-    public event EventHandler<KeyboardKeyEvent>? KeyUp;
+    public event EventHandler<KeyboardKeyEventArgs>? KeyUp;
 
     /// <summary>
     /// Event that fires when a mouse button is pressed down.
     /// </summary>
-    public event EventHandler<MouseKeyEvent>? MouseButtonDown;
+    public event EventHandler<MouseKeyEventArgs>? MouseButtonDown;
 
     /// <summary>
     /// Event that fires when a mouse button is released.
     /// </summary>
-    public event EventHandler<MouseKeyEvent>? MouseButtonUp;
+    public event EventHandler<MouseKeyEventArgs>? MouseButtonUp;
 
     /// <summary>
     /// Event that fires when the mouse scroll wheel is scrolled.
     /// </summary>
-    public event EventHandler<MouseScrollEvent>? Scroll;
+    public event EventHandler<MouseScrollEventArgs>? Scroll;
 
-    private readonly List<Keys> _pressedKeySequence = new();
+    private readonly List<Keys> _pressedKeySequence = [];
 
-    private readonly List<MouseButtons> _pressedMouseButtons = new();
+    private readonly List<MouseButtons> _pressedMouseButtons = [];
 
     private bool _disposed;
 
-    public IReadOnlyList<Keys> PressedKeys => new ReadOnlyCollection<Keys>(_pressedKeySequence.ToArray());
+    public IReadOnlyCollection<Keys> PressedKeys { get; private set; } = [];
 
-    public IReadOnlyList<MouseButtons> PressedButtons => new ReadOnlyCollection<MouseButtons>(_pressedMouseButtons.ToArray());
+    public IReadOnlyCollection<MouseButtons> PressedMouseButtons => _pressedMouseButtons;
 
-    private static readonly Keys[] ShiftKeys = {Keys.ShiftKey, Keys.RShiftKey, Keys.LShiftKey};
-    public bool Shift => ShiftKeys.Any(PressedKeys.Contains);
-
-    private static readonly Keys[] AltKeys = {Keys.Menu, Keys.RMenu, Keys.LMenu};
-    public bool Alt => AltKeys.Any(PressedKeys.Contains);
-
-    private static readonly Keys[] CtrlKeys = {Keys.ControlKey, Keys.RControlKey, Keys.LControlKey};
-    public bool Control => CtrlKeys.Any(PressedKeys.Contains);
-
-    private static readonly Keys[] WinKeys = { Keys.LWin, Keys.RWin };
-    public bool Windows => WinKeys.Any(PressedKeys.Contains);
+    public bool Shift { get; private set; }
+    public bool Alt { get; private set; }
+    public bool Control { get; private set; }
+    public bool Windows { get; private set; }
 
     private delegate nint WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable to keep reference for garbage collector
@@ -80,7 +71,7 @@ public sealed class InputEvents : IInputEvents
         RawInputDevice.RegisterDevice(HidUsageAndPage.Mouse, RawInputDeviceFlags.InputSink, _hWnd);
 
         _fnWndProcHook = Hook;
-        nint newLong = Marshal.GetFunctionPointerForDelegate(_fnWndProcHook);
+        var newLong = Marshal.GetFunctionPointerForDelegate(_fnWndProcHook);
         User32.SetWindowLongPtr(_hWnd, -4, newLong);
     }
     
@@ -123,17 +114,27 @@ public sealed class InputEvents : IInputEvents
                 return false;
             }
 
-            var keyboardKeyEvent = new KeyboardKeyEvent(key, flags.HasFlag(RawKeyboardFlags.KeyE0));
-            if ((flags & RawKeyboardFlags.Up) != 0)
+            var down = (flags & RawKeyboardFlags.Up) == 0;
+            SetModifierKeys(key, down);
+            if (down)
             {
-                _pressedKeySequence.RemoveAll(k => k == key);
-                KeyUp?.Invoke(this, keyboardKeyEvent);
+                _pressedKeySequence.Add(key);
             }
             else
             {
-                if (!_pressedKeySequence.Contains(key))
-                    _pressedKeySequence.Add(key);
+                _pressedKeySequence.RemoveAll(k => k == key);
+            }
+
+            PressedKeys = _pressedKeySequence.ToArray();
+            
+            var keyboardKeyEvent = new KeyboardKeyEventArgs(key, flags.HasFlag(RawKeyboardFlags.KeyE0), PressedKeys);
+            if (down)
+            {
                 KeyDown?.Invoke(this, keyboardKeyEvent);
+            }
+            else
+            {
+                KeyUp?.Invoke(this, keyboardKeyEvent);
             }
 
             return keyboardKeyEvent.Intercepted;
@@ -142,6 +143,32 @@ public sealed class InputEvents : IInputEvents
         {
             Global.logger.Error(exc, "Exception while handling keyboard input");
             return false;
+        }
+    }
+
+    private void SetModifierKeys(Keys key, bool down)
+    {
+        switch (key)
+        {
+            case Keys.ShiftKey:
+            case Keys.RShiftKey:
+            case Keys.LShiftKey:
+                Shift = down;
+                break;
+            case Keys.Menu:
+            case Keys.RMenu:
+            case Keys.LMenu:
+                Alt = down;
+                break;
+            case Keys.ControlKey:
+            case Keys.RControlKey:
+            case Keys.LControlKey:
+                Control = down;
+                break;
+            case Keys.RWin:
+            case Keys.LWin:
+                Windows = down;
+                break;
         }
     }
 
@@ -154,15 +181,11 @@ public sealed class InputEvents : IInputEvents
         // Scrolling
         if (mouseData.ButtonData != 0)
         {
-            if (mouseData.Buttons == RawMouseButtonFlags.MouseWheel)
-            {
-                var mouseScrollEvent = new MouseScrollEvent(mouseData.ButtonData);
-                Scroll?.Invoke(this, mouseScrollEvent);
+            if (mouseData.Buttons != RawMouseButtonFlags.MouseWheel) return false;
 
-                return mouseScrollEvent.Intercepted;
-            }
-
-            return false;
+            var mouseScrollEvent = new MouseScrollEventArgs(mouseData.ButtonData);
+            Scroll?.Invoke(this, mouseScrollEvent);
+            return mouseScrollEvent.Intercepted;
         }
 
         var (button, isDown) = mouseData.Buttons switch
@@ -176,11 +199,10 @@ public sealed class InputEvents : IInputEvents
             _ => (MouseButtons.Left, false)
         };
 
-        var mouseKeyEvent = new MouseKeyEvent(button);
+        var mouseKeyEvent = new MouseKeyEventArgs(button);
         if (isDown)
         {
-            if (!_pressedMouseButtons.Contains(button))
-                _pressedMouseButtons.Add(button);
+            _pressedMouseButtons.Add(button);
             MouseButtonDown?.Invoke(this, mouseKeyEvent);
         }
         else

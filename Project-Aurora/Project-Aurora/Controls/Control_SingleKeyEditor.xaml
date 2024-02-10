@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              Loaded="Control_SingleKeyEditor_OnLoaded"
+             Unloaded="Control_SingleKeyEditor_OnUnloaded"
              mc:Ignorable="d">
     <DockPanel>
         <Button x:Name="assignButton" Content="Assign" DockPanel.Dock="Right" Width="100" Padding="8,2" Click="AssignButton_Click" />

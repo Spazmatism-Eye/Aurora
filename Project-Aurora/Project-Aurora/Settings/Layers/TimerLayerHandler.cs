@@ -13,14 +13,15 @@ using Aurora.Utils;
 
 namespace Aurora.Settings.Layers {
 
-    public class TimerLayerHandlerProperties : LayerHandlerProperties2Color<TimerLayerHandlerProperties> {
+    public sealed class TimerLayerHandlerProperties : LayerHandlerProperties2Color<TimerLayerHandlerProperties> {
 
-        public TimerLayerHandlerProperties() : base() { }
+        public TimerLayerHandlerProperties()
+        { }
         public TimerLayerHandlerProperties(bool assign_default) : base(assign_default) { }
 
-        public Keybind[] _TriggerKeys { get; set; }
+        public Keybind[]? _TriggerKeys { get; set; }
         [JsonIgnore]
-        public Keybind[] TriggerKeys { get { return Logic._TriggerKeys ?? _TriggerKeys ?? new Keybind[] { }; } }
+        public Keybind[] TriggerKeys { get { return Logic._TriggerKeys ?? _TriggerKeys ?? []; } }
 
         [LogicOverridable("Duration")]
         public int? _Duration { get; set; }
@@ -65,8 +66,8 @@ namespace Aurora.Settings.Layers {
         }
 
         public override void Dispose() {
-            base.Dispose();
             InputsModule.InputEvents.Result.KeyDown -= InputEvents_KeyDown;
+            base.Dispose();
         }
 
         protected override UserControl CreateControl() {

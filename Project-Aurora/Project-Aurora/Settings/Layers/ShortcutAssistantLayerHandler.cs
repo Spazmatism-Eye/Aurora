@@ -7,7 +7,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Aurora.Modules;
+using Aurora.Modules.Inputs;
 using Aurora.Settings.Layers.Controls;
 using Aurora.Utils;
 using Common.Devices;
@@ -87,26 +89,23 @@ public class ShortcutAssistantLayerHandlerProperties : LayerHandlerProperties<Sh
     {
         get
         {
-            if (_shortcutKeysInvalidated)
+            if (!_shortcutKeysInvalidated) return _shortcutKeysTree;
+            _shortcutKeysTree = new Tree<Keys>(Keys.None);
+
+            foreach (var keybind in ShortcutKeys)
             {
-                _shortcutKeysTree = new Tree<Keys>(Keys.None);
+                var keys = keybind.ToArray();
 
-                foreach (var keyb in ShortcutKeys)
+                if (MergeModifierKey)
                 {
-                    var keys = keyb.ToArray();
-
-                    if (MergeModifierKey)
-                    {
-                        for (var i = 0; i < keys.Length; i++)
-                            keys[i] = KeyUtils.GetStandardKey(keys[i]);
-                    }
-
-                    _shortcutKeysTree.AddBranch(keys);
+                    for (var i = 0; i < keys.Length; i++)
+                        keys[i] = KeyUtils.GetStandardKey(keys[i]);
                 }
 
-                _shortcutKeysInvalidated = false;
+                _shortcutKeysTree.AddBranch(keys);
             }
 
+            _shortcutKeysInvalidated = false;
             return _shortcutKeysTree;
         }
     }
@@ -135,12 +134,10 @@ public class ShortcutAssistantLayerHandlerProperties : LayerHandlerProperties<Sh
     }
 }
 
-public class ShortcutAssistantLayerHandler : LayerHandler<ShortcutAssistantLayerHandlerProperties>
+public class ShortcutAssistantLayerHandler() : LayerHandler<ShortcutAssistantLayerHandlerProperties>("Shortcut Assistant")
 {
-
-    public ShortcutAssistantLayerHandler() : base("Shortcut Assistant")
-    {
-    }
+    private bool _init;
+    private IReadOnlyCollection<Keys>? _heldKeys;
 
     protected override System.Windows.Controls.UserControl CreateControl()
     {
@@ -152,14 +149,47 @@ public class ShortcutAssistantLayerHandler : LayerHandler<ShortcutAssistantLayer
     /// Layer is considered active if the first pressed key is a child of the root of Properties.ShortcutKeysTree
     /// </summary>
     /// <returns>true if layer is active</returns>
-    private bool IsLayerActive()
+    private bool IsLayerActive([MaybeNullWhen(false)] out IReadOnlyCollection<Keys> heldKeys)
     {
-        var heldKeys = InputsModule.InputEvents.Result.PressedKeys;
+        if (!_init)
+        {
+            _init = true;
+            InputsModule.InputEvents.Result.KeyDown += OnKeyDown;
+            InputsModule.InputEvents.Result.KeyUp += OnKeyUp;
 
+            heldKeys = _heldKeys;
+            return _heldKeys != null;
+        }
+
+        heldKeys = _heldKeys;
+        return _heldKeys != null;
+    }
+
+    private void OnKeyDown(object? sender, KeyboardKeyEventArgs e)
+    {
+        var shouldActivate = ShouldActivate(e.PressedKeys);
+        if (shouldActivate)
+        {
+            _heldKeys = e.PressedKeys;
+        }
+    }
+
+    private void OnKeyUp(object? sender, KeyboardKeyEventArgs e)
+    {
+        var shouldActivate = ShouldActivate(e.PressedKeys);
+        if (!shouldActivate)
+        {
+            _heldKeys = null;
+        }
+    }
+
+    private bool ShouldActivate(IEnumerable<Keys> heldKeys)
+    {
         var keyToCheck = heldKeys.FirstOrDefault();
 
         var key = Properties.MergeModifierKey ? KeyUtils.GetStandardKey(keyToCheck) : keyToCheck;
-        return Properties.ShortcutKeysTree.ContainsItem(key) != null;
+        var shouldActivate = Properties.ShortcutKeysTree.ContainsItem(key) != null;
+        return shouldActivate;
     }
 
     private Keys[] MatchHeldKeysToShortcutTree(IEnumerable<Keys> heldKeys, Tree<Keys> shortcuts)
@@ -186,14 +216,12 @@ public class ShortcutAssistantLayerHandler : LayerHandler<ShortcutAssistantLayer
 
     public override EffectLayer Render(IGameState gamestate)
     {
-        if (IsLayerActive() == false)
+        if (!IsLayerActive(out var heldKeys))
         {
             return EffectLayer.EmptyLayer;
         }
 
         // The layer is active. At this point we have at least 1 key to highlight
-
-        var heldKeys = InputsModule.InputEvents.Result.PressedKeys;
         var heldKeysToHighlight = MatchHeldKeysToShortcutTree(heldKeys, Properties.ShortcutKeysTree); // This is also the path in shortcut tree
 
         var currentShortcutNode = Properties.ShortcutKeysTree.GetNodeByPath(heldKeysToHighlight);
@@ -247,5 +275,12 @@ public class ShortcutAssistantLayerHandler : LayerHandler<ShortcutAssistantLayer
         }
 
         layer.Set(selectedKeys, Properties.PrimaryColor);
+    }
+
+    public override void Dispose()
+    {
+        InputsModule.InputEvents.Result.KeyDown -= OnKeyDown;
+        InputsModule.InputEvents.Result.KeyUp -= OnKeyUp;
+        base.Dispose();
     }
 }

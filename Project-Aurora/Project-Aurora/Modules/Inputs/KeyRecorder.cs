@@ -21,7 +21,7 @@ public sealed class KeyRecorder : IDisposable
         inputEvents.KeyUp += InputEventsOnKeyUp;
     }
         
-    private void InputEventsOnKeyUp(object? sender, KeyboardKeyEvent e)
+    private void InputEventsOnKeyUp(object? sender, KeyboardKeyEventArgs e)
     {
         if (!IsRecording()) return;
         var key = e.GetDeviceKey();

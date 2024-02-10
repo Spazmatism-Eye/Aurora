@@ -1,24 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Aurora.Utils;
 
-public class Tree<T> where T : notnull
+public class Tree<T>(T rootNode) where T : notnull
 {
-    private readonly T _item;
-
-    /// <summary>
-    /// The tree item
-    /// </summary>
-    public T Item => _item;
+    private readonly T _item = rootNode;
 
     public bool IsLeaf => _children.Count == 0;
 
-    private readonly HashSet<Tree<T>> _children = new();
-
-    public Tree(T rootNode)
-    {
-        _item = rootNode;
-    }
+    private readonly HashSet<Tree<T>> _children = [];
 
     public Tree<T> AddBranch(T[] items, int startIndex = 0)
     {
@@ -42,23 +33,12 @@ public class Tree<T> where T : notnull
 
     public Tree<T>? ContainsItem(T item)
     {
-        foreach (var child in _children)
-        {
-            if (child._item.Equals(item))
-                return child;
-        }
-
-        return null;
+        return _children.FirstOrDefault(child => child._item.Equals(item));
     }
 
     public T[] GetChildren()
     {
-        var returnChildren = new List<T>();
-
-        foreach (var child in _children)
-            returnChildren.Add(child._item);
-
-        return returnChildren.ToArray();
+        return _children.Select(child => child._item).ToArray();
     }
 
     public T[] GetAllChildren()
@@ -100,17 +80,14 @@ public class Tree<T> where T : notnull
 
         var childrenEqual = false;
 
-        if(_children.Count == p._children.Count)
+        foreach(var child in _children)
         {
-            foreach(var child in _children)
-            {
-                var pTree = p.ContainsItem(child._item);
+            var pTree = p.ContainsItem(child._item);
 
-                if(!child.Equals(pTree))
-                {
-                    childrenEqual = false;
-                    break;
-                }
+            if(!child.Equals(pTree))
+            {
+                childrenEqual = false;
+                break;
             }
         }
 

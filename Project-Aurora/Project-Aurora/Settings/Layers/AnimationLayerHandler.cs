@@ -103,17 +103,14 @@ namespace Aurora.Settings.Layers
 
     [LogicOverrideIgnoreProperty("_PrimaryColor")]
     [LogicOverrideIgnoreProperty("_SecondaryColor")]
-    public class AnimationLayerHandler : LayerHandler<AnimationLayerHandlerProperties> {
-
-        private readonly List<RunningAnimation> _runningAnimations = new();
+    public sealed class AnimationLayerHandler() : LayerHandler<AnimationLayerHandlerProperties>("Animation Layer")
+    {
+        private readonly List<RunningAnimation> _runningAnimations = [];
         private readonly Stopwatch _animTimeStopwatch = new();
         private bool _alwaysOnHasPlayed; // A dedicated variable has to be used to make 'Always On' work with the repeat count since the logic has changed
         private double _previousTriggerDoubleValue; // Used for tracking when a numeric gamestate value changes
         private bool _previousTriggerBoolValue; // Used for tracking when a boolean gamestate value changes
-        private readonly HashSet<DeviceKeys> _pressedKeys = new(); // A list of pressed keys. Used to ensure that the key down event only fires for each key when it first goes down, not as it's held
-
-        public AnimationLayerHandler(): base("Animation Later") {
-        }
+        private readonly HashSet<DeviceKeys> _pressedKeys = []; // A list of pressed keys. Used to ensure that the key down event only fires for each key when it first goes down, not as it's held
 
         protected override async Task Initialize()
         {
@@ -126,6 +123,14 @@ namespace Aurora.Settings.Layers
 
         protected override UserControl CreateControl() {
             return new Control_AnimationLayer(this);
+        }
+
+        public override void Dispose()
+        {
+            InputsModule.InputEvents.Result.KeyDown -= InputEvents_KeyDown;
+            InputsModule.InputEvents.Result.KeyUp -= InputEvents_KeyUp;
+            
+            base.Dispose();
         }
 
         public override EffectLayer Render(IGameState gamestate)
@@ -302,7 +307,7 @@ namespace Aurora.Settings.Layers
         /// <summary>
         /// Event handler for when keys are pressed.
         /// </summary>
-        private void InputEvents_KeyDown(object? sender, KeyboardKeyEvent e) {
+        private void InputEvents_KeyDown(object? sender, KeyboardKeyEventArgs e) {
             // Skip handler if not waiting for a key-related trigger to save memory/CPU time
             if (!IsTriggerKeyBased(Properties.TriggerMode)) return;
 
@@ -319,7 +324,7 @@ namespace Aurora.Settings.Layers
         /// <summary>
         /// Event handler for when keys are released.
         /// </summary>
-        private void InputEvents_KeyUp(object? sender, KeyboardKeyEvent e) {
+        private void InputEvents_KeyUp(object? sender, KeyboardKeyEventArgs e) {
             // Skip handler if not waiting for a key-related trigger to save memory/CPU time
             if (!IsTriggerKeyBased(Properties.TriggerMode)) return;
 

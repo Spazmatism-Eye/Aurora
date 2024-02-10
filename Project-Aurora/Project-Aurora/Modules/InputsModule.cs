@@ -74,7 +74,7 @@ public sealed class InputsModule : AuroraModule
         }
     }
     
-    private static async void InterceptVolumeAsBrightness(object? sender, KeyboardKeyEvent e)
+    private static async void InterceptVolumeAsBrightness(object? sender, KeyboardKeyEventArgs e)
     {
         if (!(await InputEvents).Alt) return;
         

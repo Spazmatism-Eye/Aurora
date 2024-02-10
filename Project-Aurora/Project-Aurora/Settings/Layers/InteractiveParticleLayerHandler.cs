@@ -19,7 +19,7 @@ public sealed class InteractiveParticleLayerHandler : SimpleParticleLayerHandler
         (await InputsModule.InputEvents).KeyDown += KeyDown;
     }
 
-    private void KeyDown(object? sender, KeyboardKeyEvent e) {
+    private void KeyDown(object? sender, KeyboardKeyEventArgs e) {
         _awaitingKeys.Enqueue(e.GetDeviceKey());
     }
 
@@ -35,7 +35,7 @@ public sealed class InteractiveParticleLayerHandler : SimpleParticleLayerHandler
 
     public override void Dispose()
     {
-        base.Dispose();
         InputsModule.InputEvents.Result.KeyDown -= KeyDown;
+        base.Dispose();
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using Aurora.Settings;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Aurora.Modules;
+using Aurora.Modules.Inputs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Aurora.Controls;
@@ -42,13 +44,12 @@ public partial class Control_Keybind
         InitializeComponent();
     }
 
-    private void InputEventsKeyDown(object? sender, EventArgs e)
+    private void InputEventsKeyDown(object? sender, KeyboardKeyEventArgs e)
     {
-        Dispatcher.BeginInvoke(
-            async () =>
+        Dispatcher.BeginInvoke(() =>
             {
                 if (!Equals(_ActiveKeybind)) return;
-                var pressedKeys = (await InputsModule.InputEvents).PressedKeys;
+                var pressedKeys = e.PressedKeys;
 
                 if (ContextKeybind != null)
                 {
@@ -103,5 +104,10 @@ public partial class Control_Keybind
     private async void Control_Keybind_OnLoaded(object sender, RoutedEventArgs e)
     {
         (await InputsModule.InputEvents).KeyDown += InputEventsKeyDown;
+    }
+
+    private async void Control_Keybind_OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        (await InputsModule.InputEvents).KeyDown -= InputEventsKeyDown;
     }
 }

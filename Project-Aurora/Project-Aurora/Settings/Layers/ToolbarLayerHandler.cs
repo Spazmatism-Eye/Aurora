@@ -11,7 +11,7 @@ using Common.Devices;
 
 namespace Aurora.Settings.Layers;
 
-public class ToolbarLayerHandlerProperties : LayerHandlerProperties2Color<ToolbarLayerHandlerProperties> {
+public sealed class ToolbarLayerHandlerProperties : LayerHandlerProperties2Color<ToolbarLayerHandlerProperties> {
 
     public ToolbarLayerHandlerProperties()
     { }
@@ -46,12 +46,9 @@ public class ToolbarLayerHandlerProperties : LayerHandlerProperties2Color<Toolba
 /// Sort of like a radio button but for keys on the keyboard :)
 /// The mouse scroll wheel can also be used to scroll up and down the active key (if EnableScroll is true).
 /// </summary>
-public class ToolbarLayerHandler : LayerHandler<ToolbarLayerHandlerProperties> {
-
+public sealed class ToolbarLayerHandler() : LayerHandler<ToolbarLayerHandlerProperties>("Toolbar Layer")
+{
     private DeviceKeys _activeKey = DeviceKeys.NONE;
-
-    public ToolbarLayerHandler(): base("Toolbar Layer") {
-    }
 
     protected override async Task Initialize()
     {
@@ -83,7 +80,7 @@ public class ToolbarLayerHandler : LayerHandler<ToolbarLayerHandlerProperties> {
     /// <summary>
     /// Handler for when any keyboard button is pressed.
     /// </summary>
-    private void InputEvents_KeyDown(object? sender, KeyboardKeyEvent e) {
+    private void InputEvents_KeyDown(object? sender, KeyboardKeyEventArgs e) {
         if (Properties.Sequence.Keys.Contains(e.GetDeviceKey()))
             _activeKey = e.GetDeviceKey();
     }
@@ -91,7 +88,7 @@ public class ToolbarLayerHandler : LayerHandler<ToolbarLayerHandlerProperties> {
     /// <summary>
     /// Handler for the ScrollWheel.
     /// </summary>
-    private void InputEvents_Scroll(object? sender, MouseScrollEvent e)
+    private void InputEvents_Scroll(object? sender, MouseScrollEventArgs e)
     {
         if (!Properties.EnableScroll || Properties.Sequence.Keys.Count <= 1) return;
         // If there's no active key or the ks doesn't contain it (e.g. the sequence was just changed), make the first one active.
