@@ -61,7 +61,7 @@ public sealed class LightingStateManager
         _activeProcessMonitor = activeProcessMonitor;
         _runningProcessMonitor = runningProcessMonitor;
         _isOverlayActiveProfile = evt => evt.IsOverlayEnabled &&
-                                         evt.Config.ProcessNames.Any(ProcessRunning);
+                                         Array.Exists(evt.Config.ProcessNames, ProcessRunning);
         return;
 
         bool ProcessRunning(string name) => _runningProcessMonitor.Result.IsProcessRunning(name);
@@ -132,11 +132,8 @@ public sealed class LightingStateManager
             Global.Configuration.ProfileOrder.Add(kvp.Key);
         }
 
-        foreach (var key in Global.Configuration.ProfileOrder.ToList()
-                     .Where(key => !Events.ContainsKey(key) || Events[key] is not Application))
-        {
-            Global.Configuration.ProfileOrder.Remove(key);
-        }
+        Global.Configuration.ProfileOrder
+            .RemoveAll(key => !Events.ContainsKey(key) || Events[key] is not Application);
 
         PutProfileTop("logitech");
         PutProfileTop("chroma");
@@ -147,14 +144,6 @@ public sealed class LightingStateManager
     {
         Global.Configuration.ProfileOrder.Remove(profileId);
         Global.Configuration.ProfileOrder.Insert(0, profileId);
-    }
-
-    private void SaveAll()
-    {
-        foreach (var profile in Events.Where(profile => profile.Value is Application))
-        {
-            ((Application)profile.Value).SaveAll();
-        }
     }
 
     public void RegisterEvent(ILightEvent @event)
@@ -592,8 +581,8 @@ public sealed class LightingStateManager
     {
         _updateTimer?.Dispose();
         _updateTimer = null;
-        foreach (var app in Events)
-            app.Value.Dispose();
+        foreach (var (_, lightEvent) in Events)
+            lightEvent.Dispose();
     }
 }
 
