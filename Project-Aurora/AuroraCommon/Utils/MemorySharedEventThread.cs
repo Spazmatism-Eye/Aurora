@@ -27,11 +27,24 @@ internal static class MemorySharedEventThread
         }
     }
 
-    private class HandlesAndThread
+    private sealed class HandlesAndThread
     {
         private const int MaxHandles = 64;
     
         private CancellationTokenSource _cancellation = new();
+        private CancellationTokenSource CancelToken
+        {
+            get => _cancellation;
+            set
+            {
+                var old = _cancellation;
+                _cancellation = value;
+                _handles[0] = value.Token.WaitHandle;
+                old.Cancel();
+                old.Dispose();
+            }
+        }
+        
         private Thread _thread = new(() => { });
         
         private Action[] _actions = [() => { }];
@@ -41,7 +54,7 @@ internal static class MemorySharedEventThread
 
         internal HandlesAndThread()
         {
-            _handles = [_cancellation.Token.WaitHandle];
+            _handles = [CancelToken.Token.WaitHandle];
             _thread.Start();
         }
 
@@ -93,11 +106,7 @@ internal static class MemorySharedEventThread
                     o.UpdateRequestedHandle
                 }).ToArray();
 
-                _cancellation.Cancel();
-                _thread.Join();
-
-                _cancellation = new CancellationTokenSource();
-                _handles[0] = _cancellation.Token.WaitHandle;
+                CancelToken = new CancellationTokenSource();
                 _thread = CreateThread();
                 _thread.Start();
             }
@@ -118,11 +127,7 @@ internal static class MemorySharedEventThread
                 _actions = _actions.Where((_, i) => i != updatedHandle && i != requestedHandle).ToArray();
                 _handles = _handles.Where((_, i) => i != updatedHandle && i != requestedHandle).ToArray();
 
-                _cancellation.Cancel();
-                _thread.Join();
-
-                _cancellation = new CancellationTokenSource();
-                _handles[0] = _cancellation.Token.WaitHandle;
+                CancelToken = new CancellationTokenSource();
                 _thread = CreateThread();
                 _thread.Start();
             }

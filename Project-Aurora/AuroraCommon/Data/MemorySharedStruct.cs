@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Common.Data;
 
-public class MemorySharedStruct<T> : SignaledMemoryObject where T : struct
+public sealed class MemorySharedStruct<T> : SignaledMemoryObject where T : struct
 {
     private static readonly int ElementSize = Marshal.SizeOf(typeof(T));
 

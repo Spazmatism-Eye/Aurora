@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,43 +36,42 @@ public partial class Control_DeviceManager
             return;
         }
 
-        await LoadDeviceManager();
+        await FirstInit();
     }
 
-    private async Task LoadDeviceManager()
+    private async Task FirstInit()
     {
         var deviceConfig = await ConfigManager.LoadDeviceConfig();
-
-        await Task.Run(() => UpdateControls(deviceConfig)).ConfigureAwait(false);
-        
         var deviceManager = await _deviceManager;
+
+        await Task.Run(() => UpdateControls(deviceConfig, deviceManager.DeviceContainers)).ConfigureAwait(false);
+        
         deviceManager.DevicesUpdated += DeviceManagerOnDevicesUpdated();
-        Loaded += (_, _) => deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated();
+
         Unloaded += (_, _) => deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated();
         return;
 
-        EventHandler DeviceManagerOnDevicesUpdated()
+        EventHandler<DevicesUpdatedEventArgs> DeviceManagerOnDevicesUpdated()
         {
             return ManagerOnDevicesUpdated;
 
-            async void ManagerOnDevicesUpdated(object? o, EventArgs eventArgs)
+            async void ManagerOnDevicesUpdated(object? o, DevicesUpdatedEventArgs eventArgs)
             {
-                await UpdateControls(deviceConfig);
+                await UpdateControls(deviceConfig, eventArgs.DeviceContainers);
             }
         }
     }
 
-    private async Task UpdateControls(DeviceConfig deviceConfig)
+    private async Task UpdateControls(DeviceConfig deviceConfig, IEnumerable<DeviceContainer> eventArgs)
     {
         var deviceManager = await _deviceManager;
         var isDeviceManagerUp = await deviceManager.IsDeviceManagerUp();
-        var deviceContainers = isDeviceManagerUp ? deviceManager.DeviceContainers : [];
         Dispatcher.BeginInvoke(() =>
         {
             LstDevices.Children.Clear();
             NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
         });
-        foreach (var deviceContainer in deviceContainers)
+        foreach (var deviceContainer in eventArgs)
         {
             Dispatcher.BeginInvoke(() =>
             {
@@ -86,11 +86,11 @@ public partial class Control_DeviceManager
 
         if (!isDeviceManagerUp)
         {
-            await WaitForDeviceManager(deviceConfig);
+            await WaitForDeviceManager();
         }
     }
 
-    private async Task WaitForDeviceManager(DeviceConfig deviceConfig)
+    private async Task WaitForDeviceManager()
     {
         var runningProcessMonitor = await ProcessesModule.RunningProcessMonitor;
         runningProcessMonitor.ProcessStarted += RunningProcessMonitorOnRunningProcessesChanged;
@@ -105,8 +105,6 @@ public partial class Control_DeviceManager
 
             await Task.Delay(1000); // wait for pipe
             runningProcessMonitor.ProcessStarted -= RunningProcessMonitorOnRunningProcessesChanged;
-
-            await UpdateControls(deviceConfig);
         }
     }
 

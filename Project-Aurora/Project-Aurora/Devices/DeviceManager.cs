@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -16,6 +17,11 @@ using RGB.NET.Core;
 
 namespace Aurora.Devices;
 
+public sealed class DevicesUpdatedEventArgs(IEnumerable<DeviceContainer> deviceContainers) : EventArgs
+{
+    public IEnumerable<DeviceContainer> DeviceContainers { get; } = deviceContainers;
+}
+
 public sealed class DeviceManager : IDisposable
 {
     public const string DeviceManagerProcess = "AuroraDeviceManager";
@@ -25,7 +31,7 @@ public sealed class DeviceManager : IDisposable
 
     private bool _disposed;
 
-    public event EventHandler? DevicesUpdated;
+    public event EventHandler<DevicesUpdatedEventArgs>? DevicesUpdated;
 
     public List<DeviceContainer> DeviceContainers { get; } = [];
 
@@ -93,7 +99,7 @@ public sealed class DeviceManager : IDisposable
             return new DeviceContainer(device, this);
         }));
 
-        DevicesUpdated?.Invoke(this, EventArgs.Empty);
+        DevicesUpdated?.Invoke(this, new DevicesUpdatedEventArgs(DeviceContainers.ToImmutableList()));
     }
 
     private void StartDmProcess()
@@ -106,7 +112,6 @@ public sealed class DeviceManager : IDisposable
         };
         _process = Process.Start(updaterProc);
         _process?.WaitForExitAsync().ContinueWith(DeviceManagerClosed);
-        UpdateDevices();
     }
 
     private void DeviceManagerClosed(Task processTask)
@@ -150,7 +155,7 @@ public sealed class DeviceManager : IDisposable
                 process.Kill();
             }
             await process.WaitForExitAsync();
-            DevicesUpdated?.Invoke(this, EventArgs.Empty);
+            DevicesUpdated?.Invoke(this, new DevicesUpdatedEventArgs([]));
         }
     }
 

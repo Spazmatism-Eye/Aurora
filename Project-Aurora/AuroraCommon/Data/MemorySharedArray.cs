@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Common.Data;
 
-public class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> where T : struct
+public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> where T : struct
 {
     public int Count { get; }
 
