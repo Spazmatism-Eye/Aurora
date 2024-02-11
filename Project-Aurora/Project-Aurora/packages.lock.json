@@ -153,6 +153,16 @@
           "RGB.NET.Core": "2.0.4-prerelease.14"
         }
       },
+      "RGB.NET.Devices.Logitech": {
+        "type": "Direct",
+        "requested": "[2.0.4-prerelease.14, )",
+        "resolved": "2.0.4-prerelease.14",
+        "contentHash": "WpQAb3z+cRCMomwfeabhEKScJp7Gw7Nnlo1m2TSLekOX62nwnoY+LKTgxx5mB4Wpxz2778kJ4nN6kNlfOYFSiw==",
+        "dependencies": {
+          "RGB.NET.Core": "2.0.4-prerelease.14",
+          "RGB.NET.HID": "2.0.4-prerelease.14"
+        }
+      },
       "SemanticVersioning": {
         "type": "Direct",
         "requested": "[2.0.2, )",
@@ -484,22 +494,13 @@
         "resolved": "2.0.4-prerelease.14",
         "contentHash": "jqpC9T1BAy4q0yFtmWjxhreNOTYEUElxGPJVfKsAoPj7q1rArq2d+KMlLS24nz+lU9/6pfIPzmgVN9q1yesvXA=="
       },
-      "RGB.NET.Devices.Logitech": {
-        "type": "Transitive",
-        "resolved": "2.0.0-prerelease.111",
-        "contentHash": "4403eXjBHQ86AW48nfHvVqXhOyyhasegUdv2oHK+h9W1O65vGEnBzcMmgUt/fBknv8xGJMKmsxBLP5v2MCSfxg==",
-        "dependencies": {
-          "RGB.NET.Core": "2.0.0-prerelease.111",
-          "RGB.NET.HID": "2.0.0-prerelease.111"
-        }
-      },
       "RGB.NET.HID": {
         "type": "Transitive",
-        "resolved": "2.0.0-prerelease.111",
-        "contentHash": "jHnOsqUsqYKb7GVkFQEP+SDMtWVyMJK+hwjzyjV+PqqySbSMaJ4gpyP3iL6uyN//lYhMQJbHRemIwlMR2uRnsQ==",
+        "resolved": "2.0.4-prerelease.14",
+        "contentHash": "aZO0raofp6ipFEUUoBzOaKb4ZDf/j1Iosz6CEp4tiByrgdqMhqRY4/FXXMC7UJvdoDb9srhIqcIEqpJZolU/3A==",
         "dependencies": {
           "HidSharp": "2.1.0",
-          "RGB.NET.Core": "2.0.0-prerelease.111"
+          "RGB.NET.Core": "2.0.4-prerelease.14"
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
@@ -1589,7 +1590,7 @@
         "dependencies": {
           "IronPython": "[3.4.1, )",
           "Microsoft.Win32.SystemEvents": "[8.0.0, )",
-          "RGB.NET.Devices.Logitech": "[2.0.0-prerelease.111, )",
+          "RGB.NET.Core": "[2.0.0-prerelease.111, )",
           "Serilog": "[2.10.0, )",
           "SmartThreadPool.dll": "[2.3.0, )",
           "System.Threading.AccessControl": "[8.0.0, )"
