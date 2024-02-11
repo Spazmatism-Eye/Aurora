@@ -293,6 +293,8 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private async void Window_Closing(object? sender, CancelEventArgs e)
     {
+        FocusedApplication?.SaveAll();
+
         switch (Global.Configuration.CloseMode)
         {
             case AppExitMode.Ask:
@@ -329,8 +331,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private async Task MinimizeApp()
     {
-        FocusedApplication?.SaveAll();
-
         var lightingStateManager = await _lightingStateManager;
         lightingStateManager.PreviewProfileKey = string.Empty;
 
