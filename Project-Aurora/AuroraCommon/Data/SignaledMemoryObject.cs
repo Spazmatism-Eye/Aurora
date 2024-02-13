@@ -38,12 +38,19 @@ public class SignaledMemoryObject : IDisposable
         ObjectUpdatedHandle.Set();
     }
 
-    public virtual void Dispose()
+    protected virtual void Dispose(bool disposing)
     {
+        if (!disposing) return;
         MemorySharedEventThread.RemoveObject(this);
-
+            
         ObjectUpdatedHandle.Dispose();
         UpdateRequestedHandle.Dispose();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     internal void OnUpdated()

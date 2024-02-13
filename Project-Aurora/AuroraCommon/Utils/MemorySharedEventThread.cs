@@ -30,6 +30,8 @@ internal static class MemorySharedEventThread
     private sealed class HandlesAndThread
     {
         private const int MaxHandles = 64;
+        
+        private readonly SemaphoreSlim _semaphore = new(1);
     
         private CancellationTokenSource _cancellation = new();
         private CancellationTokenSource CancelToken
@@ -49,8 +51,6 @@ internal static class MemorySharedEventThread
         
         private Action[] _actions = [() => { }];
         private WaitHandle[] _handles;
-        
-        private readonly SemaphoreSlim _semaphore = new(1);
 
         internal HandlesAndThread()
         {
@@ -60,8 +60,10 @@ internal static class MemorySharedEventThread
 
         private Thread CreateThread()
         {
-            return new Thread(() =>
+            var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            var thread = new Thread(() =>
             {
+                tcs.SetResult();
                 if (_handles.Length <= 1)
                 {
                     // stop thread if only handle is cancel token
@@ -87,6 +89,9 @@ internal static class MemorySharedEventThread
                 Name = "Memory Share Event Thread",
                 IsBackground = true,
             };
+            thread.Start();
+            tcs.Task.Wait();
+            return thread;
         }
 
         internal void AddToThread(SignaledMemoryObject o)
@@ -108,7 +113,6 @@ internal static class MemorySharedEventThread
 
                 CancelToken = new CancellationTokenSource();
                 _thread = CreateThread();
-                _thread.Start();
             }
             finally
             {
@@ -129,7 +133,6 @@ internal static class MemorySharedEventThread
 
                 CancelToken = new CancellationTokenSource();
                 _thread = CreateThread();
-                _thread.Start();
             }
             finally
             {

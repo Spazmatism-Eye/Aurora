@@ -88,9 +88,10 @@ public sealed class MemorySharedStruct<T> : SignaledMemoryObject where T : struc
         SignalUpdated();
     }
 
-    public override void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        base.Dispose();
+        if (!disposing) return;
+        base.Dispose(disposing);
 
         _mmf.Dispose();
         _accessor.Dispose();
