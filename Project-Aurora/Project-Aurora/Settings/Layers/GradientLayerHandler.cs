@@ -3,93 +3,100 @@ using Aurora.Profiles;
 using Aurora.Settings.Overrides;
 using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Controls;
 using Aurora.Settings.Layers.Controls;
 using Common.Utils;
 
-namespace Aurora.Settings.Layers
+namespace Aurora.Settings.Layers;
+
+public class GradientLayerHandlerProperties : LayerHandlerProperties2Color<GradientLayerHandlerProperties>
 {
-    public class GradientLayerHandlerProperties : LayerHandlerProperties2Color<GradientLayerHandlerProperties>
+    private LayerEffectConfig? _gradientConfig;
+
+    [LogicOverridable("Gradient")]
+    [JsonProperty("_GradientConfig")]
+    public LayerEffectConfig GradientConfig
     {
-        [LogicOverridable("Gradient")]
-        public LayerEffectConfig _GradientConfig { get; set; }
-
-        [JsonIgnore]
-        public LayerEffectConfig GradientConfig => Logic._GradientConfig ?? _GradientConfig;
-
-        public GradientLayerHandlerProperties()
-        { }
-
-        public GradientLayerHandlerProperties(bool assign_default = false) : base(assign_default) { }
-
-        public override void Default()
-        {
-            base.Default();
-            _GradientConfig = new LayerEffectConfig(CommonColorUtils.GenerateRandomColor(), CommonColorUtils.GenerateRandomColor()) { AnimationType = AnimationType.None };
-        }
+        get => Logic._gradientConfig ?? (_gradientConfig ??= DefaultGradientConfig());
+        set => _gradientConfig = value;
     }
 
-    [LogicOverrideIgnoreProperty("_PrimaryColor")]
-    [LogicOverrideIgnoreProperty("_SecondaryColor")]
-    public class GradientLayerHandler : LayerHandler<GradientLayerHandlerProperties>
+    public GradientLayerHandlerProperties()
+    { }
+
+    public GradientLayerHandlerProperties(bool assignDefault = false) : base(assignDefault) { }
+
+    public override void Default()
     {
-        private readonly EffectLayer _tempLayerBitmap = new("GradientLayer - Colors", true);
-        private bool _invalidated;
+        base.Default();
+        _gradientConfig = DefaultGradientConfig();
+    }
 
-        public GradientLayerHandler(): base("GradientLayer")
+    private static LayerEffectConfig DefaultGradientConfig()
+    {
+        return new LayerEffectConfig(CommonColorUtils.GenerateRandomColor(), CommonColorUtils.GenerateRandomColor()) { AnimationType = AnimationType.None };
+    }
+}
+
+[LogicOverrideIgnoreProperty("_PrimaryColor")]
+[LogicOverrideIgnoreProperty("_SecondaryColor")]
+public class GradientLayerHandler : LayerHandler<GradientLayerHandlerProperties>
+{
+    private readonly EffectLayer _tempLayerBitmap = new("GradientLayer - Colors", true);
+    private bool _invalidated;
+
+    public GradientLayerHandler(): base("GradientLayer")
+    {
+        Properties.PropertyChanged += PropertiesChanged;
+    }
+
+    protected override void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        base.PropertiesChanged(sender, args);
+        _invalidated = true;
+    }
+
+    protected override UserControl CreateControl()
+    {
+        return new Control_GradientLayer(this);
+    }
+    public override EffectLayer Render(IGameState gamestate)
+    {
+        if (_invalidated)
         {
-            Properties.PropertyChanged += PropertiesChanged;
+            EffectLayer.Clear();
+            _invalidated = false;
         }
-
-        protected override void PropertiesChanged(object? sender, PropertyChangedEventArgs args)
+        //If Wave Size 0 Gradiant Stop Moving Animation
+        if (Properties.GradientConfig.GradientSize == 0)
         {
-            base.PropertiesChanged(sender, args);
-            _invalidated = true;
-        }
+            Properties.GradientConfig.ShiftAmount += (Utils.Time.GetMillisecondsSinceEpoch() - Properties.GradientConfig.LastEffectCall) / 1000.0f * 5.0f * Properties.GradientConfig.Speed;
+            Properties.GradientConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
+            Properties.GradientConfig.LastEffectCall = Utils.Time.GetMillisecondsSinceEpoch();
 
-        protected override UserControl CreateControl()
+            var selectedColor = Properties.GradientConfig.Brush.GetColorSpectrum().GetColorAt(Properties.GradientConfig.ShiftAmount, Effects.Canvas.BiggestSize);
+
+            EffectLayer.Set(Properties.Sequence, selectedColor);
+        }
+        else
         {
-            return new Control_GradientLayer(this);
+            _tempLayerBitmap.DrawGradient(LayerEffects.GradientShift_Custom_Angle, Properties.GradientConfig);
+            EffectLayer.Clear();
+            EffectLayer.DrawTransformed(
+                Properties.Sequence,
+                g =>
+                {
+                    g.FillRectangle(_tempLayerBitmap.TextureBrush, _tempLayerBitmap.Dimension);
+                }
+            );
         }
-        public override EffectLayer Render(IGameState gamestate)
-        {
-            if (_invalidated)
-            {
-                EffectLayer.Clear();
-                _invalidated = false;
-            }
-            //If Wave Size 0 Gradiant Stop Moving Animation
-            if (Properties.GradientConfig.GradientSize == 0)
-            {
-                Properties.GradientConfig.ShiftAmount += (Utils.Time.GetMillisecondsSinceEpoch() - Properties.GradientConfig.LastEffectCall) / 1000.0f * 5.0f * Properties.GradientConfig.Speed;
-                Properties.GradientConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-                Properties.GradientConfig.LastEffectCall = Utils.Time.GetMillisecondsSinceEpoch();
+        return EffectLayer;
+    }
 
-                Color selectedColor = Properties.GradientConfig.Brush.GetColorSpectrum().GetColorAt(Properties.GradientConfig.ShiftAmount, Effects.Canvas.BiggestSize);
-
-                EffectLayer.Set(Properties.Sequence, selectedColor);
-            }
-            else
-            {
-                _tempLayerBitmap.DrawGradient(LayerEffects.GradientShift_Custom_Angle, Properties.GradientConfig);
-                EffectLayer.Clear();
-                EffectLayer.DrawTransformed(
-                    Properties.Sequence,
-                    g =>
-                    {
-                        g.FillRectangle(_tempLayerBitmap.TextureBrush, _tempLayerBitmap.Dimension);
-                    }
-                );
-            }
-            return EffectLayer;
-        }
-
-        public override void Dispose()
-        {
-            Properties.PropertyChanged -= PropertiesChanged;
-            EffectLayer.Dispose();
-            base.Dispose();
-        }
+    public override void Dispose()
+    {
+        Properties.PropertyChanged -= PropertiesChanged;
+        EffectLayer.Dispose();
+        base.Dispose();
     }
 }

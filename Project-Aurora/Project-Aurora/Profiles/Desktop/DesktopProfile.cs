@@ -374,7 +374,7 @@ public class DesktopProfile : ApplicationProfile
                         Freeform = new FreeFormObject(0, 0, 1600, 400),
                         Type = KeySequenceType.FreeForm
                     },
-                    _GradientConfig = new LayerEffectConfig
+                    GradientConfig = new LayerEffectConfig
                     {
                         Angle = 90,
                         Speed = 1,
@@ -415,7 +415,7 @@ public class DesktopProfile : ApplicationProfile
                         Freeform = new FreeFormObject(0, 0, 1600, 400),
                         Type = KeySequenceType.FreeForm
                     },
-                    _GradientConfig = new LayerEffectConfig
+                    GradientConfig = new LayerEffectConfig
                     {
                         Angle = 0,
                         Speed = 1,
