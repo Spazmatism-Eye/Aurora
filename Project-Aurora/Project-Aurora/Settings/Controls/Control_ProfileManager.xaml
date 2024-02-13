@@ -54,7 +54,9 @@
             </Button>
         </StackPanel>
         <DockPanel Margin="0,89,0,19">
-            <ListBox x:Name="lstProfiles" Margin="0,0,0,0" SelectionMode="Single"  DockPanel.Dock="Bottom" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="lstProfiles_SelectionChanged">
+            <ListBox x:Name="lstProfiles" Margin="0,0,0,0" SelectionMode="Single"  DockPanel.Dock="Bottom"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.PanningMode="VerticalOnly"
+                     SelectionChanged="lstProfiles_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <HierarchicalDataTemplate>
                         <DockPanel HorizontalAlignment="Stretch" Width="192">

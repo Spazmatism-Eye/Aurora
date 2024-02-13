@@ -27,7 +27,7 @@
             <LineBreak/>
             Process might have been killed or desktop profile isn't active.
         </TextBlock>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" PanningMode="VerticalOnly">
             <StackPanel Orientation="Vertical" Name="LstDevices" />
         </ScrollViewer>
     </Grid>

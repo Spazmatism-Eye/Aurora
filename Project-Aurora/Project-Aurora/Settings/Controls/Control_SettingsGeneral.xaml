@@ -14,7 +14,7 @@
         <utils:StringFormatConverter Format="x {0:0.0}" x:Key="AwayEffectSpeedLabelFormatter" />
         <utils:StringFormatConverter Format="{}{0:0}%" Multiplier="100" x:Key="PercentageFormatter" />
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Visible">
+    <ScrollViewer VerticalScrollBarVisibility="Visible" PanningMode="VerticalOnly">
         <Grid DataContext="{x:Static a:Global.Configuration}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>

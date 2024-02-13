@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="203.81" d:DesignWidth="200"  Background="Transparent">
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" >
+        <ScrollViewer VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" >
             <StackPanel x:Name="StackOptions" />
         </ScrollViewer>
     </Grid>

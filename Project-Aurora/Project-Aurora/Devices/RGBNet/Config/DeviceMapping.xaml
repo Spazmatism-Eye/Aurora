@@ -15,7 +15,7 @@
             <TextBlock DockPanel.Dock="Top">You can only remap (RGB.NET) devices</TextBlock>
             <Button Content="Reload Devices" DockPanel.Dock="Top" Click="ReloadButton_Click" />
             <Separator DockPanel.Dock="Top" Height="10"/>
-            <ScrollViewer>
+            <ScrollViewer PanningMode="VerticalOnly">
                 <DockPanel
                     VerticalAlignment="Stretch"
                     Height="auto">
@@ -30,7 +30,7 @@
         </StackPanel>
         <DockPanel
             Grid.Column="2">
-            <ScrollViewer>
+            <ScrollViewer PanningMode="VerticalOnly">
                 <DockPanel
                     VerticalAlignment="Stretch"
                     Height="auto">

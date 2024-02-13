@@ -10,7 +10,7 @@
         Loaded="Control_DeviceCalibration_OnLoaded"
         Title="Device Calibrations" Height="800" Width="800">
 
-    <ScrollViewer>
+    <ScrollViewer PanningMode="VerticalOnly">
         <StackPanel Orientation="Vertical" Name="DeviceList" />
     </ScrollViewer>
 </fluentWpf:AcrylicWindow>

@@ -33,8 +33,10 @@
         <Grid Width="Auto" Height="25" Background="#10000000" DockPanel.Dock="Top"></Grid>
         <Grid HorizontalAlignment="Left" Width="56" Background="#3F000000" DockPanel.Dock="Left">
             <ScrollViewer HorizontalAlignment="Left" Width="56" UseLayoutRounding="False" CanContentScroll="True"
+                          PanningMode="VerticalOnly"
                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,40" Padding="0,0,6,0">
-                <StackPanel x:Name="profiles_stack" RenderTransformOrigin="0.5,0" MinHeight="542" MaxHeight="542" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="6,0,0,0">
+                <StackPanel x:Name="profiles_stack" RenderTransformOrigin="0.5,0" MinHeight="542" MaxHeight="542" MinWidth="40" MaxWidth="40"
+                            HorizontalAlignment="Center" VerticalAlignment="Top" Margin="6,0,0,0">
                     <StackPanel.ContextMenu>
                         <ContextMenu x:Name="cmenuProfiles" Opened="ContextMenu_Opened" ContextMenuOpening="cmenuProfiles_ContextMenuOpening">
                             <MenuItem Header="Enabled" IsCheckable="True" IsChecked="{Binding Settings.IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

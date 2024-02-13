@@ -62,7 +62,10 @@
                 </RadioButton>
             </Grid>
 
-            <Controls:ReorderableListBox x:Name="lstLayers" ItemsSource="{Binding ActiveLayerCollection}" SelectedItem="{Binding Path=SelectedLayer, Mode=TwoWay}" DragElementTag="Dragger" SelectionMode="Single" DockPanel.Dock="Bottom" ScrollViewer.HorizontalScrollBarVisibility="Disabled" KeyDown="ReorderableListBox_KeyDown">
+            <Controls:ReorderableListBox x:Name="lstLayers" ItemsSource="{Binding ActiveLayerCollection}"
+                                         ScrollViewer.PanningMode="VerticalOnly"
+                                         SelectedItem="{Binding Path=SelectedLayer, Mode=TwoWay}" DragElementTag="Dragger" SelectionMode="Single"
+                                         DockPanel.Dock="Bottom" ScrollViewer.HorizontalScrollBarVisibility="Disabled" KeyDown="ReorderableListBox_KeyDown">
                 <ListBox.ItemTemplate>
                     <HierarchicalDataTemplate>
                         <DockPanel  HorizontalAlignment="Stretch" Width="192" >
