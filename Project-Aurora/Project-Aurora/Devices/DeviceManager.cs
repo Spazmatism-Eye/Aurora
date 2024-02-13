@@ -244,7 +244,27 @@ public sealed class DeviceManager : IDisposable
         await SendCommand( command);
     }
 
-    public Task<bool> IsDeviceManagerUp()
+    public async Task<bool> IsDeviceManagerUp()
+    {
+        var runningProcessMonitor = await ProcessesModule.RunningProcessMonitor;
+        if (!runningProcessMonitor.IsProcessRunning(DeviceManagerExe.ToLowerInvariant()))
+        {
+            return false;
+        }
+        
+        for (var i = 0; i < 5; i++)
+        {
+            var pipeOpen = await IsPipeOpen();
+            if (pipeOpen)
+            {
+                return true;
+            }
+            await Task.Delay(200);
+        }
+        return false;
+    }
+
+    private Task<bool> IsPipeOpen()
     {
         var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
         Task.Run(() =>

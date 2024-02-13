@@ -62,16 +62,27 @@ public partial class Control_DeviceManager
         }
     }
 
-    private async Task UpdateControls(DeviceConfig deviceConfig, IEnumerable<DeviceContainer> eventArgs)
+    private async Task UpdateControls(DeviceConfig deviceConfig, IEnumerable<DeviceContainer> deviceContainers)
     {
         var deviceManager = await _deviceManager;
         var isDeviceManagerUp = await deviceManager.IsDeviceManagerUp();
-        Dispatcher.BeginInvoke(() =>
+        lock (_deviceManager)
         {
-            LstDevices.Children.Clear();
-            NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
-        });
-        foreach (var deviceContainer in eventArgs)
+            Dispatcher.BeginInvoke(() =>
+            {
+                LstDevices.Children.Clear();
+                NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
+            }, DispatcherPriority.Loaded);
+            if (isDeviceManagerUp)
+            {
+                PopulateDevices(deviceConfig, deviceContainers);
+            }
+        }
+    }
+
+    private void PopulateDevices(DeviceConfig deviceConfig, IEnumerable<DeviceContainer> deviceContainers)
+    {
+        foreach (var deviceContainer in deviceContainers)
         {
             Dispatcher.BeginInvoke(() =>
             {
@@ -82,11 +93,6 @@ public partial class Control_DeviceManager
                 };
                 LstDevices.Children.Add(listViewItem);
             }, DispatcherPriority.Loaded);
-        }
-
-        if (!isDeviceManagerUp)
-        {
-            await WaitForDeviceManager();
         }
     }
 
