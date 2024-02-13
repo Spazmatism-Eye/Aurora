@@ -39,7 +39,7 @@ public class CloneHeroProfile : ApplicationProfile
             new Layer("Menu Indicator", new GradientLayerHandler{
                     Properties = new GradientLayerHandlerProperties
                     {
-                        _GradientConfig =
+                        GradientConfig =
                         {
                             Primary = Color.FromArgb(123, 1, 227),
                             Secondary = Color.FromArgb(39, 73, 167),
