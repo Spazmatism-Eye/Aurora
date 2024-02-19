@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -71,6 +72,8 @@ partial class ConfigUI : INotifyPropertyChanged
     private readonly Func<Task> _updateKeyboardLayouts;
 
     private static readonly bool DisposeWindow = false;
+
+    private bool _isDragging;
 
     public Application? FocusedApplication
     {
@@ -158,6 +161,10 @@ partial class ConfigUI : INotifyPropertyChanged
             _transparencyComponent.SetBackgroundColor(a);
         }
 
+        if (_isDragging)
+        {
+            return;
+        }
         Dispatcher.BeginInvoke(_updateKeyboardLayouts, DispatcherPriority.Render);
     }
 
@@ -233,6 +240,11 @@ partial class ConfigUI : INotifyPropertyChanged
         {
             ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
         }
+        
+        var handle = new WindowInteropHelper(this).Handle;
+        // Subclass the window to intercept messages
+        var source = HwndSource.FromHwnd(handle);
+        source?.AddHook(WndProcDrag);
 
         KeyboardRecordMessage.Visibility = Visibility.Hidden;
 
@@ -254,8 +266,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
         UpdateManagerStackFocus(ctrlLayerManager);
 
-        UpdateLayout();
-
         foreach (Image child in profiles_stack.Children)
         {
             if (child.Visibility != Visibility.Visible) continue;
@@ -264,6 +274,24 @@ partial class ConfigUI : INotifyPropertyChanged
         }
 
         _virtualKeyboardTimer.Start();
+        return;
+
+        IntPtr WndProcDrag(IntPtr winHandle, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            const int wmEnterSizeMove = 0x0231;
+            const int wmExitSizeMove = 0x0232;
+            switch (msg)
+            {
+                case wmEnterSizeMove:
+                    _isDragging = true;
+                    break;
+                case wmExitSizeMove:
+                    _isDragging = false;
+                    break;
+            }
+
+            return IntPtr.Zero;
+        }
     }
 
     private async void Window_Unloaded(object sender, RoutedEventArgs e)
