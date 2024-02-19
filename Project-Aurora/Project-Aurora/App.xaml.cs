@@ -1,19 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Pipes;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Aurora.Modules;
-using Aurora.Modules.ProcessMonitor;
 using Aurora.Settings;
-using Aurora.Settings.Controls;
-using Aurora.Utils;
 using Serilog.Core;
 using Constants = Common.Constants;
 using MessageBox = System.Windows.MessageBox;
@@ -30,105 +24,24 @@ public partial class App
 
     private static bool IsSilent { get; set; }
 
-    private static readonly PluginsModule PluginsModule = new();
-    private static readonly IpcListenerModule IpcListenerModule = new();
-    
-    private static readonly AuroraControlInterface ControlInterface = new(IpcListenerModule.IpcListener);
-    
-    private static readonly HttpListenerModule HttpListenerModule = new();
-    private static readonly ProcessesModule ProcessesModule = new();
-    private static readonly RazerSdkModule RazerSdkModule = new(LightingStateManagerModule.LightningStateManager);
-    private static readonly DevicesModule DevicesModule = new(RazerSdkModule.RzSdkManager, ControlInterface);
-    private static readonly LightingStateManagerModule LightingStateManagerModule = new(
-        PluginsModule.PluginManager, IpcListenerModule.IpcListener, HttpListenerModule.HttpListener,
-        DevicesModule.DeviceManager, ProcessesModule.ActiveProcessMonitor, ProcessesModule.RunningProcessMonitor
-    );
-    private static readonly OnlineSettings OnlineSettings = new(DevicesModule.DeviceManager, ProcessesModule.RunningProcessMonitor);
-    private static readonly LayoutsModule LayoutsModule = new(RazerSdkModule.RzSdkManager, OnlineSettings.LayoutsUpdate);
-
-    private readonly List<AuroraModule> _modules =
-    [
-        new UpdateModule(),
-        new UpdateCleanup(),
-        new InputsModule(),
-        new MediaInfoModule(),
-        new AudioCaptureModule(),
-        new PointerUpdateModule(),
-        new HardwareMonitorModule(),
-        PluginsModule,
-        IpcListenerModule,
-        HttpListenerModule,
-        ProcessesModule,
-        new LogitechSdkModule(ProcessesModule.RunningProcessMonitor),
-        RazerSdkModule, //depends LSM
-        DevicesModule,  //depends Chroma
-        LightingStateManagerModule, //depends DeviceManager
-        OnlineSettings,
-        LayoutsModule,
-        new PerformanceMonitor(ProcessesModule.RunningProcessMonitor)
-    ];
-
-    private readonly AuroraTrayIcon _trayIcon = new(ControlInterface);
-
     private static readonly SemaphoreSlim PreventShutdown = new(0);
+    private AuroraApp? _auroraApp;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        CheckRunningProcesses();
         base.OnStartup(e);
 
         Global.Initialize();
         UseArgs(e);
-
-        CheckRunningProcesses();
-
-        new UserSettingsBackup().BackupIfNew();
-        var systemInfo = SystemUtils.GetSystemInfo();
-        Global.logger.Information("{Sys}", systemInfo);
 
         var currentDomain = AppDomain.CurrentDomain;
         currentDomain.AppendPrivatePath("x64");
         if (!Global.isDebug)
             currentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-        //Load config
-        Global.logger.Information("Loading Configuration");
-        Global.Configuration = await ConfigManager.Load();
-
-        Global.effengine = new Effects(DevicesModule.DeviceManager);
-
-        if (Global.Configuration.HighPriority)
-        {
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-        }
-
-        WindowListener.Instance = new WindowListener();
-        var initModules = _modules.Select(async m => await m.InitializeAsync())
-            .Where(t => t!= null)
-            .ToArray();
-
-        ControlInterface.TrayIcon = _trayIcon.TrayIcon;
-        ControlInterface.DeviceManager = await DevicesModule.DeviceManager;
-        await ControlInterface.Initialize();
-        _trayIcon.DisplayWindow += TrayIcon_OnDisplayWindow;
-        var configUi = await CreateWindow();
-
-        Global.logger.Information("Waiting for modules...");
-        await Task.WhenAll(initModules);
-        MainWindow = configUi;
-        Global.logger.Information("Modules initiated");
-        if (!IsSilent)
-        {
-            await DisplayWindow();
-        }
-
-        //move this to ProcessModule
-        WindowListener.Instance.StartListening();
-
-        //Debug Windows on Startup
-        if (Global.Configuration.BitmapWindowOnStartUp)
-            Window_BitmapView.Open();
-        if (Global.Configuration.HttpWindowOnStartUp)
-            Window_GSIHttpDebug.Open(HttpListenerModule.HttpListener);
+        _auroraApp = new AuroraApp(IsSilent);
+        await _auroraApp.OnStartup();
 
         SessionEnding += (_, sessionEndingParams) =>
         {
@@ -137,36 +50,6 @@ public partial class App
             PreventShutdown.Wait();
         };
     }
-
-    private async Task DisplayWindow()
-    {
-        if (MainWindow is not ConfigUI mainWindow)
-        {
-            var configUi = await CreateWindow();
-            MainWindow = configUi;
-            configUi.Display();
-            return;
-        }
-        mainWindow.Display();
-    }
-
-    private async Task<ConfigUI> CreateWindow()
-    {
-        Global.logger.Information("Loading ConfigUI...");
-        var stopwatch = Stopwatch.StartNew();
-        var configUi = new ConfigUI(RazerSdkModule.RzSdkManager, PluginsModule.PluginManager, LayoutsModule.LayoutManager,
-            HttpListenerModule.HttpListener, IpcListenerModule.IpcListener, DevicesModule.DeviceManager,
-            LightingStateManagerModule.LightningStateManager, ControlInterface);
-        Global.logger.Debug("new ConfigUI() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
-        
-        stopwatch.Restart();
-        await configUi.Initialize();
-        Global.logger.Debug("configUi.Initialize() took {Elapsed} milliseconds", stopwatch.ElapsedMilliseconds);
-        stopwatch.Stop();
-
-        return configUi;
-    }
-
     private void CheckRunningProcesses()
     {
         try
@@ -190,6 +73,7 @@ public partial class App
             }
 
             Closing = true;
+            _auroraApp?.Dispose();
             Environment.Exit(0);
         }
         catch (AbandonedMutexException)
@@ -258,22 +142,13 @@ public partial class App
         if (Global.Configuration != null)
             ConfigManager.Save(Global.Configuration, Configuration.ConfigFile);
 
-        var tasks = _modules.Select(async m =>
-        {
-            try
-            {
-                await m.DisposeAsync();
-            }
-            catch (Exception moduleException)
-            {
-                Global.logger.Fatal(moduleException,"Failed closing module {@Module}", m);
-            }
-        });
-        
         var forceExitTimer = StartForceExitTimer();
-        _trayIcon.Dispose();
-
-        await Task.WhenAll(tasks);
+        if (_auroraApp != null)
+        {
+            var auroraShutdownTask = _auroraApp.Shutdown();
+            _auroraApp.Dispose();
+            await auroraShutdownTask;
+        }
         (Global.logger as Logger)?.Dispose();
         forceExitTimer.GetApartmentState(); //statement just to keep referenced
 
@@ -283,7 +158,7 @@ public partial class App
         PreventShutdown.Release();
     }
 
-    private Thread StartForceExitTimer()
+    private static Thread StartForceExitTimer()
     {
         var thread = new Thread(() =>
         {
@@ -303,7 +178,7 @@ public partial class App
         return thread;
     }
 
-    private void CurrentDomain_UnhandledException(object? sender, UnhandledExceptionEventArgs e)
+    private static void CurrentDomain_UnhandledException(object? sender, UnhandledExceptionEventArgs e)
     {
         var exc = (Exception)e.ExceptionObject;
         if (exc is COMException { Message: "0x88890004" })
@@ -351,10 +226,5 @@ public partial class App
         //Perform exit operations
         Current?.Shutdown();
         (Global.logger as Logger)?.Dispose();
-    }
-
-    private async void TrayIcon_OnDisplayWindow(object? sender, EventArgs e)
-    {
-        await DisplayWindow();
     }
 }
