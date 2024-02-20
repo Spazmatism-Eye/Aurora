@@ -37,6 +37,16 @@ public sealed class AuroraControlInterface(Task<IpcListener?> listener)
                 ShutdownDevices().Wait();
                 ExitApp();
                 break;
+            case "quitDevices":
+                ShutdownDevices().Wait();
+                break;
+            case "startDevices":
+                if (DeviceManager == null)
+                {
+                    return;
+                }
+                DeviceManager.InitializeDevices().Wait();
+                break;
         }
     }
     

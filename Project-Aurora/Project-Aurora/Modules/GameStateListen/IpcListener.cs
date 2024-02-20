@@ -37,10 +37,14 @@ public class IpcListener
 
     private static NamedPipeServerStream CreatePipe(string pipeName)
     {
-        var securityIdentifier = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+        var worldSid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+        var anonymousSid = new SecurityIdentifier(WellKnownSidType.AnonymousSid, null);
 
         var pipeSecurity = new PipeSecurity();
-        pipeSecurity.AddAccessRule(new PipeAccessRule(securityIdentifier,
+        pipeSecurity.AddAccessRule(new PipeAccessRule(worldSid,
+            PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance,
+            AccessControlType.Allow));
+        pipeSecurity.AddAccessRule(new PipeAccessRule(anonymousSid,
             PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance,
             AccessControlType.Allow));
 
