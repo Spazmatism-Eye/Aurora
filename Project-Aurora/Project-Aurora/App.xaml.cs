@@ -29,11 +29,11 @@ public partial class App
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        UseArgs(e);
         CheckRunningProcesses();
         base.OnStartup(e);
 
         Global.Initialize();
-        UseArgs(e);
 
         var currentDomain = AppDomain.CurrentDomain;
         currentDomain.AppendPrivatePath("x64");
