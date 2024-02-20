@@ -88,6 +88,10 @@ public sealed class DeviceManager : IDisposable
         var deviceManagerInfo = _deviceManagerInfo.ReadElement();
         var deviceNames = deviceManagerInfo.DeviceNames.Split(Constants.StringSplit);
 
+        foreach (var deviceContainer in DeviceContainers)
+        {
+            deviceContainer.Dispose();
+        }
         DeviceContainers.Clear();
         DeviceContainers.AddRange(deviceNames.Select(deviceName =>
         {

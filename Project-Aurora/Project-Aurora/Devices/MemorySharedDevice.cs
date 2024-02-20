@@ -9,7 +9,7 @@ using Common.Devices;
 
 namespace Aurora.Devices;
 
-public class MemorySharedDevice : IDevice
+public sealed class MemorySharedDevice : IDevice, IDisposable
 {
     public event EventHandler? Updated;
 
@@ -108,4 +108,10 @@ public class MemorySharedDevice : IDevice
     }
 
     public DeviceTooltips Tooltips { get; set; } = new();
+
+    public void Dispose()
+    {
+        _sharedDeviceInfo.Dispose();
+        _deviceVariables.Dispose();
+    }
 }

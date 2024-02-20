@@ -12,6 +12,8 @@ public class SignaledMemoryObject : IDisposable
     internal EventWaitHandle ObjectUpdatedHandle { get; }
     internal EventWaitHandle UpdateRequestedHandle { get; }
 
+    private bool _disposed;
+
     protected SignaledMemoryObject(string fileName)
     {
         var updatedHandleName = fileName + "-updated";
@@ -61,16 +63,25 @@ public class SignaledMemoryObject : IDisposable
 
     public void RequestUpdate()
     {
+        if (_disposed)
+        {
+            return;
+        }
         UpdateRequestedHandle.Set();
     }
 
     protected void SignalUpdated()
     {
+        if (_disposed)
+        {
+            return;
+        }
         ObjectUpdatedHandle.Set();
     }
 
     protected virtual void Dispose(bool disposing)
     {
+        _disposed = true;
         if (!disposing) return;
         MemorySharedEventThread.RemoveObject(this);
             
@@ -96,6 +107,10 @@ public class SignaledMemoryObject : IDisposable
 
     protected void WaitForUpdate()
     {
+        if (_disposed)
+        {
+            return;
+        }
 #if DEBUG
         ObjectUpdatedHandle.WaitOne();
 #else

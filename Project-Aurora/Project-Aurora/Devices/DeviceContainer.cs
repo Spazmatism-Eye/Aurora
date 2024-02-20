@@ -1,25 +1,24 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Aurora.Devices;
 
-public class DeviceContainer
+public sealed class DeviceContainer(MemorySharedDevice device, DeviceManager deviceManager) : IDisposable
 {
-    private readonly DeviceManager _deviceManager;
-    public MemorySharedDevice Device { get; }
-
-    public DeviceContainer(MemorySharedDevice device, DeviceManager deviceManager)
-    {
-        _deviceManager = deviceManager;
-        Device = device;
-    }
+    public MemorySharedDevice Device { get; } = device;
 
     public async Task EnableDevice()
     {
-        await _deviceManager.EnableDevice(Device.DeviceName);
+        await deviceManager.EnableDevice(Device.DeviceName);
     }
 
     public async Task DisableDevice()
     {
-        await _deviceManager.DisableDevice(Device.DeviceName);
+        await deviceManager.DisableDevice(Device.DeviceName);
+    }
+
+    public void Dispose()
+    {
+        Device.Dispose();
     }
 }
