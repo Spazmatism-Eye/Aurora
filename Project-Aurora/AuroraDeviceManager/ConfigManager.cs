@@ -10,17 +10,22 @@ using Common.Utils;
 
 namespace AuroraDeviceManager;
 
-public class ConfigManager(DeviceManager deviceManager)
+public sealed class ConfigManager(DeviceManager deviceManager): IDisposable
 {
     private static readonly string ConfigFile = Path.Combine(Global.AppDataDirectory, DeviceConfig.FileName);
 
-    private static FileSystemWatcher? _configFileWatcher;
+    private FileSystemWatcher? _configFileWatcher;
+
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        WriteIndented = true,
+    };
 
     public async Task Load()
     {
         _configFileWatcher = new FileSystemWatcher(Global.AppDataDirectory)
         {
-            Filter = "Config.json",
+            Filter = DeviceConfig.FileName,
             NotifyFilter = NotifyFilters.LastWrite,
             EnableRaisingEvents = true
         };
@@ -29,12 +34,17 @@ public class ConfigManager(DeviceManager deviceManager)
         _configFileWatcher.Changed += ConfigFileWatcherOnChanged;
     }
 
+    public void Dispose()
+    {
+        _configFileWatcher?.Dispose();
+    }
+
     private void ConfigFileWatcherOnChanged(object sender, FileSystemEventArgs e)
     {
         Thread.Sleep(200);
         try
         {
-            TryLoad().Wait();
+            TryLoad(false).Wait();
         }
         catch (Exception exc)
         {
@@ -42,7 +52,7 @@ public class ConfigManager(DeviceManager deviceManager)
         }
     }
 
-    private async Task TryLoad()
+    private async Task TryLoad(bool save = true)
     {
         DeviceConfig config;
 
@@ -61,7 +71,10 @@ public class ConfigManager(DeviceManager deviceManager)
 
         Global.DeviceConfig = config;
         deviceManager.RegisterVariables();
-        Save(config, DeviceConfig.ConfigFile);
+        if (save)
+        {
+            await Save(config, DeviceConfig.ConfigFile);
+        }
     }
 
     private async Task<DeviceConfig> CreateDefaultConfigurationFile()
@@ -95,7 +108,7 @@ public class ConfigManager(DeviceManager deviceManager)
             DevicesDisableMouse = auroraConfig.DevicesDisableMouse,
             VarRegistry = new VariableRegistry { Variables = varRegistryVariables }
         };
-        Save(migratedConfig, DeviceConfig.ConfigFile);
+        await Save(migratedConfig, DeviceConfig.ConfigFile);
         try
         {
             File.Delete(auroraConfigFile);
@@ -103,13 +116,10 @@ public class ConfigManager(DeviceManager deviceManager)
         return migratedConfig;
     }
 
-    private static void Save(object configuration, string path)
+    private static Task Save(object configuration, string path)
     {
-        var content = JsonSerializer.Serialize(configuration, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-        });
+        var content = JsonSerializer.Serialize(configuration, JsonSerializerOptions);
 
-        File.WriteAllText(path, content, Encoding.UTF8);
+        return File.WriteAllTextAsync(path, content, Encoding.UTF8);
     }
 }
