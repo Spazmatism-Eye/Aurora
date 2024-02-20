@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Aurora.Utils;
+using Common.Devices;
 
 namespace Aurora.Settings.Controls;
 
@@ -10,9 +11,11 @@ namespace Aurora.Settings.Controls;
 public sealed partial class Window_VariableRegistryEditor : IDisposable
 {
     private readonly TransparencyComponent _transparencyComponent;
+    private readonly DeviceConfig _deviceConfig;
 
-    public Window_VariableRegistryEditor()
+    public Window_VariableRegistryEditor(DeviceConfig deviceConfig)
     {
+        _deviceConfig = deviceConfig;
         InitializeComponent();
 
         _transparencyComponent = new TransparencyComponent(this, null);
@@ -23,14 +26,14 @@ public sealed partial class Window_VariableRegistryEditor : IDisposable
         _transparencyComponent.Dispose();
     }
 
-    private async void Window_VariableRegistryEditor_OnLoaded(object sender, RoutedEventArgs e)
+    private void Window_VariableRegistryEditor_OnLoaded(object sender, RoutedEventArgs e)
     {
-        var deviceConfig = await ConfigManager.LoadDeviceConfig();
-        VarRegistryEditor.VarRegistrySource = deviceConfig.VarRegistry;
+        VarRegistryEditor.VarRegistrySource = _deviceConfig.VarRegistry;
     }
 
     private void Window_VariableRegistryEditor_OnUnloaded(object sender, RoutedEventArgs e)
     {
+        ConfigManager.Save(_deviceConfig);
         Dispose();
     }
 }

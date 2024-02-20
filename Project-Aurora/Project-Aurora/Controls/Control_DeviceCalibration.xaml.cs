@@ -79,7 +79,7 @@ public sealed partial class Control_DeviceCalibration : IDisposable
 
         async void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            ConfigManager.Save(await loadDeviceConfig, DeviceConfig.ConfigFile);
+            ConfigManager.Save(await loadDeviceConfig);
         }
     }
 

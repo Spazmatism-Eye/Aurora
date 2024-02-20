@@ -8,14 +8,17 @@ using System.IO;
 using System.Windows;
 using Aurora.Modules.AudioCapture;
 using Aurora.Settings.Overrides.Logic;
+using Common.Devices;
 using Serilog.Events;
 
 namespace Aurora.Settings;
 
 [JsonObject]
-public class Configuration : INotifyPropertyChanged
+public class Configuration : INotifyPropertyChanged, IAuroraConfig
 {
     public static readonly string ConfigFile = Path.Combine(Global.AppDataDirectory, "Config.json");
+
+    public string ConfigPath => ConfigFile;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

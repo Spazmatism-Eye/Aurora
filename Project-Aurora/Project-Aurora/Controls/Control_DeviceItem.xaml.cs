@@ -98,7 +98,7 @@ public partial class Control_DeviceItem
         }
         Task.Run(() =>
         {
-            ConfigManager.Save(_deviceConfigs, DeviceConfig.ConfigFile);
+            ConfigManager.Save(_deviceConfigs);
         });
     }
 
@@ -210,7 +210,7 @@ public partial class Control_DeviceItem
 
     private void btnViewOptions_Click(object? sender, RoutedEventArgs e)
     {
-        var optionsWindow = new Window_VariableRegistryEditor
+        var optionsWindow = new Window_VariableRegistryEditor(_deviceConfigs)
         {
             Title = $"{_device.Device.DeviceName} - Options",
             SizeToContent = SizeToContent.WidthAndHeight,
@@ -219,7 +219,7 @@ public partial class Control_DeviceItem
                 RegisteredVariables = _device.Device.RegisteredVariables
             }
         };
-        optionsWindow.Closing += (_, _) => { ConfigManager.Save(_deviceConfigs, DeviceConfig.ConfigFile); };
+        optionsWindow.Closing += (_, _) => { ConfigManager.Save(_deviceConfigs); };
 
         optionsWindow.ShowDialog();
     }

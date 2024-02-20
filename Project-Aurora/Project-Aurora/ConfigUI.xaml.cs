@@ -631,7 +631,7 @@ partial class ConfigUI : INotifyPropertyChanged
         ico.Dispose();
 
         lightingStateManager.RegisterEvent(genAppPm);
-        ConfigManager.Save(Global.Configuration, Configuration.ConfigFile);
+        ConfigManager.Save(Global.Configuration);
         GenerateProfileStack(filename);
     }
 

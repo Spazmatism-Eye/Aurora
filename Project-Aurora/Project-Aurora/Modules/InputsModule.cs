@@ -85,7 +85,7 @@ public sealed class InputsModule : AuroraModule
                 brightness += e.GetDeviceKey() == DeviceKeys.VOLUME_UP ? 0.05f : -0.05f;
                 Global.Configuration.GlobalBrightness = Math.Max(0f, Math.Min(1f, brightness));
 
-                ConfigManager.Save(Global.Configuration, Configuration.ConfigFile);
+                ConfigManager.Save(Global.Configuration);
             }
         );
     }

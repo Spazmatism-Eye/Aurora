@@ -23,7 +23,7 @@ public static class ConfigManager
         config.OnPostLoad();
         config.PropertyChanged += (_, _) =>
         {
-            Save(config, Configuration.ConfigFile);
+            Save(config);
         };
 
         return config;
@@ -84,7 +84,7 @@ public static class ConfigManager
         }
 
         config.OnPostLoad();
-        config.PropertyChanged += (_, _) => { Save(config, Configuration.ConfigFile); };
+        config.PropertyChanged += (_, _) => { Save(config); };
 
         return config;
     }
@@ -99,7 +99,7 @@ public static class ConfigManager
 
             // first time start
             var deviceConfig = new DeviceConfig();
-            Save(deviceConfig, DeviceConfig.ConfigFile);
+            Save(deviceConfig);
             return deviceConfig;
 
         }
@@ -108,8 +108,9 @@ public static class ConfigManager
         return System.Text.Json.JsonSerializer.Deserialize<DeviceConfig>(content) ?? await MigrateDeviceConfig();
     }
 
-    public static void Save(object configuration, string path)
+    public static void Save(IAuroraConfig configuration)
     {
+        var path = configuration.ConfigPath;
         var currentTime = Time.GetMillisecondsSinceEpoch();
 
         if (LastSaveTimes.TryGetValue(path, out var lastSaveTime))
@@ -133,7 +134,7 @@ public static class ConfigManager
     {
         Global.logger.Information("Creating default configuration");
         var config = new Configuration();
-        Save(config, Configuration.ConfigFile);
+        Save(config);
         return config;
     }
 

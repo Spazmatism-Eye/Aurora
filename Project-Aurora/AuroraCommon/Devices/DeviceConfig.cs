@@ -4,12 +4,14 @@ using System.Text.Json.Serialization;
 
 namespace Common.Devices;
 
-public sealed class DeviceConfig : INotifyPropertyChanged
+public sealed class DeviceConfig : INotifyPropertyChanged, IAuroraConfig
 {
     public const string FileName = "DeviceConfig.json";
 
     public static readonly string ConfigFile =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora", FileName);
+
+    public string ConfigPath => ConfigFile;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

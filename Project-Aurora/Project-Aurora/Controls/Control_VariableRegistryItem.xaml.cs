@@ -20,7 +20,8 @@ namespace Aurora.Controls;
 public partial class Control_VariableRegistryItem
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty VariableNameProperty = DependencyProperty.Register(nameof(VariableName), typeof(string), typeof(Control_VariableRegistryItem), new PropertyMetadata(VariableNameChanged));
+    public static readonly DependencyProperty VariableNameProperty = DependencyProperty.Register(nameof(VariableName),
+        typeof(string), typeof(Control_VariableRegistryItem), new PropertyMetadata(VariableNameChanged));
 
     private static void VariableNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -39,7 +40,8 @@ public partial class Control_VariableRegistryItem
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty VarRegistryProperty = DependencyProperty.Register(nameof(VarRegistry), typeof(VariableRegistry), typeof(Control_VariableRegistryItem));
+    public static readonly DependencyProperty VarRegistryProperty = DependencyProperty.Register(nameof(VarRegistry),
+        typeof(VariableRegistry), typeof(Control_VariableRegistryItem));
 
     public VariableRegistry VarRegistry
     {
@@ -123,7 +125,7 @@ public partial class Control_VariableRegistryItem
         }
         else
         {
-            control = new TextBox{ Text = "Unsupported type", IsEnabled = false};
+            control = new TextBox{ Text = "Unsupported type: " + varType, IsEnabled = false};
         }
 
         grd_control.Children.Add(control);

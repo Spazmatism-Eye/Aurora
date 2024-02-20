@@ -140,7 +140,7 @@ public partial class App
         base.OnExit(e);
 
         if (Global.Configuration != null)
-            ConfigManager.Save(Global.Configuration, Configuration.ConfigFile);
+            ConfigManager.Save(Global.Configuration);
 
         var forceExitTimer = StartForceExitTimer();
         if (_auroraApp != null)
