@@ -100,7 +100,6 @@ public partial class App
             {
                 case "-debug":
                     Global.isDebug = true;
-                    Global.logger.Information("Program started in debug mode");
                     break;
                 case "-restart":
                     var pid = int.Parse(e.Args[++i]);
@@ -114,16 +113,10 @@ public partial class App
                 case "-minimized":
                 case "-silent":
                     IsSilent = true;
-                    Global.logger.Information("Program started with '-silent' parameter");
-                    break;
-                case "-ignore_update":
-                    new UpdateModule().IgnoreUpdate = true;
-                    Global.logger.Information("Program started with '-ignore_update' parameter");
                     break;
                 case "-delay":
                     if (i + 1 >= e.Args.Length || !int.TryParse(e.Args[i++], out var delayTime))
                         delayTime = 5000;
-                    Global.logger.Information("Program started with '-delay' parameter with delay of {DelayTime} ms", delayTime);
                     Thread.Sleep(delayTime);
                     break;
             }
