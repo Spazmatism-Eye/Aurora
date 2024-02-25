@@ -88,9 +88,11 @@ internal static class MemorySharedEventThread
             {
                 Name = "Memory Share Event Thread",
                 IsBackground = true,
+                Priority = ThreadPriority.Highest,
             };
             thread.Start();
             tcs.Task.Wait();
+            Thread.Sleep(2); //a little delay to help WaitHandle.WaitAny(_handles) run before returning
             return thread;
         }
 
