@@ -173,16 +173,6 @@ partial class ConfigUI : INotifyPropertyChanged
         await GenerateProfileStack();
     }
 
-    private void OnAuroraCommandReceived(object? sender, string e)
-    {
-        switch (e)
-        {
-            case "restore":
-                Dispatcher.BeginInvoke(Display, DispatcherPriority.Input);
-                break;
-        }
-    }
-
     public void Display()
     {
         ShowInTaskbar = true;
@@ -234,12 +224,6 @@ partial class ConfigUI : INotifyPropertyChanged
     private async void Window_Loaded(object? sender, RoutedEventArgs e)
     {
         (await _layoutManager).KeyboardLayoutUpdated += KbLayout_KeyboardLayoutUpdated;
-
-        var ipcListener = await _ipcListener;
-        if (ipcListener != null)
-        {
-            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
-        }
         
         var handle = new WindowInteropHelper(this).Handle;
         // Subclass the window to intercept messages
@@ -299,12 +283,6 @@ partial class ConfigUI : INotifyPropertyChanged
         _virtualKeyboardTimer.Stop();
 
         (await _layoutManager).KeyboardLayoutUpdated -= KbLayout_KeyboardLayoutUpdated;
-
-        var ipcListener = await _ipcListener;
-        if (ipcListener != null)
-        {
-            ipcListener.AuroraCommandReceived -= OnAuroraCommandReceived;
-        }
 
         KeyboardGrid.Children.Clear();
     }

@@ -102,7 +102,13 @@ public sealed class AuroraApp : IDisposable
         Global.logger.Information("Modules initiated");
         if (!_isSilent)
         {
-            await DisplayWindow();
+            DisplayWindow();
+        }
+
+        var ipcListener = await IpcListenerModule.IpcListener;
+        if (ipcListener != null)
+        {
+            ipcListener.AuroraCommandReceived += OnAuroraCommandReceived;
         }
 
         //move this to ProcessModule
@@ -131,16 +137,29 @@ public sealed class AuroraApp : IDisposable
         return Task.WhenAll(tasks);
     }
 
-    private async Task DisplayWindow()
+    private void OnAuroraCommandReceived(object? sender, string e)
     {
-        if (Application.Current.MainWindow is not ConfigUI mainWindow)
+        switch (e)
         {
-            var configUi = await CreateWindow();
-            Application.Current.MainWindow = configUi;
-            configUi.Display();
-            return;
+            case "restore":
+                DisplayWindow();
+                break;
         }
-        mainWindow.Display();
+    }
+
+    private void DisplayWindow()
+    {
+        Application.Current.Dispatcher.BeginInvoke(async () =>
+        {
+            if (Application.Current.MainWindow is not ConfigUI mainWindow)
+            {
+                var configUi = await CreateWindow();
+                Application.Current.MainWindow = configUi;
+                configUi.Display();
+                return;
+            }
+            mainWindow.Display();
+        });
     }
 
     private async Task<ConfigUI> CreateWindow()
@@ -160,9 +179,9 @@ public sealed class AuroraApp : IDisposable
         return configUi;
     }
 
-    private async void TrayIcon_OnDisplayWindow(object? sender, EventArgs e)
+    private void TrayIcon_OnDisplayWindow(object? sender, EventArgs e)
     {
-        await DisplayWindow();
+        DisplayWindow();
     }
 
     public void Dispose()
