@@ -17,7 +17,7 @@ public sealed class LogitechRgbNetDevice() : RgbNetDevice(true)
     {
         await base.ConfigureProvider();
 
-        var isSdkRunning = ProcessUtils.IsProcessRunning("lghub") || ProcessUtils.IsProcessRunning("lcore");
+        var isSdkRunning = ProcessUtils.IsProcessRunning("lghub_agent") || ProcessUtils.IsProcessRunning("lcore");
         if (!isSdkRunning)
         {
             _sdkDetectedOff = true;

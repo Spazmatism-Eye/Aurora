@@ -77,6 +77,11 @@ public partial class Control_DeviceItem
         if (deviceEnabled)
         {
             _deviceConfigs.EnabledDevices.Add(_device.Device.DeviceName);
+            var device = _device;
+            Task.Run(async () =>
+            {
+                await device.EnableDevice();
+            });
         }
         else
         {

@@ -199,9 +199,9 @@ public static class LogitechGSDK
     private static (int R, int G, int B) GetColorValues(SimpleColor clr)
     {
         clr = CommonColorUtils.CorrectWithAlpha(clr);
-        return ((int)(clr.R / 255.0 * 100.0),
-            (int)(clr.G / 255.0 * 100.0),
-            (int)(clr.B / 255.0 * 100.0));
+        return ((int)(clr.R * 100.0 / 255.0),
+            (int)(clr.G * 100.0 / 255.0),
+            (int)(clr.B * 100.0 / 255.0));
     }
 }
 
