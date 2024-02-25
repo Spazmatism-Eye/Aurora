@@ -270,9 +270,9 @@ public sealed class InteractiveLayerHandler : LayerHandler<InteractiveLayerHandl
                 var rainbowWave = new AnimationTrack("Rainbow Wave", 1.0f);
 
                 rainbowWave.SetFrame(0.0f, new AnimationGradientCircle(origin, 0,
-                    new EffectBrush(new ColorSpectrum(ColorSpectrum.Rainbow).Flip()).SetBrushType(EffectBrush.BrushType.Radial), Properties.EffectWidth));
+                    new EffectBrush(new ColorSpectrum(ColorSpectrum.Rainbow).Flip(), EffectBrush.BrushType.Radial), Properties.EffectWidth));
                 rainbowWave.SetFrame(1.0f, new AnimationGradientCircle(origin, Effects.Canvas.Width + (float)Properties.EffectWidth / 2,
-                    new EffectBrush(new ColorSpectrum(ColorSpectrum.Rainbow).Flip()).SetBrushType(EffectBrush.BrushType.Radial), Properties.EffectWidth));
+                    new EffectBrush(new ColorSpectrum(ColorSpectrum.Rainbow).Flip(), EffectBrush.BrushType.Radial), Properties.EffectWidth));
 
                 animMix.AddTrack(rainbowWave);
                 break;

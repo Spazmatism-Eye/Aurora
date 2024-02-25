@@ -18,14 +18,14 @@ public class PercentGradientLayerHandlerProperties : PercentLayerHandlerProperti
     [LogicOverridable("Gradient")]
     public EffectBrush Gradient
     {
-        get => Logic._gradient ?? (_gradient ??= new EffectBrush().SetBrushType(EffectBrush.BrushType.Linear));
+        get => Logic._gradient ?? (_gradient ??= new EffectBrush(EffectBrush.BrushType.Linear));
         set => _gradient = value;
     }
 
     public override void Default()
     {
         base.Default();
-        Gradient = new EffectBrush().SetBrushType(EffectBrush.BrushType.Linear);
+        Gradient = new EffectBrush(EffectBrush.BrushType.Linear);
     }
 }
 

@@ -214,9 +214,9 @@ namespace Aurora.EffectsEngine
                     shift = effectConfig.AnimationType switch
                     {
                         AnimationType.TranslateXy => effectConfig.ShiftAmount,
-                        AnimationType.ZoomIn when effectConfig.Brush.type == EffectBrush.BrushType.Radial =>
+                        AnimationType.ZoomIn when effectConfig.Brush.Type == EffectBrush.BrushType.Radial =>
                             (Effects.Canvas.BiggestSize - effectConfig.ShiftAmount) * 40.0f % Effects.Canvas.BiggestSize,
-                        AnimationType.ZoomOut when effectConfig.Brush.type == EffectBrush.BrushType.Radial =>
+                        AnimationType.ZoomOut when effectConfig.Brush.Type == EffectBrush.BrushType.Radial =>
                             effectConfig.ShiftAmount * 40.0f % Effects.Canvas.BiggestSize,
                         _ => shift
                     };
@@ -225,7 +225,7 @@ namespace Aurora.EffectsEngine
                         shift *= -1.0f;
 
                     brush = effectConfig.Brush.GetDrawingBrush();
-                    switch (effectConfig.Brush.type)
+                    switch (effectConfig.Brush.Type)
                     {
                         case EffectBrush.BrushType.Linear:
                         {

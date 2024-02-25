@@ -48,19 +48,14 @@ public class DesktopProfile : ApplicationProfile
                     DeviceKeys.VOLUME_MUTE, DeviceKeys.VOLUME_UP, DeviceKeys.VOLUME_DOWN
                 }),
                 PercentType = PercentEffectType.AllAtOnce,
-                Gradient = new EffectBrush
+                Gradient = new EffectBrush(EffectBrush.BrushType.Linear).SetColorGradients(new SortedDictionary<double, Color>
                 {
-                    type = EffectBrush.BrushType.Linear,
-                    wrap = EffectBrush.BrushWrap.None,
-                    colorGradients = new SortedDictionary<double, Color>
-                    {
-                        { 0f, Color.Red },
-                        { 0.18f, Color.FromArgb(255, 251, 0) },
-                        { 0.4f, Color.Lime },
-                        { 0.8f, Color.FromArgb(138, 255, 200) },
-                        { 1f, Color.FromArgb(91, 0, 255) }
-                    }
-                },
+                    { 0f, Color.Red },
+                    { 0.18f, Color.FromArgb(255, 251, 0) },
+                    { 0.4f, Color.Lime },
+                    { 0.8f, Color.FromArgb(138, 255, 200) },
+                    { 1f, Color.FromArgb(91, 0, 255) }
+                }),
                 VariablePath = new VariablePath("LocalPCInfo/SystemVolume"),
                 MaxVariablePath = new VariablePath("1")
             },
@@ -380,28 +375,26 @@ public class DesktopProfile : ApplicationProfile
                         Speed = 1,
                         GradientSize = 19.5f,
                         AnimationType = AnimationType.TranslateXy,
-                        Brush = new EffectBrush
+                        Brush = new EffectBrush(EffectBrush.BrushType.Linear, EffectBrush.BrushWrap.Repeat)
                         {
-                            type = EffectBrush.BrushType.Linear,
-                            wrap = EffectBrush.BrushWrap.Repeat,
-                            start = new PointF(0, -0.5f),
-                            center = new PointF(0, 0),
-                            end = new PointF(1, 1),
-                            colorGradients =
-                            {
-                                [0] = CommonColorUtils.FastColor(0, 0, 0, 0),
-                                [0.06593407690525055] = CommonColorUtils.FastColor(0, 0, 0, 0),
-                                [0.1538461595773697] = CommonColorUtils.FastColor(153, 59, 237),
-                                [0.24337075650691986] = CommonColorUtils.FastColor(10, 0, 0, 0),
-                                [0.4263019561767578] = CommonColorUtils.FastColor(0, 0, 0, 0),
-                                [0.5358933806419373] = CommonColorUtils.FastColor(151, 183, 63),
-                                [0.6483517289161682] = CommonColorUtils.FastColor(4, 0, 0, 0),
-                                [0.7614668011665344] = CommonColorUtils.FastColor(0, 24, 24, 51),
-                                [0.8626373410224915] = CommonColorUtils.FastColor(129, 255, 239, 48),
-                                [0.9395604133605957] = CommonColorUtils.FastColor(4, 194, 189, 127),
-                                [1] = CommonColorUtils.FastColor(4, 194, 189, 12),
-                            }
+                            Start = new PointF(0, -0.5f),
+                            Center = new PointF(0, 0),
+                            End = new PointF(1, 1),
                         }
+                        .SetColorGradients(new SortedDictionary<double, Color>
+                        {
+                            {0, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                            {0.06593407690525055, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                            {0.1538461595773697, CommonColorUtils.FastColor(153, 59, 237) },
+                            {0.24337075650691986, CommonColorUtils.FastColor(10, 0, 0, 0) },
+                            {0.4263019561767578, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                            {0.5358933806419373, CommonColorUtils.FastColor(151, 183, 63) },
+                            {0.6483517289161682, CommonColorUtils.FastColor(4, 0, 0, 0) },
+                            {0.7614668011665344, CommonColorUtils.FastColor(0, 24, 24, 51) },
+                            {0.8626373410224915, CommonColorUtils.FastColor(129, 255, 239, 48) },
+                            {0.9395604133605957, CommonColorUtils.FastColor(4, 194, 189, 127) },
+                            {1, CommonColorUtils.FastColor(4, 194, 189, 12) },
+                        }),
                     }
                 }
             }),
@@ -426,12 +419,11 @@ public class DesktopProfile : ApplicationProfile
                             CommonColorUtils.FastColor(253, 83, 30),
                             CommonColorUtils.FastColor(136, 219, 61),
                             CommonColorUtils.FastColor(255, 83, 30)
-                        ))
+                        ), EffectBrush.BrushType.Linear, EffectBrush.BrushWrap.Repeat)
                         {
-                            start = new PointF(0, -0.5f),
-                            center = new PointF(0, 0),
-                            end = new PointF(1, 1),
-                            wrap = EffectBrush.BrushWrap.Repeat,
+                            Start = new PointF(0, -0.5f),
+                            Center = new PointF(0, 0),
+                            End = new PointF(1, 1),
                         }
                     }
                 }

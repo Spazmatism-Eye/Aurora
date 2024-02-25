@@ -80,7 +80,7 @@ public class EqualizerLayerHandlerProperties : LayerHandlerProperties<EqualizerL
     [JsonProperty("_Gradient")]
     public EffectBrush Gradient
     {
-        get => Logic._gradient ?? _gradient ?? new EffectBrush().SetBrushType(EffectBrush.BrushType.Linear);
+        get => Logic._gradient ?? _gradient ?? new EffectBrush(EffectBrush.BrushType.Linear);
         set => _gradient = value;
     }
 
@@ -149,7 +149,7 @@ public class EqualizerLayerHandlerProperties : LayerHandlerProperties<EqualizerL
         _Sequence = new KeySequence(Effects.Canvas.WholeFreeForm);
         _PrimaryColor = CommonColorUtils.GenerateRandomColor();
         _secondaryColor = CommonColorUtils.GenerateRandomColor();
-        _gradient = new EffectBrush(ColorSpectrum.RainbowLoop).SetBrushType(EffectBrush.BrushType.Linear);
+        _gradient = new EffectBrush(ColorSpectrum.RainbowLoop);
         _EQType = EqualizerType.PowerBars;
         _viewType = EqualizerPresentationType.SolidColor;
         _maxAmplitude = 1.0f;
@@ -411,8 +411,8 @@ public class EqualizerLayerHandler : LayerHandler<EqualizerLayerHandlerPropertie
             case EqualizerPresentationType.GradientHorizontal:
             {
                 var eBrush = new EffectBrush(Properties.Gradient.GetColorSpectrum()) {
-                    start = PointF.Empty,
-                    end = new PointF(SourceRect.Width, 0)
+                    Start = PointF.Empty,
+                    End = new PointF(SourceRect.Width, 0)
                 };
 
                 return eBrush.GetDrawingBrush();
@@ -422,8 +422,8 @@ public class EqualizerLayerHandler : LayerHandler<EqualizerLayerHandlerPropertie
             case EqualizerPresentationType.GradientVertical:
             {
                 var eBrush = new EffectBrush(Properties.Gradient.GetColorSpectrum()) {
-                    start = new PointF(0, SourceRect.Height),
-                    end = PointF.Empty
+                    Start = new PointF(0, SourceRect.Height),
+                    End = PointF.Empty
                 };
 
                 return eBrush.GetDrawingBrush();

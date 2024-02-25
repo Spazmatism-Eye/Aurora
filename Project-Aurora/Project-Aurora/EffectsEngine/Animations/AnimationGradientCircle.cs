@@ -20,9 +20,9 @@ public class AnimationGradientCircle : AnimationCircle
     {
         GradientBrush = new EffectBrush(brush)
         {
-            start = new PointF(0.0f, 0.0f),
-            end = new PointF(1.0f, 1.0f),
-            center = new PointF(0.5f, 0.5f)
+            Start = new PointF(0.0f, 0.0f),
+            End = new PointF(1.0f, 1.0f),
+            Center = new PointF(0.5f, 0.5f)
         };
     }
 
@@ -30,9 +30,9 @@ public class AnimationGradientCircle : AnimationCircle
     {
         GradientBrush = new EffectBrush(brush)
         {
-            start = new PointF(0.0f, 0.0f),
-            end = new PointF(1.0f, 1.0f),
-            center = new PointF(0.5f, 0.5f)
+            Start = new PointF(0.0f, 0.0f),
+            End = new PointF(1.0f, 1.0f),
+            Center = new PointF(0.5f, 0.5f)
         };
     }
 
@@ -40,9 +40,9 @@ public class AnimationGradientCircle : AnimationCircle
     {
         GradientBrush = new EffectBrush(brush)
         {
-            start = new PointF(0.0f, 0.0f),
-            end = new PointF(1.0f, 1.0f),
-            center = new PointF(0.5f, 0.5f)
+            Start = new PointF(0.0f, 0.0f),
+            End = new PointF(1.0f, 1.0f),
+            Center = new PointF(0.5f, 0.5f)
         };
     }
 
@@ -67,7 +67,7 @@ public class AnimationGradientCircle : AnimationCircle
             newColorGradients.Add(cutOffPoint - 0.0001f, Color.Transparent);
             newColorGradients.Add(0.0f, Color.Transparent);
 
-            GradientBrush.colorGradients = newColorGradients;
+            GradientBrush.SetColorGradients(newColorGradients);
         }
         else if (cutOffPoint > 1.0f)
         {
