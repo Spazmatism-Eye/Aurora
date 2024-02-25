@@ -96,10 +96,6 @@ public sealed class DeviceManager : IDisposable
         DeviceContainers.AddRange(deviceNames.Select(deviceName =>
         {
             var device = new MemorySharedDevice(deviceName);
-            if (OnlineSettings.DeviceTooltips.TryGetValue(deviceName, out var tooltips))
-            {
-                device.Tooltips = tooltips;
-            }
             return new DeviceContainer(device, this);
         }));
 

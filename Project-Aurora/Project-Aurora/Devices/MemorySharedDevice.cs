@@ -107,8 +107,6 @@ public sealed class MemorySharedDevice : IDevice, IDisposable
         return DeviceInformation.Devices?.Split(Constants.StringSplit) ?? Enumerable.Empty<string>();
     }
 
-    public DeviceTooltips Tooltips { get; set; } = new();
-
     public void Dispose()
     {
         _sharedDeviceInfo.Dispose();

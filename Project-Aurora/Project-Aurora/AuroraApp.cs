@@ -40,7 +40,7 @@ public sealed class AuroraApp : IDisposable
             PluginsModule.PluginManager, IpcListenerModule.IpcListener, _httpListenerModule.HttpListener,
             _devicesModule.DeviceManager, ProcessesModule.ActiveProcessMonitor, ProcessesModule.RunningProcessMonitor
         );
-        var onlineSettings = new OnlineSettings(_devicesModule.DeviceManager, ProcessesModule.RunningProcessMonitor);
+        var onlineSettings = new OnlineSettings(ProcessesModule.RunningProcessMonitor);
         _layoutsModule = new LayoutsModule(_razerSdkModule.RzSdkManager, onlineSettings.LayoutsUpdate);
         
         _modules =

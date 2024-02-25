@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Aurora.Devices;
+using Aurora.Modules;
 using Aurora.Settings.Controls;
 using Common.Devices;
 
@@ -22,6 +23,8 @@ public partial class Control_DeviceItem
     private readonly Timer _updateControlsTimer = new(1000);
 
     private bool _deviceRunning;
+
+    private string? _sdkLink;
 
     public Control_DeviceItem(DeviceConfig deviceConfigs, DeviceContainer device)
     {
@@ -134,9 +137,16 @@ public partial class Control_DeviceItem
 
     private void UpdateStatic()
     {
-        Beta.Visibility = _device.Device.Tooltips.Beta ? Visibility.Visible : Visibility.Hidden;
+        DeviceName.Text = _device.Device.DeviceName;
 
-        var infoTooltip = _device.Device.Tooltips.Info;
+        if (!OnlineSettings.DeviceTooltips.TryGetValue(_device.Device.DeviceName, out var tooltips))
+        {
+            return;
+        }
+        
+        Beta.Visibility = tooltips.Beta ? Visibility.Visible : Visibility.Hidden;
+
+        var infoTooltip = tooltips.Info;
         if (infoTooltip != null)
         {
             InfoTooltip.HintTooltip = infoTooltip;
@@ -147,8 +157,8 @@ public partial class Control_DeviceItem
             InfoTooltip.Visibility = Visibility.Hidden;
         }
 
-        var sdkLink = _device.Device.Tooltips.SdkLink;
-        if (sdkLink != null)
+        _sdkLink = tooltips.SdkLink;
+        if (_sdkLink != null)
         {
             SdkLink.MouseDoubleClick -= SdkLink_Clicked;
             SdkLink.MouseDoubleClick += SdkLink_Clicked;
@@ -160,10 +170,9 @@ public partial class Control_DeviceItem
             SdkLink.Visibility = Visibility.Hidden;
         }
 
-        Recommended.Visibility = _device.Device.Tooltips.Recommended ? Visibility.Visible : Visibility.Hidden;
+        Recommended.Visibility = tooltips.Recommended ? Visibility.Visible : Visibility.Hidden;
 
         BtnOptions.IsEnabled = _device.Device.RegisteredVariables.Count != 0;
-        DeviceName.Text = _device.Device.DeviceName;
     }
 
     private void UpdateDynamic()
@@ -206,10 +215,9 @@ public partial class Control_DeviceItem
 
     private void SdkLink_Clicked(object? sender, MouseButtonEventArgs e)
     {
-        var sdkLink = _device.Device.Tooltips.SdkLink;
-        if (sdkLink != null)
+        if (_sdkLink != null)
         {
-            System.Diagnostics.Process.Start("explorer", sdkLink);
+            System.Diagnostics.Process.Start("explorer", _sdkLink);
         }
     }
 

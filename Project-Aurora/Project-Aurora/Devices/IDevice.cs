@@ -49,6 +49,4 @@ public interface IDevice
     VariableRegistry RegisteredVariables { get; }
 
     IEnumerable<string> GetDevices();
-    
-    DeviceTooltips Tooltips { get; set; }
 }

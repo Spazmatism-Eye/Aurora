@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Aurora.Devices;
 using Aurora.Modules.OnlineConfigs;
 using Aurora.Modules.OnlineConfigs.Model;
 using Aurora.Modules.ProcessMonitor;
@@ -15,10 +14,10 @@ using Microsoft.Win32;
 
 namespace Aurora.Modules;
 
-public sealed class OnlineSettings(Task<DeviceManager> deviceManager, Task<RunningProcessMonitor> runningProcessMonitor)
+public sealed class OnlineSettings(Task<RunningProcessMonitor> runningProcessMonitor)
     : AuroraModule
 {
-    public static Dictionary<string, DeviceTooltips> DeviceTooltips = new();
+    public static Dictionary<string, DeviceTooltips> DeviceTooltips { get; private set; } = new();
 
     private Dictionary<string, ShutdownProcess> _shutdownProcesses = new();
     private readonly TaskCompletionSource _layoutUpdateTaskSource = new();
@@ -177,16 +176,9 @@ public sealed class OnlineSettings(Task<DeviceManager> deviceManager, Task<Runni
         App.ForceShutdownApp(-1);
     }
 
-    private async Task UpdateDeviceInfos()
+    private static async Task UpdateDeviceInfos()
     {
         DeviceTooltips = await OnlineConfigsRepository.GetDeviceTooltips();
-        foreach (var device in (await deviceManager).DeviceContainers.Select(dc => dc.Device))
-        {
-            if (DeviceTooltips.TryGetValue(device.DeviceName, out var tooltips))
-            {
-                device.Tooltips = tooltips;
-            }
-        }
     }
 
     async Task WaitGithubAccess(TimeSpan timeout)
@@ -200,9 +192,10 @@ public sealed class OnlineSettings(Task<DeviceManager> deviceManager, Task<Runni
 
         if (completedTask == delayTask)
         {
-            cancelSource.Cancel();
-            throw new Exception("Failed");
+            await cancelSource.CancelAsync();
+            throw new WebException("Failed to get github access");
         }
+        cancelSource.Dispose();
     }
 
     private async Task WaitUntilResolve(string domain, CancellationToken cancellationToken)
