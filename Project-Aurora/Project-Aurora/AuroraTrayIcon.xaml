@@ -8,7 +8,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <tb:TaskbarIcon x:Name="TrayIcon"
                     Visibility="Visible"
-                    ToolTipText="Aurora"
                     IconSource="Resources/aurora_icon.ico"
                     TrayMouseDoubleClick="trayicon_TrayMouseDoubleClick">
         <tb:TaskbarIcon.ContextMenu>
