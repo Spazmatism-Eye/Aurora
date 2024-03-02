@@ -13,10 +13,10 @@ public partial class UpdateCleanup : AuroraModule
 {
     protected override Task Initialize()
     {
-        if (!Global.Configuration.Migrations.Contains("net8"))
+        if (!Global.Configuration.Migrations.Contains("net8v2"))
         {
-            Net8Migration();
-            Global.Configuration.Migrations.Add("net8");
+            Net8V2Migration();
+            Global.Configuration.Migrations.Add("net8v2");
         }
         CleanOldLogiDll();
         CleanLogs();
@@ -60,27 +60,36 @@ public partial class UpdateCleanup : AuroraModule
         //noop
     }
 
-    private void Net8Migration()
+    private void Net8V2Migration()
     {
         IEnumerable<string> files = [
-        "Accessibility.dl",
-        "clrcompression.dl",
-        "D3DCompiler_47_cor3.dl",
-        "DirectWriteForwarder.dl",
-        "Microsoft.VisualBasic.Forms.dl",
-        "Microsoft.Win32.Registry.AccessControl.dl",
-        "Microsoft.Win32.SystemEvents.dl",
-        "System.Windows.Controls.Ribbon.dl",
-        "System.Windows.Extensions.dl",
-        "System.Windows.Forms.Design.dl",
-        "System.Windows.Forms.Design.Editors.dl",
-        "System.Windows.Forms.dl",
-        "System.Windows.Forms.Primitives.dl",
-        "System.Windows.Input.Manipulations.dl",
-        "System.Windows.Presentation.dl",
-        "System.Xaml.dl",
-        "WindowsFormsIntegration.dl",
-        "wpfgfx_cor3.dll"
+            "Bloody.NET.dll",
+            "clrcompression.dll",
+            "CTIntrfu.dll",
+            "DS4WindowsApi.dll",
+            "HidLibrary.dll",
+            "mscordaccore_amd64_amd64_6.0.2423.51814.dll",
+            "OmenFourZoneLighting.dll",
+            "OpenRGB.NET.dll",
+            "RGB.NET.Devices.Asus.dll",
+            "RGB.NET.Devices.Bloody.dll",
+            "RGB.NET.Devices.Bloody.pdb",
+            "RGB.NET.Devices.CoolerMaster.dll",
+            "RGB.NET.Devices.OpenRGB.dll",
+            "RGB.NET.Devices.Razer.dll",
+            "RGB.NET.Devices.SteelSeries.dll",
+            "RGB.NET.Devices.Wooting.dll",
+            "RGB.NET.YeeLightStates.dll",
+            "RGB.NET.YeeLightStates.pdb",
+            "Roccat-Talk.dll",
+            "SBAuroraReactive.dll",
+            "UniwillSDKDLL.dll",
+            "Vulcan.NET.dll",
+            "wooting-rgb-sdk.dll",
+            "Wooting.NET.dll",
+            "YeeLightAPI.dll",
+            "mscordaccore_amd64_amd64_6.0.2623.60508.dll",
+            "mscordaccore_amd64_amd64_6.0.2724.6912.dll",
         ];
 
         foreach (var file in files)
