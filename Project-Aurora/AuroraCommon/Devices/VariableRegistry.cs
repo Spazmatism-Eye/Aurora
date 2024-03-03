@@ -100,7 +100,7 @@ public class VariableRegistryItem : ICloneable
 
     private static object GetNumber(JsonElement jsonElement)
     {
-        if (int.TryParse(jsonElement.GetDecimal().ToString(CultureInfo.InvariantCulture), out var intVal))
+        if (int.TryParse(jsonElement.GetDecimal().ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture, out var intVal))
             return intVal;
         
         return jsonElement.GetDouble();

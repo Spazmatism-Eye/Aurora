@@ -1,12 +1,12 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using Aurora.Modules;
 using Aurora.Settings;
 using Serilog.Core;
 using Constants = Common.Constants;
@@ -115,7 +115,7 @@ public partial class App
                     IsSilent = true;
                     break;
                 case "-delay":
-                    if (i + 1 >= e.Args.Length || !int.TryParse(e.Args[i++], out var delayTime))
+                    if (i + 1 >= e.Args.Length || !int.TryParse(e.Args[i++], CultureInfo.InvariantCulture, out var delayTime))
                         delayTime = 5000;
                     Thread.Sleep(delayTime);
                     break;
