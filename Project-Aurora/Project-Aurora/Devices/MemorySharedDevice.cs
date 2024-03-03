@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Aurora.Modules.OnlineConfigs.Model;
 using Common;
 using Common.Data;
 using Common.Devices;
 
 namespace Aurora.Devices;
 
-public sealed class MemorySharedDevice : IDevice, IDisposable
+public sealed class MemorySharedDevice : IDevice
 {
     public event EventHandler? Updated;
 
@@ -18,7 +17,7 @@ public sealed class MemorySharedDevice : IDevice, IDisposable
     public string DeviceName => DeviceInformation.DeviceName;
     public string DeviceDetails => DeviceInformation.DeviceDetails;
     public string DeviceUpdatePerformance => DeviceInformation.DeviceUpdatePerformance;
-    public bool isDoingWork => DeviceInformation.IsDoingWork;
+    public bool IsDoingWork => DeviceInformation.IsDoingWork;
     public bool IsInitialized => DeviceInformation.IsInitialized;
     public VariableRegistry RegisteredVariables { get; } = new();
 

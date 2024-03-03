@@ -177,7 +177,7 @@ public partial class Control_DeviceItem
 
     private void UpdateDynamic()
     {
-        if (_device.Device.isDoingWork)
+        if (_device.Device.IsDoingWork)
         {
             _deviceRunning = false;
             BtnStart.Content = "Working...";
@@ -207,7 +207,7 @@ public partial class Control_DeviceItem
             BtnEnable.Content = "Enable";
             BtnStart.IsEnabled = false;
         }
-        else if (!_device.Device.isDoingWork)
+        else if (!_device.Device.IsDoingWork)
         {
             BtnEnable.Content = "Disable";
         }

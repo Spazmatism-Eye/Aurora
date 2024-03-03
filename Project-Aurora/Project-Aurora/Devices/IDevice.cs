@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using Aurora.Modules.OnlineConfigs.Model;
-using Aurora.Settings;
-using Common;
+﻿using System;
+using System.Collections.Generic;
 using Common.Devices;
 using JetBrains.Annotations;
 
@@ -12,7 +9,7 @@ namespace Aurora.Devices;
 /// An interface for a device class.
 /// </summary>
 [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature | ImplicitUseKindFlags.Access, ImplicitUseTargetFlags.WithInheritors)]
-public interface IDevice
+public interface IDevice : IDisposable
 {
     /// <summary>
     /// Gets the name of the device.
@@ -34,7 +31,7 @@ public interface IDevice
     /// <summary>
     /// Indicates that initialization is in progress for this device instance.
     /// </summary>
-    bool isDoingWork { get; }
+    bool IsDoingWork { get; }
 
     /// <summary>
     /// Gets the initialization status of this device instance.
