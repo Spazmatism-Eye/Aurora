@@ -1,17 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <Platforms>x64</Platforms>
-        <UseRidGraph>true</UseRidGraph>
+        <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-        <PublishSelfContained>true</PublishSelfContained>
-        <PublishTrimmed>false</PublishTrimmed>
+        <OutputType>WinExe</OutputType>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-        <LangVersion>12</LangVersion>
-        <OutputType>WinExe</OutputType>
+        <UseRidGraph>true</UseRidGraph>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>false</PublishTrimmed>
+
+        <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputPath>$(SolutionDir)..\Build\$(Configuration)\win10-x64\AuroraDeviceManager</OutputPath>

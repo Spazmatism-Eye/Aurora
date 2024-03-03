@@ -9,7 +9,6 @@
     <PublishSelfContained>true</PublishSelfContained>
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputType>WinExe</OutputType>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Aurora</RootNamespace>
