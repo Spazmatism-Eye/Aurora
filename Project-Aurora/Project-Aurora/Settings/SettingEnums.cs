@@ -102,18 +102,6 @@ public enum LayerEffects
     RainbowShift_Vertical = 4,
 
     /// <summary>
-    /// Rainbow Shift (Diagonal)
-    /// </summary>
-    [Description("Rainbow Shift (Diagonal)")]
-    RainbowShift_Diagonal = 5,
-
-    /// <summary>
-    /// Rainbow Shift (Other Diagonal)
-    /// </summary>
-    [Description("Rainbow Shift (Other Diagonal)")]
-    RainbowShift_Diagonal_Other = 6,
-
-    /// <summary>
     /// Rainbow Shift (Custom Angle)
     /// </summary>
     [Description("Rainbow Shift (Custom Angle)")]

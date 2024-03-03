@@ -275,8 +275,6 @@ public class EffectBrush
             if (!ColorGradients.ContainsKey(1.0f))
                 _colorGradients.Add(1.0f, Color.Transparent);
         }
-
-            
     }
 
     public EffectBrush(System.Windows.Media.Brush brush)
@@ -389,15 +387,13 @@ public class EffectBrush
 
     public Brush GetDrawingBrush()
     {
-        Brush returnBrush = Type switch
+        _drawingBrush ??= Type switch
         {
             BrushType.Solid => new SolidBrush(ColorGradients[0.0f]),
             BrushType.Linear => GetLinearBrush(),
             BrushType.Radial => GetRadialBrush(),
             _ => new SolidBrush(Color.Transparent)
         };
-            
-        _drawingBrush = returnBrush;
 
         return _drawingBrush;
     }

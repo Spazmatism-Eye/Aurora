@@ -97,8 +97,21 @@ namespace Aurora.EffectsEngine
         public void DrawGradient(LayerEffects effect, LayerEffectConfig effectConfig, RectangleF rect = new())
         {
             Clear();
-            Brush brush;
-            var shift = 0.0f;
+
+            effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 0.067f * effectConfig.Speed;
+            effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
+            
+            var shift = effectConfig.AnimationType switch
+            {
+                AnimationType.TranslateXy => effectConfig.ShiftAmount,
+                AnimationType.ZoomIn when effectConfig.Brush.Type == EffectBrush.BrushType.Radial =>
+                    (Effects.Canvas.BiggestSize - effectConfig.ShiftAmount) * 40.0f % Effects.Canvas.BiggestSize,
+                AnimationType.ZoomOut when effectConfig.Brush.Type == EffectBrush.BrushType.Radial =>
+                    effectConfig.ShiftAmount * 40.0f % Effects.Canvas.BiggestSize,
+                _ => 0,
+            };
+            if (effectConfig.AnimationReverse)
+                shift *= -1.0f;
 
             switch (effect)
             {
@@ -111,125 +124,23 @@ namespace Aurora.EffectsEngine
                     FillOver(Color.FromArgb((byte)(sine * 255), effectConfig.Secondary));
                     break;
                 case LayerEffects.RainbowShift_Horizontal:
-                    effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-
-                    if (effectConfig.AnimationType == AnimationType.TranslateXy)
-                        shift = effectConfig.ShiftAmount;
-
-                    if (effectConfig.AnimationReverse)
-                        shift *= -1.0f;
-
-                    var rainbowBrush = CreateRainbowBrush();
-                    brush = rainbowBrush;
-                    rainbowBrush.RotateTransform(0.0f);
-                    rainbowBrush.TranslateTransform(shift, shift);
-
-                    Fill(brush);
-
-                    effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
+                    DrawRainbowGradient(0, shift);
                     break;
                 case LayerEffects.RainbowShift_Vertical:
-                    effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-
-                    if (effectConfig.AnimationType == AnimationType.TranslateXy)
-                        shift = effectConfig.ShiftAmount;
-
-                    if (effectConfig.AnimationReverse)
-                        shift *= -1.0f;
-
-                    rainbowBrush = CreateRainbowBrush();
-                    brush = rainbowBrush;
-                    rainbowBrush.RotateTransform(90.0f);
-                    rainbowBrush.TranslateTransform(shift, shift);
-
-                    Fill(brush);
-
-                    effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
-                    break;
-                case LayerEffects.RainbowShift_Diagonal:
-                    effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-
-                    if (effectConfig.AnimationType == AnimationType.TranslateXy)
-                        shift = effectConfig.ShiftAmount;
-
-                    if (effectConfig.AnimationReverse)
-                        shift *= -1.0f;
-
-                    rainbowBrush = CreateRainbowBrush();
-                    brush = rainbowBrush;
-                    rainbowBrush.RotateTransform(45.0f);
-                    rainbowBrush.TranslateTransform(shift, shift);
-
-                    Fill(brush);
-
-                    effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
-                    break;
-                case LayerEffects.RainbowShift_Diagonal_Other:
-                    effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-
-                    if (effectConfig.AnimationType == AnimationType.TranslateXy)
-                        shift = effectConfig.ShiftAmount;
-
-                    if (effectConfig.AnimationReverse)
-                        shift *= -1.0f;
-
-                    rainbowBrush = CreateRainbowBrush();
-                    brush = rainbowBrush;
-                    rainbowBrush.RotateTransform(-45.0f);
-                    rainbowBrush.TranslateTransform(shift, shift);
-
-                    Fill(brush);
-
-                    effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
+                    DrawRainbowGradient(90, shift);
                     break;
                 case LayerEffects.RainbowShift_Custom_Angle:
-                    effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 5.0f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-
-
-                    if (effectConfig.AnimationType == AnimationType.TranslateXy)
-                        shift = effectConfig.ShiftAmount;
-
-                    if (effectConfig.AnimationReverse)
-                        shift *= -1.0f;
-
-                    rainbowBrush = CreateRainbowBrush();
-                    brush = rainbowBrush;
-                    rainbowBrush.RotateTransform(effectConfig.Angle);
-                    rainbowBrush.TranslateTransform(shift, shift);
-
-                    Fill(brush);
-
-                    effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
+                    DrawRainbowGradient(effectConfig.Angle, shift);
                     break;
                 case LayerEffects.GradientShift_Custom_Angle:
                 {
-                    effectConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - effectConfig.LastEffectCall) / 1000.0f * 0.067f * effectConfig.Speed;
-                    effectConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-
-                    shift = effectConfig.AnimationType switch
-                    {
-                        AnimationType.TranslateXy => effectConfig.ShiftAmount,
-                        AnimationType.ZoomIn when effectConfig.Brush.Type == EffectBrush.BrushType.Radial =>
-                            (Effects.Canvas.BiggestSize - effectConfig.ShiftAmount) * 40.0f % Effects.Canvas.BiggestSize,
-                        AnimationType.ZoomOut when effectConfig.Brush.Type == EffectBrush.BrushType.Radial =>
-                            effectConfig.ShiftAmount * 40.0f % Effects.Canvas.BiggestSize,
-                        _ => shift
-                    };
-
-                    if (effectConfig.AnimationReverse)
-                        shift *= -1.0f;
-
-                    brush = effectConfig.Brush.GetDrawingBrush();
+                    var brush = effectConfig.Brush.GetDrawingBrush();
                     switch (effectConfig.Brush.Type)
                     {
                         case EffectBrush.BrushType.Linear:
                         {
                             var linearBrush = (LinearGradientBrush)brush;
+                            linearBrush.ResetTransform();
                             if (!rect.IsEmpty)
                             {
                                 linearBrush.TranslateTransform(rect.X, rect.Y);
@@ -247,6 +158,7 @@ namespace Aurora.EffectsEngine
                         case EffectBrush.BrushType.Radial:
                         {
                             var radialBrush = (PathGradientBrush)brush;
+                            radialBrush.ResetTransform();
                             if (effectConfig.AnimationType is AnimationType.ZoomIn or AnimationType.ZoomOut)
                             {
                                 var percent = shift / Effects.Canvas.BiggestSize;
@@ -287,11 +199,21 @@ namespace Aurora.EffectsEngine
                     }
 
                     Fill(brush);
-
-                    effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
                     break;
                 }
             }
+
+            effectConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
+        }
+
+        private void DrawRainbowGradient(float angle, float shift)
+        {
+            var rainbowBrush = CreateRainbowBrush();
+            rainbowBrush.RotateTransform(angle);
+            rainbowBrush.TranslateTransform(shift, shift);
+
+            Fill(rainbowBrush);
+            rainbowBrush.Dispose();
         }
 
         public void Dispose()
@@ -312,11 +234,8 @@ namespace Aurora.EffectsEngine
         /// <returns>Rainbow LinearGradientBrush</returns>
         private LinearGradientBrush CreateRainbowBrush()
         {
-            var brush = new LinearGradientBrush(
-                new Point(0, 0),
-                new Point(Effects.Canvas.BiggestSize, 0),
-                Color.Red, Color.Red);
-            Color[] colors = {
+            Color[] colors =
+            [
                 Color.FromArgb(255, 0, 0),
                 Color.FromArgb(255, 127, 0),
                 Color.FromArgb(255, 255, 0),
@@ -325,17 +244,24 @@ namespace Aurora.EffectsEngine
                 Color.FromArgb(75, 0, 130),
                 Color.FromArgb(139, 0, 255),
                 Color.FromArgb(255, 0, 0)
-            };
+            ];
             var numColors = colors.Length;
             var blendPositions = new float[numColors];
             for (var i = 0; i < numColors; i++)
             {
                 blendPositions[i] = i / (numColors - 1f);
             }
-
-            var colorBlend = new ColorBlend();
-            colorBlend.Colors = colors;
-            colorBlend.Positions = blendPositions;
+            
+            var colorBlend = new ColorBlend
+            {
+                Colors = colors,
+                Positions = blendPositions
+            };
+            
+            var brush = new LinearGradientBrush(
+                new Point(0, 0),
+                new Point(Effects.Canvas.BiggestSize, 0),
+                Color.Red, Color.Red);
             brush.InterpolationColors = colorBlend;
 
             return brush;
