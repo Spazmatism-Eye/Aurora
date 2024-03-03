@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Aurora.Nodes;
 using Aurora.Utils;
 
@@ -91,7 +92,7 @@ public class GameState : IGameState
     }
 
     public double GetNumber(VariablePath path) {
-        if (double.TryParse(path.GsiPath, out var val)) // If the path is a raw number, return that
+        if (double.TryParse(path.GsiPath, CultureInfo.InvariantCulture, out var val)) // If the path is a raw number, return that
             return val;
         if (TryResolveGsPath(path, GSIPropertyType.Number, out var pVal)) // Next, try resolve the path as we would other types
             return Convert.ToDouble(pVal);

@@ -9,6 +9,7 @@ using JsonException = System.Text.Json.JsonException;
 namespace Aurora.Utils;
 
 public abstract class GenericDictionaryJsonConverterAdapter<K, V> : JsonConverter<IDictionary<K, V>>
+    where K : notnull
 {
     public override bool CanWrite => false;
 
@@ -37,11 +38,11 @@ public abstract class GenericDictionaryJsonConverterAdapter<K, V> : JsonConverte
             var key = Convert.ChangeType(prop.Name, keyType, CultureInfo.InvariantCulture);
             if (keyType == typeof(double))
             {
-                double.TryParse(prop.Name, out var doubleKey);
+                double.TryParse(prop.Name, CultureInfo.InvariantCulture, out var doubleKey);
                 key = doubleKey;
             }
             var value = serializer.Deserialize(prop.Value.CreateReader(), valueType);
-            map.TryAdd((K)key, (V)value);
+            map.TryAdd((K)key, (V?)value ?? default(V));
         }
         return map;
     }

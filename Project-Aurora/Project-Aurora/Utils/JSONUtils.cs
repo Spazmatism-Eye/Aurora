@@ -3,6 +3,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -332,7 +333,7 @@ public class SingleToDoubleConverter : JsonConverter
                 return (double)(reader.Value ?? 0.0);
             case JsonToken.String:
 
-                double.TryParse(reader.ReadAsString(), out var value);
+                double.TryParse(reader.ReadAsString(), CultureInfo.InvariantCulture, out var value);
                 return value;
         }
 

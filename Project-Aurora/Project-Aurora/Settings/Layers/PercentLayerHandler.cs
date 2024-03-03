@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Controls;
 using Aurora.EffectsEngine;
 using Aurora.Profiles;
@@ -132,10 +133,16 @@ public class PercentLayerHandler<TProperty> : LayerHandler<TProperty> where TPro
     {
         if (profile != null)
         {
-            if (!double.TryParse(Properties.VariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.VariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.VariablePath.GsiPath))
+            if (!double.TryParse(Properties.VariablePath.GsiPath, CultureInfo.InvariantCulture, out _) &&
+                !string.IsNullOrWhiteSpace(Properties.VariablePath.GsiPath) &&
+                !profile.ParameterLookup.IsValidParameter(Properties.VariablePath.GsiPath)
+               )
                 Properties.VariablePath = VariablePath.Empty;
 
-            if (!double.TryParse(Properties.MaxVariablePath.GsiPath, out _) && !string.IsNullOrWhiteSpace(Properties.MaxVariablePath.GsiPath) && !profile.ParameterLookup.IsValidParameter(Properties.MaxVariablePath.GsiPath))
+            if (!double.TryParse(Properties.MaxVariablePath.GsiPath, CultureInfo.InvariantCulture, out _) &&
+                !string.IsNullOrWhiteSpace(Properties.MaxVariablePath.GsiPath) &&
+                !profile.ParameterLookup.IsValidParameter(Properties.MaxVariablePath.GsiPath)
+               )
                 Properties.MaxVariablePath = VariablePath.Empty;
         }
         base.SetApplication(profile);

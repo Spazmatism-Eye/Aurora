@@ -85,7 +85,7 @@ public partial class GameStateParameterPicker : INotifyPropertyChanged {
             return;
         }
 
-        if (double.TryParse(e.NewValue.ToString(), out double val)) {
+        if (double.TryParse(e.NewValue.ToString(), CultureInfo.InvariantCulture, out var val)) {
             // If a raw number has been entered, fill in the numeric stepper
             picker.numericEntry.Value = val;
         } else {
@@ -146,7 +146,7 @@ public partial class GameStateParameterPicker : INotifyPropertyChanged {
                                              // An empty path is fine
                                              || string.IsNullOrEmpty(path.GsiPath)
                                              // If we're in number mode, allow the selected path to be a double
-                                             || (PropertyType == GSIPropertyType.Number && double.TryParse(path.GsiPath, out var _))
+                                             || (PropertyType == GSIPropertyType.Number && double.TryParse(path.GsiPath, CultureInfo.InvariantCulture, out _))
                                              // If not in number mode, must be a valid path and have the same type as the expected property type
                                              || (Application?.ParameterLookup?.IsValidParameter(path.GsiPath, PropertyType) ?? false);
 
