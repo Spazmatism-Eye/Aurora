@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Aurora.Settings.Layers;
@@ -25,23 +25,6 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
-    /// Sets a dependency property to a specific value and raises change events for the property and all additional properties if the value is different.
-    /// </summary>
-    private void SetValueNotify(DependencyProperty dp, object val, string[] additionalProperties = null, [CallerMemberName] string propName = null) {
-        if (GetValue(dp) == val) return;
-        SetValue(dp, val);
-        Notify(additionalProperties, propName);
-    }
-
-    /// <summary>
-    /// Raises change events for the property and all additional properties.
-    /// </summary>
-    private void Notify(string[] additionalProperties, string propName) {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        Notify(additionalProperties);
-    }
-
-    /// <summary>
     /// Raises change events for the properties.
     /// </summary>
     /// <param name="properties"></param>
@@ -51,10 +34,10 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     }
 
     /// <summary>
-    /// Helper funtion that creates a PropertyChangedCallback for PropertyMetadata that notifies the provided property names have changed.
+    /// Helper function that creates a PropertyChangedCallback for PropertyMetadata that notifies the provided property names have changed.
     /// </summary>
     private static PropertyChangedCallback NotifyCb(params string[] properties) {
-        return (trg, e) => ((Control_LayerList)trg).Notify(properties);
+        return (trg, _) => ((Control_LayerList)trg).Notify(properties);
     }
     #endregion
 
@@ -62,7 +45,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     #region FocusedApplication Property
     public Profiles.Application FocusedApplication {
         get => (Profiles.Application)GetValue(FocusedApplicationProperty);
-        set => SetValueNotify(FocusedApplicationProperty, value);
+        set => SetValue(FocusedApplicationProperty, value);
     }
 
     public static readonly DependencyProperty FocusedApplicationProperty =
@@ -79,36 +62,38 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     }
         
     public static readonly DependencyProperty LayerCollectionProperty =
-        DependencyProperty.Register(nameof(LayerCollection), typeof(ObservableCollection<Layer>), typeof(Control_LayerList), new PropertyMetadata(null, NotifyCb("ActiveLayerCollection", "DayNightCheckboxesVisiblity")));
+        DependencyProperty.Register(nameof(LayerCollection), typeof(ObservableCollection<Layer>), typeof(Control_LayerList),
+            new PropertyMetadata(null, NotifyCb(nameof(ActiveLayerCollection), nameof(DayNightCheckboxesVisibility))));
     #endregion
 
     #region SecondaryLayerCollection Property
     /// <summary>
-    /// This collection of layers is a secondary set of layers to display to the user. If this is given a value and the relevant setting is enabled, a pair of checkboxs
+    /// This collection of layers is a secondary set of layers to display to the user. If this is given a value and the relevant setting is enabled, a pair of checkboxes
     /// will show that allow the user to choose between day and night time layers. This collection is the nighttime collection.
     /// </summary>
-    public ObservableCollection<Layer> SecondaryLayerCollection {
-        get => (ObservableCollection<Layer>)GetValue(SecondaryLayerCollectionProperty);
+    public ObservableCollection<Layer>? SecondaryLayerCollection {
+        get => GetValue(SecondaryLayerCollectionProperty) as ObservableCollection<Layer>;
         set => SetValue(SecondaryLayerCollectionProperty, value);
     }
 
     public static readonly DependencyProperty SecondaryLayerCollectionProperty =
-        DependencyProperty.Register(nameof(SecondaryLayerCollection), typeof(ObservableCollection<Layer>), typeof(Control_LayerList), new PropertyMetadata(null, NotifyCb("ActiveLayerCollection", "DayNightCheckboxesVisiblity")));
+        DependencyProperty.Register(nameof(SecondaryLayerCollection), typeof(ObservableCollection<Layer>), typeof(Control_LayerList),
+            new PropertyMetadata(null, NotifyCb(nameof(ActiveLayerCollection), nameof(DayNightCheckboxesVisibility))));
     #endregion
 
     #region ActiveLayerCollection Property
     /// <summary>
     /// This returns the currently selected layer collection.
     /// </summary>
-    public ObservableCollection<Layer> ActiveLayerCollection => Global.Configuration.NighttimeEnabled && showSecondaryCollection.IsChecked == true ? SecondaryLayerCollection : LayerCollection;
+    public ObservableCollection<Layer> ActiveLayerCollection => Global.Configuration.NighttimeEnabled && showSecondaryCollection.IsChecked == true ? SecondaryLayerCollection! : LayerCollection;
     #endregion
 
     #region SelectedLayer Property
     /// <summary>
     /// The currently selected layer.
     /// </summary>
-    public Layer SelectedLayer {
-        get => (Layer)GetValue(SelectedLayerProperty);
+    public Layer? SelectedLayer {
+        get => GetValue(SelectedLayerProperty) as Layer;
         set => SetValue(SelectedLayerProperty, value);
     }
         
@@ -163,7 +148,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// Property that returns a <see cref="Visibility"/> indicating whether or not the day/night (collection/secondary collection) checkboxes should be shown
     /// based on whether night time feature is enabled and whether a secondary collection has been provided or not.
     /// </summary>
-    public Visibility DayNightCheckboxesVisiblity => Global.Configuration.NighttimeEnabled && SecondaryLayerCollection != null ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility DayNightCheckboxesVisibility => Global.Configuration.NighttimeEnabled && SecondaryLayerCollection != null ? Visibility.Visible : Visibility.Collapsed;
     #endregion
 
     #region Methods
@@ -171,7 +156,6 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// Adds a new layer to the currently active collection. Will also setup the event listener to make the profile save and set the layer's application.
     /// </summary>
     private void AddLayer(Layer layer) {
-        layer.PropertyChanged += FocusedApplication.SaveProfilesEvent;
         layer.SetProfile(FocusedApplication);
         ActiveLayerCollection.Insert(0, layer);
         SelectedLayer = layer;
@@ -181,23 +165,23 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// <summary>
     /// When the add button is clicked, adds a new default layer.
     /// </summary>
-    private void AddButton_Click(object? sender, RoutedEventArgs e) {
+    private void AddButton_Click(object? sender, EventArgs e) {
         AddLayer(new Layer("New layer " + Utils.Time.GetMilliSeconds()));
     }
         
     /// <summary>
-    /// Creates a clone of the selected layer and sets <see cref="Global.Clipboard"/> to the clone. The reason for cloning is so that should the layer be
+    /// Creates a clone of the selected layer and sets <see cref="Clipboard"/> to the clone. The reason for cloning is so that should the layer be
     /// changed after copying, the pasted version will not have this changes (as should be expected).
     /// </summary>
-    private void CopyButton_Click(object? sender, RoutedEventArgs e) {
+    private void CopyButton_Click(object? sender, EventArgs e) {
         Clipboard = SelectedLayer?.Clone();
     }
 
     /// <summary>
-    /// Checks if the <see cref="Global.Clipboard"/> object is a layer, and if so adds a copy of this layer to the active collection. The reason for taking
+    /// Checks if the <see cref="Clipboard"/> object is a layer, and if so adds a copy of this layer to the active collection. The reason for taking
     /// a clone of the layer is so that if it was to be pasted again, the two pasted layers don't equal one another (i.e. don't have the same reference).
     /// </summary>
-    private void PasteButton_Click(object? sender, RoutedEventArgs e)
+    private void PasteButton_Click(object? sender, EventArgs e)
     {
         // Check if clipboard is layer and also that either: The layer on the clipboard is available to ALL applications OR the layer is available to the current application type.
         // This check is to avoid being able to copy application specific layers to other applications, e.g. prevent copying Minecraft health layer to CSGO.
@@ -214,8 +198,12 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// <summary>
     /// Asks the user if they wish to delete the currently selected layer and does so if they press "Yes".
     /// </summary>
-    private void DeleteButton_Click(object? sender, RoutedEventArgs e)
+    private void DeleteButton_Click(object? sender, EventArgs e)
     {
+        if (SelectedLayer == null)
+        {
+            return;
+        }
         if (!ActiveLayerCollection.Contains(SelectedLayer) ||
             MessageBox.Show(
                 $"Are you sure you want to delete Layer '{SelectedLayer.Name}'?\n\nYou cannot undo this action.",
@@ -232,11 +220,11 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     private void ReorderableListBox_KeyDown(object? sender, KeyEventArgs e) {
         if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) {
             if (e.Key == Key.C)
-                CopyButton_Click(sender, null);
+                CopyButton_Click(sender, EventArgs.Empty);
             else if (e.Key == Key.V)
-                PasteButton_Click(sender, null);
+                PasteButton_Click(sender, EventArgs.Empty);
         } else if (e.Key == Key.Delete)
-            DeleteButton_Click(sender, null);
+            DeleteButton_Click(sender, EventArgs.Empty);
     }
 
     /// <summary>
@@ -244,7 +232,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// property will have changed, thus updating the layer list.
     /// </summary>
     private void CollectionSelection_Checked(object? sender, RoutedEventArgs e) {
-        Notify("ActiveLayerCollection");
+        Notify(nameof(ActiveLayerCollection));
     }
 
     /// <summary>
@@ -253,7 +241,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     private void UserControl_GotFocus(object? sender, RoutedEventArgs e)
     {
         var cur = lstLayers.SelectedItem as Layer;
-        if ((cur == null || !LayerCollection.Contains(cur)) && (LayerCollection?.Count ?? 0) > 0)
+        if ((cur == null || !LayerCollection.Contains(cur)) && LayerCollection.Count > 0)
             lstLayers.SelectedItem = LayerCollection[0];
     }
     #endregion

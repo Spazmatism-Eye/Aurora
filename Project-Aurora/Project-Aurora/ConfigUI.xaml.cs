@@ -64,7 +64,6 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private readonly Task<KeyboardLayoutManager> _layoutManager;
     private readonly Task<AuroraHttpListener?> _httpListener;
-    private readonly Task<IpcListener?> _ipcListener;
     private readonly Task<LightingStateManager> _lightingStateManager;
 
     private readonly TransparencyComponent _transparencyComponent;
@@ -77,7 +76,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     public Application? FocusedApplication
     {
-        get => (Application)GetValue(FocusedApplicationProperty);
+        get => GetValue(FocusedApplicationProperty) as Application;
         set
         {
             SetValue(FocusedApplicationProperty, value);
@@ -103,7 +102,6 @@ partial class ConfigUI : INotifyPropertyChanged
     {
         _httpListener = httpListener;
         _layoutManager = layoutManager;
-        _ipcListener = ipcListener;
         _lightingStateManager = lightingStateManager;
         _controlInterface = controlInterface;
 
@@ -111,9 +109,6 @@ partial class ConfigUI : INotifyPropertyChanged
         
         _updateKeyboardLayouts = async () =>
         {
-            var keyLights = Global.effengine.GetKeyboardLights();
-            (await _layoutManager).SetKeyboardColors(keyLights);
-
             if (Global.key_recorder?.IsRecording() ?? false)
             {
                 KeyboardRecordMessage.Visibility = Visibility.Visible;
@@ -124,6 +119,9 @@ partial class ConfigUI : INotifyPropertyChanged
                 KeyboardRecordMessage.Visibility = Visibility.Hidden;
                 KeyboardViewBorder.BorderBrush = Brushes.Transparent;
             }
+
+            var keyLights = Global.effengine.GetKeyboardLights();
+            (await _layoutManager).SetKeyboardColors(keyLights);
         };
         
         InitializeComponent();

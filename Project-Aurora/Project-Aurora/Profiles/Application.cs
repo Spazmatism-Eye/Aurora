@@ -75,6 +75,32 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
         };
         if (config.GameStateType != null)
             ParameterLookup = new GameStateParameterLookup(config.GameStateType);
+
+        var jsonSerializerSettings = new JsonSerializerSettings
+        {
+            ObjectCreationHandling = ObjectCreationHandling.Replace,
+            TypeNameHandling = TypeNameHandling.Auto,
+            FloatParseHandling = FloatParseHandling.Double,
+            SerializationBinder = _binder,
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+            Error = LoadProfilesError,
+            Converters = [
+                new ObservableCollectionJsonConverter(),
+                new EnumConverter(),
+                new SingleToDoubleConverter(),
+                new OverrideTypeConverter(),
+                new TypeAnnotatedObjectConverter(),
+                new ObjectDictionaryJsonConverterAdapter(),
+                new StringDictionaryJsonConverterAdapter(),
+                new SingleDictionaryJsonConverterAdapter(),
+                new DoubleDictionaryJsonConverterAdapter<dynamic>(),
+                new SortedDictionaryAdapter(),
+                new VariableRegistryDictionaryConverter(),
+                new UltimateListJsonConverter(),
+            ],
+        };
+
+        _serializer = JsonSerializer.Create(jsonSerializerSettings);
     }
 
     public virtual bool Initialize()
@@ -230,6 +256,7 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
 
     //hacky fix to sort out MoD profile type change
     private readonly ISerializationBinder _binder = new AuroraSerializationBinder();
+    private readonly JsonSerializer _serializer;
 
     private ApplicationProfile? LoadProfile(string path)
     {
@@ -238,73 +265,58 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
 
         try
         {
-            if (File.Exists(path))
+            if (!File.Exists(path))
             {
-                using var profileFile = File.OpenText(path);
-                        
-                var jsonTextReader = new JsonTextReader(profileFile);
+                return null;
+            }
 
-                var jsonSerializerSettings = new JsonSerializerSettings
+            using var profileFile = File.OpenText(path);
+            using var jsonTextReader = new JsonTextReader(profileFile);
+
+            if (_serializer.Deserialize(jsonTextReader, Config.ProfileType) is not ApplicationProfile prof)
+            {
+                return null;
+            }
+
+            prof.ProfileFilepath = path;
+
+            if (string.IsNullOrWhiteSpace(prof.ProfileName))
+                prof.ProfileName = Path.GetFileNameWithoutExtension(path);
+
+            // Call the above setup method on the regular layers and the overlay layers.
+            InitialiseLayerCollection(prof.Layers);
+            InitialiseLayerCollection(prof.OverlayLayers);
+
+            prof.PropertyChanged += Profile_PropertyChanged;
+            return prof;
+
+            // Initializes a collection, setting the layers' profile/application property and adding events to them and the collections to save to disk.
+            void InitialiseLayerCollection(ObservableCollection<Layer> collection)
+            {
+                foreach (var lyr in collection.ToList())
                 {
-                    ObjectCreationHandling = ObjectCreationHandling.Replace,
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    FloatParseHandling = FloatParseHandling.Double,
-                    SerializationBinder = _binder,
-                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-                    Error = LoadProfilesError,
-                    Converters = [
-                        new ObservableCollectionJsonConverter(),
-                        new EnumConverter(),
-                        new SingleToDoubleConverter(),
-                        new OverrideTypeConverter(),
-                        new TypeAnnotatedObjectConverter(),
-                        new ObjectDictionaryJsonConverterAdapter(),
-                        new StringDictionaryJsonConverterAdapter(),
-                        new SingleDictionaryJsonConverterAdapter(),
-                        new DoubleDictionaryJsonConverterAdapter<dynamic>(),
-                        new SortedDictionaryAdapter(),
-                        new VariableRegistryDictionaryConverter(),
-                        new UltimateListJsonConverter(),
-                    ],
-                };
-
-                var serializer = JsonSerializer.Create(jsonSerializerSettings);
-
-                if (serializer.Deserialize(jsonTextReader, Config.ProfileType) is ApplicationProfile prof)
-                {
-                    prof.ProfileFilepath = path;
-
-                    if (string.IsNullOrWhiteSpace(prof.ProfileName))
-                        prof.ProfileName = Path.GetFileNameWithoutExtension(path);
-
-                    // Call the above setup method on the regular layers and the overlay layers.
-                    InitialiseLayerCollection(prof.Layers);
-                    InitialiseLayerCollection(prof.OverlayLayers);
-
-                    prof.PropertyChanged += Profile_PropertyChanged;
-                    return prof;
-
-                    // Initializes a collection, setting the layers' profile/application property and adding events to them and the collections to save to disk.
-                    void InitialiseLayerCollection(ObservableCollection<Layer> collection) { 
-                        foreach (var lyr in collection.ToList()) {
-                            //Remove any Layers that have non-functional handlers
-                            if (lyr.Handler == null || !Global.LightingStateManager.LayerHandlers.ContainsKey(lyr.Handler.GetType())) {
-                                prof.Layers.Remove(lyr);
-                                continue;
-                            }
-
-                            WeakEventManager<Layer, PropertyChangedEventArgs>.AddHandler(lyr, nameof(lyr.PropertyChanged), SaveProfilesEvent);
-                        }
-
-                        collection.CollectionChanged += (_, e) => {
-                            if (e.NewItems != null)
-                                foreach (Layer lyr in e.NewItems)
-                                    if (lyr != null)
-                                        WeakEventManager<Layer, PropertyChangedEventArgs>.AddHandler(lyr, nameof(lyr.PropertyChanged), SaveProfilesEvent);
-                            SaveProfiles();
-                        };
+                    //Remove any Layers that have non-functional handlers
+                    if (lyr.Handler == null || !Global.LightingStateManager.LayerHandlers.ContainsKey(lyr.Handler.GetType()))
+                    {
+                        prof.Layers.Remove(lyr);
+                        continue;
                     }
+
+                    WeakEventManager<Layer, PropertyChangedEventArgs>.AddHandler(lyr, nameof(lyr.PropertyChanged), (_, _) => SaveProfile(prof, path));
                 }
+
+                collection.CollectionChanged += (_, e) =>
+                {
+                    SaveProfile(prof, path);
+                    if (e.NewItems == null)
+                    {
+                        return;
+                    }
+
+                    foreach (Layer lyr in e.NewItems)
+                        if (lyr != null)
+                            WeakEventManager<Layer, PropertyChangedEventArgs>.AddHandler(lyr, nameof(lyr.PropertyChanged), (_, _) => SaveProfile(prof, path));
+                };
             }
         }
         catch (Exception exc)
@@ -576,11 +588,6 @@ public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INo
         {
             Global.logger.Error(exc, "Exception Saving Profile: {Path}", path);
         }
-    }
-
-    public void SaveProfilesEvent(object? sender, EventArgs e)
-    {
-        SaveProfiles();
     }
 
     public void SaveProfiles()

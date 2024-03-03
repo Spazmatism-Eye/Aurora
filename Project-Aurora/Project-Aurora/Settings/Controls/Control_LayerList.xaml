@@ -47,7 +47,7 @@
         </StackPanel>
         
         <DockPanel Margin="0,59,0,0">
-            <Grid Height="23" VerticalAlignment="Top" DockPanel.Dock="Top" Visibility="{Binding DayNightCheckboxesVisiblity}">
+            <Grid Height="23" VerticalAlignment="Top" DockPanel.Dock="Top" Visibility="{Binding DayNightCheckboxesVisibility}">
                 <RadioButton GroupName="TimeSelection" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Daytime" IsChecked="True" Checked="CollectionSelection_Checked">
                     <Grid>
                         <Image Source="/Aurora;component/Resources/Daytime_Icon.png" HorizontalAlignment="Left" Margin="0,0,0,0" />
