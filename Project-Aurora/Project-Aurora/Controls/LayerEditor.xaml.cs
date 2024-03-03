@@ -1,6 +1,7 @@
 ﻿using Aurora.Settings;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -132,22 +133,22 @@ namespace Aurora.Controls
 
         private static void OnCanvasTopChanged(object? sender, EventArgs e)
         {
-            object item = (sender as ContentControl).GetValue(Canvas.TopProperty);
+            var contentControl = sender as ContentControl;
 
-            if ((sender as ContentControl).Tag != null && (sender as ContentControl).Tag is FreeFormObject)
-            {
-                ((sender as ContentControl).Tag as FreeFormObject).Y = float.Parse(item.ToString()) - Effects.Canvas.GridBaselineY;
-            }
+            if (contentControl?.Tag is not FreeFormObject freeFormObject) return;
+
+            var item = contentControl.GetValue(Canvas.TopProperty);
+            freeFormObject.Y = float.Parse(item.ToString(), CultureInfo.InvariantCulture) - Effects.Canvas.GridBaselineY;
         }
 
         private static void OnCanvasLeftChanged(object? sender, EventArgs e)
         {
-            object item = (sender as ContentControl).GetValue(Canvas.LeftProperty);
+            var contentControl = sender as ContentControl;
 
-            if ((sender as ContentControl).Tag != null && (sender as ContentControl).Tag is FreeFormObject)
-            {
-                ((sender as ContentControl).Tag as FreeFormObject).X = float.Parse(item.ToString()) - Effects.Canvas.GridBaselineX;
-            }
+            if (contentControl?.Tag is not FreeFormObject freeFormObject) return;
+
+            var item = contentControl.GetValue(Canvas.LeftProperty);
+            freeFormObject.X = float.Parse(item.ToString(), CultureInfo.InvariantCulture) - Effects.Canvas.GridBaselineX;
         }
 
         private static void Newcontrol_SizeChanged(object? sender, SizeChangedEventArgs e)

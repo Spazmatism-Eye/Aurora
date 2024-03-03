@@ -1,7 +1,7 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Aurora.EffectsEngine;
 using Common.Devices;
@@ -12,39 +12,25 @@ public static class ScriptHelper
 {
         
     public static void RegProp(this VariableRegistry registry,
-        string name, object defaultValue, string remark = "", object min = null, object max = null)
+        string name, object defaultValue, string remark = "", object? min = null, object? max = null)
     {
         registry.Register(name, defaultValue, name, max, min, remark);
     }
 
-    public static string SpectrumToString(ColorSpectrum spectrum)
-    {
-        return string.Join(" | ",
-            spectrum.GetSpectrumColors().Select(x => string.Format("#{0:X2}{1:X2}{2:X2}{3:X2} @ {4}", x.Value.A, x.Value.R,
-                x.Value.G, x.Value.B, x.Key)));
-    }
-
     public static ColorSpectrum StringToSpectrum(string text)
     {
-        var colors = text.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries)
+        var colors = text.Split('|', StringSplitOptions.RemoveEmptyEntries)
             .Select(x => x.Trim().Split('@').Select(x2 => x2.Trim()).ToArray())
             .ToArray();
         var spectrum = new ColorSpectrum();
-        foreach (var colorset in colors.Select((x, i) => new
+        foreach (var colorSet in colors.Select((x, i) => new
                  {
                      Color = ColorTranslator.FromHtml(x[0]),
-                     Position = x.Length > 1 ? float.Parse(x[1]) : (1f / (colors.Length - 1) * i)
+                     Position = x.Length > 1 ? float.Parse(x[1], CultureInfo.InvariantCulture) : 1f / (colors.Length - 1) * i
                  }))
         {
-            spectrum.SetColorAt(colorset.Position, colorset.Color);
+            spectrum.SetColorAt(colorSet.Position, colorSet.Color);
         }
         return spectrum;
-    }
-
-    public static KeyValuePair<string, ColorSpectrum> UpdateSpectrumProperty(KeyValuePair<string, ColorSpectrum> current,
-        string newValue)
-    {
-        return newValue == current.Key ? current :
-            new KeyValuePair<string, ColorSpectrum>(newValue, StringToSpectrum(newValue));
     }
 }
