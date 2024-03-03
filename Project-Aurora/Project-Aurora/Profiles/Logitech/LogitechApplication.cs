@@ -23,6 +23,6 @@ public class LogitechApplication : Application
 
     private void LogitechSdkListenerOnApplicationChanged(object? sender, string? e)
     {
-        Config.ProcessNames = e == null ? Array.Empty<string>() : new []{ Path.GetFileName(e) };
+        Config.ProcessNames = e == null ? Array.Empty<string>() : [Path.GetFileName(e)];
     }
 }

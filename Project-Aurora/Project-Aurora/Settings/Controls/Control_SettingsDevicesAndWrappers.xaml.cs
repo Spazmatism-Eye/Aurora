@@ -151,6 +151,8 @@ public partial class Control_SettingsDevicesAndWrappers
                     LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Chocolate);
                     break;
                 case LightsyncSdkState.Connected:
+                    LightsyncConnectionStatusLabel.Content = "Connected";
+                    LightsyncConnectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
                     break;
                 case LightsyncSdkState.Disabled:
                     LightsyncConnectionStatusLabel.Content = "Disabled";
