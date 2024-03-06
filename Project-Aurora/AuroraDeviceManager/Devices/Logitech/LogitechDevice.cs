@@ -12,10 +12,10 @@ public class LogitechDevice : DefaultDevice
     public override string DeviceName => "Logitech";
 
     private readonly byte[] _logitechBitmap = new byte[LogitechGSDK.LOGI_LED_BITMAP_SIZE];
-    private SimpleColor _speakers;
+    private SimpleColor[] _speakers = new SimpleColor[4];
     private SimpleColor _mousepad;
     private readonly SimpleColor[] _mouse = new SimpleColor[3];
-    private readonly SimpleColor[] _headset = new SimpleColor[3];
+    private readonly SimpleColor[] _headset = new SimpleColor[4];
     private DeviceKeys _genericKey;
 
     protected override async Task<bool> DoInitialize()
@@ -86,6 +86,14 @@ public class LogitechDevice : DefaultDevice
         }
     }
 
+    private static void SetAll(IList<SimpleColor> colors, SimpleColor color)
+    {
+        for (var i = 0; i < colors.Count; i++)
+        {
+            colors[i] = color;
+        }
+    }
+
     protected override Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false)
     {
         if (!IsInitialized)
@@ -95,12 +103,10 @@ public class LogitechDevice : DefaultDevice
         //at least the leds wont turn off :)
         if (keyColors.TryGetValue(_genericKey, out var peripheralColor))
         {
-            _speakers = peripheralColor;
+            SetAll(_speakers, peripheralColor);
             _mousepad = peripheralColor;
-            _mouse[0] = peripheralColor;
-            _mouse[1] = peripheralColor;
-            _headset[0] = peripheralColor;
-            _headset[1] = peripheralColor;
+            SetAll(_mouse, peripheralColor);
+            SetAll(_headset, peripheralColor);
         }
 
         foreach (var (key, color) in keyColors)
@@ -124,9 +130,9 @@ public class LogitechDevice : DefaultDevice
                 LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Headset, i, _headset[i]);
             }
 
-            for (var i = 0; i < 4; i++)//speakers have 4 leds
+            for (var i = 0; i < _speakers.Length; i++)//speakers have 4 leds
             {
-                LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Speaker, i, _speakers);
+                LogitechGSDK.LogiLedSetLightingForTargetZone(DeviceType.Speaker, i, _speakers[i]);
             }
         }
         if (!Global.DeviceConfig.DevicesDisableKeyboard)
@@ -177,7 +183,7 @@ public class LogitechDevice : DefaultDevice
                 _headset[peripheral.zone] = color;
                 break;
             case DeviceType.Speaker:
-                _speakers = color;
+                _speakers[peripheral.zone] = color;
                 break;
         }
         #endregion
