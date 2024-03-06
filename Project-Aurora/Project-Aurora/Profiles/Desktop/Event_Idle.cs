@@ -407,12 +407,13 @@ internal class RainFallSmooth : AwayEffect
                 var percent = Math.Min(1, Math.Max(0, inEdgePercent))
                     + Math.Min(1, Math.Max(0, outEdgePercent)) - 1f;
 
-                if (percent > 0)
-                {
-                    layer.Set(key, (Color) EffectColor.BlendColors(
-                        new EffectColor(layer.Get(key)),
-                        new EffectColor(_dropSpec.GetColorAt(raindrop.Item3)), percent));
-                }
+                if (percent <= 0) continue;
+                var bg = layer.Get(key);
+                var fg = _dropSpec.GetColorAt(raindrop.Item3);
+                layer.Set(key, (Color)ColorUtils.BlendColors(
+                    ColorUtils.DrawingToSimpleColor(bg),
+                    ColorUtils.DrawingToSimpleColor(fg),
+                    percent));
             }
         }
     }

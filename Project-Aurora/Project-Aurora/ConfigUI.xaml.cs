@@ -16,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Aurora.Controls;
 using Aurora.Devices;
-using Aurora.EffectsEngine;
 using Aurora.Modules.GameStateListen;
 using Aurora.Profiles;
 using Aurora.Profiles.Aurora_Wrapper;
@@ -25,6 +24,7 @@ using Aurora.Settings;
 using Aurora.Settings.Controls;
 using Aurora.Settings.Layers;
 using Aurora.Utils;
+using Common;
 using PropertyChanged;
 using RazerSdkReader;
 using Application = Aurora.Profiles.Application;
@@ -46,10 +46,10 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private DateTime _lastActivated = DateTime.UtcNow;
     private readonly TimeSpan _renderTimeout = TimeSpan.FromMinutes(5);
-    private readonly EffectColor _desktopColorScheme = new(0, 0, 0, 0);
+    private readonly SimpleColor _desktopColorScheme = new(0, 0, 0, 0);
 
-    private EffectColor _previousColor = new(0, 0, 0);
-    private EffectColor _currentColor = new(0, 0, 0);
+    private SimpleColor _previousColor = SimpleColor.Transparent;
+    private SimpleColor _currentColor = SimpleColor.Transparent;
 
     private double _transitionAmount;
 
@@ -68,6 +68,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private readonly TransparencyComponent _transparencyComponent;
 
+    private bool _keyboardUpdating;
     private readonly Func<Task> _updateKeyboardLayouts;
 
     private static readonly bool DisposeWindow = false;
@@ -109,6 +110,12 @@ partial class ConfigUI : INotifyPropertyChanged
         
         _updateKeyboardLayouts = async () =>
         {
+            if (_keyboardUpdating)
+            {
+                return;
+            }
+            _keyboardUpdating = true;
+
             if (Global.key_recorder?.IsRecording() ?? false)
             {
                 KeyboardRecordMessage.Visibility = Visibility.Visible;
@@ -122,6 +129,8 @@ partial class ConfigUI : INotifyPropertyChanged
 
             var keyLights = Global.effengine.GetKeyboardLights();
             (await _layoutManager).SetKeyboardColors(keyLights);
+
+            _keyboardUpdating = false;
         };
         
         InitializeComponent();
@@ -151,19 +160,32 @@ partial class ConfigUI : INotifyPropertyChanged
         {
             return;
         }
+
+        if (_isDragging)
+        {
+            _transitionAmount = 0.4;
+            _previousColor = SimpleColor.Transparent;
+        } else if (_transitionAmount <= 1.0f)
+        {
+            _transitionAmount += _keyboardTimer.Elapsed.TotalSeconds;
+            var smooth = 1 - Math.Pow(1 - Math.Min(_transitionAmount, 1d), 3);
+            var a = ColorUtils.BlendColors(_previousColor, _currentColor, smooth);
+            _transparencyComponent.SetBackgroundColor(a);
+        }
+        
         if (_transitionAmount <= 1.0f)
         {
             _transitionAmount += _keyboardTimer.Elapsed.TotalSeconds;
             var smooth = 1 - Math.Pow(1 - Math.Min(_transitionAmount, 1d), 3);
-            var a = EffectColor.BlendColors(_previousColor, _currentColor, smooth);
+            var a = ColorUtils.BlendColors(_previousColor, _currentColor, smooth);
             _transparencyComponent.SetBackgroundColor(a);
         }
-
-        if (_isDragging)
+        
+        if (_keyboardUpdating)
         {
             return;
         }
-        Dispatcher.BeginInvoke(_updateKeyboardLayouts, DispatcherPriority.Render);
+        Dispatcher.BeginInvoke(_updateKeyboardLayouts, _isDragging ? DispatcherPriority.Background : DispatcherPriority.Render);
     }
 
     public async Task Initialize()
@@ -230,7 +252,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
         KeyboardRecordMessage.Visibility = Visibility.Hidden;
 
-        _currentColor = EffectColor.FromRGBA(0, 0, 0, 0);
+        _currentColor = SimpleColor.Transparent;
 
         var keyboardLayoutManager = await _layoutManager;
         var virtualKb = await keyboardLayoutManager.VirtualKeyboard;
@@ -515,8 +537,7 @@ partial class ConfigUI : INotifyPropertyChanged
         var color = ColorUtils.GetAverageColor(bitmap);
 
         _previousColor = _currentColor;
-        _currentColor = new EffectColor(color);
-        _currentColor *= 0.85f;
+        _currentColor = ColorUtils.DrawingToSimpleColor(color) * 0.85;
 
         _transitionAmount = 0.0;
     }

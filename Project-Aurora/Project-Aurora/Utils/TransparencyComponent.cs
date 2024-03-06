@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Aurora.EffectsEngine;
+using Common;
 using SourceChord.FluentWPF;
 using static Aurora.Utils.Win32Transparency;
 
@@ -21,7 +22,7 @@ public sealed class TransparencyComponent : IDisposable
 
     private HwndSource? _hwHandle;
     private readonly Action _setBackground;
-    private EffectColor _color = EffectColor.FromRGBA(0, 0, 0, 0);
+    private SimpleColor _color = SimpleColor.Transparent;
 
     public TransparencyComponent(AcrylicWindow window, Panel? bg)
     {
@@ -117,8 +118,12 @@ public sealed class TransparencyComponent : IDisposable
         }
     }
 
-    public void SetBackgroundColor(EffectColor a)
+    public void SetBackgroundColor(SimpleColor a)
     {
+        if (_color == a)
+        {
+            return;
+        }
         _color = a;
         _window.Dispatcher.BeginInvoke(_setBackground, DispatcherPriority.Render);
     }
@@ -135,11 +140,11 @@ public sealed class TransparencyComponent : IDisposable
         SolidColorBrush brush;
         if (Global.Configuration.AllowTransparency && UseMica)
         {
-            brush = new SolidColorBrush(Color.FromArgb((byte)(_color.Alpha * 64 / 255), _color.Red, _color.Green, _color.Blue));
+            brush = new SolidColorBrush(Color.FromArgb((byte)(_color.A * 64 / 255), _color.R, _color.G, _color.B));
         }
         else
         {
-            brush = new SolidColorBrush(Color.FromArgb(255, _color.Red, _color.Green, _color.Blue));
+            brush = new SolidColorBrush(Color.FromArgb(255, _color.R, _color.G, _color.B));
         }
 
         brush.Freeze();

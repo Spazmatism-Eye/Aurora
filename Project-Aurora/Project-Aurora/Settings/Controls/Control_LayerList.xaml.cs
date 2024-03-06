@@ -56,7 +56,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// <summary>
     /// This collection is a primary set of layers to display to the user.
     /// </summary>
-    public ObservableCollection<Layer> LayerCollection {
+    public ObservableCollection<Layer>? LayerCollection {
         get => (ObservableCollection<Layer>)GetValue(LayerCollectionProperty);
         set => SetValue(LayerCollectionProperty, value);
     }
@@ -85,7 +85,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// <summary>
     /// This returns the currently selected layer collection.
     /// </summary>
-    public ObservableCollection<Layer> ActiveLayerCollection => Global.Configuration.NighttimeEnabled && showSecondaryCollection.IsChecked == true ? SecondaryLayerCollection! : LayerCollection;
+    public ObservableCollection<Layer>? ActiveLayerCollection => Global.Configuration.NighttimeEnabled && showSecondaryCollection.IsChecked == true ? SecondaryLayerCollection! : LayerCollection;
     #endregion
 
     #region SelectedLayer Property
@@ -157,6 +157,10 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// </summary>
     private void AddLayer(Layer layer) {
         layer.SetProfile(FocusedApplication);
+        if (ActiveLayerCollection == null)
+        {
+            return;
+        }
         ActiveLayerCollection.Insert(0, layer);
         SelectedLayer = layer;
     }
@@ -200,7 +204,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// </summary>
     private void DeleteButton_Click(object? sender, EventArgs e)
     {
-        if (SelectedLayer == null)
+        if (SelectedLayer == null || ActiveLayerCollection == null)
         {
             return;
         }
@@ -240,6 +244,10 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// </summary>
     private void UserControl_GotFocus(object? sender, RoutedEventArgs e)
     {
+        if (LayerCollection == null)
+        {
+            return;
+        }
         var cur = lstLayers.SelectedItem as Layer;
         if ((cur == null || !LayerCollection.Contains(cur)) && LayerCollection.Count > 0)
             lstLayers.SelectedItem = LayerCollection[0];

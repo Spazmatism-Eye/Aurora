@@ -108,6 +108,11 @@ public static class ColorUtils
         return CommonColorUtils.BlendColors(background, foreground, percent);
     }
 
+    public static SimpleColor DrawingToSimpleColor(DrawingColor color)
+    {
+        return new SimpleColor(color.R, color.G, color.B, color.A);
+    }
+
     public static DrawingColor MultiplyColorByScalar(DrawingColor color, double scalar)
     {
         return CommonColorUtils.MultiplyColorByScalar(color, scalar);

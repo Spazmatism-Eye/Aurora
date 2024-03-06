@@ -7,6 +7,7 @@ namespace Common;
 [method: JsonConstructor]
 public readonly record struct SimpleColor(byte R, byte G, byte B, byte A = 255)
 {
+    public static readonly SimpleColor Transparent = new(0, 0, 0, 0);
     public static readonly SimpleColor White = new(255, 255, 255);
     public static readonly SimpleColor Black = new(0, 0, 0);
 
@@ -40,5 +41,30 @@ public readonly record struct SimpleColor(byte R, byte G, byte B, byte A = 255)
     public static SimpleColor FromArgb(byte red, byte green, byte blue, byte alpha = 255)
     {
         return new SimpleColor(red, green, blue, alpha);
+    }
+
+    public static SimpleColor operator *(SimpleColor color, double scalar)
+    {
+        return color with { A = ColorByteMultiplication(color.A, scalar) };
+    }
+
+    public static SimpleColor operator /(SimpleColor color, double scalar)
+    {
+        var r = ColorByteMultiplication(color.R, 1.0 / scalar);
+        var g = ColorByteMultiplication(color.G, 1.0 / scalar);
+        var b = ColorByteMultiplication(color.B, 1.0 / scalar);
+        var a = ColorByteMultiplication(color.A, 1.0 / scalar);
+
+        return new SimpleColor(r, g, b, a);
+    }
+
+    private static byte ColorByteMultiplication(byte color, double value)
+    {
+        return (color * value) switch
+        {
+            >= 255.0 => 255,
+            <= 0.0 => 0,
+            _ => (byte)(color * value)
+        };
     }
 }
