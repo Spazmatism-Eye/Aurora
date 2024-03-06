@@ -93,57 +93,19 @@ public class LogitechDevice : DefaultDevice
 
         //reset keys to peripheral_logo here so if we dont find any better color for them,
         //at least the leds wont turn off :)
-        if (keyColors.TryGetValue(_genericKey, out var periph))
+        if (keyColors.TryGetValue(_genericKey, out var peripheralColor))
         {
-            _speakers = periph;
-            _mousepad = periph;
-            _mouse[0] = periph;
-            _mouse[1] = periph;
-            _headset[0] = periph;
-            _headset[1] = periph;
+            _speakers = peripheralColor;
+            _mousepad = peripheralColor;
+            _mouse[0] = peripheralColor;
+            _mouse[1] = peripheralColor;
+            _headset[0] = peripheralColor;
+            _headset[1] = peripheralColor;
         }
 
-        foreach (var key in keyColors)
+        foreach (var (key, color) in keyColors)
         {
-            if (key.Key == DeviceKeys.Peripheral)
-            {
-                LogitechGSDK.LogiLedSetLighting(key.Value);
-                continue;
-            }
-
-            #region keyboard
-            if (LedMaps.BitmapMap.TryGetValue(key.Key, out var index))
-            {
-                _logitechBitmap[index] = key.Value.B;
-                _logitechBitmap[index + 1] = key.Value.G;
-                _logitechBitmap[index + 2] = key.Value.R;
-                _logitechBitmap[index + 3] = key.Value.A;
-            }
-
-            if (!Global.DeviceConfig.DevicesDisableKeyboard && LedMaps.KeyMap.TryGetValue(key.Key, out var logiKey))
-                IsInitialized &= LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(logiKey, key.Value);
-            #endregion
-
-            #region peripherals
-            if (LedMaps.PeripheralMap.TryGetValue(key.Key, out var peripheral))
-            {
-                switch (peripheral.type)
-                {
-                    case DeviceType.Mouse:
-                        _mouse[peripheral.zone] = key.Value;
-                        break;
-                    case DeviceType.Mousemat:
-                        _mousepad = key.Value;
-                        break;
-                    case DeviceType.Headset:
-                        _headset[peripheral.zone] = key.Value;
-                        break;
-                    case DeviceType.Speaker:
-                        _speakers = key.Value;
-                        break;
-                }
-            }
-            #endregion
+            UpdateLed(color, key);
         }
 
         if (!Global.DeviceConfig.DevicesDisableMouse)
@@ -173,6 +135,52 @@ public class LogitechDevice : DefaultDevice
         }
 
         return Task.FromResult(IsInitialized);
+    }
+
+    private void UpdateLed(SimpleColor color, DeviceKeys key)
+    {
+        if (color is { A: 0 })
+        {
+            return;
+        }
+        if (key == DeviceKeys.Peripheral)
+        {
+            LogitechGSDK.LogiLedSetLighting(color);
+            return;
+        }
+
+        #region keyboard
+        if (LedMaps.BitmapMap.TryGetValue(key, out var index))
+        {
+            _logitechBitmap[index] = color.B;
+            _logitechBitmap[index + 1] = color.G;
+            _logitechBitmap[index + 2] = color.R;
+            _logitechBitmap[index + 3] = color.A;
+        }
+
+        if (!Global.DeviceConfig.DevicesDisableKeyboard && LedMaps.KeyMap.TryGetValue(key, out var logiKey))
+            IsInitialized &= LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(logiKey, color);
+        #endregion
+
+        #region peripherals
+
+        if (!LedMaps.PeripheralMap.TryGetValue(key, out var peripheral)) return;
+        switch (peripheral.type)
+        {
+            case DeviceType.Mouse:
+                _mouse[peripheral.zone] = color;
+                break;
+            case DeviceType.Mousemat:
+                _mousepad = color;
+                break;
+            case DeviceType.Headset:
+                _headset[peripheral.zone] = color;
+                break;
+            case DeviceType.Speaker:
+                _speakers = color;
+                break;
+        }
+        #endregion
     }
 
     protected override void RegisterVariables(VariableRegistry variableRegistry)
