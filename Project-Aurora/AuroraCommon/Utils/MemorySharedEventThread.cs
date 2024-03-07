@@ -91,7 +91,7 @@ internal static class MemorySharedEventThread
                 Priority = ThreadPriority.Highest,
             };
             thread.Start();
-            tcs.Task.Wait();
+            tcs.Task.Wait(200);
             Thread.Sleep(2); //a little delay to help WaitHandle.WaitAny(_handles) run before returning
             return thread;
         }
