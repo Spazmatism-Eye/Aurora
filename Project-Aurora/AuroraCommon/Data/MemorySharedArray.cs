@@ -6,15 +6,16 @@ namespace Common.Data;
 
 public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> where T : struct
 {
+    private const bool CheckFileSize = false;
     public int Count { get; }
 
     private static readonly int ElementSize = Marshal.SizeOf(typeof(T));
-    
+
     private readonly MemoryMappedFile _mmf;
     private readonly MemoryMappedViewAccessor _accessor;
     private readonly byte[] _readBuffer = new byte[ElementSize];
     private readonly byte[] _writeBuffer = new byte[ElementSize];
-    
+
     private readonly GCHandle _writeHandle;
     private readonly GCHandle _readHandle;
 
@@ -26,6 +27,7 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
         try
         {
             _mmf = MemoryMappedFile.OpenExisting(fileName);
+            RequestUpdate();
         }
         catch (FileNotFoundException)
         {
@@ -34,7 +36,8 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
         }
         _accessor = _mmf.CreateViewAccessor();
 
-        Count = _accessor.ReadInt32(0);
+        //first long is byte length, second int is Count
+        Count = _accessor.ReadInt32(sizeof(long));
 
         _writeHandle = GCHandle.Alloc(_writeBuffer, GCHandleType.Pinned);
         _writePointer = _writeHandle.AddrOfPinnedObject();
@@ -48,15 +51,29 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
         Count = size;
 
         // Calculate the total size for the MemoryMappedFile
-        long totalSize = sizeof(int) + Count * ElementSize;
+        long totalSize = ElementOffset() + Count * ElementSize;
 
         // Create a MemoryMappedFile
         _mmf = MemoryMappedFile.CreateOrOpen(fileName, totalSize);
         // Create a MemoryMappedViewAccessor to write data
         _accessor = _mmf.CreateViewAccessor();
+
+        var setSize = _accessor.ReadInt32(0);
+        if (CheckFileSize && setSize != totalSize && setSize != 0)
+        {
+            //TODO trigger an event to close all open files?
+            _mmf.SafeMemoryMappedFileHandle.Close();
+            _mmf.Dispose();
+            _accessor.Dispose();
+            _mmf = MemoryMappedFile.CreateNew(fileName, totalSize);
+            _accessor = _mmf.CreateViewAccessor();
+        }
         
         // Write array size
-        _accessor.Write(0, Count);
+        _accessor.Write(0, totalSize);
+        
+        // Write array size
+        _accessor.Write(sizeof(long), Count);
 
         _writeHandle = GCHandle.Alloc(_writeBuffer, GCHandleType.Pinned);
         _writePointer = _writeHandle.AddrOfPinnedObject();
@@ -69,7 +86,7 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
         for (var i = 0; i < Count; i++)
         {
             // Calculate the offset for the current element
-            var offset = sizeof(int) + i * ElementSize;
+            var offset = ElementOffset() + i * ElementSize;
 
             // Write the data at the calculated offset
             WriteObject(offset, data);
@@ -85,7 +102,7 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
     {
         // Create a MemoryMappedViewAccessor to read data
         // Calculate the offset for the specified element
-        long offset = sizeof(int) + index * ElementSize;
+        long offset = ElementOffset() + index * ElementSize;
 
         if (!_accessor.CanRead)
         {
@@ -121,7 +138,7 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
             {
                 return;
             }
-            _accessor.Write(sizeof(int) + offset, ref element);
+            _accessor.Write(ElementOffset() + offset, ref element);
         }
 
         SignalUpdated();
@@ -139,12 +156,17 @@ public sealed class MemorySharedArray<T> : SignaledMemoryObject, IEnumerable<T> 
             }
 
             // Write the data at the calculated offset
-            WriteObject(sizeof(int) + offset, e);
+            WriteObject(ElementOffset() + offset, e);
             //var element = e;
-            //_accessor.Write(sizeof(int) + offset, ref element);
+            //_accessor.Write(ElementOffset() + offset, ref element);
         }
 
         SignalUpdated();
+    }
+
+    private static int ElementOffset()
+    {
+        return sizeof(long) + sizeof(int);
     }
 
     protected override void Dispose(bool disposing)
