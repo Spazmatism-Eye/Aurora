@@ -58,16 +58,11 @@ public class BlinkingLayerHandlerProperties : LayerHandlerProperties2Color<Blink
     }
 }
 
-public class BlinkingLayerHandler : LayerHandler<BlinkingLayerHandlerProperties>
+public class BlinkingLayerHandler() : LayerHandler<BlinkingLayerHandlerProperties>("Blinking Layer")
 {
-    private double _currentSine;
 
     private Color _currentPrimaryColor = Color.Transparent;
     private Color _currentSecondaryColor = Color.Transparent;
-
-    public BlinkingLayerHandler() : base("Blinking Layer")
-    {
-    }
 
     protected override UserControl CreateControl()
     {
@@ -76,20 +71,19 @@ public class BlinkingLayerHandler : LayerHandler<BlinkingLayerHandlerProperties>
 
     public override EffectLayer Render(IGameState gamestate)
     {
-        _currentSine = Math.Round(Math.Pow(Math.Sin(Time.GetMillisecondsSinceEpoch() % 10000L / 10000.0d * 2 * Math.PI * Properties.EffectSpeed), 2));
+        var currentSine = Math.Round(Math.Pow(Math.Sin(Time.GetMillisecondsSinceEpoch() % 10000L / 10000.0d * 2 * Math.PI * Properties.EffectSpeed), 2));
 
-        if (_currentSine == 0.0f && Properties.RandomSecondaryColor)
+        if (Properties.RandomSecondaryColor && currentSine == 0.0f)
             _currentSecondaryColor = CommonColorUtils.GenerateRandomColor();
         else if(!Properties.RandomSecondaryColor)
             _currentSecondaryColor = Properties.SecondaryColor;
 
-        if (_currentSine >= 0.99f && Properties.RandomPrimaryColor)
+        if (Properties.RandomPrimaryColor && currentSine >= 0.99f)
             _currentPrimaryColor = CommonColorUtils.GenerateRandomColor();
         else if (!Properties.RandomPrimaryColor)
             _currentPrimaryColor = Properties.PrimaryColor;
 
-        EffectLayer.Clear();
-        EffectLayer.Set(Properties.Sequence, ColorUtils.BlendColors(_currentPrimaryColor, _currentSecondaryColor, _currentSine));
+        EffectLayer.Set(Properties.Sequence, ColorUtils.BlendColors(_currentPrimaryColor, _currentSecondaryColor, currentSine));
 
         return EffectLayer;
     }

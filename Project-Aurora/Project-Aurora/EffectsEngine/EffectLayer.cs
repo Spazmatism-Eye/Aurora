@@ -316,6 +316,7 @@ namespace Aurora.EffectsEngine
             using var g = Graphics.FromImage(_colormap);
             g.CompositingMode = CompositingMode.SourceCopy;
             g.FillRectangle(ClearingBrush, Dimension);
+            _lastColor = Color.Empty;
             Invalidate();
         }
 
