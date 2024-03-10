@@ -308,15 +308,15 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
         if (_cropRegion.IsEmpty)
             return EffectLayer;
 
+        if (!_brushChanged)
+        {
+            return EffectLayer;
+        }
+
         if (_invalidated)
         {
             EffectLayer.Clear();
             _invalidated = false;
-        }
-
-        if (!_brushChanged)
-        {
-            return EffectLayer;
         }
 
         lock (_screenBrush)
@@ -410,6 +410,11 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
                     average = CommonColorUtils.ChangeSaturation(average, Properties.SaturationChange);
                 if (Properties.HueShiftImage)
                     average = CommonColorUtils.ChangeHue(average, Properties.HueShiftAngle);
+
+                if (average is { R: 0, G: 0, B: 0 })
+                {
+                    return;
+                }
 
                 lock (_screenBrush)
                 {
