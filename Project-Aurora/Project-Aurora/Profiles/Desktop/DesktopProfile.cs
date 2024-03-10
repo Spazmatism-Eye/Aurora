@@ -366,13 +366,13 @@ public class DesktopProfile : ApplicationProfile
                 {
                     Sequence =
                     {
-                        Freeform = new FreeFormObject(0, 0, 1600, 400),
+                        Freeform = new FreeFormObject(0, 0, 1200, 260),
                         Type = KeySequenceType.FreeForm
                     },
                     GradientConfig = new LayerEffectConfig
                     {
-                        Angle = 90,
-                        Speed = 1,
+                        Angle = 50,
+                        Speed = 1.5f,
                         GradientSize = 19.5f,
                         AnimationType = AnimationType.TranslateXy,
                         Brush = new EffectBrush(EffectBrush.BrushType.Linear, EffectBrush.BrushWrap.Repeat)
@@ -386,16 +386,57 @@ public class DesktopProfile : ApplicationProfile
                             {0, CommonColorUtils.FastColor(0, 0, 0, 0) },
                             {0.06593407690525055, CommonColorUtils.FastColor(0, 0, 0, 0) },
                             {0.1538461595773697, CommonColorUtils.FastColor(153, 59, 237) },
-                            {0.24337075650691986, CommonColorUtils.FastColor(10, 0, 0, 0) },
+                            {0.24337075650691986, CommonColorUtils.FastColor(0, 0, 0, 0) },
                             {0.4263019561767578, CommonColorUtils.FastColor(0, 0, 0, 0) },
                             {0.5358933806419373, CommonColorUtils.FastColor(151, 183, 63) },
-                            {0.6483517289161682, CommonColorUtils.FastColor(4, 0, 0, 0) },
+                            {0.6483517289161682, CommonColorUtils.FastColor(0, 0, 0, 0) },
                             {0.7614668011665344, CommonColorUtils.FastColor(0, 24, 24, 51) },
                             {0.8626373410224915, CommonColorUtils.FastColor(129, 255, 239, 48) },
-                            {0.9395604133605957, CommonColorUtils.FastColor(4, 194, 189, 127) },
-                            {1, CommonColorUtils.FastColor(4, 194, 189, 12) },
+                            {0.9395604133605957, CommonColorUtils.FastColor(0, 24, 24, 51) },
+                            {1, CommonColorUtils.FastColor(0, 0, 0, 0) },
                         }),
-                    }
+                    },
+                    _LayerOpacity = 0.5f,
+                }
+            }),
+            new("Gradient Wave 2", new GradientLayerHandler
+            {
+                Properties = new GradientLayerHandlerProperties
+                {
+                    Sequence =
+                    {
+                        Freeform = new FreeFormObject(0, 0, 1200, 260),
+                        Type = KeySequenceType.FreeForm
+                    },
+                    GradientConfig = new LayerEffectConfig
+                    {
+                        Angle = 115,
+                        Speed = 1,
+                        AnimationReverse = true,
+                        GradientSize = 12.25f,
+                        AnimationType = AnimationType.TranslateXy,
+                        Brush = new EffectBrush(EffectBrush.BrushType.Linear, EffectBrush.BrushWrap.Repeat)
+                        {
+                            Start = new PointF(0, -0.5f),
+                            Center = new PointF(0, 0),
+                            End = new PointF(1, 1),
+                        }
+                        .SetColorGradients(new SortedDictionary<double, Color>
+                        {
+                            {0, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                            {0.03296704590320587, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                            {0.1538461595773697, CommonColorUtils.FastColor(153, 58, 249, 159) },
+                            {0.2983158230781555, CommonColorUtils.FastColor(10, 0, 0, 0) },
+                            {0.39333492517471313, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                            {0.5358933806419373, CommonColorUtils.FastColor(151, 87, 63) },
+                            {0.6868132948875427, CommonColorUtils.FastColor(4, 0, 0, 0) },
+                            {0.7230052351951599, CommonColorUtils.FastColor(0, 24, 24, 51) },
+                            {0.8626373410224915, CommonColorUtils.FastColor(129, 255, 135, 48) },
+                            {0.9725274443626404, CommonColorUtils.FastColor(0, 24, 24, 51) },
+                            {1, CommonColorUtils.FastColor(0, 0, 0, 0) },
+                        }),
+                    },
+                    _LayerOpacity = 0.5f,
                 }
             }),
             new("Background", new GradientLayerHandler
@@ -405,7 +446,7 @@ public class DesktopProfile : ApplicationProfile
                     _LayerOpacity = 0.08f,
                     Sequence =
                     {
-                        Freeform = new FreeFormObject(0, 0, 1600, 400),
+                        Freeform = new FreeFormObject(0, 0, 1200, 260),
                         Type = KeySequenceType.FreeForm
                     },
                     GradientConfig = new LayerEffectConfig
