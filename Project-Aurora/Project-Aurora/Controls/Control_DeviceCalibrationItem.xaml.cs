@@ -45,7 +45,7 @@ public partial class Control_DeviceCalibrationItem
 
     private async Task WorkerOnDoWork()
     {
-        await _deviceManager.Recalibrate(_deviceKey, _color);
+        await _deviceManager.DevicesPipe.Recalibrate(_deviceKey, _color);
     }
 
     private void ResetDevice_OnClick(object sender, RoutedEventArgs e)

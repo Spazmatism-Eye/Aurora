@@ -91,7 +91,7 @@ public partial class DeviceMapping
             return;
         }
         
-        await deviceManager.RequestRemappableDevices();
+        await deviceManager.DevicesPipe.RequestRemappableDevices();
     }
 
     private void LoadDevices(CurrentDevices remappableDevices)
@@ -185,7 +185,15 @@ public partial class DeviceMapping
             var keyControl = await keyControlTask;
             var led = keyControl.Led;
 
-            keyControl.BlinkCallback += async () => { await _deviceManager.Result.BlinkRemappableKey(remappableDevice, led); };
+            keyControl.BlinkCallback += async () =>
+            {
+                var deviceManager = await _deviceManager;
+                if (!await deviceManager.IsDeviceManagerUp())
+                {
+                    return;
+                }
+                await deviceManager.DevicesPipe.BlinkRemappableKey(remappableDevice, led);
+            };
             keyControl.DeviceKeyChanged += async (_, newKey) =>
             {
                 if (newKey != null)
@@ -198,7 +206,11 @@ public partial class DeviceMapping
                 }
 
                 var deviceManager = await _deviceManager;
-                await deviceManager.RemapKey(remappableDevice.DeviceId, led, newKey);
+                if (!await deviceManager.IsDeviceManagerUp())
+                {
+                    return;
+                }
+                await deviceManager.DevicesPipe.RemapKey(remappableDevice.DeviceId, led, newKey);
             };
 
             return keyControl;

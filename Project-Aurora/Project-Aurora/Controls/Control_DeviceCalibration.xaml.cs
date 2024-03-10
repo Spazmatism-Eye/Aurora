@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -97,7 +94,7 @@ public sealed partial class Control_DeviceCalibration : IDisposable
             return;
         }
         
-        await deviceManager.RequestRemappableDevices();
+        await deviceManager.DevicesPipe.RequestRemappableDevices();
         await _devicesUpdated.WaitAsync();
     }
 

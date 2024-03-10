@@ -5,9 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Aurora.Devices;
-using Aurora.Modules;
 using Aurora.Modules.GameStateListen;
-using Aurora.Modules.ProcessMonitor;
 using Aurora.Settings;
 using Common.Devices;
 
@@ -45,17 +43,17 @@ public partial class Control_DeviceManager
         var deviceManager = await _deviceManager;
 
         await Task.Run(() => UpdateControls(deviceConfig, deviceManager.DeviceContainers)).ConfigureAwait(false);
-        
-        deviceManager.DevicesUpdated += DeviceManagerOnDevicesUpdated();
 
-        Unloaded += (_, _) => deviceManager.DevicesUpdated -= DeviceManagerOnDevicesUpdated();
-        return;
+        var deviceManagerUpdatedHandle = DeviceManagerOnDevicesUpdated();
+        deviceManager.DevicesUpdated += deviceManagerUpdatedHandle;
+
+        Unloaded += (_, _) => deviceManager.DevicesUpdated -= deviceManagerUpdatedHandle;
 
         EventHandler<DevicesUpdatedEventArgs> DeviceManagerOnDevicesUpdated()
         {
             return ManagerOnDevicesUpdated;
 
-            async void ManagerOnDevicesUpdated(object? o, DevicesUpdatedEventArgs eventArgs)
+            async void ManagerOnDevicesUpdated(object? _, DevicesUpdatedEventArgs eventArgs)
             {
                 await UpdateControls(deviceConfig, eventArgs.DeviceContainers);
             }
@@ -66,18 +64,12 @@ public partial class Control_DeviceManager
     {
         var deviceManager = await _deviceManager;
         var isDeviceManagerUp = await deviceManager.IsDeviceManagerUp();
-        lock (_deviceManager)
+        Dispatcher.BeginInvoke(() =>
         {
-            Dispatcher.BeginInvoke(() =>
-            {
-                LstDevices.Children.Clear();
-                NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
-            }, DispatcherPriority.Loaded);
-            if (isDeviceManagerUp)
-            {
-                PopulateDevices(deviceConfig, deviceContainers);
-            }
-        }
+            LstDevices.Children.Clear();
+            NoDevManTextBlock.Visibility = isDeviceManagerUp ? Visibility.Collapsed : Visibility.Visible;
+        }, DispatcherPriority.Loaded);
+        PopulateDevices(deviceConfig, deviceContainers);
     }
 
     private void PopulateDevices(DeviceConfig deviceConfig, IEnumerable<DeviceContainer> deviceContainers)
@@ -93,24 +85,6 @@ public partial class Control_DeviceManager
                 };
                 LstDevices.Children.Add(listViewItem);
             }, DispatcherPriority.Loaded);
-        }
-    }
-
-    private async Task WaitForDeviceManager()
-    {
-        var runningProcessMonitor = await ProcessesModule.RunningProcessMonitor;
-        runningProcessMonitor.ProcessStarted += RunningProcessMonitorOnRunningProcessesChanged;
-        return;
-
-        async void RunningProcessMonitorOnRunningProcessesChanged(object? sender, ProcessStarted e)
-        {
-            if (e.ProcessName != DeviceManager.DeviceManagerProcess)
-            {
-                return;
-            }
-
-            await Task.Delay(1000); // wait for pipe
-            runningProcessMonitor.ProcessStarted -= RunningProcessMonitorOnRunningProcessesChanged;
         }
     }
 

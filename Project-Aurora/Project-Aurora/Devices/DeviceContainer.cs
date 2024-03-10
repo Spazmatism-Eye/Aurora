@@ -9,12 +9,12 @@ public sealed class DeviceContainer(MemorySharedDevice device, DeviceManager dev
 
     public async Task EnableDevice()
     {
-        await deviceManager.EnableDevice(Device.DeviceName);
+        await deviceManager.DevicesPipe.EnableDevice(Device.DeviceName);
     }
 
     public async Task DisableDevice()
     {
-        await deviceManager.DisableDevice(Device.DeviceName);
+        await deviceManager.DevicesPipe.DisableDevice(Device.DeviceName);
     }
 
     public void Dispose()
