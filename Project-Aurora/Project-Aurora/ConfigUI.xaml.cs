@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,7 +57,7 @@ partial class ConfigUI : INotifyPropertyChanged
     private FrameworkElement? _selectedManager;
 
     private readonly Timer _virtualKeyboardTimer = new(8);
-    private readonly Action _keyboardTimerCallback;
+    private readonly Func<Task> _keyboardTimerCallback;
 
     public static readonly DependencyProperty FocusedApplicationProperty = DependencyProperty.Register(
         nameof(FocusedApplication), typeof(Application), typeof(ConfigUI),
@@ -73,7 +74,7 @@ partial class ConfigUI : INotifyPropertyChanged
 
     private static readonly bool DisposeWindow = false;
 
-    private bool _isDragging;
+    private static bool IsDragging { get; set; }
 
     public Application? FocusedApplication
     {
@@ -96,6 +97,8 @@ partial class ConfigUI : INotifyPropertyChanged
             ShowHiddenChanged(value);
         }
     }
+
+    private CancellationTokenSource _keyboardUpdateCancel = new();
 
     public ConfigUI(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager,
         Task<KeyboardLayoutManager> layoutManager, Task<AuroraHttpListener?> httpListener,
@@ -128,7 +131,7 @@ partial class ConfigUI : INotifyPropertyChanged
             }
 
             var keyLights = Global.effengine.GetKeyboardLights();
-            (await _layoutManager).SetKeyboardColors(keyLights);
+            (await _layoutManager).SetKeyboardColors(keyLights, _keyboardUpdateCancel.Token);
 
             _keyboardUpdating = false;
         };
@@ -154,14 +157,14 @@ partial class ConfigUI : INotifyPropertyChanged
         _profileHidden.MouseDown += HiddenProfile_MouseDown;
     }
 
-    private void KeyboardTimerCallback()
+    private async Task KeyboardTimerCallback()
     {
         if (DateTime.UtcNow - _lastActivated > _renderTimeout)
         {
             return;
         }
 
-        if (_isDragging)
+        if (IsDragging)
         {
             _transitionAmount = 0.4;
             _previousColor = SimpleColor.Transparent;
@@ -185,7 +188,12 @@ partial class ConfigUI : INotifyPropertyChanged
         {
             return;
         }
-        Dispatcher.BeginInvoke(_updateKeyboardLayouts, _isDragging ? DispatcherPriority.Background : DispatcherPriority.Render);
+
+        await _keyboardUpdateCancel.CancelAsync();
+        _keyboardUpdateCancel.Dispose();
+        _keyboardUpdateCancel = new CancellationTokenSource();
+
+        await Dispatcher.BeginInvoke(_updateKeyboardLayouts, IsDragging ? DispatcherPriority.Background : DispatcherPriority.Render);
     }
 
     public async Task Initialize()
@@ -287,10 +295,10 @@ partial class ConfigUI : INotifyPropertyChanged
             switch (msg)
             {
                 case wmEnterSizeMove:
-                    _isDragging = true;
+                    IsDragging = true;
                     break;
                 case wmExitSizeMove:
-                    _isDragging = false;
+                    IsDragging = false;
                     break;
             }
 

@@ -516,11 +516,17 @@ public class KeyboardLayoutManager
         LayoutKeyConversion = keyboard.KeyConversion;
     }
 
-    public void SetKeyboardColors(Dictionary<DeviceKeys, SimpleColor> keyLights)
+    public void SetKeyboardColors(Dictionary<DeviceKeys, SimpleColor> keyLights, CancellationToken cancellationToken)
     {
         foreach (var (key, value) in _virtualKeyboardMap)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (!keyLights.TryGetValue(key, out var keyColor)) continue;
+            // cancel low priority calls when render stops
             var opaqueColor = ColorUtils.MultiplyColorByScalar(keyColor, keyColor.A / 255.0D);
             var drawingColor = Color.FromArgb(255, opaqueColor.R, opaqueColor.G, opaqueColor.B);
             value.SetColor(ColorUtils.DrawingColorToMediaColor(drawingColor));
