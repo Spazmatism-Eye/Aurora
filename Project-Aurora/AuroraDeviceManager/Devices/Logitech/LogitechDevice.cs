@@ -18,7 +18,7 @@ public class LogitechDevice : DefaultDevice
     private readonly SimpleColor[] _headset = new SimpleColor[4];
     private DeviceKeys _genericKey;
 
-    protected override async Task<bool> DoInitialize()
+    protected override async Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         _genericKey = Global.DeviceConfig.VarRegistry.GetVariable<DeviceKeys>($"{DeviceName}_devicekey");
         var ghubRunning = ProcessUtils.IsProcessRunning("lghub_agent");

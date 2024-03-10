@@ -22,14 +22,14 @@ public class YeeLightDevice : DefaultDevice
                                 (light.IsMusicMode() ? "(m)" : ""))
     );
 
-    protected override async Task<bool> DoInitialize()
+    protected override async Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         if (IsInitialized) return IsInitialized;
         try
         {
             var ipListString = Global.DeviceConfig.VarRegistry.GetString($"{DeviceName}_IP");
             var autoDiscover = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_auto_discovery");
-            await YeeLightConnector.PopulateDevices(_lights, autoDiscover ? null : ipListString).ConfigureAwait(false);
+            await YeeLightConnector.PopulateDevices(_lights, autoDiscover ? null : ipListString);
 
             InitiateState();
             _updateDelayStopWatch.Start();

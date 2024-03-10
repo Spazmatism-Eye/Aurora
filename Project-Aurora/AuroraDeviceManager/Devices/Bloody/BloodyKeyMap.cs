@@ -1,11 +1,12 @@
-﻿using Bloody.NET;
+﻿using System.Collections.Immutable;
+using Bloody.NET;
 using Common.Devices;
 
 namespace AuroraDeviceManager.Devices.Bloody;
 
 public static class BloodyKeyMap
 {
-    public static Dictionary<DeviceKeys, Key> KeyMap = new()
+    public static readonly ImmutableDictionary<DeviceKeys, Key> KeyMap = new Dictionary<DeviceKeys, Key>
     {
         [DeviceKeys.ESC] = Key.ESC,
         [DeviceKeys.TILDE] = Key.TILDE,
@@ -113,5 +114,5 @@ public static class BloodyKeyMap
         [DeviceKeys.NUM_ENTER] = Key.NUM_ENTER,
         [DeviceKeys.NUM_ZERO] = Key.NUM_ZERO,
         [DeviceKeys.NUM_PERIOD] = Key.NUM_PERIOD,
-    };
+    }.ToImmutableDictionary();
 }

@@ -28,15 +28,15 @@ public class CorsairRgbNetDevice : RgbNetDevice
         return !App.Closing;
     }
 
-    protected override async Task ConfigureProvider()
+    protected override async Task ConfigureProvider(CancellationToken cancellationToken)
     {
-        await base.ConfigureProvider();
+        await base.ConfigureProvider(cancellationToken);
 
         var waitSessionUnlock = await DesktopUtils.WaitSessionUnlock();
         if (waitSessionUnlock)
         {
             Global.Logger.Information("Waiting for Corsair to load after unlock");
-            await Task.Delay(5000);
+            await Task.Delay(5000, cancellationToken);
         }
         
         var isIcueRunning = ProcessUtils.IsProcessRunning("icue");
@@ -48,13 +48,13 @@ public class CorsairRgbNetDevice : RgbNetDevice
 
         if (_icueDetectedOff)
         {
-            await Task.Delay(10000);
+            await Task.Delay(10000, cancellationToken);
         }
 
         _icueDetectedOff = false;
         
         //give iCUE some time to initialize
-        await Task.Delay(1500);
+        await Task.Delay(1500, cancellationToken);
 
         //var exclusive = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_exclusive");
 

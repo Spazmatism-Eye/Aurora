@@ -8,7 +8,7 @@ namespace AuroraDeviceManager.Devices.Drevo
     {
         public override string DeviceName => "Drevo";
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             if (IsInitialized)
                 return Task.FromResult(true);

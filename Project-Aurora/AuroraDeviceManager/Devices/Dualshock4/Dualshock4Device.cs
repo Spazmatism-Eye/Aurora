@@ -99,7 +99,7 @@ public class DualshockDevice : DefaultDevice
         Instance = this;
     }
 
-    protected override Task<bool> DoInitialize()
+    protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         if (IsInitialized)
             return Task.FromResult(true);

@@ -22,9 +22,9 @@ public class YeelightRgbNetDevice : RgbNetDevice
             null, null, "Only connects as music mode, making sure all devices update fast");
     }
 
-    protected override async Task ConfigureProvider()
+    protected override async Task ConfigureProvider(CancellationToken cancellationToken)
     {
-        await base.ConfigureProvider();
+        await base.ConfigureProvider(cancellationToken);
 
         var autoDiscovery = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_auto_discovery");
         if (autoDiscovery)

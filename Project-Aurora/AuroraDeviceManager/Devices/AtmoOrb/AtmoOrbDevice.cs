@@ -14,7 +14,7 @@ public class AtmoOrbDevice : DefaultDevice
 
     public override string DeviceName => "AtmoOrb";
 
-    protected override async Task<bool> DoInitialize()
+    protected override async Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         if (_isConnected) return true;
         try

@@ -32,7 +32,7 @@ namespace AuroraDeviceManager.Devices.Clevo
 
         public override string DeviceName => "Clevo Keyboard";
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             if (IsInitialized) return Task.FromResult(true);
             try

@@ -51,7 +51,7 @@ public abstract class RgbNetDevice : DefaultDevice
         return _devicesString;
     }
 
-    protected override async Task<bool> DoInitialize()
+    protected override async Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         Global.Logger.Information("Initializing {DeviceName}", DeviceName);
 
@@ -65,7 +65,7 @@ public abstract class RgbNetDevice : DefaultDevice
             try
             {
                 timeWatch.Stop();
-                await ConfigureProvider();
+                await ConfigureProvider(cancellationToken);
                 timeWatch.Start();
 
                 Provider.Initialize(RGBDeviceType.All, true);
@@ -89,6 +89,7 @@ public abstract class RgbNetDevice : DefaultDevice
                         Global.Logger.Error("{DeviceProvider} initialization timed out after {Timeout} seconds",
                             DeviceName, connectSleepTimeSeconds);
                     }
+
                     ErrorMessage = $"{e.Message}";
                     Provider.DevicesChanged -= ProviderOnDevicesChanged;
                     return false;
@@ -96,9 +97,22 @@ public abstract class RgbNetDevice : DefaultDevice
 
                 ErrorMessage = $"{e.Message} ({remainingMillis.Seconds.ToString()})";
 
-                await Task.Delay(1800);
+                try
+                {
+                    await Task.Delay(1800, cancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    return false;
+                }
             }
-        } while (true);
+            catch (TaskCanceledException)
+            {
+                return false;
+            }
+        } while (!cancellationToken.IsCancellationRequested);
+
+        return false;
     }
 
     private async void ProviderOnException(object? sender, ExceptionEventArgs e)
@@ -197,7 +211,7 @@ public abstract class RgbNetDevice : DefaultDevice
         return _needsLayout;
     }
 
-    protected virtual Task ConfigureProvider()
+    protected virtual Task ConfigureProvider(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

@@ -9,9 +9,9 @@ public class RazerRgbNetDevice : RgbNetDevice
 
     public override string DeviceName => "Razer (RGB.NET)";
 
-    protected override async Task ConfigureProvider()
+    protected override async Task ConfigureProvider(CancellationToken cancellationToken)
     {
-        await base.ConfigureProvider();
+        await base.ConfigureProvider(cancellationToken);
         
         Provider.LoadEmulatorDevices = Global.DeviceConfig.VarRegistry.GetVariable<bool>($"{DeviceName}_force_all");
     }

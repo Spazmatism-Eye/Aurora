@@ -14,7 +14,7 @@ namespace AuroraDeviceManager.Devices.Vulcan
 
         private List<IVulcanKeyboard> _keyboards = new();
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             _keyboards = VulcanFinder.FindKeyboards().ToList();
 

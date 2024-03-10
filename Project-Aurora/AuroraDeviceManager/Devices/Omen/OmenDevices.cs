@@ -33,7 +33,7 @@ namespace AuroraDeviceManager.Devices.Omen
             }
         }
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             lock (this)
             {

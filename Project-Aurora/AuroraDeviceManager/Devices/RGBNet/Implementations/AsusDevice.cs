@@ -9,9 +9,9 @@ public class AsusDevice : RgbNetDevice
 
     protected override IRGBDeviceProvider Provider => RGB.NET.Devices.Asus.AsusDeviceProvider.Instance;
 
-    protected override Task ConfigureProvider()
+    protected override Task ConfigureProvider(CancellationToken cancellationToken)
     {
-        base.ConfigureProvider();
+        base.ConfigureProvider(cancellationToken);
         
         var isAuraRunning = ProcessUtils.IsProcessRunning("lightingservice");
         if (!isAuraRunning)

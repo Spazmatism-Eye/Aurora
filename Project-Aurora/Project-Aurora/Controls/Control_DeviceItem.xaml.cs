@@ -58,7 +58,7 @@ public partial class Control_DeviceItem
         BtnStart.Content = "Working...";
         BtnStart.IsEnabled = false;
         var device = _device;
-        if (device.Device.IsInitialized)
+        if (device.Device.IsInitialized || device.Device.IsDoingWork)
         {
             Task.Run(async () =>
             {
@@ -180,8 +180,8 @@ public partial class Control_DeviceItem
         if (_device.Device.IsDoingWork)
         {
             _deviceRunning = false;
-            BtnStart.Content = "Working...";
-            BtnStart.IsEnabled = false;
+            BtnStart.Content = "Cancel";
+            BtnStart.IsEnabled = true;
             BtnEnable.IsEnabled = false;
         }
         else if (_device.Device.IsInitialized)

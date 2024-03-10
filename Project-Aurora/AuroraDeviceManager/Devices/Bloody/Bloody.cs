@@ -18,7 +18,7 @@ public class BloodyDevice : DefaultDevice
 
     private event EventHandler<Dictionary<DeviceKeys, SimpleColor>> DeviceUpdated;
 
-    protected override Task<bool> DoInitialize()
+    protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         _keyboard = BloodyKeyboard.Initialize();
         if(_keyboard != null)

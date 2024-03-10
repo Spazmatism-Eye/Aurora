@@ -33,7 +33,7 @@ namespace AuroraDeviceManager.Devices.SteelSeries
         //Previous data
         private SimpleColor previous_peripheral_Color = SimpleColor.Black;
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             lock (action_lock)
             {

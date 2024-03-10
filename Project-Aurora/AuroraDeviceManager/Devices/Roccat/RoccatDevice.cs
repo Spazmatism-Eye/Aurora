@@ -178,7 +178,7 @@ namespace AuroraDeviceManager.Devices.Roccat
             }
         }
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             if (!IsInitialized)
             {

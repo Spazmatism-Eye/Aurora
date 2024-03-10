@@ -17,9 +17,9 @@ public class OpenRgbNetDevice : RgbNetDevice
         ClientName = "Aurora (RGB.NET)"
     };
 
-    protected override Task ConfigureProvider()
+    protected override Task ConfigureProvider(CancellationToken cancellationToken)
     {
-        base.ConfigureProvider();
+        base.ConfigureProvider(cancellationToken);
         
         var ip = Global.DeviceConfig.VarRegistry.GetString($"{DeviceName}_ip");
         var port = Global.DeviceConfig.VarRegistry.GetVariable<int>($"{DeviceName}_port");

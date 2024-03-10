@@ -48,7 +48,7 @@ public class UnifiedHIDDevice : DefaultDevice
         }
     }
 
-    protected override Task<bool> DoInitialize()
+    protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         if (IsInitialized) return Task.FromResult(IsInitialized);
         // Clear list from old data

@@ -22,7 +22,7 @@ namespace AuroraDeviceManager.Devices.Ducky
 
         public override string DeviceName => "Ducky";
 
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             //Sets the initialize colour change packet
             DuckyRGBMappings.DuckyStartingPacket.CopyTo(colourMessage, Packet(0) + 1);

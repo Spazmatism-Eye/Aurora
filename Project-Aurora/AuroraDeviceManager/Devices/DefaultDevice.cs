@@ -28,6 +28,8 @@ public abstract class DefaultDevice : IDevice, IDisposable
 
     public virtual bool IsInitialized { get; protected set; }
 
+    private CancellationTokenSource _cancelSource = new();
+
     public async Task<bool> Initialize() {
         if (IsInitialized || IsDoingWork)
         {
@@ -35,9 +37,10 @@ public abstract class DefaultDevice : IDevice, IDisposable
             return IsInitialized;
         }
         IsDoingWork = true;
+        await RecreateCancelToken();
         try
         {
-            IsInitialized = await DoInitialize();
+            IsInitialized = await DoInitialize(_cancelSource.Token);
         }
         finally
         {
@@ -47,11 +50,19 @@ public abstract class DefaultDevice : IDevice, IDisposable
         return IsInitialized;
     }
 
+    private async Task RecreateCancelToken()
+    {
+        await _cancelSource.CancelAsync();
+        _cancelSource.Dispose();
+        _cancelSource = new CancellationTokenSource();
+    }
+
     public async Task ShutdownDevice()
     {
         try
         {
             IsDoingWork = true;
+            await RecreateCancelToken();
             if (IsInitialized)
             {
                 await Shutdown();
@@ -94,7 +105,7 @@ public abstract class DefaultDevice : IDevice, IDisposable
         return null;
     }
 
-    protected abstract Task<bool> DoInitialize();
+    protected abstract Task<bool> DoInitialize(CancellationToken cancellationToken);
 
     protected abstract Task<bool> UpdateDevice(Dictionary<DeviceKeys, SimpleColor> keyColors, DoWorkEventArgs e, bool forced = false);
 

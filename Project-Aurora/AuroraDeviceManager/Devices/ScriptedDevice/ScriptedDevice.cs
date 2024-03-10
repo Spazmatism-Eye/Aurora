@@ -46,7 +46,7 @@ public class ScriptedDevice : DefaultDevice
 
     public override string DeviceName => _deviceName;
 
-    protected override Task<bool> DoInitialize()
+    protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         if (_isInitialized) return Task.FromResult(_isInitialized && !_crashed);
         try

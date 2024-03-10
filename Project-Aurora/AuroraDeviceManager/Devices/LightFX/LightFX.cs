@@ -101,7 +101,7 @@ namespace AuroraDeviceManager.Devices.LightFX
 
         int byteDataLength = 9;
         bool usingHID;
-        protected override Task<bool> DoInitialize()
+        protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
         {
             lock (action_lock)
             {

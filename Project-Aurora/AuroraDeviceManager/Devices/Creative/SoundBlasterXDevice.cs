@@ -45,7 +45,7 @@ public class SoundBlasterXDevice : DefaultDevice
     }
     
     [MethodImpl(MethodImplOptions.Synchronized)]
-    protected override Task<bool> DoInitialize()
+    protected override Task<bool> DoInitialize(CancellationToken cancellationToken)
     {
         EnumeratedDevice[] devicesArr;
         try

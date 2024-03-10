@@ -13,9 +13,9 @@ public sealed class LogitechRgbNetDevice() : RgbNetDevice(true)
 
     public override string DeviceName => "Logitech (RGB.NET)";
 
-    protected override async Task ConfigureProvider()
+    protected override async Task ConfigureProvider(CancellationToken cancellationToken)
     {
-        await base.ConfigureProvider();
+        await base.ConfigureProvider(cancellationToken);
 
         var isSdkRunning = ProcessUtils.IsProcessRunning("lghub_agent") || ProcessUtils.IsProcessRunning("lcore");
         if (!isSdkRunning)
@@ -26,7 +26,7 @@ public sealed class LogitechRgbNetDevice() : RgbNetDevice(true)
 
         if (_sdkDetectedOff)
         {
-            await Task.Delay(5000);
+            await Task.Delay(5000, cancellationToken);
         }
 
         _sdkDetectedOff = false;
