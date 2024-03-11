@@ -7,7 +7,7 @@ namespace Aurora.Settings.Layers.Controls;
 /// <summary>
 /// Interaction logic for Control_PercentGradientLayer.xaml
 /// </summary>
-public partial class Control_PercentGradientLayer
+public partial class Control_PercentGradientLayer : IProfileContainingControl
 {
     private bool _settingsSet;
 
@@ -44,7 +44,7 @@ public partial class Control_PercentGradientLayer
         _settingsSet = true;
     }
 
-    internal void SetApplication(Profiles.Application profile)
+    public void SetProfile(Profiles.Application profile)
     {
         VariablePath.Application = MaxVariablePath.Application = profile;
     }
