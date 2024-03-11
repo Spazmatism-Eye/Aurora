@@ -357,7 +357,7 @@ public sealed class LightingStateManager
 
     private void UpdateIdleEffects(EffectsEngine.EffectFrame newFrame)
     {
-        var lastInput = new User32.tagLASTINPUTINFO();
+        var lastInput = new User32.TagLastInputInfo();
         lastInput.cbSize = (uint)Marshal.SizeOf(lastInput);
         lastInput.dwTime = 0;
 

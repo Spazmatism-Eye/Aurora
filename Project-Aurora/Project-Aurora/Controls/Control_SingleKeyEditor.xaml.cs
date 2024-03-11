@@ -13,7 +13,7 @@ public partial class Control_SingleKeyEditor
 {
 
     /// <summary>A reference to the editor that is currently listening for a keypress</summary>
-    private static Control_SingleKeyEditor? _listeningEditor;
+    private Control_SingleKeyEditor? _listeningEditor;
 
     // Static constructor so that we only have to add a input event listener once.
     static Control_SingleKeyEditor() {
@@ -37,7 +37,7 @@ public partial class Control_SingleKeyEditor
         assignButton.Content = assigning ? "Press a key" : "Assign";
     }
 
-    private static void InputEvents_KeyDown(object? sender, KeyboardKeyEventArgs e)
+    private void InputEvents_KeyDown(object? sender, KeyboardKeyEventArgs e)
     {
         _listeningEditor?.Dispatcher.BeginInvoke(() => {
             _listeningEditor.SelectedKey = e.Key;

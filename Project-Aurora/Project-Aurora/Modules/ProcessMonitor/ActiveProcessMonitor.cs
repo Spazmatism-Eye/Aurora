@@ -17,7 +17,7 @@ public sealed class ActiveProcessMonitor : IDisposable
 		private set
 		{
 			_processPath = value;
-			ActiveProcessChanged?.Invoke(null, EventArgs.Empty);
+			ActiveProcessChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 	public string ProcessTitle { get; private set; } = string.Empty;
@@ -46,16 +46,16 @@ public sealed class ActiveProcessMonitor : IDisposable
 
 	private void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr windowHandle, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
 	{
-		SetWindowCurrent(windowHandle);
+		SetActiveWindowProperties(windowHandle);
 	}
 
 	public void UpdateActiveProcessPolling()
 	{
 		var windowHandle = User32.GetForegroundWindow();
-		SetWindowCurrent(windowHandle);
+		SetActiveWindowProperties(windowHandle);
 	}
 
-	private void SetWindowCurrent(IntPtr windowHandle)
+	private void SetActiveWindowProperties(IntPtr windowHandle)
 	{
 		try
 		{

@@ -8,10 +8,11 @@ namespace Aurora.Utils;
 /// <summary>
 /// http://peterkellyonline.blogspot.com/2011/04/configuring-windows-service.html
 /// </summary>
-public static class ServiceHelper
+public static partial class ServiceHelper
 {
-    [DllImport(Advapi32Dll, CharSet = CharSet.Unicode, SetLastError = true)]
-    private static extern bool ChangeServiceConfig(
+    [LibraryImport(Advapi32Dll, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool ChangeServiceConfig(
         IntPtr hService,
         uint nServiceType,
         uint nStartType,
@@ -24,16 +25,15 @@ public static class ServiceHelper
         string? lpPassword,
         string? lpDisplayName);
 
-    [DllImport(Advapi32Dll, SetLastError = true, CharSet = CharSet.Auto)]
-    private static extern IntPtr OpenService(IntPtr hScManager, string lpServiceName, uint dwDesiredAccess);
+    [LibraryImport(Advapi32Dll, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    private static partial IntPtr OpenService(IntPtr hScManager, string lpServiceName, uint dwDesiredAccess);
 
-    [DllImport(Advapi32Dll, EntryPoint = "OpenSCManagerW", ExactSpelling = true, CharSet = CharSet.Unicode,
-        SetLastError = true)]
-    private static extern IntPtr OpenSCManager(
+    [LibraryImport(Advapi32Dll, EntryPoint = "OpenSCManagerW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    private static partial IntPtr OpenScManager(
         string machineName, string databaseName, uint dwAccess);
 
-    [DllImport(Advapi32Dll, EntryPoint = "CloseServiceHandle")]
-    private static extern int CloseServiceHandle(IntPtr hScObject);
+    [LibraryImport(Advapi32Dll, EntryPoint = "CloseServiceHandle")]
+    private static partial void CloseServiceHandle(IntPtr hScObject);
 
     private const uint ServiceNoChange = 0xFFFFFFFF;
     private const uint ServiceQueryConfig = 0x00000001;
@@ -43,7 +43,7 @@ public static class ServiceHelper
 
     public static void ChangeStartMode(ServiceController svc, ServiceStartMode mode)
     {
-        var scManagerHandle = OpenSCManager(null, null, ScManagerAllAccess);
+        var scManagerHandle = OpenScManager(null, null, ScManagerAllAccess);
         if (scManagerHandle == IntPtr.Zero)
         {
             throw new ExternalException("Open Service Manager Error");

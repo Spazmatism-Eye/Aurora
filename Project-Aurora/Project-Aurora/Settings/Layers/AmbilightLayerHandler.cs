@@ -242,7 +242,7 @@ public class AmbilightLayerHandlerProperties : LayerHandlerProperties2Color<Ambi
 [LogicOverrideIgnoreProperty("_SecondaryColor")]
 [LogicOverrideIgnoreProperty("_Sequence")]
 [DoNotNotify]
-public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerProperties>
+public partial class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerProperties>
 {
     private IScreenCapture? _screenCapture;
 
@@ -571,8 +571,8 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
 
     #region DWM
 
-    [DllImport("dwmapi.dll")]
-    private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out Rect pvAttribute, int cbAttribute);
+    [LibraryImport("dwmapi.dll")]
+    private static partial void DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out Rect pvAttribute, int cbAttribute);
 
     private struct Rect
     {
@@ -585,28 +585,28 @@ public class AmbilightLayerHandler : LayerHandler<AmbilightLayerHandlerPropertie
     [Flags]
     private enum DwmWindowAttribute : uint
     {
-        DWMWA_NCRENDERING_ENABLED = 1,
-        DWMWA_NCRENDERING_POLICY,
-        DWMWA_TRANSITIONS_FORCEDISABLED,
-        DWMWA_ALLOW_NCPAINT,
-        DWMWA_CAPTION_BUTTON_BOUNDS,
-        DWMWA_NONCLIENT_RTL_LAYOUT,
-        DWMWA_FORCE_ICONIC_REPRESENTATION,
-        DWMWA_FLIP3D_POLICY,
-        DWMWA_EXTENDED_FRAME_BOUNDS,
-        DWMWA_HAS_ICONIC_BITMAP,
-        DWMWA_DISALLOW_PEEK,
-        DWMWA_EXCLUDED_FROM_PEEK,
-        DWMWA_CLOAK,
-        DWMWA_CLOAKED,
-        DWMWA_FREEZE_REPRESENTATION,
-        DWMWA_LAST
+        DwmwaNcrenderingEnabled = 1,
+        DwmwaNcrenderingPolicy = 2,
+        DwmwaTransitionsForcedisabled = 4,
+        DwmwaAllowNcpaint = 8,
+        DwmwaCaptionButtonBounds = 16,
+        DwmwaNonclientRtlLayout = 32,
+        DwmwaForceIconicRepresentation = 64,
+        DwmwaFlip3DPolicy = 128,
+        DwmwaExtendedFrameBounds = 256,
+        DwmwaHasIconicBitmap = 512,
+        DwmwaDisallowPeek = 1024,
+        DwmwaExcludedFromPeek = 2048,
+        DwmwaCloak = 4096,
+        DwmwaCloaked = 8192,
+        DwmwaFreezeRepresentation = 16384,
+        DwmwaLast = 32768
     }
 
     private static Rect GetWindowRectangle(IntPtr hWnd)
     {
         var size = Marshal.SizeOf(typeof(Rect));
-        DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out var rect, size);
+        DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DwmwaExtendedFrameBounds, out var rect, size);
 
         return rect;
     }

@@ -4,7 +4,7 @@ using Aurora.EffectsEngine;
 
 namespace Aurora.Utils;
 
-public static class Win32Transparency
+public static partial class Win32Transparency
 {
     #region Mica
 
@@ -33,8 +33,8 @@ public static class Win32Transparency
         DWMWA_MICA_EFFECT = 1029
     }
 
-    [DllImport("dwmapi.dll")]
-    internal static extern int DwmSetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute,
+    [LibraryImport("dwmapi.dll")]
+    internal static partial int DwmSetWindowAttribute(IntPtr hwnd, DwmWindowAttribute dwAttribute, ref int pvAttribute,
         int cbAttribute);
 
     #endregion

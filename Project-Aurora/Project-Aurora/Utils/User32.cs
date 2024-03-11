@@ -26,36 +26,39 @@ internal static partial class User32
         IntPtr lpParam);
 
     [Pure]
-    [DllImport("user32.dll")]
-    internal static extern IntPtr GetForegroundWindow();
-    
+    [LibraryImport("user32.dll")]
+    internal static partial IntPtr GetForegroundWindow();
+
+    // LibraryImport does not work for this
     [Pure]
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    internal static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
+    internal static partial IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
 
     [Pure]
-    [DllImport("user32.dll")]
-    internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+    [LibraryImport("user32.dll")]
+    internal static partial uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", CharSet = CharSet.Unicode)]
-    internal static extern IntPtr SetWindowLongPtr(nint hWnd, int nIndex, IntPtr dwNewLong);
+    [LibraryImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
+    internal static partial void SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
     internal delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject,
         int idChild, uint dwEventThread, uint dwmsEventTime);
 
-    [DllImport("user32.dll")]
-    internal static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc,
+    [LibraryImport("user32.dll")]
+    internal static partial IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc,
         WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
 
-    [DllImport("user32.dll")]
-    internal static extern bool UnhookWinEvent(IntPtr eventHook);
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial void UnhookWinEvent(IntPtr eventHook);
 
     [Pure]
-    [DllImport("user32.dll")]
-    internal static extern bool GetLastInputInfo(ref tagLASTINPUTINFO plii);
-    
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool GetLastInputInfo(ref TagLastInputInfo plii);
+
     [StructLayout(LayoutKind.Sequential)]
-    internal struct tagLASTINPUTINFO
+    internal struct TagLastInputInfo
     {
         public uint cbSize;
         public Int32 dwTime;

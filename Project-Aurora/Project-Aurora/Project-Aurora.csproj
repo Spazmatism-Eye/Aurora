@@ -26,6 +26,8 @@
     <Configurations>Debug;Release</Configurations>
     <Nullable>enable</Nullable>
     <StartupObject>Aurora.App</StartupObject>
+    
+    <WarningsAsErrors>CA2244;SYSLIB1054</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">

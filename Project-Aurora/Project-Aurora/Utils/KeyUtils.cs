@@ -12,7 +12,7 @@ namespace Aurora.Utils;
 /// <summary>
 /// A class for Utilities pertaining to keys
 /// </summary>
-public static class KeyUtils
+public static partial class KeyUtils
 {
     /// <summary>
     ///     Translates (maps) a virtual-key code into a scan code or character value, or translates a scan code into a
@@ -30,14 +30,14 @@ public static class KeyUtils
     ///     The return value is either a scan code, a virtual-key code, or a character value, depending on the value of
     ///     uCode and uMapType. If there is no translation, the return value is zero.
     /// </returns>
-    [DllImport("user32.dll")]
-    private static extern uint MapVirtualKey(uint uCode, MapVirtualKeyMapTypes uMapType);
+    [LibraryImport("user32.dll", EntryPoint = "MapVirtualKeyA")]
+    private static partial uint MapVirtualKey(uint uCode, MapVirtualKeyMapTypes uMapType);
 
-    [DllImport("user32.dll")]
-    private static extern uint MapVirtualKeyEx(uint uCode, MapVirtualKeyMapTypes uMapType, IntPtr dwhkl);
+    [LibraryImport("user32.dll", EntryPoint = "MapVirtualKeyExA")]
+    private static partial uint MapVirtualKeyEx(uint uCode, MapVirtualKeyMapTypes uMapType, IntPtr dwhkl);
 
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    private static extern IntPtr GetKeyboardLayout(uint idThread);
+    [LibraryImport("user32.dll")]
+    private static partial IntPtr GetKeyboardLayout(uint idThread);
 
     [DllImport("user32", SetLastError = true, CharSet = CharSet.Unicode)]
     public static extern int GetKeyNameTextW(uint lParam, StringBuilder lpString, int nSize);
