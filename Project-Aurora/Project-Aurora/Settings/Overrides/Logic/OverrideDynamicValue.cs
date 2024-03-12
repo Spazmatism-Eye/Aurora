@@ -5,13 +5,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Profiles;
+using AuroraRgb.Profiles;
 using Common.Utils;
 using Newtonsoft.Json;
-using DCD = Aurora.Settings.Overrides.Logic.DynamicConstructorDefinition;
-using DCPD = Aurora.Settings.Overrides.Logic.DynamicConstructorParamDefinition;
+using DCD = AuroraRgb.Settings.Overrides.Logic.DynamicConstructorDefinition;
+using DCPD = AuroraRgb.Settings.Overrides.Logic.DynamicConstructorParamDefinition;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// The override dynamic logic creates a values dynamically based on some given IEvaluatables.

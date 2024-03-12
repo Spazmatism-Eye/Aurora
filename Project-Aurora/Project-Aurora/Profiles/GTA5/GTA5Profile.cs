@@ -1,14 +1,8 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.GTA5
+namespace AuroraRgb.Profiles.GTA5
 {
     public enum GTA5_PoliceEffects
     {

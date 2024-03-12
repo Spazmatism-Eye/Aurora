@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Data;
 
-namespace Aurora.Settings
+namespace AuroraRgb.Settings
 {
     public interface IShortcut
     {

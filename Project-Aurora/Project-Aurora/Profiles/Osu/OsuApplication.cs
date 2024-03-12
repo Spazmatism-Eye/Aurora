@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Osu;
+﻿namespace AuroraRgb.Profiles.Osu;
 
 public class Osu : Application {
 

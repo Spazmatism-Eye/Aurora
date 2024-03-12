@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.Payday_2.GSI.Nodes;
+namespace AuroraRgb.Profiles.Payday_2.GSI.Nodes;
 
 public class ItemsNode : Node
 {

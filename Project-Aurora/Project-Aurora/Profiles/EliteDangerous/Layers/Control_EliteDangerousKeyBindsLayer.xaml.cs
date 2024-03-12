@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.EliteDangerous.Layers
+namespace AuroraRgb.Profiles.EliteDangerous.Layers
 {
     /// <summary>
     /// Interaction logic for Control_EliteDangerousKeyBindsLayer.xaml

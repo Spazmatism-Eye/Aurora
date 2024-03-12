@@ -1,9 +1,9 @@
-﻿using FastMember;
-using System;
+﻿using System;
 using System.Collections;
 using System.Globalization;
+using FastMember;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static class FastMemberExtensions {
 

@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Settings.Overrides;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
 using Common.Utils;
 using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class PercentLayerHandlerProperties<TProperty> : LayerHandlerProperties2Color<TProperty> where TProperty : PercentLayerHandlerProperties<TProperty>
 {

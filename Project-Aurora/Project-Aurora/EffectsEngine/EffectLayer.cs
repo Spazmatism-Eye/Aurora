@@ -7,14 +7,13 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Common.Utils;
 using Point = System.Drawing.Point;
-using RadialGradientBrush = System.Windows.Media.RadialGradientBrush;
 
-namespace Aurora.EffectsEngine
+namespace AuroraRgb.EffectsEngine
 {
     /// <summary>
     /// A class representing a bitmap layer for effects

@@ -1,24 +1,26 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
 using System.Threading;
-using Aurora.Modules.AudioCapture;
-using Aurora.Modules.Inputs;
-using Aurora.Profiles;
-using Aurora.Settings;
-using Common.Devices;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules.AudioCapture;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
 using RazerSdkReader;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Aurora;
+namespace AuroraRgb;
 
 /// <summary>
 /// Globally accessible classes and variables
 /// </summary>
 public static class Global
 {
+    public const string AuroraExe = "AuroraRgb.exe";
     public static readonly string ScriptDirectory = "Scripts";
 
     /// <summary>
@@ -29,7 +31,7 @@ public static class Global
     /// <summary>
     /// The path to the application executing directory
     /// </summary>
-    public static string ExecutingDirectory { get; } = Path.GetDirectoryName(Environment.ProcessPath) ?? string.Empty;
+    public static string ExecutingDirectory { get; } = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
 
     public static string AppDataDirectory { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Aurora");
 
@@ -77,6 +79,8 @@ public static class Global
 
     public static void Initialize()
     {
+        Directory.SetCurrentDirectory(ExecutingDirectory);
+        
         WpfSyncContext = AsyncOperationManager.SynchronizationContext;
 #if DEBUG
         isDebug = true;

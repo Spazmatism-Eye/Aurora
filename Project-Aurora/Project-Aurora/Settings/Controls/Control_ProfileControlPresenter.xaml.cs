@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// Interaction logic for Control_ProfileControlPresenter.xaml

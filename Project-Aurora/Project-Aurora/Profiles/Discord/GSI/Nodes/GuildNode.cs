@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aurora.Profiles.Discord.GSI.Nodes {
+﻿namespace AuroraRgb.Profiles.Discord.GSI.Nodes {
     public class GuildNode : AutoJsonNode<GuildNode> {
         public long Id;
         public string Name;

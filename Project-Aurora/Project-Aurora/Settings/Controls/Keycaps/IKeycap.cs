@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Common.Devices;
 
-namespace Aurora.Settings.Controls.Keycaps;
+namespace AuroraRgb.Settings.Controls.Keycaps;
 
 public abstract class Keycap : UserControl
 {

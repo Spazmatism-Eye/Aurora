@@ -1,11 +1,8 @@
-﻿using Aurora.Controls;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
-namespace Aurora.Profiles.Generic_Application
+namespace AuroraRgb.Profiles.Generic_Application
 {
     /// <summary>
     /// Interaction logic for Control_GenericApplication.xaml

@@ -1,15 +1,15 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Aurora.Profiles.RocketLeague.Layers;
-using Aurora.Settings.Overrides.Logic;
-using Aurora.Settings.Overrides.Logic.Boolean;
+﻿using System.Drawing;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.RocketLeague.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings.Overrides.Logic.Generic;
+using AuroraRgb.Settings.Overrides.Logic.Number;
 using Common.Devices;
 
-namespace Aurora.Profiles.RocketLeague
+namespace AuroraRgb.Profiles.RocketLeague
 {
     public class RocketLeagueBMProfile : ApplicationProfile
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aurora.Profiles.StardewValley;
+﻿namespace AuroraRgb.Profiles.StardewValley;
 
 public class StardewValley : Application {
     public StardewValley() : base(new LightEventConfig

@@ -8,12 +8,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Aurora.Settings.Controls.Keycaps;
-using Aurora.Settings.Layouts;
-using Aurora.Utils;
+using AuroraRgb.Settings.Controls.Keycaps;
+using AuroraRgb.Settings.Layouts;
+using AuroraRgb.Utils;
 using Common.Devices;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 internal class KeyboardControlGenerator(
     bool abstractKeycaps,

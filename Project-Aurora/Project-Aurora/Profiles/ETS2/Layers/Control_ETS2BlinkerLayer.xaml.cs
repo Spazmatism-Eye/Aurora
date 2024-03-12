@@ -1,11 +1,10 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.ETS2.Layers {
+namespace AuroraRgb.Profiles.ETS2.Layers {
     /// <summary>
     /// Interaction logic for Control_ETS2BlinkerLayer.xaml
     /// </summary>

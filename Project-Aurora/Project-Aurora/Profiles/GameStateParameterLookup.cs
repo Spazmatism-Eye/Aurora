@@ -1,11 +1,11 @@
-﻿using FastMember;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aurora.Nodes;
-using Aurora.Utils;
+using AuroraRgb.Nodes;
+using AuroraRgb.Utils;
+using FastMember;
 
-namespace Aurora.Profiles {
+namespace AuroraRgb.Profiles {
 
     /// <summary>
     /// Data structure that holds a record of all game state parameters for a particular type of GameState.

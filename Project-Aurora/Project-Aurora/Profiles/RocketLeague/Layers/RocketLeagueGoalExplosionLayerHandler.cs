@@ -1,18 +1,13 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles.RocketLeague.GSI;
-using Aurora.Profiles.RocketLeague.GSI.Nodes;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Profiles.RocketLeague.GSI;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.RocketLeague.Layers
+namespace AuroraRgb.Profiles.RocketLeague.Layers
 {
     public class RocketLeagueGoalExplosionProperties : LayerHandlerProperties<RocketLeagueGoalExplosionProperties>
     {
@@ -76,7 +71,7 @@ namespace Aurora.Profiles.RocketLeague.Layers
         public override EffectLayer Render(IGameState gamestate)
         {
             previoustime = currenttime;
-            currenttime = Utils.Time.GetMillisecondsSinceEpoch();
+            currenttime = Time.GetMillisecondsSinceEpoch();
 
             EffectLayer layer = new EffectLayer("Goal Explosion");
             AnimationMix goal_explosion_mix = new AnimationMix();

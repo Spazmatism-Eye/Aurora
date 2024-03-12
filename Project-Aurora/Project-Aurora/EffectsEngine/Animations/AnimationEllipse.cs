@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using Common.Utils;
 
-namespace Aurora.EffectsEngine.Animations
+namespace AuroraRgb.EffectsEngine.Animations
 {
     public class AnimationEllipse : AnimationCircle
     {

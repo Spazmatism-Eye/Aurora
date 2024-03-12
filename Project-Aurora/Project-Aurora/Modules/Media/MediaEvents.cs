@@ -2,7 +2,7 @@
 using Windows.Media.Control;
 using WindowsMediaController;
 
-namespace Aurora.Modules.Media;
+namespace AuroraRgb.Modules.Media;
 
 public class FocusedMediaChangedEventArgs : EventArgs
 {

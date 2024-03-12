@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Aurora.Devices;
 using Common.Devices;
 
-namespace Aurora.Modules.Razer;
+namespace AuroraRgb.Modules.Razer;
 
 // https://developer.razer.com/works-with-chroma/razer-chroma-led-profiles/
 public static class RazerLayoutMap

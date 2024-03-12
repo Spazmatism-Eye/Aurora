@@ -8,11 +8,11 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using Aurora.Modules.Razer;
+using AuroraRgb.Utils;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Modules.Razer;
 
 public enum RazerChromaInstallerExitCode
 {

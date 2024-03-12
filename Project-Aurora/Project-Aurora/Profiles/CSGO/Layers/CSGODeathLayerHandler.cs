@@ -1,13 +1,14 @@
 ﻿using System;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
 using System.Drawing;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.CSGO.GSI;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 public class CSGODeathLayerHandlerProperties : LayerHandlerProperties2Color<CSGODeathLayerHandlerProperties>
 {
@@ -64,7 +65,7 @@ public class CSGODeathLayerHandler : LayerHandler<CSGODeathLayerHandlerPropertie
         if (!_isDead && gameState.Player.State.Health <= 0 && gameState.Previously.Player.State.Health > 0)
         {
             _isDead = true;
-            _lastTimeMillis = Utils.Time.GetMillisecondsSinceEpoch();
+            _lastTimeMillis = Time.GetMillisecondsSinceEpoch();
             _fadeAlpha = 255;
         }
 
@@ -87,8 +88,8 @@ public class CSGODeathLayerHandler : LayerHandler<CSGODeathLayerHandlerPropertie
 
     private int GetFadeAlpha()
     {
-        var t = Utils.Time.GetMillisecondsSinceEpoch() - _lastTimeMillis;
-        _lastTimeMillis = Utils.Time.GetMillisecondsSinceEpoch();
+        var t = Time.GetMillisecondsSinceEpoch() - _lastTimeMillis;
+        _lastTimeMillis = Time.GetMillisecondsSinceEpoch();
         _fadeAlpha -= (int)(t / 10);
         _fadeAlpha = Math.Min(_fadeAlpha, 255);
         return _fadeAlpha;

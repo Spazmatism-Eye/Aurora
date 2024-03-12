@@ -1,15 +1,15 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles.Dota_2.GSI;
-using Aurora.Profiles.Dota_2.GSI.Nodes;
-using Aurora.Settings.Layers;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Profiles.Dota_2.GSI;
+using AuroraRgb.Profiles.Dota_2.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.Dota_2.Layers
+namespace AuroraRgb.Profiles.Dota_2.Layers
 {
     public class Dota2HeroAbilityEffectsLayerHandlerProperties : LayerHandlerProperties2Color<Dota2HeroAbilityEffectsLayerHandlerProperties>
     {
@@ -135,7 +135,7 @@ namespace Aurora.Profiles.Dota_2.Layers
         public override EffectLayer Render(IGameState state)
         {
             _previousTime = _currentTime;
-            _currentTime = Utils.Time.GetMillisecondsSinceEpoch();
+            _currentTime = Time.GetMillisecondsSinceEpoch();
 
             if (state is not GameState_Dota2 dota2State) return EffectLayer.EmptyLayer;
 

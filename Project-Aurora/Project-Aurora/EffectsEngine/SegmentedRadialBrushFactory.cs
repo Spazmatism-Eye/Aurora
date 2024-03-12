@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.EffectsEngine {
+namespace AuroraRgb.EffectsEngine {
 
     /// <summary>
     /// A factory that can create a segmented radial brush.

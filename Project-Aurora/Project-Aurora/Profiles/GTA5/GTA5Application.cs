@@ -1,6 +1,6 @@
-﻿using Aurora.Profiles.GTA5.Layers;
+﻿using AuroraRgb.Profiles.GTA5.Layers;
 
-namespace Aurora.Profiles.GTA5
+namespace AuroraRgb.Profiles.GTA5
 {
     public class GTA5 : Application
     {

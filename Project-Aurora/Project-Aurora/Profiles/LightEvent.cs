@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aurora.EffectsEngine;
-using Aurora.Settings;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles
+namespace AuroraRgb.Profiles
 {
     public interface ILightEvent : IInitializableProfile
     {

@@ -1,9 +1,3 @@
-using Aurora.Devices;
-using Aurora.Profiles.Desktop;
-using Aurora.Profiles.GTA5;
-using Aurora.Profiles.Payday_2.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +8,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Markup;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     public static class EnumUtils {
 

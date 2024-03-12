@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Aurora;
-using Aurora.Profiles;
+using AuroraRgb;
+using AuroraRgb.Profiles;
 using Newtonsoft.Json;
 
 namespace MemoryAccessProfiles.Profiles;

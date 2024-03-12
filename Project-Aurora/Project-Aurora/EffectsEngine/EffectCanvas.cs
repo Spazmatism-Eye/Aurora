@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using AuroraRgb.Settings;
 using Common.Devices;
 
-namespace Aurora.EffectsEngine;
+namespace AuroraRgb.EffectsEngine;
 
 public sealed class EffectCanvas(
     int width,
@@ -34,7 +35,7 @@ public sealed class EffectCanvas(
     /// <summary>
     /// Creates a new FreeFormObject that perfectly occupies the entire canvas.
     /// </summary>
-    public Settings.FreeFormObject WholeFreeForm => new(-GridBaselineX, -GridBaselineY, GridWidth, GridHeight);
+    public FreeFormObject WholeFreeForm => new(-GridBaselineX, -GridBaselineY, GridWidth, GridHeight);
 
     public BitmapRectangle GetRectangle(DeviceKeys key)
     {

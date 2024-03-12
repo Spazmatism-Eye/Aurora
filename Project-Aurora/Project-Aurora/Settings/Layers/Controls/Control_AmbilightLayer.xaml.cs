@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 /// <summary>
 /// Interaction logic for Control_AmbilightLayer.xaml

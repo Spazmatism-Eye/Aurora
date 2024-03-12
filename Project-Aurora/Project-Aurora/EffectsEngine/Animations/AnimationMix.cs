@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Aurora.EffectsEngine.Animations;
+namespace AuroraRgb.EffectsEngine.Animations;
 
 public sealed class AnimationMix: IEquatable<AnimationMix>
 {

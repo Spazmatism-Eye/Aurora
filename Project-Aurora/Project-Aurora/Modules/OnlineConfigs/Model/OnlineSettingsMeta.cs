@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aurora.Modules.OnlineConfigs.Model;
+namespace AuroraRgb.Modules.OnlineConfigs.Model;
 
 public class OnlineSettingsMeta
 {

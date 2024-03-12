@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Profiles.LeagueOfLegends.GSI.Nodes;
+﻿using AuroraRgb.Profiles.LeagueOfLegends.GSI.Nodes;
 
-namespace Aurora.Profiles.LeagueOfLegends.GSI
+namespace AuroraRgb.Profiles.LeagueOfLegends.GSI
 {
     public class GameState_LoL : GameState
     {

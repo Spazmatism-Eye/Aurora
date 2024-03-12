@@ -3,14 +3,14 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Aurora.EffectsEngine;
+using AuroraRgb.EffectsEngine;
 using Common;
 using Common.Utils;
 using Newtonsoft.Json;
 using DrawingColor = System.Drawing.Color;
 using MediaColor = System.Windows.Media.Color;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static class MediaColorExt
 {

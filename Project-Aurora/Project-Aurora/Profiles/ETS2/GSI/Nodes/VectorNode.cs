@@ -1,6 +1,6 @@
-﻿using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.ETS2.GSI.Nodes {
+namespace AuroraRgb.Profiles.ETS2.GSI.Nodes {
     public class VectorNode : Node {
 
         public float x;

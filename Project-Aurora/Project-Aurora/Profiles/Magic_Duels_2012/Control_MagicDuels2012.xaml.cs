@@ -2,11 +2,10 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Controls;
-using Aurora.Settings;
-using Aurora.Utils.Steam;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.Magic_Duels_2012
+namespace AuroraRgb.Profiles.Magic_Duels_2012
 {
     /// <summary>
     /// Interaction logic for Control_MagicDuels2012.xaml

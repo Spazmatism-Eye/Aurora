@@ -1,11 +1,11 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.DiscoDodgeball
+namespace AuroraRgb.Profiles.DiscoDodgeball
 {
     public class DiscoDodgeballProfile : ApplicationProfile
     {
@@ -17,8 +17,8 @@ namespace Aurora.Profiles.DiscoDodgeball
         [OnDeserialized]
         void OnDeserialized(StreamingContext context)
         {
-            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(Aurora.Settings.Layers.WrapperLightsLayerHandler))))
-                Layers.Add(new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()));
+            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(WrapperLightsLayerHandler))))
+                Layers.Add(new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()));
         }
 
         public override void Reset()
@@ -34,7 +34,7 @@ namespace Aurora.Profiles.DiscoDodgeball
                         _Sequence = new KeySequence(new[] { DeviceKeys.W, DeviceKeys.A, DeviceKeys.S, DeviceKeys.D, DeviceKeys.SPACE })
                     }
                 }),
-                new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()),
+                new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()),
             };
         }
     }

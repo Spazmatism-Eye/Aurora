@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
-namespace Aurora.Profiles.RocketLeague.GSI.Nodes
+namespace AuroraRgb.Profiles.RocketLeague.GSI.Nodes
 {
     public class Team_RocketLeague : AutoJsonNode<Team_RocketLeague>
     {

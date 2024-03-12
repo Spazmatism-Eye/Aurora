@@ -1,9 +1,8 @@
 ﻿using System;
-using Aurora.Profiles.EliteDangerous.Journal.Events;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles.EliteDangerous.Journal
+namespace AuroraRgb.Profiles.EliteDangerous.Journal
 {
     public enum EventType
     {
@@ -41,18 +40,18 @@ namespace Aurora.Profiles.EliteDangerous.Journal
 
             switch (item["event"].Value<string>())
             {
-                case "FSDTarget": return item.ToObject<FSDTarget>();
-                case "StartJump": return item.ToObject<StartJump>();
-                case "SupercruiseEntry": return item.ToObject<SupercruiseEntry>();
-                case "SupercruiseExit": return item.ToObject<SupercruiseExit>();
-                case "Fileheader": return item.ToObject<Fileheader>();
-                case "FSDJump": return item.ToObject<FSDJump>();
-                case "Loadout": return item.ToObject<Loadout>();
-                case "Music": return item.ToObject<Music>();
-                case "LaunchFighter": return item.ToObject<LaunchFighter>();
-                case "DockFighter": return item.ToObject<DockFighter>();
-                case "FighterDestroyed": return item.ToObject<FighterDestroyed>();
-                case "FighterRebuilt": return item.ToObject<FighterRebuilt>();
+                case "FSDTarget": return item.ToObject<Events.FSDTarget>();
+                case "StartJump": return item.ToObject<Events.StartJump>();
+                case "SupercruiseEntry": return item.ToObject<Events.SupercruiseEntry>();
+                case "SupercruiseExit": return item.ToObject<Events.SupercruiseExit>();
+                case "Fileheader": return item.ToObject<Events.Fileheader>();
+                case "FSDJump": return item.ToObject<Events.FSDJump>();
+                case "Loadout": return item.ToObject<Events.Loadout>();
+                case "Music": return item.ToObject<Events.Music>();
+                case "LaunchFighter": return item.ToObject<Events.LaunchFighter>();
+                case "DockFighter": return item.ToObject<Events.DockFighter>();
+                case "FighterDestroyed": return item.ToObject<Events.FighterDestroyed>();
+                case "FighterRebuilt": return item.ToObject<Events.FighterRebuilt>();
             }
                 
             //Do not deserialize an event we don't need since it's REALLY SLOW!

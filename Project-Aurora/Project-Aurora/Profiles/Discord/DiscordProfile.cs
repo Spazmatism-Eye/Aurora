@@ -1,11 +1,10 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using System.Drawing;
-using Aurora.Settings.Overrides.Logic.Boolean;
+﻿using System.Drawing;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
 using Common.Devices;
 
-namespace Aurora.Profiles.Discord;
+namespace AuroraRgb.Profiles.Discord;
 
 public class DiscordProfile : ApplicationProfile
 {

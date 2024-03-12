@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 /// <summary>
 /// Interaction logic for Control_WinningTeamLayer.xaml

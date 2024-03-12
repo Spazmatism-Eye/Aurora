@@ -1,10 +1,9 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.Dota_2.Layers;
+namespace AuroraRgb.Profiles.Dota_2.Layers;
 
 /// <summary>
 /// Interaction logic for Control_Dota2RespawnLayer.xaml

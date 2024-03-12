@@ -1,12 +1,11 @@
-﻿using Aurora.Controls;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils.Steam;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.QuantumConumdrum
+namespace AuroraRgb.Profiles.QuantumConumdrum
 {
     /// <summary>
     /// Interaction logic for Control_QuantumConumdrum.xaml

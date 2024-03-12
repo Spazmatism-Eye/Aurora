@@ -7,12 +7,12 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using Aurora.Settings;
+using AuroraRgb.Settings;
 using Serilog.Core;
 using Constants = Common.Constants;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora;
+namespace AuroraRgb;
 
 /// <summary>
 /// Interaction logic for App.xaml

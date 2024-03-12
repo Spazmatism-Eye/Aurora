@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Devices;
+using AuroraRgb.Devices;
 using Common;
 using Common.Devices;
 using Common.Devices.RGBNet;
 using Common.Utils;
 using MediaColor = System.Windows.Media.Color;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 public partial class Control_DeviceCalibrationItem
 {

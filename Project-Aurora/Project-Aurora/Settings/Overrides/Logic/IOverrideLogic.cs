@@ -1,8 +1,7 @@
 ﻿using System;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
+using AuroraRgb.Profiles;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Interface that states this class can be used for a property for the overrides logic system.
@@ -13,7 +12,7 @@ public interface IOverrideLogic : System.ComponentModel.INotifyPropertyChanged {
     /// Evalutes this logic and returns the value of the first lookup which has a truthy condition.
     /// Will return `null` if there are no true conditions.
     /// </summary>
-    object? Evaluate(Profiles.IGameState gameState);
+    object? Evaluate(IGameState gameState);
 
     /// <summary>
     /// Gets a control for editing this override logic system.

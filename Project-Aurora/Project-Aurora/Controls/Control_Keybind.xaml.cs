@@ -1,15 +1,13 @@
-﻿using System;
-using Aurora.Settings;
-using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Aurora.Modules;
-using Aurora.Modules.Inputs;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Settings;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_Keybind.xaml

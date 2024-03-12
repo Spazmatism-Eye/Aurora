@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Linq;
-using Aurora.Modules.Razer;
-using Aurora.Utils;
+using AuroraRgb.Modules.Razer;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.Chroma;
+namespace AuroraRgb.Profiles.Chroma;
 
 public class ChromaApplication : Application
 {

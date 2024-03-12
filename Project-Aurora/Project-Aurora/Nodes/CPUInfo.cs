@@ -1,4 +1,4 @@
-﻿namespace Aurora.Nodes;
+﻿namespace AuroraRgb.Nodes;
 
 public class CPUInfo : Node
 {

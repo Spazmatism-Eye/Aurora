@@ -1,6 +1,7 @@
-﻿using Aurora.Utils;
+﻿using AuroraRgb.Utils;
+using ColorBox.Implementation;
 
-namespace Aurora.Settings.Layers.Controls {
+namespace AuroraRgb.Settings.Layers.Controls {
 
     public partial class Control_RadialLayer
     {
@@ -17,7 +18,7 @@ namespace Aurora.Settings.Layers.Controls {
             Loaded -= UserControl_Loaded;
         }
 
-        private void GradientPicker_BrushChanged(object? sender, ColorBox.BrushChangedEventArgs e) {
+        private void GradientPicker_BrushChanged(object? sender, BrushChangedEventArgs e) {
             handler.Properties.Brush.Colors = ColorStopCollection.FromMediaBrush(GradientPicker.Brush);
             handler.Properties.OnPropertiesChanged(this);
         }

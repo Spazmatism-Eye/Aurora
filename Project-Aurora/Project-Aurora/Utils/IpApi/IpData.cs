@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Aurora.Utils.IpApi;
+namespace AuroraRgb.Utils.IpApi;
 
 public class IpData
 {

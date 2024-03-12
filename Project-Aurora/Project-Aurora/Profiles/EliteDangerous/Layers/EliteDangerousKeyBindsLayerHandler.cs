@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aurora.EffectsEngine;
-using Aurora.Settings.Layers;
 using System.Drawing;
 using System.Linq;
-using Aurora.Modules;
-using Aurora.Profiles.EliteDangerous.GSI;
-using Aurora.Profiles.EliteDangerous.GSI.Nodes;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles.EliteDangerous.GSI;
+using AuroraRgb.Profiles.EliteDangerous.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Aurora.Profiles.EliteDangerous.Layers;
+namespace AuroraRgb.Profiles.EliteDangerous.Layers;
 
 public class ColorGroup
 {

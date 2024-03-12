@@ -1,14 +1,14 @@
-﻿<UserControl  x:Class="Aurora.Settings.Layers.Controls.Control_LockColourLayer"
+﻿<UserControl  x:Class="AuroraRgb.Settings.Layers.Controls.Control_LockColourLayer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
-             xmlns:utils="clr-namespace:Aurora.Utils"
-             xmlns:Controls="clr-namespace:Aurora.Controls"
+             xmlns:utils1="clr-namespace:AuroraRgb.Utils"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
              mc:Ignorable="d" x:Name="ctrlMain">
     <UserControl.Resources>
-        <utils:EnumToDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <utils1:EnumToDescriptionConverter x:Key="EnumDescriptionConverter" />
     </UserControl.Resources>
     <Grid>
         <Label HorizontalAlignment="Left" Margin="0,27,0,0" Content="Off Color:" VerticalAlignment="Top" Height="24" Padding="0" VerticalContentAlignment="Center"  />
@@ -27,6 +27,6 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Controls:KeySequence Sequence="{Binding Path=Properties._Sequence}" HorizontalAlignment="Left" Margin="270,36,0,10" Title="Lock Colour Affected Keys" RecordingTag="Lock Colour Affected Keys" />
+        <controls:KeySequence Sequence="{Binding Path=Properties._Sequence}" HorizontalAlignment="Left" Margin="270,36,0,10" Title="Lock Colour Affected Keys" RecordingTag="Lock Colour Affected Keys" />
     </Grid>
 </UserControl>

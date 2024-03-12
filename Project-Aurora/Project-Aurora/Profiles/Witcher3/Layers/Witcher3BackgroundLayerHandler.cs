@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.Witcher3.GSI;
-using Aurora.Settings.Layers;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Witcher3.GSI;
+using AuroraRgb.Settings.Layers;
 using Witcher3Gsi;
 
-namespace Aurora.Profiles.Witcher3.Layers;
+namespace AuroraRgb.Profiles.Witcher3.Layers;
 
 public class Witcher3BackgroundLayerHandlerProperties : LayerHandlerProperties2Color<Witcher3BackgroundLayerHandlerProperties>
 {

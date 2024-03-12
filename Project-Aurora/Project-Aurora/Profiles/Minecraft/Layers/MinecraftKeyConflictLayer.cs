@@ -1,13 +1,12 @@
-﻿using Aurora.Devices;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.Minecraft.GSI;
-using Aurora.Settings.Layers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Minecraft.GSI;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.Minecraft.Layers {
+namespace AuroraRgb.Profiles.Minecraft.Layers {
 
     public class MinecraftKeyConflictLayerProperties : LayerHandlerProperties2Color<MinecraftKeyConflictLayerProperties> {
 

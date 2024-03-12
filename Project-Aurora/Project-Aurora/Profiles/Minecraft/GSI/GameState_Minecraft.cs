@@ -1,13 +1,7 @@
-﻿using Aurora.Profiles.Generic.GSI.Nodes;
-using Aurora.Profiles.Minecraft.GSI.Nodes;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Profiles.Minecraft.GSI.Nodes;
 
-namespace Aurora.Profiles.Minecraft.GSI {
+namespace AuroraRgb.Profiles.Minecraft.GSI {
 
     public class GameState_Minecraft : GameState {
 

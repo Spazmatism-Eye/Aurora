@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using Aurora.Devices;
-using Aurora.EffectsEngine;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
 using Common.Devices;
 using Microsoft.Scripting.Utils;
 using Newtonsoft.Json;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 /// <summary>
 /// The type of the KeySequence

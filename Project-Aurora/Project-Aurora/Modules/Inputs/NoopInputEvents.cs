@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Aurora.Modules.Inputs;
+namespace AuroraRgb.Modules.Inputs;
 
 public sealed class NoopInputEvents : IInputEvents
 {

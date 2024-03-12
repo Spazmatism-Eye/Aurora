@@ -9,13 +9,13 @@
 
 ***********************************************************************************/
 
-using System;
-using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using ColorBox.Utils;
 
-namespace ColorBox
+namespace ColorBox.Implementation
 {
     class HueSelector : BaseSelector
     {       

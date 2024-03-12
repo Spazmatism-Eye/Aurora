@@ -12,7 +12,7 @@ using SharpDX.DXGI;
 using Device = SharpDX.Direct3D11.Device;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 
-namespace Aurora.Settings.Layers.Ambilight;
+namespace AuroraRgb.Settings.Layers.Ambilight;
 
 public sealed class DesktopDuplicator : IDisposable
 {

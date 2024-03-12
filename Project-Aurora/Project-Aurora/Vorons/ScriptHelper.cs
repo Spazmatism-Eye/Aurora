@@ -1,12 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using Aurora.EffectsEngine;
+using AuroraRgb.EffectsEngine;
 using Common.Devices;
 
-namespace Aurora.Scripts.VoronScripts;
+namespace AuroraRgb.Vorons;
 
 public static class ScriptHelper
 {

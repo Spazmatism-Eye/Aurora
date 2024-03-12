@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Common.Utils;
 using Microsoft.Win32;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class UpdateModule : AuroraModule
 {

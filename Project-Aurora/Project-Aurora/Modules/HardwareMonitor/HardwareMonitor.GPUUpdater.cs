@@ -2,7 +2,7 @@
 using System.Linq;
 using LibreHardwareMonitor.Hardware;
 
-namespace Aurora.Modules.HardwareMonitor;
+namespace AuroraRgb.Modules.HardwareMonitor;
 
 public partial class HardwareMonitor
 {

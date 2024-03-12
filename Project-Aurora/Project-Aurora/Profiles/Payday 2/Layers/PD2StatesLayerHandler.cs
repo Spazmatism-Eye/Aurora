@@ -1,20 +1,15 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Payday_2.GSI;
-using Aurora.Profiles.Payday_2.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Payday_2.GSI;
+using AuroraRgb.Profiles.Payday_2.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Payday_2.Layers
+namespace AuroraRgb.Profiles.Payday_2.Layers
 {
     public class PD2StatesLayerHandlerProperties : LayerHandlerProperties2Color<PD2StatesLayerHandlerProperties>
     {
@@ -99,7 +94,7 @@ namespace Aurora.Profiles.Payday_2.Layers
 
                     if (pd2state.LocalPlayer.IsSwanSong && Properties.ShowSwanSong)
                     {
-                        double blend_percent = Math.Pow(Math.Cos((Utils.Time.GetMillisecondsSinceEpoch() % 1300L) / 1300.0D * Properties.SwanSongSpeedMultiplier * 2.0D * Math.PI), 2.0D);
+                        double blend_percent = Math.Pow(Math.Cos((Time.GetMillisecondsSinceEpoch() % 1300L) / 1300.0D * Properties.SwanSongSpeedMultiplier * 2.0D * Math.PI), 2.0D);
 
                         Color swansongColor = ColorUtils.MultiplyColorByScalar(Properties.SwanSongColor, blend_percent);
 

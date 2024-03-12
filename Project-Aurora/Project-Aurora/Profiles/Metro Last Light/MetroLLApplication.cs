@@ -1,13 +1,6 @@
-﻿using Aurora.Settings;
-using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+﻿using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.Metro_Last_Light;
+namespace AuroraRgb.Profiles.Metro_Last_Light;
 
 public class MetroLL : Application
 {

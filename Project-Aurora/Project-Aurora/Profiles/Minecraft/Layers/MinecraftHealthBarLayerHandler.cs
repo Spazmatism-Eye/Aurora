@@ -1,16 +1,13 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Minecraft.GSI;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Minecraft.GSI;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Minecraft.Layers {
+namespace AuroraRgb.Profiles.Minecraft.Layers {
     [Obsolete("This layer is obselete and has been replaced by the Overrides system.")]
     public class MinecraftHealthBarLayerHandlerProperties : LayerHandlerProperties<MinecraftHealthBarLayerHandlerProperties> {
 
@@ -99,7 +96,7 @@ namespace Aurora.Profiles.Minecraft.Layers {
 
             // If absorption is enabled, overlay the absorption display on the top of the original healthbar
             if (Properties.EnableAbsorptionHealthColor)
-                EffectLayer.PercentEffect(Properties.AbsorptionHealthColor, Properties.BackgroundColor, Properties.Sequence, minecraftState.Player.Absorption, minecraftState.Player.AbsorptionMax, Properties.GradualProgress ? Settings.PercentEffectType.Progressive_Gradual : Settings.PercentEffectType.Progressive);
+                EffectLayer.PercentEffect(Properties.AbsorptionHealthColor, Properties.BackgroundColor, Properties.Sequence, minecraftState.Player.Absorption, minecraftState.Player.AbsorptionMax, Properties.GradualProgress ? PercentEffectType.Progressive_Gradual : PercentEffectType.Progressive);
 
             return EffectLayer;
         }

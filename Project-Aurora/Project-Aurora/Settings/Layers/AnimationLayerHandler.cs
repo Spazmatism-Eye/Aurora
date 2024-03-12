@@ -1,22 +1,22 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Aurora.Settings.Overrides.Logic;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using Aurora.Modules;
-using Aurora.Modules.Inputs;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Settings.Overrides.Logic;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers
+namespace AuroraRgb.Settings.Layers
 {
     public class AnimationLayerHandlerProperties : LayerHandlerProperties2Color<AnimationLayerHandlerProperties>
     {

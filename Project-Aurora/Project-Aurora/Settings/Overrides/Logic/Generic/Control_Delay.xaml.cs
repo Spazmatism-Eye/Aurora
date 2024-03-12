@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace Aurora.Settings.Overrides.Logic.Generic {
+namespace AuroraRgb.Settings.Overrides.Logic.Generic {
 
     public partial class Control_Delay : UserControl {
         public Control_Delay() {

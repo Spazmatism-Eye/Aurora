@@ -1,9 +1,3 @@
-using Aurora.Profiles.Desktop;
-using Aurora.Profiles.Generic_Application;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,11 +9,17 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Modules;
-using Aurora.Modules.GameStateListen;
-using Aurora.Modules.ProcessMonitor;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Profiles.Desktop;
+using AuroraRgb.Profiles.Generic_Application;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
+using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 public sealed class LightingStateManager
 {
@@ -599,7 +599,7 @@ public class LayerHandlerMeta
         Type = type;
         // if the layer is in the Aurora.Settings.Layers namespace, make the IsDefault true unless otherwise specified.
         // If it is in another namespace, it's probably a custom application layer and so make IsDefault false unless otherwise specified
-        IsDefault = attribute?.IsDefault ?? type.Namespace == "Aurora.Settings.Layers";
+        IsDefault = attribute?.IsDefault ?? type.Namespace == "AuroraRgb.Settings.Layers";
         Order = attribute?.Order ?? 0;
     }
 

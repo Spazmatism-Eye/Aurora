@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI.Nodes;

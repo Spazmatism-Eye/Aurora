@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Aurora.Profiles.EliteDangerous.GSI;
-using Aurora.Profiles.EliteDangerous.GSI.Nodes;
-using Aurora.Profiles.EliteDangerous.Layers;
-using Aurora.Utils;
+using AuroraRgb.Profiles.EliteDangerous.GSI;
+using AuroraRgb.Profiles.EliteDangerous.GSI.Nodes;
+using AuroraRgb.Profiles.EliteDangerous.Layers;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.EliteDangerous
+namespace AuroraRgb.Profiles.EliteDangerous
 {
     public class CommandColors
     {

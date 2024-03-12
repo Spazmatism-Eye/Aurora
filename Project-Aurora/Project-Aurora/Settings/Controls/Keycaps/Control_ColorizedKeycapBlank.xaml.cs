@@ -4,10 +4,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Aurora.Settings.Layouts;
+using AuroraRgb.Settings.Layouts;
 using Common.Devices;
 
-namespace Aurora.Settings.Controls.Keycaps;
+namespace AuroraRgb.Settings.Controls.Keycaps;
 
 /// <summary>
 /// Interaction logic for Control_ColorizedKeycapBlank.xaml

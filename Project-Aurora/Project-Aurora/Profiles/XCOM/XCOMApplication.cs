@@ -1,7 +1,7 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.XCOM;
+namespace AuroraRgb.Profiles.XCOM;
 
 public class XCOM : Application
 {

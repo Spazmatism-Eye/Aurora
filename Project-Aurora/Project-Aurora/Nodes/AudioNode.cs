@@ -1,6 +1,6 @@
 ﻿using NAudio.CoreAudioApi;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 public class AudioNode : Node
 {

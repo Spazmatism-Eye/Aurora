@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using RazerSdkReader.Structures;
 
-namespace Aurora.Modules.Razer;
+namespace AuroraRgb.Modules.Razer;
 
 public class ChromaAppChangedEventArgs : EventArgs
 {
@@ -92,7 +92,7 @@ public static class RzHelper
     }
 
     public static bool IsCurrentAppValid()
-        => !string.IsNullOrEmpty(CurrentAppExecutable) && CurrentAppExecutable != "Aurora.exe";
+        => !string.IsNullOrEmpty(CurrentAppExecutable) && CurrentAppExecutable != Global.AuroraExe;
 
     public static void Initialize()
     {

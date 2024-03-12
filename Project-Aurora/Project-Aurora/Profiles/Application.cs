@@ -11,13 +11,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using Aurora.EffectsEngine;
-using Aurora.Scripts.VoronScripts;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
-using Aurora.Vorons;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
+using AuroraRgb.Vorons;
 using Common.Utils;
 using IronPython.Hosting;
 using IronPython.Runtime.Types;
@@ -25,10 +23,10 @@ using JetBrains.Annotations;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using EnumConverter = Aurora.Utils.EnumConverter;
+using EnumConverter = AuroraRgb.Utils.EnumConverter;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
 public class Application : ObjectSettings<ApplicationSettings>, ILightEvent, INotifyPropertyChanged

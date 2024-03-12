@@ -12,20 +12,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Amib.Threading;
-using Aurora.EffectsEngine;
-using Aurora.Modules;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Profiles;
-using Aurora.Settings.Layers.Ambilight;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Settings.Overrides;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Ambilight;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Utils;
 using Common.Utils;
 using Newtonsoft.Json;
 using PropertyChanged;
 using Point = System.Drawing.Point;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 #region Enums
 public enum AmbilightType

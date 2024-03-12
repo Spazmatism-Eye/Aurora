@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Common.Utils;
 
-namespace Aurora.EffectsEngine.Animations
+namespace AuroraRgb.EffectsEngine.Animations
 {
     public class AnimationLine : AnimationFrame
     {

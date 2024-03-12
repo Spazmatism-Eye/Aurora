@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public class Tree<T>(T rootNode) where T : notnull
 {

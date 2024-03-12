@@ -7,15 +7,15 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Aurora.EffectsEngine;
-using Aurora.Utils;
-using ColorBox;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Utils;
+using ColorBox.Implementation;
 using Xceed.Wpf.Toolkit;
 using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 /// <summary>
 /// Interaction logic for Control_EqualizerLayer.xaml
@@ -107,7 +107,7 @@ public partial class ControlEqualizerLayer
 
     private void Gradient_editor_BrushChanged(object? sender, BrushChangedEventArgs e)
     {
-        if (IsLoaded && _settingsSet && DataContext is EqualizerLayerHandler && sender is ColorBox.ColorBox box)
+        if (IsLoaded && _settingsSet && DataContext is EqualizerLayerHandler && sender is ColorBox.Implementation.ColorBox box)
             ((EqualizerLayerHandler)DataContext).Properties.Gradient = new EffectBrush(box.Brush);
     }
 

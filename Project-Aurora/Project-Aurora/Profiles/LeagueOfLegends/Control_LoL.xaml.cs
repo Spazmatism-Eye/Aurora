@@ -1,12 +1,10 @@
-﻿using Aurora.Controls;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.LeagueOfLegends
+namespace AuroraRgb.Profiles.LeagueOfLegends
 {
     /// <summary>
     /// Interaction logic for Control_LoL.xaml

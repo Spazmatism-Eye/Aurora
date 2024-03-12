@@ -1,8 +1,7 @@
-﻿using Aurora.Profiles.RocketLeague.GSI.Nodes;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using AuroraRgb.Profiles.RocketLeague.GSI.Nodes;
 
-namespace Aurora.Profiles.RocketLeague.GSI
+namespace AuroraRgb.Profiles.RocketLeague.GSI
 {
     public enum RLStatus
     {

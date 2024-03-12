@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Common.Devices;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Window_VariableRegistryEditor.xaml

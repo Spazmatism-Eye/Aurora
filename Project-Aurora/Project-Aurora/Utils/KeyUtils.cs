@@ -1,13 +1,13 @@
-﻿using Aurora.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using AuroraRgb.Settings;
 using Common.Devices;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 /// <summary>
 /// A class for Utilities pertaining to keys

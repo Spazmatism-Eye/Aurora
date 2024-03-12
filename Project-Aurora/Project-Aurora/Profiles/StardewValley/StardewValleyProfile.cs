@@ -1,13 +1,13 @@
-﻿using Aurora.EffectsEngine.Animations;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using Aurora.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Utils;
 using DK = Common.Devices.DeviceKeys;
 
-namespace Aurora.Profiles.StardewValley
+namespace AuroraRgb.Profiles.StardewValley
 {
     public class StardewValleyProfile : ApplicationProfile
     {
@@ -79,7 +79,7 @@ namespace Aurora.Profiles.StardewValley
                     Properties = new SimpleParticleLayerProperties()
                     {
                         _SpawnLocation = ParticleSpawnLocations.TopEdge,
-                        _ParticleColorStops = new Utils.ColorStopCollection
+                        _ParticleColorStops = new ColorStopCollection
                         {
                             { 0f, Color.FromArgb(255, 255, 131, 65) },
                             { 1f, Color.FromArgb(255, 255, 131, 65) }
@@ -110,7 +110,7 @@ namespace Aurora.Profiles.StardewValley
                     Properties = new SimpleParticleLayerProperties()
                     {
                         _SpawnLocation = ParticleSpawnLocations.TopEdge,
-                        _ParticleColorStops = new Utils.ColorStopCollection
+                        _ParticleColorStops = new ColorStopCollection
                         {
                             { 0f, Color.Blue },
                             { 1f, Color.Blue }
@@ -141,7 +141,7 @@ namespace Aurora.Profiles.StardewValley
                     Properties = new SimpleParticleLayerProperties()
                     {
                         _SpawnLocation = ParticleSpawnLocations.TopEdge,
-                        _ParticleColorStops = new Utils.ColorStopCollection
+                        _ParticleColorStops = new ColorStopCollection
                         {
                             { 0f, Color.White },
                             { 1f, Color.White }

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Lombok.NET;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public partial class UpdateCleanup : AuroraModule
 {
@@ -20,14 +20,13 @@ public partial class UpdateCleanup : AuroraModule
         }
         CleanOldLogiDll();
         CleanLogs();
+        CleanOldExe();
         return Task.CompletedTask;
     }
 
     private static void CleanOldLogiDll()
     {
-        var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        Directory.SetCurrentDirectory(path);
-        var logiDll = Path.Combine(path, "LogitechLed.dll");
+        var logiDll = Path.Combine(Global.ExecutingDirectory, "LogitechLed.dll");
         if (File.Exists(logiDll))
             File.Delete(logiDll);
     }
@@ -51,6 +50,15 @@ public partial class UpdateCleanup : AuroraModule
             {
                 Global.logger.Error(e, "Failed to delete log: {File}", file);
             }
+        }
+    }
+
+    private static void CleanOldExe()
+    {
+        var oldExe = Path.Combine(Global.ExecutingDirectory, "Aurora.exe");
+        if (File.Exists(oldExe))
+        {
+            File.Delete(oldExe);
         }
     }
 

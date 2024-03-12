@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Drawing;
+using AuroraRgb.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 public class ColorZone
@@ -26,7 +27,7 @@ public class ColorZone
 
     private void GenerateRandomColor()
     {
-        Random r = new Random(Utils.Time.GetSeconds());
+        Random r = new Random(Time.GetSeconds());
         Color = Color.FromArgb(r.Next(255), r.Next(255), r.Next(255));
     }
 

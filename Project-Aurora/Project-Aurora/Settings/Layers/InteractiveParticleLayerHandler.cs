@@ -1,11 +1,11 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using Aurora.Modules;
-using Aurora.Modules.Inputs;
-using Aurora.Profiles;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Profiles;
 using Common.Devices;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 [LayerHandlerMeta(Name = "Particle (Interactive)", IsDefault = true)]
 public sealed class InteractiveParticleLayerHandler : SimpleParticleLayerHandler {

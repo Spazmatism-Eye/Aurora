@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System;
-using System.Collections;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
+using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles.Payday_2.GSI.Nodes
+namespace AuroraRgb.Profiles.Payday_2.GSI.Nodes
 {
     /// <summary>
     /// Information about players in the lobby

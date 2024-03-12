@@ -1,15 +1,15 @@
-<UserControl  x:Class="Aurora.Settings.Layers.Controls.ControlEqualizerLayer"
+<UserControl  x:Class="AuroraRgb.Settings.Layers.Controls.ControlEqualizerLayer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:ncore="http://schemas.ncore.com/wpf/xaml/colorbox"
-             xmlns:u="clr-namespace:Aurora.Utils"
-             xmlns:local="clr-namespace:Aurora.Settings.Layers"
-             xmlns:c="clr-namespace:Aurora.Controls"
-             xmlns:aurora="clr-namespace:Aurora"
-             xmlns:audioCapture="clr-namespace:Aurora.Modules.AudioCapture"
+             xmlns:aurora="clr-namespace:AuroraRgb"
+             xmlns:utils="clr-namespace:AuroraRgb.Utils"
+             xmlns:layers="clr-namespace:AuroraRgb.Settings.Layers"
+             xmlns:implementation="clr-namespace:ColorBox.Implementation;assembly=ColorBox"
+             xmlns:audioCapture="clr-namespace:AuroraRgb.Modules.AudioCapture"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <aurora:Global x:Key="Global"/>
@@ -41,13 +41,13 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" TextWrapping="Wrap" Text="Equalizer Effect Type: " />
-            <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" x:Name="eq_type" ItemsSource="{u:EnumToItemsSource {x:Type local:EqualizerType}}" DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="eq_type_SelectionChanged" />
+            <ComboBox Grid.Row="0" Grid.Column="1" Margin="3" x:Name="eq_type" ItemsSource="{utils:EnumToItemsSource {x:Type layers:EqualizerType}}" DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="eq_type_SelectionChanged" />
 
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" TextWrapping="Wrap" Text="View Type: " />
-            <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" x:Name="eq_view_type" ItemsSource="{u:EnumToItemsSource {x:Type local:EqualizerPresentationType}}" DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="eq_view_type_SelectionChanged" />
+            <ComboBox Grid.Row="1" Grid.Column="1" Margin="3" x:Name="eq_view_type" ItemsSource="{utils:EnumToItemsSource {x:Type layers:EqualizerPresentationType}}" DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="eq_view_type_SelectionChanged" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Background Mode:" />
-            <ComboBox Grid.Row="2" Grid.Column="1" Margin="3" x:Name="eq_background_mode" ItemsSource="{u:EnumToItemsSource {x:Type local:EqualizerBackgroundMode}}" DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="eq_background_mode_SelectionChanged" />
+            <ComboBox Grid.Row="2" Grid.Column="1" Margin="3" x:Name="eq_background_mode" ItemsSource="{utils:EnumToItemsSource {x:Type layers:EqualizerBackgroundMode}}" DisplayMemberPath="Text" SelectedValuePath="Value" SelectionChanged="eq_background_mode_SelectionChanged" />
 
             <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Background Color:" />
             <xctk:ColorPicker Grid.Row="3" Grid.Column="1" Margin="3" x:Name="Clr_dim_color" ColorMode="ColorCanvas" SelectedColorChanged="Clr_dim_color_SelectedColorChanged" UsingAlphaChannel="True" />
@@ -59,7 +59,7 @@
             <xctk:ColorPicker Grid.Row="5" Grid.Column="1" Margin="3" x:Name="Clr_secondary_color" ColorMode="ColorCanvas" SelectedColorChanged="Clr_secondary_color_SelectedColorChanged" UsingAlphaChannel="True" />
 
             <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" TextWrapping="Wrap" Text="Gradient (Linear Only): " />
-            <ncore:ColorBox Grid.Row="6" Grid.Column="1" Margin="3" x:Name="gradient_editor" BrushChanged="Gradient_editor_BrushChanged" />
+            <implementation:ColorBox Grid.Row="6" Grid.Column="1" Margin="3" x:Name="gradient_editor" BrushChanged="Gradient_editor_BrushChanged" />
 
             <Button Grid.Row="7" Grid.Column="0" Margin="3" x:Name="Button_SetGradientRainbow" Content="Set to Rainbow" Click="Button_SetGradientRainbow_Click" />
             <Button Grid.Row="7" Grid.Column="1" Margin="3" x:Name="Button_SetGradientRainbowLoop" Content="Set to Rainbow (Seamless)" Click="Button_SetGradientRainbowLoop_Click" />
@@ -90,7 +90,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="3,3,0,3" HorizontalAlignment="Left" Text="Frequencies" Width="63" />
-            <Image Grid.Row="0" Grid.Column="1" Margin="3" Width="20" Height="20" ToolTip="There must be at least 2 frequencies to sample between" Source="/Aurora;component/Resources/info.png" ToolTipService.InitialShowDelay="0" />
+            <Image Grid.Row="0" Grid.Column="1" Margin="3" Width="20" Height="20" ToolTip="There must be at least 2 frequencies to sample between" Source="/AuroraRgb;component/Resources/info.png" ToolTipService.InitialShowDelay="0" />
 
             <ListView Grid.Row="1" Grid.Column="0" Grid.RowSpan="5" x:Name="lstbx_frequencies">
                 <ListBox.ItemTemplate>
@@ -110,10 +110,10 @@
             <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" Text="Hz" />
 
             <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" x:Name="btn_AddFreq" Click="btn_AddFreq_Click">
-                <Image Source="/Aurora;component/Resources/Layers_Add.png" Margin="2,0" Width="18" Height="18" />
+                <Image Source="/AuroraRgb;component/Resources/Layers_Add.png" Margin="2,0" Width="18" Height="18" />
             </Button>
             <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" x:Name="btn_DeleteFreq" Click="btn_DeleteFreq_Click">
-                <Image Source="/Aurora;component/Resources/Layers_Remove.png" Margin="2,0" Width="18" Height="18" />
+                <Image Source="/AuroraRgb;component/Resources/Layers_Remove.png" Margin="2,0" Width="18" Height="18" />
             </Button>
 
         </Grid>
@@ -126,7 +126,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Height="28px" Text="Key Sequence" Margin="3" />
-                <c:KeySequence Grid.Row="1" x:Name="affectedKeys" Title="Affected Rectangle" RecordingTag="EqAffectedRect" SequenceUpdated="KeySequence_keys_SequenceUpdated" />
+                <controls:KeySequence Grid.Row="1" x:Name="affectedKeys" Title="Affected Rectangle" RecordingTag="EqAffectedRect" SequenceUpdated="KeySequence_keys_SequenceUpdated" />
             </Grid>
 
         </Grid>

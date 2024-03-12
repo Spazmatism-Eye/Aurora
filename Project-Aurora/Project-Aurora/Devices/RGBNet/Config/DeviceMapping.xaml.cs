@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using Aurora.Modules.GameStateListen;
+using AuroraRgb.Modules.GameStateListen;
 using Common;
 using Common.Devices;
 using Common.Devices.RGBNet;
 using RGB.NET.Core;
 
-namespace Aurora.Devices.RGBNet.Config;
+namespace AuroraRgb.Devices.RGBNet.Config;
 
 /// <summary>
 /// Interaction logic for AsusConfigWindow.xaml

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Plugin_Example.Layers"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:Controls="clr-namespace:Aurora.Controls;assembly=Aurora"
+             xmlns:Controls="clr-namespace:AuroraRgb.Controls;assembly=AuroraRgb"
              x:Class="Plugin_Example.Layers.Control_ExampleLayer"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <Grid>

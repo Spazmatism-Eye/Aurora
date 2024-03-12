@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using Newtonsoft.Json;
 
-namespace Aurora.EffectsEngine.Animations;
+namespace AuroraRgb.EffectsEngine.Animations;
 
 public class AnimationGradientCircle : AnimationCircle
 {

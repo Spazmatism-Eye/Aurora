@@ -1,7 +1,7 @@
 ﻿using System;
-using Aurora.Settings;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.Witcher3;
+namespace AuroraRgb.Profiles.Witcher3;
 
 public class Witcher3 : Application
 {

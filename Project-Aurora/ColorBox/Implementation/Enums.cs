@@ -9,9 +9,7 @@
 
 ***********************************************************************************/
 
-using System;
-
-namespace ColorBox
+namespace ColorBox.Implementation
 {    
     internal enum SpinDirection
     {

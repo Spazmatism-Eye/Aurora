@@ -1,7 +1,8 @@
 ﻿using System;
-using Aurora.Profiles.ETS2.Layers;
+using AuroraRgb.Profiles.ETS2.Layers;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.ETS2;
+namespace AuroraRgb.Profiles.ETS2;
 
 public class ETS2 : Application {
 
@@ -10,7 +11,7 @@ public class ETS2 : Application {
         ID = "ets2",
         AppID = "227300",
         ProcessNames = new[] { "eurotrucks2.exe" },
-        SettingsType = typeof(Settings.FirstTimeApplicationSettings),
+        SettingsType = typeof(FirstTimeApplicationSettings),
         ProfileType = typeof(ETS2Profile),
         OverviewControlType = typeof(Control_ETS2),
         GameStateType = typeof(GSI.GameState_ETS2),

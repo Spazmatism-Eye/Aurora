@@ -5,17 +5,17 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
-using Aurora.Controls;
-using Aurora.Devices;
-using Aurora.Devices.RGBNet.Config;
-using Aurora.Modules;
-using Aurora.Modules.GameStateListen;
-using Aurora.Modules.HardwareMonitor;
+using AuroraRgb.Controls;
+using AuroraRgb.Devices;
+using AuroraRgb.Devices.RGBNet.Config;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Modules.HardwareMonitor;
 using RazerSdkReader;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// Interaction logic for Control_Settings.xaml

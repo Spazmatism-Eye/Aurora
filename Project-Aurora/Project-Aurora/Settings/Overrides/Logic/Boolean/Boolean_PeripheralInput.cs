@@ -1,15 +1,15 @@
-﻿using Aurora.Profiles;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Controls;
-using Aurora.Modules;
-using Aurora.Utils;
+using AuroraRgb.Controls;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using Keys = System.Windows.Forms.Keys;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Condition that is true when a specific keyboard button is held down.

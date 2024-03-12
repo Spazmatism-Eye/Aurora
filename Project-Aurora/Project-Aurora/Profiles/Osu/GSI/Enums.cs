@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Osu.GSI {
+﻿namespace AuroraRgb.Profiles.Osu.GSI {
     public enum OsuStatus {
         NoFoundProcess = 1,
         Unkonwn = 2,

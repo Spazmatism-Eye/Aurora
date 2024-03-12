@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.EffectsEngine;
-using ColorBox;
+using AuroraRgb.EffectsEngine;
+using ColorBox.Implementation;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 /// <summary>
 /// Interaction logic for Control_GradientLayer.xaml
@@ -55,7 +55,7 @@ public partial class Control_GradientLayer
 
     private void Gradient_editor_BrushChanged(object? sender, BrushChangedEventArgs e)
     {
-        if (IsLoaded && _settingsSet && DataContext is GradientLayerHandler && sender is ColorBox.ColorBox colorBox)
+        if (IsLoaded && _settingsSet && DataContext is GradientLayerHandler && sender is ColorBox.Implementation.ColorBox colorBox)
             ((GradientLayerHandler)DataContext).Properties.GradientConfig.Brush = new EffectBrush(colorBox.Brush);
     }
 

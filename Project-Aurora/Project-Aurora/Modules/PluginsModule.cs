@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Aurora.Settings;
+using AuroraRgb.Settings;
 using Lombok.NET;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class PluginsModule : AuroraModule
 {

@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.EffectsEngine.Animations
+namespace AuroraRgb.EffectsEngine.Animations
 {
     /// <summary>
     /// Enum list for different frame transition types

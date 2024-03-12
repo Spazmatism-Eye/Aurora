@@ -1,18 +1,18 @@
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Modules.Razer;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules.Razer;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
 using Common.Devices;
 using Common.Utils;
+using Newtonsoft.Json;
 using RazerSdkReader.Structures;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class RazerLayerHandlerProperties : LayerHandlerProperties<RazerLayerHandlerProperties>
 {

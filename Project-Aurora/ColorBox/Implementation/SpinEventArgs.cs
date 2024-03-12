@@ -11,7 +11,7 @@
 
 using System.Windows;
 
-namespace ColorBox
+namespace ColorBox.Implementation
 {
     class SpinEventArgs : RoutedEventArgs
     {

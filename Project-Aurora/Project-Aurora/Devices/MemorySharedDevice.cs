@@ -6,7 +6,7 @@ using Common;
 using Common.Data;
 using Common.Devices;
 
-namespace Aurora.Devices;
+namespace AuroraRgb.Devices;
 
 public sealed class MemorySharedDevice : IDevice
 {

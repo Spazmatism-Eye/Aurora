@@ -17,16 +17,15 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using Aurora.EffectsEngine;
-using Aurora.Modules;
-using Aurora.Profiles;
-using Aurora.Scripts.VoronScripts;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Common.Utils;
 
-namespace Aurora.Vorons;
+namespace AuroraRgb.Vorons;
 
 public class PingEffect : IEffectScript
 {

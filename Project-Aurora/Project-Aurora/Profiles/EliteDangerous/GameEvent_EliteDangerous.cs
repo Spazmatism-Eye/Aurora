@@ -4,15 +4,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using Aurora.Modules;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Profiles.EliteDangerous.GSI;
-using Aurora.Profiles.EliteDangerous.GSI.Nodes;
-using Aurora.Profiles.EliteDangerous.Helpers;
-using Aurora.Profiles.EliteDangerous.Journal;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles.EliteDangerous.GSI;
+using AuroraRgb.Profiles.EliteDangerous.GSI.Nodes;
+using AuroraRgb.Profiles.EliteDangerous.Helpers;
+using AuroraRgb.Profiles.EliteDangerous.Journal;
+using AuroraRgb.Profiles.Generic;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.EliteDangerous;
+namespace AuroraRgb.Profiles.EliteDangerous;
 
 public class GameEvent_EliteDangerous : GameEvent_Generic
 {

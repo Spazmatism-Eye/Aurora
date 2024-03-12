@@ -1,11 +1,11 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Modules;
-using Aurora.Profiles;
-using Aurora.Utils;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic.Number {
+namespace AuroraRgb.Settings.Overrides.Logic.Number {
 
     /// <summary>
     /// An evaluatable that returns the time since the user has pressed a keyboard key or clicked the mouse.

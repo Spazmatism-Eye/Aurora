@@ -1,16 +1,16 @@
-﻿<Application x:Class="Aurora.App"
+﻿<Application x:Class="AuroraRgb.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
-             xmlns:u="clr-namespace:Aurora.Utils"
+             xmlns:utils="clr-namespace:AuroraRgb.Utils"
              DispatcherUnhandledException="App_DispatcherUnhandledException"
              ShutdownMode="OnExplicitShutdown"
              >
     <Application.Resources>
         <ResourceDictionary>
             <!-- Global converters -->
-            <u:DrawingMediaColorConverter x:Key="DrawingToMediaColorConv" />
-            <u:EffectMediaBrushConverter x:Key="EffectToMediaBrushConv" />
+            <utils:DrawingMediaColorConverter x:Key="DrawingToMediaColorConv" />
+            <utils:EffectMediaBrushConverter x:Key="EffectToMediaBrushConv" />
 
             <!-- Dictionary containing the colors of the evalutable presenters for each type of override type. -->
             <ResourceDictionary x:Key="OverridesTypeColors">

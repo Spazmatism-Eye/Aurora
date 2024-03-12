@@ -5,11 +5,11 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Newtonsoft.Json;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public static class ConfigManager
 {

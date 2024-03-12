@@ -1,14 +1,9 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.Dota_2
+namespace AuroraRgb.Profiles.Dota_2
 {
     public class Dota2Profile : ApplicationProfile
     {

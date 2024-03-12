@@ -7,7 +7,7 @@ using System.Threading;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
-namespace Aurora.Modules.AudioCapture;
+namespace AuroraRgb.Modules.AudioCapture;
 
 /// <summary>
 /// Utility class to make it easier to manage dealing with audio devices and input.

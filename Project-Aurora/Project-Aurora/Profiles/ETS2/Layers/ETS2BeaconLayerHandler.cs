@@ -1,17 +1,17 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.ETS2.GSI;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.ETS2.GSI;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 using Common.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.ETS2.Layers {
+namespace AuroraRgb.Profiles.ETS2.Layers {
     public class ETS2BeaconLayerProperties : LayerHandlerProperties<ETS2BeaconLayerProperties> {
         public ETS2_BeaconStyle? _BeaconStyle { get; set; }
 

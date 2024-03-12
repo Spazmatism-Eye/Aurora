@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Aurora.EffectsEngine;
-using Aurora.Settings;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Aurora.Settings.Layers;
+using System.Linq;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.Generic_Application
+namespace AuroraRgb.Profiles.Generic_Application
 {
     public class Event_GenericApplication : GameEvent_Generic
     {
@@ -27,7 +26,7 @@ namespace Aurora.Profiles.Generic_Application
             //this.Application.UpdateEffectScripts(layers);
 
             if ((Global.Configuration.NighttimeEnabled &&
-                Utils.Time.IsCurrentTimeBetween(Global.Configuration.NighttimeStartHour, Global.Configuration.NighttimeStartMinute, Global.Configuration.NighttimeEndHour, Global.Configuration.NighttimeEndMinute)) ||
+                Time.IsCurrentTimeBetween(Global.Configuration.NighttimeStartHour, Global.Configuration.NighttimeStartMinute, Global.Configuration.NighttimeEndHour, Global.Configuration.NighttimeEndMinute)) ||
                 settings._simulateNighttime
                 )
             {

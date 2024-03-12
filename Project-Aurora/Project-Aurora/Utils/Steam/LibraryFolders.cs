@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Aurora.Utils.Steam;
+namespace AuroraRgb.Utils.Steam;
 
 [JsonObject]
 public class SteamLibraryFolder

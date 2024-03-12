@@ -12,7 +12,7 @@ using Common.Devices;
 using Xceed.Wpf.Toolkit;
 using MediaColor = System.Windows.Media.Color;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_VariableRegistryItem.xaml
@@ -107,7 +107,7 @@ public partial class Control_VariableRegistryItem
         {
             control = CreateFloatControl();
         }
-        else if (varType == typeof(Aurora.Settings.KeySequence))
+        else if (varType == typeof(Settings.KeySequence))
         {
             control = CreateKeySequenceControl(varTitle);
         }
@@ -214,7 +214,7 @@ public partial class Control_VariableRegistryItem
         var ctrl = new KeySequence
         {
             RecordingTag = varTitle,
-            Sequence = VarRegistry.GetVariable<Aurora.Settings.KeySequence>(VariableName)
+            Sequence = VarRegistry.GetVariable<Settings.KeySequence>(VariableName)
         };
 
         ctrl.SequenceUpdated += VariableChanged;

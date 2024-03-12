@@ -1,8 +1,7 @@
 ﻿using System;
-using Aurora.Profiles.EliteDangerous.GSI.Nodes;
-using Aurora.Profiles.EliteDangerous.Layers;
+using AuroraRgb.Profiles.EliteDangerous.GSI.Nodes;
 
-namespace Aurora.Profiles.EliteDangerous.GSI
+namespace AuroraRgb.Profiles.EliteDangerous.GSI
 {
     public class GameStateCondition
     {

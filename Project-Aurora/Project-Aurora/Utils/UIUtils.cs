@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Aurora.Devices;
 using Common.Devices;
 
-namespace Aurora.Utils
+namespace AuroraRgb.Utils
 {
     public static class UIUtils
     {

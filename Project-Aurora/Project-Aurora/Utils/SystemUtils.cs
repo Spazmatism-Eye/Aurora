@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using Microsoft.Win32;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static class SystemUtils
 {

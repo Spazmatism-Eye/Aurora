@@ -1,4 +1,4 @@
-﻿namespace Aurora.Settings.Layouts;
+﻿namespace AuroraRgb.Settings.Layouts;
 
 public enum KeyboardRegion
 {

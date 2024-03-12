@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Aurora.Settings.Layers.Ambilight;
+namespace AuroraRgb.Settings.Layers.Ambilight;
 
 internal sealed class GdiScreenCapture : IScreenCapture
 {

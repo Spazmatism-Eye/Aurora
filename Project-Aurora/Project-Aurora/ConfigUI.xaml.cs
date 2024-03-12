@@ -15,26 +15,26 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Aurora.Controls;
-using Aurora.Devices;
-using Aurora.Modules.GameStateListen;
-using Aurora.Profiles;
-using Aurora.Profiles.Aurora_Wrapper;
-using Aurora.Profiles.Generic_Application;
-using Aurora.Settings;
-using Aurora.Settings.Controls;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.Controls;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Profiles;
+using AuroraRgb.Profiles.Aurora_Wrapper;
+using AuroraRgb.Profiles.Generic_Application;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Controls;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common;
 using PropertyChanged;
 using RazerSdkReader;
-using Application = Aurora.Profiles.Application;
+using Application = AuroraRgb.Profiles.Application;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
 using Timer = System.Timers.Timer;
 
-namespace Aurora;
+namespace AuroraRgb;
 
 [DoNotNotify]
 partial class ConfigUI : INotifyPropertyChanged

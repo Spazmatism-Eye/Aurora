@@ -1,5 +1,4 @@
-﻿using Aurora.Settings;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
@@ -7,8 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Settings;
 
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     /// <summary>
     /// Interaction logic for LayerEditor.xaml

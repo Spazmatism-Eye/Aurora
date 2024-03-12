@@ -1,14 +1,15 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 /// <summary>
 /// Interaction logic for Control_ScriptLayer.xaml
 /// </summary>
 public partial class Control_ScriptLayer
 {
-    private Profiles.Application Application { get; set; }
+    private Application Application { get; set; }
 
     public Control_ScriptLayer()
     {
@@ -22,7 +23,7 @@ public partial class Control_ScriptLayer
         UpdateScriptSettings();
     }
 
-    public void SetProfile(Profiles.Application application)
+    public void SetProfile(Application application)
     {
         cboScripts.ItemsSource = application.EffectScripts.Keys;
         cboScripts.IsEnabled = application.EffectScripts.Keys.Count > 0;

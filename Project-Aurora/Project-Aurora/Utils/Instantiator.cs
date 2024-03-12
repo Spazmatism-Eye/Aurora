@@ -2,7 +2,7 @@
 using System.Reflection;
 using static System.Linq.Expressions.Expression;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     // Using Activator.CreateInstance is slower than using a compiled LINQ expression: https://stackoverflow.com/a/16162809
     // These utility classes allow for stictly-typed instantiation of classes, using cached LINQ expressions. The first call to one

@@ -1,11 +1,13 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using System.Drawing;
-using Aurora.Profiles.LeagueOfLegends.GSI.Nodes;
+﻿using System.Drawing;
+using AuroraRgb.Profiles.LeagueOfLegends.GSI.Nodes;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings.Overrides.Logic.Number;
 using DK = Common.Devices.DeviceKeys;
 
-namespace Aurora.Profiles.LeagueOfLegends
+namespace AuroraRgb.Profiles.LeagueOfLegends
 {
     public class LoLGSIProfile : ApplicationProfile
     {

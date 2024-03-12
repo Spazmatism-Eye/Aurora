@@ -1,16 +1,16 @@
-﻿using Aurora.Settings;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Aurora.Devices;
-using Aurora.Modules;
-using Aurora.Settings.Controls;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Controls;
 using Common.Devices;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_DeviceItem.xaml

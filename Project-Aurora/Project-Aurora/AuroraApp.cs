@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Modules;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Settings;
-using Aurora.Settings.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Controls;
+using AuroraRgb.Utils;
 
-namespace Aurora;
+namespace AuroraRgb;
 
 public sealed class AuroraApp : IDisposable
 {

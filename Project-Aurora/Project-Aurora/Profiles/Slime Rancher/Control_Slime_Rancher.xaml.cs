@@ -1,26 +1,10 @@
-using Aurora.Profiles.Slime_Rancher.GSI;
-using Aurora.Profiles.Slime_Rancher.GSI.Nodes;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Xceed.Wpf.Toolkit;
+using AuroraRgb.Profiles.Slime_Rancher.GSI;
+using AuroraRgb.Profiles.Slime_Rancher.GSI.Nodes;
 
-namespace Aurora.Profiles.Slime_Rancher
+namespace AuroraRgb.Profiles.Slime_Rancher
 {
     /// <summary>
     /// Interaction logic for Control_Slime_Rancher.xaml

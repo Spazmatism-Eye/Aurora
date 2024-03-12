@@ -5,12 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils;
-using Aurora.Utils.IpApi;
+using AuroraRgb.Utils;
+using AuroraRgb.Utils.IpApi;
 using Microsoft.Win32.TaskScheduler;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 public partial class Control_SettingsGeneral
 {

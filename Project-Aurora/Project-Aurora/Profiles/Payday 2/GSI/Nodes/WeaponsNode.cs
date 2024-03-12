@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using Aurora.Nodes;
+﻿using System.Collections.Generic;
+using AuroraRgb.Nodes;
+using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles.Payday_2.GSI.Nodes
+namespace AuroraRgb.Profiles.Payday_2.GSI.Nodes
 {
     public class WeaponsNode : Node
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Aurora.Profiles.Logitech;
+namespace AuroraRgb.Profiles.Logitech;
 
 public partial class Control_Logitech : INotifyPropertyChanged
 {

@@ -7,7 +7,7 @@ using System.Windows;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 
-namespace Aurora.Settings.Layers.Ambilight;
+namespace AuroraRgb.Settings.Layers.Ambilight;
 
 internal sealed class DxScreenCapture : IScreenCapture
 {

@@ -6,12 +6,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Navigation;
-using Aurora.Settings;
-using Aurora.Utils;
-using Aurora.Utils.Steam;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Profiles.Witcher3
+namespace AuroraRgb.Profiles.Witcher3
 {
     /// <summary>
     /// Interaction logic for Control_Witcher3.xaml

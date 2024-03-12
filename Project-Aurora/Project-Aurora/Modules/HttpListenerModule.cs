@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Modules.GameStateListen;
+using AuroraRgb.Modules.GameStateListen;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class HttpListenerModule : AuroraModule
 {

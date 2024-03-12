@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Profiles.Dota_2.Layers;
+namespace AuroraRgb.Profiles.Dota_2.Layers;
 
 /// <summary>
 /// Interaction logic for Control_Dota2KillstreakLayer.xaml

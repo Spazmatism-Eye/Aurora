@@ -6,10 +6,10 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Aurora.Modules.OnlineConfigs.Model;
-using Aurora.Utils;
+using AuroraRgb.Modules.OnlineConfigs.Model;
+using AuroraRgb.Utils;
 
-namespace Aurora.Modules.OnlineConfigs;
+namespace AuroraRgb.Modules.OnlineConfigs;
 
 [JsonSerializable(typeof(OnlineSettingsMeta))]
 [JsonSerializable(typeof(DeviceTooltips))]

@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace Aurora.Utils.IpApi;
+namespace AuroraRgb.Utils.IpApi;
 
 public static class IpApiClient
 {

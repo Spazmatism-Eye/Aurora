@@ -13,9 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 
-namespace Aurora.Vorons.Mathos.Parser;
+namespace AuroraRgb.Vorons.Mathos.Parser;
 
 /// <summary>
 /// This is a mathematical expression parser that allows you to parser a string value,

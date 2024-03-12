@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     /// <summary>
     /// A GridHelper utility that provides "Columns" and "Rows" attached properties to the Grid control.

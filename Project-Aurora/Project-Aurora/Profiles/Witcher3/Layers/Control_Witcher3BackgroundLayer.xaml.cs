@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Profiles.Witcher3.Layers;
+namespace AuroraRgb.Profiles.Witcher3.Layers;
 
 /// <summary>
 /// Interaction logic for Control_Witcher3BackgroundLayer.xaml

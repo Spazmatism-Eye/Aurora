@@ -1,14 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Nodes;
+﻿using System.ComponentModel;
+using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.CSGO.GSI.Nodes
+namespace AuroraRgb.Profiles.CSGO.GSI.Nodes
 {
     /// <summary>
     /// A class representing weapon information

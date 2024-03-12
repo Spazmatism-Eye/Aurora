@@ -3,10 +3,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using Aurora.Settings.Layers;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using PropertyChanged;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 [DoNotNotify]
 public partial class Control_LayerList : INotifyPropertyChanged {
@@ -43,13 +45,13 @@ public partial class Control_LayerList : INotifyPropertyChanged {
 
     #region Properties
     #region FocusedApplication Property
-    public Profiles.Application FocusedApplication {
-        get => (Profiles.Application)GetValue(FocusedApplicationProperty);
+    public Application FocusedApplication {
+        get => (Application)GetValue(FocusedApplicationProperty);
         set => SetValue(FocusedApplicationProperty, value);
     }
 
     public static readonly DependencyProperty FocusedApplicationProperty =
-        DependencyProperty.Register(nameof(FocusedApplication), typeof(Profiles.Application), typeof(Control_LayerList), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(FocusedApplication), typeof(Application), typeof(Control_LayerList), new PropertyMetadata(null));
     #endregion
 
     #region LayerCollection Property
@@ -170,7 +172,7 @@ public partial class Control_LayerList : INotifyPropertyChanged {
     /// When the add button is clicked, adds a new default layer.
     /// </summary>
     private void AddButton_Click(object? sender, EventArgs e) {
-        AddLayer(new Layer("New layer " + Utils.Time.GetMilliSeconds()));
+        AddLayer(new Layer("New layer " + Time.GetMilliSeconds()));
     }
         
     /// <summary>

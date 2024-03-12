@@ -1,7 +1,7 @@
-﻿using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 using Witcher3Gsi;
 
-namespace Aurora.Profiles.Witcher3.GSI.Nodes;
+namespace AuroraRgb.Profiles.Witcher3.GSI.Nodes;
 
 /// <summary>
 /// Class representing player information

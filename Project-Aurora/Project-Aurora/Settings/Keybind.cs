@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Aurora.Modules;
+using AuroraRgb.Modules;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public class Keybind
 {

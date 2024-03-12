@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Subnautica;
+﻿namespace AuroraRgb.Profiles.Subnautica;
 
 public class Subnautica : Application {
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Newtonsoft.Json;
 
-namespace Aurora.EffectsEngine.Animations;
+namespace AuroraRgb.EffectsEngine.Animations;
 
 public class AnimationLines : AnimationFrame
 {

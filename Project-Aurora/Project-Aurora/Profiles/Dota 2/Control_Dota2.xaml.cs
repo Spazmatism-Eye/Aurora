@@ -1,18 +1,14 @@
-﻿using Aurora.Controls;
-using System;
+﻿using System;
 using System.IO;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using Aurora.Devices;
-using Aurora.Settings;
-using Xceed.Wpf.Toolkit;
-using Aurora.Profiles.Dota_2.GSI;
-using Aurora.Utils.Steam;
+using AuroraRgb.Profiles.Dota_2.GSI;
+using AuroraRgb.Profiles.Dota_2.GSI.Nodes;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.Dota_2
+namespace AuroraRgb.Profiles.Dota_2
 {
     /// <summary>
     /// Interaction logic for Control_Dota2.xaml
@@ -58,9 +54,9 @@ namespace Aurora.Profiles.Dota_2
 
             if (!this.preview_team.HasItems)
             {
-                this.preview_team.Items.Add(Aurora.Profiles.Dota_2.GSI.Nodes.PlayerTeam.None);
-                this.preview_team.Items.Add(Aurora.Profiles.Dota_2.GSI.Nodes.PlayerTeam.Dire);
-                this.preview_team.Items.Add(Aurora.Profiles.Dota_2.GSI.Nodes.PlayerTeam.Radiant);
+                this.preview_team.Items.Add(PlayerTeam.None);
+                this.preview_team.Items.Add(PlayerTeam.Dire);
+                this.preview_team.Items.Add(PlayerTeam.Radiant);
             }
         }
 
@@ -118,7 +114,7 @@ namespace Aurora.Profiles.Dota_2
 
         private void preview_team_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            (profile_manager.Config.Event._game_state as GameState_Dota2).Player.Team = (Aurora.Profiles.Dota_2.GSI.Nodes.PlayerTeam)this.preview_team.SelectedItem;
+            (profile_manager.Config.Event._game_state as GameState_Dota2).Player.Team = (PlayerTeam)this.preview_team.SelectedItem;
         }
 
         private void preview_health_slider_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 /// <summary>The valid types of GSI property.</summary>
 public enum GSIPropertyType

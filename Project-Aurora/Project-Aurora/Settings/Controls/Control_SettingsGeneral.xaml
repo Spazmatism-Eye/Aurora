@@ -1,21 +1,21 @@
-﻿<UserControl x:Class="Aurora.Settings.Controls.Control_SettingsGeneral"
+﻿<UserControl x:Class="AuroraRgb.Settings.Controls.Control_SettingsGeneral"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Aurora.Settings"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:utils="clr-namespace:Aurora.Utils"
-             xmlns:audioCapture="clr-namespace:Aurora.Modules.AudioCapture"
-             xmlns:a="clr-namespace:Aurora"
-             xmlns:controls="clr-namespace:Aurora.Settings.Controls"
+             xmlns:utils1="clr-namespace:AuroraRgb.Utils"
+             xmlns:auroraRgb="clr-namespace:AuroraRgb"
+             xmlns:settings="clr-namespace:AuroraRgb.Settings"
+             xmlns:audioCapture="clr-namespace:AuroraRgb.Modules.AudioCapture"
+             xmlns:controls="clr-namespace:AuroraRgb.Settings.Controls"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <utils:StringFormatConverter Format="x {0:0.0}" x:Key="AwayEffectSpeedLabelFormatter" />
-        <utils:StringFormatConverter Format="{}{0:0}%" Multiplier="100" x:Key="PercentageFormatter" />
+        <utils1:StringFormatConverter Format="x {0:0.0}" x:Key="AwayEffectSpeedLabelFormatter" />
+        <utils1:StringFormatConverter Format="{}{0:0}%" Multiplier="100" x:Key="PercentageFormatter" />
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Visible" PanningMode="VerticalOnly">
-        <Grid DataContext="{x:Static a:Global.Configuration}">
+        <Grid DataContext="{x:Static auroraRgb:Global.Configuration}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -140,7 +140,7 @@
 
                 <TextBlock Text="Closing mode:" Margin="178,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <ComboBox SelectedValue="{Binding CloseMode}"
-                          ItemsSource="{utils:EnumToItemsSource {x:Type local:AppExitMode}}" DisplayMemberPath="Text"
+                          ItemsSource="{utils1:EnumToItemsSource {x:Type settings:AppExitMode}}" DisplayMemberPath="Text"
                           SelectedValuePath="Value" Margin="261,35,0,0" Width="147" HorizontalAlignment="Left"
                           VerticalAlignment="Top" />
             </Grid>
@@ -209,7 +209,7 @@
                 <TextBlock Text="Away Effect Type:" Margin="10,12,0,0" HorizontalAlignment="Left"
                            VerticalAlignment="Top" />
                 <ComboBox SelectedValue="{Binding IdleType}"
-                          ItemsSource="{utils:EnumToItemsSource {x:Type local:IdleEffects}}" DisplayMemberPath="Text"
+                          ItemsSource="{utils1:EnumToItemsSource {x:Type settings:IdleEffects}}" DisplayMemberPath="Text"
                           SelectedValuePath="Value" Margin="110,10,0,0" Width="170" HorizontalAlignment="Left"
                           VerticalAlignment="Top" />
                 <TextBlock Text="Delay:" Margin="10,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />

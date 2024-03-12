@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aurora.Profiles.Desktop;
+namespace AuroraRgb.Profiles.Desktop;
 
 public class Desktop : Application {
     public Desktop() : base(new LightEventConfig(new Lazy<LightEvent>(() => new Event_Desktop())) {

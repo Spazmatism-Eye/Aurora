@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-namespace Aurora.Controls.EditorResources
+namespace AuroraRgb.Controls.EditorResources
 {
     public class MoveThumb : Thumb
     {

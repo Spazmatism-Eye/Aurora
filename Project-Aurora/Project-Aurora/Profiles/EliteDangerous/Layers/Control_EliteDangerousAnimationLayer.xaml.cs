@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Aurora.Profiles.EliteDangerous.Layers
+namespace AuroraRgb.Profiles.EliteDangerous.Layers
 {
     /// <summary>
     /// Interaction logic for Control_EliteDangerousAnimationLayer.xaml

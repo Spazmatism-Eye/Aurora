@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 
-namespace Aurora.Modules.ProcessMonitor;
+namespace AuroraRgb.Modules.ProcessMonitor;
 
 public sealed class ActiveProcessMonitor : IDisposable
 {

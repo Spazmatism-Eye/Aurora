@@ -5,7 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public class UltimateListJsonConverter : JsonConverter<IList<dynamic>>
 {

@@ -1,11 +1,11 @@
-﻿using Aurora.Profiles;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic.Boolean;
+namespace AuroraRgb.Settings.Overrides.Logic.Boolean;
 
 /// <summary>
 /// A simple memory gate that can be used for storing a boolean state.

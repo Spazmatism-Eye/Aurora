@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Data;
-using Application = Aurora.Profiles.Application;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     /// <summary>
     /// This class exposes an inherited attached property which allows for providing a cascading application context down to subcontrols.

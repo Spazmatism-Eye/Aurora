@@ -1,13 +1,14 @@
-﻿using Aurora.Settings;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 
-namespace Aurora.Controls {
+namespace AuroraRgb.Controls {
 
     public partial class Control_GradientEditor : UserControl {
 
         public Control_GradientEditor(LayerEffectConfig gradient) {
             InitializeComponent();
-            animTypeCb.ItemsSource = Utils.EnumUtils.GetEnumItemsSource<AnimationType>();
+            animTypeCb.ItemsSource = EnumUtils.GetEnumItemsSource<AnimationType>();
             DataContext = gradient;
         }
     }

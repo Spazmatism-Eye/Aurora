@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
 using System.Windows.Controls;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class BinaryCounterLayerHandlerProperties : LayerHandlerProperties<BinaryCounterLayerHandlerProperties> {
 

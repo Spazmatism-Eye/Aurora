@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
     /// <summary>
     /// Enum listing various logic operators for the string comparison.
     /// </summary>

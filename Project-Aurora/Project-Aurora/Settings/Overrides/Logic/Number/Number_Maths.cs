@@ -1,18 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Profiles;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Overrides.Logic.Number;
+using AuroraRgb.Utils;
 using Common.Utils;
-using Newtonsoft.Json;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     /// <summary>
     /// Evaluatable that performs a binary mathematical operation on two operands.

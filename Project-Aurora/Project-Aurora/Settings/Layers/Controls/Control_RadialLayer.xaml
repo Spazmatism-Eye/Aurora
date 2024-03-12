@@ -1,19 +1,20 @@
-﻿<UserControl  x:Class="Aurora.Settings.Layers.Controls.Control_RadialLayer"
+﻿<UserControl  x:Class="AuroraRgb.Settings.Layers.Controls.Control_RadialLayer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:controls="clr-namespace:Aurora.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ncore="http://schemas.ncore.com/wpf/xaml/colorbox"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:u="clr-namespace:Aurora.Utils"
+             xmlns:utils="clr-namespace:AuroraRgb.Utils"
+             xmlns:implementation="clr-namespace:ColorBox.Implementation;assembly=ColorBox"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="UserControl_Loaded">
     
-    <Grid u:GridHelper.Rows="28px,28px,28px,180px,1*" u:GridHelper.Columns="95px,240px,1*">
+    <Grid utils:GridHelper.Rows="28px,28px,28px,180px,1*" utils:GridHelper.Columns="95px,240px,1*">
         <Label Content="Gradient:" />
-        <ncore:ColorBox x:Name="GradientPicker" BrushChanged="GradientPicker_BrushChanged" Height="28" Grid.Column="1" Margin="0,4" />
+        <implementation:ColorBox x:Name="GradientPicker" BrushChanged="GradientPicker_BrushChanged" Height="28" Grid.Column="1" Margin="0,4" />
 
         <Label Content="Rotation speed:" Grid.Row="1" />
         <xctk:IntegerUpDown Value="{Binding Properties._AnimationSpeed}" Grid.Column="1" Grid.Row="1" Margin="0,4" />

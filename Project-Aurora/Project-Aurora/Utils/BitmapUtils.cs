@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Common.Utils;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static class BitmapUtils
 {

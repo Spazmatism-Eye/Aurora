@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Utils;
 using Newtonsoft.Json;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Aurora.Settings.Layers
+namespace AuroraRgb.Settings.Layers
 {
     public class LockColourLayerHandlerProperties : LayerHandlerProperties2Color<LockColourLayerHandlerProperties>
     {

@@ -1,10 +1,10 @@
-﻿using Aurora.Settings.Layers;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// A control that is capable of rendering the preview of any layer that correctly implements <see cref="INotifyRender"/>.

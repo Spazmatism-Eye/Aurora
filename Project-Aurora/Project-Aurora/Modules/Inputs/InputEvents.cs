@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Linearstar.Windows.RawInput;
 using Linearstar.Windows.RawInput.Native;
-using User32 = Aurora.Utils.User32;
+using User32 = AuroraRgb.Utils.User32;
 
-namespace Aurora.Modules.Inputs;
+namespace AuroraRgb.Modules.Inputs;
 
 /// <summary>
 /// Class for subscribing to various HID input events

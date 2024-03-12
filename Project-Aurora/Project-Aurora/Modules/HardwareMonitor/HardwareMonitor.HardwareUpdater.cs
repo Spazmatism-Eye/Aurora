@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Timers;
 using LibreHardwareMonitor.Hardware;
 
-namespace Aurora.Modules.HardwareMonitor;
+namespace AuroraRgb.Modules.HardwareMonitor;
 
 public partial class HardwareMonitor
 {

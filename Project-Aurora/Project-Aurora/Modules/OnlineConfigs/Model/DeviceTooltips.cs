@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Aurora.Modules.OnlineConfigs.Model;
+namespace AuroraRgb.Modules.OnlineConfigs.Model;
 
 public class DeviceTooltips
 {

@@ -1,15 +1,12 @@
-﻿using System;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Profiles.CSGO.GSI.Nodes;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System.Drawing;
-using System.Windows;
+﻿using System.Drawing;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.CSGO.GSI;
+using AuroraRgb.Profiles.CSGO.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 public class CSGOWinningTeamLayerHandlerProperties : LayerHandlerProperties2Color<CSGOWinningTeamLayerHandlerProperties>
 {

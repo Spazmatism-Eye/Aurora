@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Profiles;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Extends the length of a boolean 'true' state. For example, if the sub-evaluatable evaluated to true for 1 second and this had it's

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Aurora.Settings.Layers.Controls {
+namespace AuroraRgb.Settings.Layers.Controls {
 
     public partial class Control_InteractiveLayer : UserControl {
 

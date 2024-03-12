@@ -1,6 +1,6 @@
-﻿using Aurora.Profiles.Generic.GSI.Nodes;
+﻿using AuroraRgb.Profiles.Generic;
 
-namespace Aurora.Profiles.Osu.GSI {
+namespace AuroraRgb.Profiles.Osu.GSI {
 
     public class GameState_Osu : GameState {
 

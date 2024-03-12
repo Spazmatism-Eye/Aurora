@@ -1,10 +1,10 @@
-﻿using Aurora.EffectsEngine.Animations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Utils;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_AnimationFrameItem.xaml

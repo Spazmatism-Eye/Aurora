@@ -1,7 +1,6 @@
-﻿using Aurora.Profiles.Dota_2.GSI.Nodes;
-using System;
+﻿using AuroraRgb.Profiles.Dota_2.GSI.Nodes;
 
-namespace Aurora.Profiles.Dota_2.GSI
+namespace AuroraRgb.Profiles.Dota_2.GSI
 {
     /// <summary>
     /// A class representing various information retaining to Game State Integration of Dota 2

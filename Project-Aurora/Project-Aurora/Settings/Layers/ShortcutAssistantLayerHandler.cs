@@ -1,20 +1,20 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using Aurora.Modules;
-using Aurora.Modules.Inputs;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Utils;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public enum ShortcutAssistantPresentationType
 {

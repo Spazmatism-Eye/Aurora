@@ -1,11 +1,11 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Utils;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles.Chroma;
 
 public class RazerChromaProfile : ApplicationProfile
 {

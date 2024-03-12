@@ -5,14 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Aurora.Modules.OnlineConfigs;
-using Aurora.Modules.OnlineConfigs.Model;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Utils.IpApi;
+using AuroraRgb.Modules.OnlineConfigs;
+using AuroraRgb.Modules.OnlineConfigs.Model;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Utils.IpApi;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class OnlineSettings(Task<RunningProcessMonitor> runningProcessMonitor)
     : AuroraModule

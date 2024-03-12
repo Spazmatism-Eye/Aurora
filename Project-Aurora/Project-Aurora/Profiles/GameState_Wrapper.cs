@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 using Common.Utils;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 /// <summary>
 /// A class representing various lighting information retaining to the wrapper.

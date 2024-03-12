@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Aurora.Modules.Logitech.Enums;
+using AuroraRgb.Modules.Logitech.Enums;
 using Common.Devices;
 using Microsoft.Collections.Extensions;
 using RGB.NET.Devices.Logitech;
 
-namespace Aurora.Modules.Logitech;
+namespace AuroraRgb.Modules.Logitech;
 
 internal static class LedMapping
 {

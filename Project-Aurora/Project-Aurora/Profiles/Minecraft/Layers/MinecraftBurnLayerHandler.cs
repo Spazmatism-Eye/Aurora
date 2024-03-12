@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles.Minecraft.GSI;
-using Aurora.Settings.Layers;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Profiles.Minecraft.GSI;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.Minecraft.Layers;
+namespace AuroraRgb.Profiles.Minecraft.Layers;
 
 [Obsolete("This layer is obselete and has been replaced by the Overrides system.")]
 public class MinecraftBurnLayerHandler : LayerHandler<LayerHandlerProperties> {

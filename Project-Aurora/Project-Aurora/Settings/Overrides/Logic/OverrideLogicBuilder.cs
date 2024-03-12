@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// This class helps to build override logic instead of needing to manually

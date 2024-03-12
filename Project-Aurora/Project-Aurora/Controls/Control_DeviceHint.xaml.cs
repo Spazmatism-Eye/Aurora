@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 public partial class Control_DeviceHint
 {

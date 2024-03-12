@@ -1,15 +1,12 @@
-﻿using Aurora.Controls;
-using Aurora.Profiles.Payday_2.GSI;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using Aurora.Utils.Steam;
+using AuroraRgb.Profiles.Payday_2.GSI;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.Payday_2
+namespace AuroraRgb.Profiles.Payday_2
 {
     /// <summary>
     /// Interaction logic for Control_PD2.xaml

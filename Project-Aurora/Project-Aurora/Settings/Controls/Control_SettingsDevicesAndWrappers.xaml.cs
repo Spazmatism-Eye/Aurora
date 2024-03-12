@@ -6,18 +6,17 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Aurora.Devices;
-using Aurora.Modules;
-using Aurora.Modules.Logitech;
-using Aurora.Modules.Razer;
-using Aurora.Utils;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Logitech;
+using AuroraRgb.Modules.Razer;
 using Microsoft.Win32;
 using RazerSdkReader;
 using RazerSdkReader.Structures;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 public partial class Control_SettingsDevicesAndWrappers
 {

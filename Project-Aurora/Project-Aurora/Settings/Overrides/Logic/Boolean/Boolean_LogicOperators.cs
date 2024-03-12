@@ -5,11 +5,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Profiles;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using Newtonsoft.Json;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Condition that checks a set of subconditions for atleast one of them being true.

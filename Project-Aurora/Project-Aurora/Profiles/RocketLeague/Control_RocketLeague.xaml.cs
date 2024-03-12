@@ -1,16 +1,13 @@
-﻿using Aurora.Controls;
-using Aurora.Profiles.RocketLeague.GSI;
-using Aurora.Profiles.RocketLeague.GSI.Nodes;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using AuroraRgb.Profiles.RocketLeague.GSI;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Profiles.RocketLeague
+namespace AuroraRgb.Profiles.RocketLeague
 {
     /// <summary>
     /// Interaction logic for Control_RocketLeague.xaml

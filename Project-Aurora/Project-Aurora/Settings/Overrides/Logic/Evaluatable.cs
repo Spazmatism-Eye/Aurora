@@ -1,14 +1,14 @@
-﻿using Aurora.Profiles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using VP = Aurora.Profiles.VariablePath;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Interface that defines a logic operand that can be evaluated into a value. Should also have a Visual control
@@ -113,7 +113,7 @@ public static class EvaluatableHelpers {
     {
         if (@do.GetData(@do.GetFormats()
                 .FirstOrDefault(x => x != "SourcePresenter")) is IEvaluatable data &&
-            (evalType == null || Utils.TypeUtils.GetGenericParentTypes(data.GetType(), typeof(Evaluatable<>))[0] == evalType)) {
+            (evalType == null || TypeUtils.GetGenericParentTypes(data.GetType(), typeof(Evaluatable<>))[0] == evalType)) {
             evaluatable = data;
             source = @do.GetData("SourcePresenter") as Control_EvaluatablePresenter;
             return true;

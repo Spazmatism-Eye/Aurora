@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Aurora.Modules.OnlineConfigs.Model;
+namespace AuroraRgb.Modules.OnlineConfigs.Model;
 
 public class ConflictingProcesses
 {
-    [JsonPropertyName("shutdownAurora")]
+    [JsonPropertyName("shutdownAuroraRgb")]
     public List<ShutdownProcess>? ShutdownAurora { get; set; }
 }
 

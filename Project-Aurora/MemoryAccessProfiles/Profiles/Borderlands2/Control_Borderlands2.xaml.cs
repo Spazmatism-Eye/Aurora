@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using MemoryAccessProfiles.Profiles.Borderlands2.GSI;
-using Application = Aurora.Profiles.Application;
+using Application = AuroraRgb.Profiles.Application;
 
 namespace MemoryAccessProfiles.Profiles.Borderlands2;
 

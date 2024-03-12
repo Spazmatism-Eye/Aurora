@@ -5,7 +5,7 @@ using System.Threading;
 using Common;
 using Common.Devices;
 
-namespace Aurora.Devices;
+namespace AuroraRgb.Devices;
 
 public class SharedDeviceColor : IDisposable
 {

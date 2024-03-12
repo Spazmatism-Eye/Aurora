@@ -1,7 +1,7 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.Serious_Sam_3;
+namespace AuroraRgb.Profiles.Serious_Sam_3;
 
 public class SSam3 : Application
 {

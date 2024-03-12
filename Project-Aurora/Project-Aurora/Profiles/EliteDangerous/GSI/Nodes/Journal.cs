@@ -1,9 +1,10 @@
 ﻿using System;
-using Aurora.Nodes;
-using Aurora.Profiles.EliteDangerous.Journal;
-using Aurora.Profiles.EliteDangerous.Journal.Events;
+using AuroraRgb.Nodes;
+using AuroraRgb.Profiles.EliteDangerous.Journal;
+using AuroraRgb.Profiles.EliteDangerous.Journal.Events;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
+namespace AuroraRgb.Profiles.EliteDangerous.GSI.Nodes
 {
     public enum StarClass
     {
@@ -114,7 +115,7 @@ namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
                         fsdState = FSDState.CountdownHyperspace;
                         try
                         {
-                            jumpStarClass = (StarClass) Enum.Parse(typeof(StarClass), startJump.StarClass, true);
+                            jumpStarClass = (StarClass) Enum.Parse(typeof(StarClass), (string)startJump.StarClass, true);
                         }
                         catch (Exception e)
                         {
@@ -127,7 +128,7 @@ namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
                     }
 
                     SetFsdWaitingCooldown(true);
-                    fsdChargeStartTime = Utils.Time.GetMillisecondsSinceEpoch();
+                    fsdChargeStartTime = Time.GetMillisecondsSinceEpoch();
                     break;
                 case EventType.SupercruiseEntry:
                     ResetFsd();

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles.EliteDangerous.GSI;
-using Aurora.Profiles.EliteDangerous.GSI.Nodes;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Profiles.EliteDangerous.GSI;
+using AuroraRgb.Profiles.EliteDangerous.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.EliteDangerous.Layers;
+namespace AuroraRgb.Profiles.EliteDangerous.Layers;
 
 public enum EliteAnimation
 {

@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Threading;
-using IronPython.Modules;
 
-namespace Aurora.Profiles.EliteDangerous.Helpers
+namespace AuroraRgb.Profiles.EliteDangerous.Helpers
 {
     public class FileWatcher
     {

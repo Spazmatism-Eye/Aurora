@@ -1,11 +1,11 @@
-﻿using Aurora.EffectsEngine.Animations;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System.Drawing;
-using Aurora.EffectsEngine;
+﻿using System.Drawing;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.Osu;
+namespace AuroraRgb.Profiles.Osu;
 
 public class OsuProfile : ApplicationProfile
 {

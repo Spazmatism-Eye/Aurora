@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Common.Devices;
 
-namespace Aurora.Settings.Layouts;
+namespace AuroraRgb.Settings.Layouts;
 
 internal sealed class KeyboardLayout(Dictionary<DeviceKeys, DeviceKeys>? keyConversion, KeyboardKey[]? keys)
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.EffectsEngine
+namespace AuroraRgb.EffectsEngine
 {
 	/// <summary>
 	/// A class that represents a spectrum of colors. After creating an instance, you can then retrieve a blended color within a range of [0.0f, 1.0f].

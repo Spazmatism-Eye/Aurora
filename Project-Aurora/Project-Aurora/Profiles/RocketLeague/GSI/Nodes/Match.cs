@@ -1,5 +1,5 @@
 ﻿
-namespace Aurora.Profiles.RocketLeague.GSI.Nodes
+namespace AuroraRgb.Profiles.RocketLeague.GSI.Nodes
 {
     public enum RLPlaylist
     {

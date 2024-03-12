@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ncore="http://schemas.ncore.com/wpf/xaml/colorbox"
-             xmlns:Controls="clr-namespace:Aurora.Controls"  x:Class="Aurora.Settings.Layers.Controls.Control_GradientFillLayer"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
+             xmlns:implementation="clr-namespace:ColorBox.Implementation;assembly=ColorBox"
+             x:Class="AuroraRgb.Settings.Layers.Controls.Control_GradientFillLayer"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
 
     <Grid>
-        <Controls:KeySequence x:Name="KeySequence_keys" Margin="265,0,0,0" HorizontalAlignment="Left" Width="230" RecordingTag="SolidColorLayer" Title="Affected Keys" SequenceUpdated="KeySequence_keys_SequenceUpdated"/>
+        <controls:KeySequence x:Name="KeySequence_keys" Margin="265,0,0,0" HorizontalAlignment="Left" Width="230" RecordingTag="SolidColorLayer" Title="Affected Keys" SequenceUpdated="KeySequence_keys_SequenceUpdated"/>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gradient (Linear Only): " VerticalAlignment="Top"/>
-        <ncore:ColorBox x:Name="gradient_editor" HorizontalAlignment="Left" Height="80" Margin="0,21,0,0" VerticalAlignment="Top" Width="260" BrushChanged="Gradient_editor_BrushChanged"/>
+        <implementation:ColorBox x:Name="gradient_editor" HorizontalAlignment="Left" Height="80" Margin="0,21,0,0" VerticalAlignment="Top" Width="260" BrushChanged="Gradient_editor_BrushChanged"/>
         <Button x:Name="Button_SetGradientRainbow" Content="Set to Rainbow" HorizontalAlignment="Left" Margin="0,106,0,0" VerticalAlignment="Top" Click="Button_SetGradientRainbow_Click"/>
         <Button x:Name="Button_SetGradientRainbowLoop" Content="Set to Rainbow (Seamless)" Margin="91,106,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="145" Click="Button_SetGradientRainbowLoop_Click"/>
         <TextBlock HorizontalAlignment="Left" Margin="0,133,0,0" TextWrapping="Wrap" Text="Effect Speed: " VerticalAlignment="Top"/>

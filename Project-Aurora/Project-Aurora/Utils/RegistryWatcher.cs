@@ -4,7 +4,7 @@ using System.Security.Principal;
 using System.Windows;
 using Microsoft.Win32;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public class RegistryChangedEventArgs(object data) : EventArgs
 {

@@ -1,17 +1,17 @@
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
-using System.Collections.ObjectModel;
-using System.Collections.Concurrent;
 using System.IO;
 using System.Windows;
-using Aurora.Modules.AudioCapture;
-using Aurora.Settings.Overrides.Logic;
+using AuroraRgb.Modules.AudioCapture;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Utils;
 using Common.Devices;
+using Newtonsoft.Json;
 using Serilog.Events;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 [JsonObject]
 public class Configuration : INotifyPropertyChanged, IAuroraConfig

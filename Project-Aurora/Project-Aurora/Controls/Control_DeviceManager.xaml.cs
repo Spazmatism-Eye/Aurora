@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using Aurora.Devices;
-using Aurora.Modules.GameStateListen;
-using Aurora.Settings;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Settings;
 using Common.Devices;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_DeviceManager.xaml

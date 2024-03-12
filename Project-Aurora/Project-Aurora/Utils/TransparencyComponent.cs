@@ -5,12 +5,11 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Aurora.EffectsEngine;
 using Common;
 using SourceChord.FluentWPF;
-using static Aurora.Utils.Win32Transparency;
+using static AuroraRgb.Utils.Win32Transparency;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public sealed class TransparencyComponent : IDisposable
 {

@@ -1,13 +1,14 @@
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
+using PropertyChanged;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public class ScriptSettings : INotifyPropertyChanged
 {
@@ -50,7 +51,7 @@ public class ApplicationProfile : INotifyPropertyChanged, IDisposable
         TriggerKeybind = new Keybind();
     }
 
-    public void SetApplication(Profiles.Application app)
+    public void SetApplication(Application app)
     {
         foreach (var l in Layers)
             l.SetProfile(app);

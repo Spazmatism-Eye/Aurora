@@ -1,7 +1,7 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.Guild_Wars_2;
+namespace AuroraRgb.Profiles.Guild_Wars_2;
 
 public class GW2 : Application
 {

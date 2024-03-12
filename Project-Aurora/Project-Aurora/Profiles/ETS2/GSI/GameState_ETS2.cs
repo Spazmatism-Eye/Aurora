@@ -1,11 +1,6 @@
-﻿using Aurora.Profiles.ETS2.GSI.Nodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuroraRgb.Profiles.ETS2.GSI.Nodes;
 
-namespace Aurora.Profiles.ETS2.GSI {
+namespace AuroraRgb.Profiles.ETS2.GSI {
 
     public class GameState_ETS2 : GameState {
 

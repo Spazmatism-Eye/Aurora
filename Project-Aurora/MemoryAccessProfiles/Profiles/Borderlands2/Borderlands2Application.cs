@@ -1,4 +1,5 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using MemoryAccessProfiles.Profiles.Borderlands2.GSI;
 
 namespace MemoryAccessProfiles.Profiles.Borderlands2;
@@ -17,6 +18,6 @@ public class Borderlands2 : Application
             IconURI = "Resources/Borderlands2_256x256.png"
         })
     {
-        Aurora.Utils.PointerUpdateUtils.MarkAppForUpdate("Borderlands2");
+        PointerUpdateUtils.MarkAppForUpdate("Borderlands2");
     }
 }

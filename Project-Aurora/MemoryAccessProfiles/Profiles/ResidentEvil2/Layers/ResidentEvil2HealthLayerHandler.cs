@@ -1,10 +1,11 @@
 ﻿using System.Drawing;
 using System.Windows.Controls;
 using Aurora;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles;
-using Aurora.Settings.Layers;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI.Nodes;
 using Newtonsoft.Json;
@@ -112,7 +113,7 @@ public class ResidentEvil2HealthLayerHandler : LayerHandler<ResidentEvil2HealthL
             else if (Properties.DisplayType == ResidentEvil2HealthLayerHandlerProperties.HealthDisplayType.Scanning)
             {
                 previoustime = currenttime;
-                currenttime = Aurora.Utils.Time.GetMillisecondsSinceEpoch();
+                currenttime = Time.GetMillisecondsSinceEpoch();
 
                 GameState_ResidentEvil2 re2state = state as GameState_ResidentEvil2;
 

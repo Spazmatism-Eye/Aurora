@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Aurora;
+namespace AuroraRgb;
 
 public sealed partial class AuroraTrayIcon : IDisposable
 {

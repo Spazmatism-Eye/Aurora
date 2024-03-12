@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JsonSubTypes;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.LeagueOfLegends.GSI
+namespace AuroraRgb.Profiles.LeagueOfLegends.GSI
 {
     //Mostly auto generated with jsonutils.com
 

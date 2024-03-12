@@ -1,4 +1,4 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
 using MemoryAccessProfiles.Profiles.CloneHero.GSI.Nodes;
 
 namespace MemoryAccessProfiles.Profiles.CloneHero.GSI;

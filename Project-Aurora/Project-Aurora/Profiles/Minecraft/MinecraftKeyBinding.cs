@@ -1,10 +1,8 @@
-﻿using Aurora.Devices;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Common.Devices;
 
-namespace Aurora.Profiles.Minecraft {
+namespace AuroraRgb.Profiles.Minecraft {
     public class MinecraftKeyBinding {
         public int keyCode;
         public string modifier;

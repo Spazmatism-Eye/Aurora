@@ -1,17 +1,17 @@
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides.Logic;
-using Newtonsoft.Json;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
+using PropertyChanged;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 /// <summary>
 /// A class representing a default settings layer

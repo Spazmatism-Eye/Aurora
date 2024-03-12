@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amib.Threading;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public abstract class AuroraModule : IDisposable
 {

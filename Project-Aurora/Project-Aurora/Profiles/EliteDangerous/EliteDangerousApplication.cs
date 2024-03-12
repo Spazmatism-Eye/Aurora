@@ -1,7 +1,7 @@
 using System;
-using Aurora.Profiles.EliteDangerous.Layers;
+using AuroraRgb.Profiles.EliteDangerous.Layers;
 
-namespace Aurora.Profiles.EliteDangerous;
+namespace AuroraRgb.Profiles.EliteDangerous;
 
 public class EliteDangerous : Application
 {

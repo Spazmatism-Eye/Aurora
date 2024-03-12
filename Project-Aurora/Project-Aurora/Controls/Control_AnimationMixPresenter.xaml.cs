@@ -1,13 +1,14 @@
-﻿using Aurora.EffectsEngine.Animations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
 
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     /// <summary>
     /// Interaction logic for Control_AnimationMixPresenter.xaml

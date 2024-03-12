@@ -4,10 +4,10 @@ using System.IO.Pipes;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Aurora.Profiles;
+using AuroraRgb.Profiles;
 using Common;
 
-namespace Aurora.Modules.GameStateListen;
+namespace AuroraRgb.Modules.GameStateListen;
 
 public class IpcListener
 {

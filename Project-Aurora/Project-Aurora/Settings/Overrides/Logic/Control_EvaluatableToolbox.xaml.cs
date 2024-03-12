@@ -1,19 +1,17 @@
-﻿using Aurora.Controls;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Aurora.Utils;
-using static Aurora.Settings.Overrides.Logic.EvaluatableHelpers;
-using TemplateContext = System.Collections.Generic.KeyValuePair<string, Aurora.Settings.Overrides.Logic.IEvaluatable>;
+using AuroraRgb.Controls;
+using AuroraRgb.Utils;
+using static AuroraRgb.Settings.Overrides.Logic.EvaluatableHelpers;
+using TemplateContext = System.Collections.Generic.KeyValuePair<string, AuroraRgb.Settings.Overrides.Logic.IEvaluatable>;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     public partial class Control_EvaluatableToolbox : UserControl {
 

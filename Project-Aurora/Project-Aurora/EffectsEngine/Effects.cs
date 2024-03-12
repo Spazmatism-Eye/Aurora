@@ -1,15 +1,14 @@
 ﻿using System;
-using Aurora.EffectsEngine;
 using System.Collections.Generic;
-using System.Linq;
-using Aurora.Devices;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
-using Aurora.Utils;
+using AuroraRgb.Devices;
+using AuroraRgb.Utils;
 using Common;
 using Common.Devices;
 
-namespace Aurora;
+namespace AuroraRgb.EffectsEngine;
 
 public delegate void NewLayerRendered(Bitmap bitmap);
 

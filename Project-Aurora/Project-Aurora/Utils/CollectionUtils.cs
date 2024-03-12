@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     public static class CollectionUtils {
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 using static System.Linq.Expressions.Expression;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 /// <summary>
 /// A version of <see cref="Node"/> which automatically populates the fields defined on it from the parsed JSON data.

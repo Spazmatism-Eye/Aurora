@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Aurora.Settings.Layers.Controls
+namespace AuroraRgb.Settings.Layers.Controls
 {
     /// <summary>
     /// Interaction logic for Control_SolidFillLayer.xaml

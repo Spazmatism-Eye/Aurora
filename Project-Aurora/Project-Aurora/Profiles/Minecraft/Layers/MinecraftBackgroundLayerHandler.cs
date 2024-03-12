@@ -1,18 +1,12 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Minecraft.GSI;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Minecraft.GSI;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.Minecraft.Layers {
+namespace AuroraRgb.Profiles.Minecraft.Layers {
 
     public class MinecraftBackgroundLayerHandlerProperties : LayerHandlerProperties2Color<MinecraftBackgroundLayerHandlerProperties> {
 

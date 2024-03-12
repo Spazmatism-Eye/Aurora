@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Aurora.Settings;
+using AuroraRgb.Settings;
 using Lombok.NET;
 using RazerSdkReader;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class LayoutsModule(Task<ChromaReader?> rzSdk, Task onlineSettingsLayoutsUpdate) : AuroraModule
 {

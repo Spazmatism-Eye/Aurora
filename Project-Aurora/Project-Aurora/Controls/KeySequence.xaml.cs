@@ -6,10 +6,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Settings;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Common.Devices;
 
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     public partial class KeySequence
     {
@@ -70,13 +71,13 @@ namespace Aurora.Controls
 
         private static void SequencePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) {
             var source = (KeySequence)sender;
-            if (e.NewValue is not Settings.KeySequence@new) {
+            if (e.NewValue is not Settings.KeySequence @new) {
                 source.Sequence = new Settings.KeySequence();
                 return;
             }
 
             // If the old sequence is a region, remove that region from the editor
-            if (e.OldValue is Settings.KeySequence {Type: Settings.KeySequenceType.FreeForm} old)
+            if (e.OldValue is Settings.KeySequence {Type: KeySequenceType.FreeForm} old)
                 LayerEditor.RemoveKeySequenceElement(old.Freeform);
 
             // Handle the new sequence. If a region, this will add it to the editor
@@ -90,7 +91,7 @@ namespace Aurora.Controls
             }
 
             // Manually update the "Use freestyle instead" checkbox state
-            source.sequence_freestyle_checkbox.IsChecked = @new.Type == Settings.KeySequenceType.FreeForm;
+            source.sequence_freestyle_checkbox.IsChecked = @new.Type == KeySequenceType.FreeForm;
 
             // Fire an event? Dunno if this is really neccessary but since it was already there I feel like I should keep it
             source.SequenceUpdated?.Invoke(source, new RoutedPropertyChangedEventArgs<Settings.KeySequence>((Settings.KeySequence)e.OldValue, source.Sequence));
@@ -170,7 +171,7 @@ namespace Aurora.Controls
 
         private void sequence_remove_keys_Click(object? sender, RoutedEventArgs e)
         {
-            if (Utils.UIUtils.ListBoxRemoveSelected(this.keys_keysequence))
+            if (UIUtils.ListBoxRemoveSelected(this.keys_keysequence))
             {
                 _allowListRefresh = false;
                 AddDeviceKeys();
@@ -180,7 +181,7 @@ namespace Aurora.Controls
 
         private void sequence_up_keys_Click(object? sender, RoutedEventArgs e)
         {
-            if (Utils.UIUtils.ListBoxMoveSelectedUp(this.keys_keysequence))
+            if (UIUtils.ListBoxMoveSelectedUp(this.keys_keysequence))
             {
                 _allowListRefresh = false;
                 AddDeviceKeys();
@@ -190,7 +191,7 @@ namespace Aurora.Controls
 
         private void sequence_down_keys_Click(object? sender, RoutedEventArgs e)
         {
-            if (Utils.UIUtils.ListBoxMoveSelectedDown(this.keys_keysequence))
+            if (UIUtils.ListBoxMoveSelectedDown(this.keys_keysequence))
             {
                 _allowListRefresh = false;
                 AddDeviceKeys();
@@ -200,7 +201,7 @@ namespace Aurora.Controls
 
         private void btnReverseOrder_Click(object? sender, RoutedEventArgs e)
         {
-            if (Utils.UIUtils.ListBoxReverseOrder(this.keys_keysequence))
+            if (UIUtils.ListBoxReverseOrder(this.keys_keysequence))
             {
                 _allowListRefresh = false;
                 AddDeviceKeys();
@@ -272,7 +273,7 @@ namespace Aurora.Controls
             Settings.KeySequence seq = Sequence;
             if (seq != null && sender is CheckBox && (sender as CheckBox).IsChecked.HasValue)
             {
-                seq.Type = (sender as CheckBox).IsChecked.Value ? Settings.KeySequenceType.FreeForm : Settings.KeySequenceType.Sequence;
+                seq.Type = (sender as CheckBox).IsChecked.Value ? KeySequenceType.FreeForm : KeySequenceType.Sequence;
                 Sequence = seq;
 
                 sequence_updateToLayerEditor();
@@ -283,7 +284,7 @@ namespace Aurora.Controls
         {
             if (Sequence != null && IsInitialized && IsVisible && IsEnabled)
             {
-                if (Sequence.Type == Settings.KeySequenceType.FreeForm && ShowOnCanvas)
+                if (Sequence.Type == KeySequenceType.FreeForm && ShowOnCanvas)
                 {
                     Sequence.Freeform.ValuesChanged += freeform_updated;
                     LayerEditor.AddKeySequenceElement(Sequence.Freeform, Color.FromRgb(255, 255, 255), Title);
@@ -310,7 +311,7 @@ namespace Aurora.Controls
         {
             if (Sequence != null && IsInitialized)
             {
-                if (Sequence.Type == Settings.KeySequenceType.FreeForm)
+                if (Sequence.Type == KeySequenceType.FreeForm)
                 {
                     Sequence.Freeform.ValuesChanged -= freeform_updated;
                     LayerEditor.RemoveKeySequenceElement(Sequence.Freeform);

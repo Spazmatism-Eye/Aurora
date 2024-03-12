@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public interface IInitializableProfile : IDisposable
 {

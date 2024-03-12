@@ -10,10 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Microsoft.Win32;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 public partial class Window_ProcessSelection : IDisposable
 {

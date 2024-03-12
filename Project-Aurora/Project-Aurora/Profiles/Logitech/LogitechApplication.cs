@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using Aurora.Modules;
+using AuroraRgb.Modules;
 
-namespace Aurora.Profiles.Logitech;
+namespace AuroraRgb.Profiles.Logitech;
 
 public class LogitechApplication : Application
 {

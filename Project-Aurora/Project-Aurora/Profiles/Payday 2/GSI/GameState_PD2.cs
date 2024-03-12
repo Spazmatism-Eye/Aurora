@@ -1,9 +1,6 @@
-﻿using Aurora.Profiles.Payday_2.GSI.Nodes;
-using Aurora.Settings;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using AuroraRgb.Profiles.Payday_2.GSI.Nodes;
 
-namespace Aurora.Profiles.Payday_2.GSI
+namespace AuroraRgb.Profiles.Payday_2.GSI
 {
     /// <summary>
     /// A class representing various information retaining to Payday 2

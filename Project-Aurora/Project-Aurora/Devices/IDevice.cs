@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Common.Devices;
 using JetBrains.Annotations;
 
-namespace Aurora.Devices;
+namespace AuroraRgb.Devices;
 
 /// <summary>
 /// An interface for a device class.

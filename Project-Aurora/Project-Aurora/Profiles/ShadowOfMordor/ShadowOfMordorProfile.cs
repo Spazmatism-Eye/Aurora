@@ -1,12 +1,11 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.ShadowOfMordor
+namespace AuroraRgb.Profiles.ShadowOfMordor
 {
     public class ShadowOfMordorProfile : ApplicationProfile
     {
@@ -18,8 +17,8 @@ namespace Aurora.Profiles.ShadowOfMordor
         [OnDeserialized]
         void OnDeserialized(StreamingContext context)
         {
-            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(Aurora.Settings.Layers.WrapperLightsLayerHandler))))
-                Layers.Add(new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()));
+            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(WrapperLightsLayerHandler))))
+                Layers.Add(new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()));
         }
 
 
@@ -45,7 +44,7 @@ namespace Aurora.Profiles.ShadowOfMordor
                         _Sequence = new KeySequence(new DeviceKeys[] { DeviceKeys.LEFT_CONTROL, DeviceKeys.V, DeviceKeys.I, DeviceKeys.K, DeviceKeys.M })
                     }
                 }),
-                new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()),
+                new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()),
             };
         }
     }

@@ -1,6 +1,6 @@
-﻿using Aurora.Profiles.Witcher3.GSI.Nodes;
+﻿using AuroraRgb.Profiles.Witcher3.GSI.Nodes;
 
-namespace Aurora.Profiles.Witcher3.GSI;
+namespace AuroraRgb.Profiles.Witcher3.GSI;
 
 /// <summary>
 /// A class representing various information retaining to Game State Integration of Witcher 3

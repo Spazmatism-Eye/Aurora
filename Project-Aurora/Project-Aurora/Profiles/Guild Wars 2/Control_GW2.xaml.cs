@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Profiles.Guild_Wars_2;
+namespace AuroraRgb.Profiles.Guild_Wars_2;
 
 /// <summary>
 /// Interaction logic for Control_GW2.xaml

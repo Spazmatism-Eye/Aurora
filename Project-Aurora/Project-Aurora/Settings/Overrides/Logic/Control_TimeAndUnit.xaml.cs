@@ -1,13 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Aurora.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     public partial class Control_TimeAndUnit : UserControl {
         public Control_TimeAndUnit() {
             InitializeComponent();
-            UnitCombo.ItemsSource = Utils.EnumUtils.GetEnumItemsSource<TimeUnit>();
+            UnitCombo.ItemsSource = EnumUtils.GetEnumItemsSource<TimeUnit>();
             ((FrameworkElement)Content).DataContext = this;
         }
 

@@ -1,17 +1,17 @@
 using System;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Modules;
-using Aurora.Modules.Logitech;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Logitech;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class LogitechLayerHandlerProperties : LayerHandlerProperties<LogitechLayerHandlerProperties>
 {

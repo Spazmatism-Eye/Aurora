@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 [JsonConverter(typeof(VariablePathConverter))]
 public class VariablePath

@@ -6,21 +6,19 @@
 //
 //--------------------------------------------------------------------------
 
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
-using Aurora;
 using JetBrains.Annotations;
 using PropertyChanged;
 
 //changing namespace requires migration for setting restore
-namespace System.Collections.Concurrent;
+namespace AuroraRgb.Utils;
 
 /// <summary>
 /// Provides a thread-safe dictionary for use with data binding.

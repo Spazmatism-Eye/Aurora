@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
-using Aurora.Profiles;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Settings.Overrides;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
 
-namespace Aurora.Settings.Layers
+namespace AuroraRgb.Settings.Layers
 {
     [LogicOverrideIgnoreProperty("_PrimaryColor")]
     [LogicOverrideIgnoreProperty("_Opacity")]

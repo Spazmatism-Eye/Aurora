@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
-namespace Aurora.EffectsEngine.Animations
+namespace AuroraRgb.EffectsEngine.Animations
 {
     public class AnimationFilledRectangle : AnimationRectangle
     {

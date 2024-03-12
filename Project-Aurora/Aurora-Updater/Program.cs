@@ -81,7 +81,7 @@ internal static class Program
         var maj = "";
 
         string auroraPath;
-        if (File.Exists(auroraPath = Path.Combine(ExePath, "Aurora.exe")))
+        if (File.Exists(auroraPath = Path.Combine(ExePath, "AuroraRgb.exe")))
             maj = FileVersionInfo.GetVersionInfo(auroraPath).FileVersion;
 
         if (string.IsNullOrWhiteSpace(maj))

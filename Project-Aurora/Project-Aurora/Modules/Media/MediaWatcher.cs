@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.Media.Control;
 using WindowsMediaController;
 
-namespace Aurora.Modules.Media;
+namespace AuroraRgb.Modules.Media;
 
 /// <summary>
 /// Wrapping class that it's only dependency is Dubya.WindowsMediaController

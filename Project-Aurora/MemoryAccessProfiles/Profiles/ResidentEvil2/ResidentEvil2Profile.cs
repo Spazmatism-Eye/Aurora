@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using Aurora.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
 
 namespace MemoryAccessProfiles.Profiles.ResidentEvil2;
 

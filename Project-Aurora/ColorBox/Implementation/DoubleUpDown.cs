@@ -10,11 +10,10 @@
 ***********************************************************************************/
 
 using System;
-using System.Windows;
 using System.Globalization;
-using System.IO;
+using System.Windows;
 
-namespace ColorBox
+namespace ColorBox.Implementation
 {
     class DoubleUpDown : UpDownBase
     {

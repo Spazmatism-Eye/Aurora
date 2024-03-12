@@ -1,22 +1,10 @@
-﻿using Aurora.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Aurora.Utils;
-using Xceed.Wpf.Toolkit;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 
-namespace Aurora.Profiles.Minecraft.Layers {
+namespace AuroraRgb.Profiles.Minecraft.Layers {
     /// <summary>
     /// Interaction logic for Control_MinecraftHealthBarLayer.xaml
     /// </summary>
@@ -112,7 +100,7 @@ namespace Aurora.Profiles.Minecraft.Layers {
                 Context.Properties._GradualProgress = (sender as CheckBox).IsChecked.Value;
         }
 
-        private void KeySequence_Keys_SequenceUpdated(object sender, RoutedPropertyChangedEventArgs<Settings.KeySequence> e) {
+        private void KeySequence_Keys_SequenceUpdated(object sender, RoutedPropertyChangedEventArgs<KeySequence> e) {
             if (CanSet)
                 Context.Properties._Sequence = e.NewValue;
         }

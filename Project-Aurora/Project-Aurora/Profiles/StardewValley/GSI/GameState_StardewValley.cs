@@ -1,13 +1,7 @@
-using Aurora.Profiles.Generic.GSI.Nodes;
-using Aurora.Profiles.StardewValley.GSI.Nodes;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Profiles.StardewValley.GSI.Nodes;
 
-namespace Aurora.Profiles.StardewValley.GSI {
+namespace AuroraRgb.Profiles.StardewValley.GSI {
     public class GameState_StardewValley : GameState {
         public ProviderNode Provider => NodeFor<ProviderNode>("Provider");
 

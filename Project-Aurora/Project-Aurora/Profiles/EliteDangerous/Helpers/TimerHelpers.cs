@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace Aurora.Profiles.EliteDangerous.Helpers
+namespace AuroraRgb.Profiles.EliteDangerous.Helpers
 {
     public class DelayedMethodCaller
     {

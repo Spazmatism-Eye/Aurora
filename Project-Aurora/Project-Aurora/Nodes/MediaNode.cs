@@ -1,6 +1,6 @@
-﻿using Aurora.Modules.Media;
+﻿using AuroraRgb.Modules.Media;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 public class MediaNode : Node
 {

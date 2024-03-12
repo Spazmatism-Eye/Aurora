@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Common.Utils;
 
-namespace Aurora.Modules.Logitech.Structs;
+namespace AuroraRgb.Modules.Logitech.Structs;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly struct LogitechArgbColor

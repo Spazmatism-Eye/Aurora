@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
+using AuroraRgb.Modules.HardwareMonitor;
+using AuroraRgb.Nodes;
 using Lombok.NET;
-using Aurora.Modules.HardwareMonitor;
-using Aurora.Nodes;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class HardwareMonitorModule : AuroraModule
 {

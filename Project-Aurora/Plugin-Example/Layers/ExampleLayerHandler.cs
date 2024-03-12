@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Settings.Layers;
-using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
+﻿using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers;
 
 namespace Plugin_Example.Layers
 {

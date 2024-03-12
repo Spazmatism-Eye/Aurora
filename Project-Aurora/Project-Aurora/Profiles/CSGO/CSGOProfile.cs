@@ -1,15 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
-using Aurora.Devices;
-using Aurora.Profiles.CSGO.GSI.Nodes;
-using Aurora.Profiles.CSGO.Layers;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using Aurora.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Profiles.CSGO.GSI.Nodes;
+using AuroraRgb.Profiles.CSGO.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings.Overrides.Logic.Number;
 using Common.Devices;
 
-namespace Aurora.Profiles.CSGO;
+namespace AuroraRgb.Profiles.CSGO;
 
 public class CSGOProfile : ApplicationProfile
 {

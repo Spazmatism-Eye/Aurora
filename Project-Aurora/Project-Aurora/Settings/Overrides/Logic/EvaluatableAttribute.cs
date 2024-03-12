@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using AuroraRgb.Utils;
 using JetBrains.Annotations;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Simple attribute that can be added to conditions to add metadata to them and register them as conditions.
@@ -25,7 +26,7 @@ public class EvaluatableAttribute : Attribute {
     public EvaluatableCategory Category { get; }
 
     /// <summary>Gets the description of the category as a string.</summary>
-    public string CategoryStr => Utils.EnumUtils.GetDescription(Category);
+    public string CategoryStr => EnumUtils.GetDescription(Category);
 }
 
 public enum EvaluatableCategory {

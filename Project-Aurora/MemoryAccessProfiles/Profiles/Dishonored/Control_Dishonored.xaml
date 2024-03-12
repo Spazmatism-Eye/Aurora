@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:Controls="clr-namespace:Aurora.Controls" xmlns:Settings="clr-namespace:Aurora.Settings" x:Class="MemoryAccessProfiles.Profiles.Dishonored.Control_Dishonored"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             x:Class="MemoryAccessProfiles.Profiles.Dishonored.Control_Dishonored"
              mc:Ignorable="d" 
              d:DesignHeight="300" Height="Auto" Width="Auto" d:DesignWidth="850">
     <Grid>

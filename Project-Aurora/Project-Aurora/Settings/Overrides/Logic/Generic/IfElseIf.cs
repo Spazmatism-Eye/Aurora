@@ -1,15 +1,11 @@
-﻿using Aurora.Profiles;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Overrides.Logic.Generic;
+using AuroraRgb.Utils;
 
-
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     public abstract class IfElseGeneric<T> : Evaluatable<T> {
         /// <summary>

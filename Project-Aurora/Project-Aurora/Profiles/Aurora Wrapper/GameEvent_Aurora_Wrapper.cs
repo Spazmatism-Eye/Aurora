@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Aurora.Devices;
-using Aurora.EffectsEngine;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Common.Utils;
 
-namespace Aurora.Profiles.Aurora_Wrapper;
+namespace AuroraRgb.Profiles.Aurora_Wrapper;
 
 public class GameEvent_Aurora_Wrapper : LightEvent
 {

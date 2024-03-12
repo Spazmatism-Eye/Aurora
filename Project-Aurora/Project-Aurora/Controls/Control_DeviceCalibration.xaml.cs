@@ -4,15 +4,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Aurora.Devices;
-using Aurora.Modules.GameStateListen;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Common;
 using Common.Devices;
 using Common.Devices.RGBNet;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 public sealed partial class Control_DeviceCalibration : IDisposable
 {

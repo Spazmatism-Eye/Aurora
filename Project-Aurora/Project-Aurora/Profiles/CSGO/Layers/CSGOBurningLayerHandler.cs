@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.CSGO.GSI;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 public class CSGOBurningLayerHandlerProperties : LayerHandlerProperties2Color<CSGOBurningLayerHandlerProperties>
 {

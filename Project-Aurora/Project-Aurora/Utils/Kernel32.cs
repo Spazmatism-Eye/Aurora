@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static partial class Kernel32
 {

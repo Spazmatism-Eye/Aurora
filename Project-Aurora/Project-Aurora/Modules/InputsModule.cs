@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Aurora.Modules.Inputs;
-using Aurora.Settings;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Settings;
 using Common.Devices;
 using Common.Utils;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class InputsModule : AuroraModule
 {

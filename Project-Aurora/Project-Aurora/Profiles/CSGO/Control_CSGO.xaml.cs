@@ -3,14 +3,13 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Profiles.CSGO.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Utils;
-using Aurora.Utils.Steam;
+using AuroraRgb.Profiles.CSGO.GSI;
+using AuroraRgb.Profiles.CSGO.GSI.Nodes;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 using Timer = System.Timers.Timer;
 
-namespace Aurora.Profiles.CSGO;
+namespace AuroraRgb.Profiles.CSGO;
 
 /// <summary>
 /// Interaction logic for Control_CSGO.xaml

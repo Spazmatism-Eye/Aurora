@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Modules.Media;
+using AuroraRgb.Modules.Media;
 using Lombok.NET;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class MediaInfoModule : AuroraModule
 {

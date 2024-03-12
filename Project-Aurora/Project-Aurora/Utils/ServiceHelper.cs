@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 /// <summary>
 /// http://peterkellyonline.blogspot.com/2011/04/configuring-windows-service.html

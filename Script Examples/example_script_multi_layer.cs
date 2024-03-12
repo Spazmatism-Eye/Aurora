@@ -1,9 +1,9 @@
-using Aurora;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Devices;
-using Aurora.Utils;
-using Aurora.Settings;
+using AuroraRgb;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Devices;
+using AuroraRgb.Utils;
+using AuroraRgb.Settings;
 using System;
 using System.Drawing;
 using System.Collections.Generic;

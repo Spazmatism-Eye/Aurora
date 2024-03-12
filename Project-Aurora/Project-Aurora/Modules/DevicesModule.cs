@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Aurora.Devices;
+using AuroraRgb.Devices;
 using RazerSdkReader;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class DevicesModule(Task<ChromaReader?> rzSdkManager, AuroraControlInterface auroraControlInterface) : AuroraModule
 {

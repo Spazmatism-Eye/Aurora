@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using JetBrains.Annotations;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 /// <summary>
 /// Enum list for the percent effect type

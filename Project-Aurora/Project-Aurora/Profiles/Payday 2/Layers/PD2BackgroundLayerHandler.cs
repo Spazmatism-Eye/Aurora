@@ -1,20 +1,16 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Payday_2.GSI;
-using Aurora.Profiles.Payday_2.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Payday_2.GSI;
+using AuroraRgb.Profiles.Payday_2.GSI.Nodes;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Payday_2.Layers
+namespace AuroraRgb.Profiles.Payday_2.Layers
 {
     public class PD2BackgroundLayerHandlerProperties : LayerHandlerProperties2Color<PD2BackgroundLayerHandlerProperties>
     {
@@ -123,7 +119,7 @@ namespace Aurora.Profiles.Payday_2.Layers
 
                 Color bg_color = Properties.AmbientColor;
 
-                long currenttime = Utils.Time.GetMillisecondsSinceEpoch();
+                long currenttime = Time.GetMillisecondsSinceEpoch();
 
                 if ((pd2.Level.Phase == LevelPhase.Assault || pd2.Level.Phase == LevelPhase.Winters) && pd2.Game.State == GameStates.Ingame)
                 {
@@ -203,7 +199,7 @@ namespace Aurora.Profiles.Payday_2.Layers
                         ColorSpectrum suspicion_spec = new ColorSpectrum(Properties.LowSuspicionColor, Properties.HighSuspicionColor);
                         suspicion_spec.SetColorAt(0.5f, Properties.MediumSuspicionColor);
 
-                        Settings.KeySequence suspicionSequence = new Settings.KeySequence(new Settings.FreeFormObject(0, 0, 1.0f / (Effects.Canvas.EditorToCanvasWidth / Effects.Canvas.Width), 1.0f / (Effects.Canvas.EditorToCanvasHeight / Effects.Canvas.Height)));
+                        KeySequence suspicionSequence = new KeySequence(new FreeFormObject(0, 0, 1.0f / (Effects.Canvas.EditorToCanvasWidth / Effects.Canvas.Width), 1.0f / (Effects.Canvas.EditorToCanvasHeight / Effects.Canvas.Height)));
 
                         bg_layer.PercentEffect(suspicion_spec, suspicionSequence, percentSuspicious, 1.0D, Properties.SuspicionEffectType);
 

@@ -1,6 +1,6 @@
-﻿using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.Dota_2.GSI.Nodes
+namespace AuroraRgb.Profiles.Dota_2.GSI.Nodes
 {
     /// <summary>
     /// Information about the provider of this GameState

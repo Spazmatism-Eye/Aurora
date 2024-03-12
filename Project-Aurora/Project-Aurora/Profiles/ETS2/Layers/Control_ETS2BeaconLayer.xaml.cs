@@ -1,12 +1,10 @@
-﻿using Aurora.Controls;
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Utils;
-using KeySequence = Aurora.Settings.KeySequence;
+using AuroraRgb.Utils;
+using KeySequence = AuroraRgb.Settings.KeySequence;
 
-namespace Aurora.Profiles.ETS2.Layers {
+namespace AuroraRgb.Profiles.ETS2.Layers {
     /// <summary>
     /// Interaction logic for Control_ETS2BeaconLayer.xaml
     /// </summary>

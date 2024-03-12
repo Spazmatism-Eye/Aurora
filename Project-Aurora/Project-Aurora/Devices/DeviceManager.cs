@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Aurora.Modules;
+using AuroraRgb.Modules;
 using Common;
 using Common.Data;
 using Common.Devices;
 using RazerSdkReader;
 
-namespace Aurora.Devices;
+namespace AuroraRgb.Devices;
 
 public sealed class DevicesUpdatedEventArgs(IEnumerable<DeviceContainer> deviceContainers) : EventArgs
 {
@@ -22,8 +22,8 @@ public sealed class DeviceManager : IDisposable
 {
     private const string DeviceManagerProcess = "AuroraDeviceManager";
 
-    private const string DeviceManagerFolder = @".\AuroraDeviceManager";
-    private const string DeviceManagerExe = "AuroraDeviceManager.exe";
+    private const string DeviceManagerFolder = @".\AuroraDeviceManager\";
+    public const string DeviceManagerExe = "AuroraDeviceManager.exe";
 
     private bool _disposed;
 

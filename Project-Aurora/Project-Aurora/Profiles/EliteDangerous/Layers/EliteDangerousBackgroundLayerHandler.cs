@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.EliteDangerous.GSI;
-using Aurora.Profiles.EliteDangerous.GSI.Nodes;
-using Aurora.Settings.Layers;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.EliteDangerous.GSI;
+using AuroraRgb.Profiles.EliteDangerous.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.EliteDangerous.Layers
+namespace AuroraRgb.Profiles.EliteDangerous.Layers
 {
     public class EliteDangerousBackgroundHandlerProperties : LayerHandlerProperties2Color<EliteDangerousBackgroundHandlerProperties>
     {

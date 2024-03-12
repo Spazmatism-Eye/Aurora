@@ -1,7 +1,7 @@
-﻿using Aurora.Profiles.Discord.GSI.Nodes;
-using Aurora.Profiles.Generic.GSI.Nodes;
+﻿using AuroraRgb.Profiles.Discord.GSI.Nodes;
+using AuroraRgb.Profiles.Generic;
 
-namespace Aurora.Profiles.Discord.GSI
+namespace AuroraRgb.Profiles.Discord.GSI
 {
     public class GameState_Discord : GameState
     {

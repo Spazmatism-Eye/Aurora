@@ -1,6 +1,6 @@
-﻿using Aurora.Profiles.Payday_2.Layers;
+﻿using AuroraRgb.Profiles.Payday_2.Layers;
 
-namespace Aurora.Profiles.Payday_2;
+namespace AuroraRgb.Profiles.Payday_2;
 
 public class PD2 : Application
 {

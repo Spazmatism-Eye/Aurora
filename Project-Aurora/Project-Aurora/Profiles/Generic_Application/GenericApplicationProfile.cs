@@ -1,14 +1,8 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.Generic_Application
+namespace AuroraRgb.Profiles.Generic_Application
 {
     public class GenericApplicationProfile : ApplicationProfile
     {

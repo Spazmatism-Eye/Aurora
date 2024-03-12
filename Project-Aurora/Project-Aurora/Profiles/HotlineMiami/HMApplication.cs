@@ -1,7 +1,7 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.HotlineMiami;
+namespace AuroraRgb.Profiles.HotlineMiami;
 
 public class HotlineMiami : Application
 {

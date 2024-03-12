@@ -1,5 +1,4 @@
-﻿using Aurora.EffectsEngine.Animations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -8,11 +7,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Aurora.Settings.Controls.Keycaps;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Settings.Controls.Keycaps;
 using Common.Devices;
-using static Aurora.Controls.Control_AnimationMixPresenter;
+using static AuroraRgb.Controls.Control_AnimationMixPresenter;
 
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     /// <summary>
     /// Interaction logic for Control_AnimationEditor.xaml

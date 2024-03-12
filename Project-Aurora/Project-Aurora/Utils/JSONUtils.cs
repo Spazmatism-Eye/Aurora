@@ -1,32 +1,39 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
+using AuroraRgb.Profiles.Dota_2.Layers;
+using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Profiles.GTA5.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
 using Common.Devices;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
-public class AuroraSerializationBinder : DefaultSerializationBinder
+public partial class AuroraSerializationBinder : DefaultSerializationBinder
 {
     private readonly Dictionary<string, Dictionary<string, Type>> _assemblyTypeMap = new();
     private readonly Dictionary<string, Type> _typeMap = new();
     
     public override Type BindToType(string? assemblyName, string typeName)
     {
-        const string pattern1 = @"\[([^\s,^\[]*), ([^\s,^\]]*)]";
-
         Dictionary<string, Type> typeMap;
         if (assemblyName != null)
         {
+            if (assemblyName == "Aurora")
+            {
+                assemblyName = "AuroraRgb";
+            }
             if (!_assemblyTypeMap.TryGetValue(assemblyName, out typeMap!))
             {
                 typeMap = new Dictionary<string, Type>();
@@ -43,7 +50,7 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
         }
 
         // Use the Regex.Replace method with a MatchEvaluator delegate
-        var convertedTypeName = Regex.Replace(typeName, pattern1, ReplaceGroups);
+        var convertedTypeName = TypeAndAssemblyRegex().Replace(typeName, ReplaceGroups);
 
         var boundType = convertedTypeName switch
         {
@@ -53,29 +60,29 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
                 typeof(List<System.Windows.Forms.Keys>),
             //Resolve typo'd AbilityLayerHandler type
             "Aurora.Profiles.Dota_2.Layers.Dota2AbiltiyLayerHandler" =>
-                typeof(Profiles.Dota_2.Layers.Dota2AbilityLayerHandler),
+                typeof(Dota2AbilityLayerHandler),
             "Aurora.Profiles.Dota_2.Layers.Dota2HeroAbiltiyEffectsLayerHandler" =>
-                typeof(Profiles.Dota_2.Layers.Dota2HeroAbilityEffectsLayerHandler),
+                typeof(Dota2HeroAbilityEffectsLayerHandler),
             "Aurora.Settings.Layers.ComparisonLayerHandler" =>
                 typeof(DefaultLayerHandler),
             "Aurora.Settings.Layers.ComparisonLayerProperties" =>
                 typeof(LayerHandlerProperties),
             "Aurora.Profiles.Dota_2.Layers.Dota2HeroAbiltiyEffectsLayerHandlerProperties" =>
-                typeof(Profiles.Dota_2.Layers.Dota2HeroAbilityEffectsLayerHandlerProperties),
+                typeof(Dota2HeroAbilityEffectsLayerHandlerProperties),
             "Aurora.Profiles.GTA5.Layers.GTA5PoliceSirenLayerHandlerProperties" =>
-                typeof(Profiles.GTA5.Layers.Gta5PoliceSirenLayerHandlerProperties),
+                typeof(Gta5PoliceSirenLayerHandlerProperties),
             "Aurora.Profiles.TheDivision.TheDivisionSettings" =>
-                typeof(Settings.ApplicationProfile),
+                typeof(ApplicationProfile),
             "Aurora.Profiles.Overwatch.OverwatchProfile" =>
-                typeof(Profiles.WrapperProfile),
+                typeof(WrapperProfile),
             "Aurora.Profiles.WormsWMD.WormsWMDProfile" =>
-                typeof(Profiles.WrapperProfile),
+                typeof(WrapperProfile),
             "Aurora.Profiles.Blade_and_Soul.BnSProfile" =>
-                typeof(Profiles.WrapperProfile),
+                typeof(WrapperProfile),
             "Aurora.Profiles.Magic_Duels_2012.MagicDuels2012Profile" =>
-                typeof(Profiles.WrapperProfile),
+                typeof(WrapperProfile),
             "Aurora.Profiles.ColorEnhanceProfile" =>
-                typeof(Profiles.WrapperProfile),
+                typeof(WrapperProfile),
             "Aurora.Settings.Overrides.Logic.IEvaluatableBoolean" =>
                 typeof(Evaluatable<bool>),
             "Aurora.Settings.Overrides.Logic.IEvaluatable`1[[System.Boolean, mscorlib]]" =>
@@ -89,7 +96,7 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
             "Aurora.Settings.Overrides.Logic.IEvaluatable`1[[System.String, mscorlib]]" =>
                 typeof(Evaluatable<string>),
             "Aurora.Settings.Overrides.Logic.Boolean.Boolean_Latch" =>
-                typeof(Settings.Overrides.Logic.Boolean.Boolean_FlipFlopSR),
+                typeof(Boolean_FlipFlopSR),
             "System.Drawing.Color" =>
                 typeof(Color),
             "Aurora.Devices.DeviceKeys" =>
@@ -100,13 +107,32 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
                 typeof(VariableRegistry),
             "Aurora.Settings.VariableRegistryItem" =>
                 typeof(VariableRegistryItem),
-            _ => base.BindToType(assemblyName, convertedTypeName),
+            _ => base.BindToType(assemblyName, ConvertedTypeName(convertedTypeName)),
         };
         typeMap[typeName] = boundType;
 
         return boundType;
     }
-    
+
+    public static Type? GetAuroraType(string typeName)
+    {
+        var regularType = Type.GetType(typeName);
+        if (regularType != null)
+        {
+            return regularType;
+        }
+        var auroraType = Type.GetType(ConvertedTypeName(typeName.Split(',')[0]));
+        return auroraType;
+    }
+
+    private static string ConvertedTypeName(string convertedTypeName)
+    {
+        if (!convertedTypeName.StartsWith("Aurora.")) return convertedTypeName;
+
+        var regex = new Regex(Regex.Escape("Aurora."));
+        return regex.Replace(convertedTypeName, "AuroraRgb.", 1);
+    }
+
     private string ReplaceGroups(Match match)
     {
         var typeName = match.Groups[1].Value;
@@ -117,6 +143,9 @@ public class AuroraSerializationBinder : DefaultSerializationBinder
         var secondComma = ass.IndexOf(',', ass.IndexOf(',') + 1);
         return string.Concat("[", ass.AsSpan(0, secondComma), "]");
     }
+
+    [GeneratedRegex(@"\[([^\s,^\[]*), ([^\s,^\]]*)]")]
+    private static partial Regex TypeAndAssemblyRegex();
 }
 
 public class EnumConverter : JsonConverter
@@ -150,8 +179,19 @@ public class EnumConverter : JsonConverter
                 return Enum.ToObject(objectType, reader.Value);
             case JsonToken.StartObject:
                 var item = serializer.Deserialize<JObject>(reader);
-                var typeName = item["$type"].Value<string>();
-                return JsonConvert.DeserializeObject(item["$value"].ToString(), Type.GetType(typeName));
+                if (item == null)
+                {
+                    throw new JsonSerializationException("Enum value object is empty");
+                }
+
+                var jToken = item["$type"];
+                if (jToken == null)
+                {
+                    throw new JsonSerializationException("Enum value type is empty");
+                }
+
+                var type = AuroraSerializationBinder.GetAuroraType(jToken.Value<string>());
+                return JsonConvert.DeserializeObject(item["$value"].ToString(), type);
         }
 
         return existingValue;
@@ -184,7 +224,7 @@ public class OverrideTypeConverter : JsonConverter
         switch (readerTokenType)
         {
             case JsonToken.String:
-                return Type.GetType(reader.Value.ToString());
+                return AuroraSerializationBinder.GetAuroraType(reader.Value.ToString());
             case JsonToken.StartObject:
                 var item = serializer.Deserialize<JObject>(reader);
                 foreach (var prop in item.Children<JProperty>())
@@ -192,7 +232,7 @@ public class OverrideTypeConverter : JsonConverter
                     switch (prop.Name)
                     {
                         case "$type":
-                            return Type.GetType(prop.Value.ToString());
+                            return AuroraSerializationBinder.GetAuroraType(prop.Value.ToString());
                     }
                 }
 

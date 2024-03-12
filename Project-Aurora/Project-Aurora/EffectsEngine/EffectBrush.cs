@@ -4,14 +4,14 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Newtonsoft.Json;
 using Brush = System.Drawing.Brush;
 using Color = System.Drawing.Color;
 using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
 using Point = System.Windows.Point;
 
-namespace Aurora.EffectsEngine;
+namespace AuroraRgb.EffectsEngine;
 
 public class EffectBrush
 {

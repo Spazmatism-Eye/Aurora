@@ -1,12 +1,12 @@
-﻿using Aurora.EffectsEngine.Animations;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using AuroraRgb.EffectsEngine.Animations;
 
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     /// <summary>
     /// Interaction logic for Control_AnimationTrackPresenter.xaml
@@ -62,32 +62,32 @@ namespace Aurora.Controls
 
             if (ContextTrack.SupportedAnimationType == typeof(AnimationFilledCircle))
             {
-                this.imgTrackType.Source = new BitmapImage(new Uri(@"/Aurora;component/Resources/FreeForm_CircleFilled.png", UriKind.Relative));
+                this.imgTrackType.Source = new BitmapImage(new Uri(@"/AuroraRgb;component/Resources/FreeForm_CircleFilled.png", UriKind.Relative));
                 this.imgTrackType.ToolTip = "Filled Circle Track";
             }
             else if (ContextTrack.SupportedAnimationType == typeof(AnimationCircle))
             {
-                this.imgTrackType.Source = new BitmapImage(new Uri(@"/Aurora;component/Resources/FreeForm_Circle.png", UriKind.Relative));
+                this.imgTrackType.Source = new BitmapImage(new Uri(@"/AuroraRgb;component/Resources/FreeForm_Circle.png", UriKind.Relative));
                 this.imgTrackType.ToolTip = "Circle Track";
             }
             else if (ContextTrack.SupportedAnimationType == typeof(AnimationFilledRectangle))
             {
-                this.imgTrackType.Source = new BitmapImage(new Uri(@"/Aurora;component/Resources/FreeForm_RectangleFilled.png", UriKind.Relative));
+                this.imgTrackType.Source = new BitmapImage(new Uri(@"/AuroraRgb;component/Resources/FreeForm_RectangleFilled.png", UriKind.Relative));
                 this.imgTrackType.ToolTip = "Filled Rectangle Track";
             }
             else if (ContextTrack.SupportedAnimationType == typeof(AnimationRectangle))
             {
-                this.imgTrackType.Source = new BitmapImage(new Uri(@"/Aurora;component/Resources/FreeForm_Rectangle.png", UriKind.Relative));
+                this.imgTrackType.Source = new BitmapImage(new Uri(@"/AuroraRgb;component/Resources/FreeForm_Rectangle.png", UriKind.Relative));
                 this.imgTrackType.ToolTip = "Rectangle Track";
             }
             else if (ContextTrack.SupportedAnimationType == typeof(AnimationLine))
             {
-                this.imgTrackType.Source = new BitmapImage(new Uri(@"/Aurora;component/Resources/FreeForm_Line.png", UriKind.Relative));
+                this.imgTrackType.Source = new BitmapImage(new Uri(@"/AuroraRgb;component/Resources/FreeForm_Line.png", UriKind.Relative));
                 this.imgTrackType.ToolTip = "Line Track";
             }
             else if (ContextTrack.SupportedAnimationType == typeof(AnimationManualColorFrame))
             {
-                this.imgTrackType.Source = new BitmapImage(new Uri(@"/Aurora;component/Resources/FreeForm_ManualColor.png", UriKind.Relative));
+                this.imgTrackType.Source = new BitmapImage(new Uri(@"/AuroraRgb;component/Resources/FreeForm_ManualColor.png", UriKind.Relative));
                 this.imgTrackType.ToolTip = "Manual Color Track";
             }
 

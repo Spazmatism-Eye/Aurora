@@ -1,10 +1,3 @@
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using NAudio.CoreAudioApi;
-using NAudio.Dsp;
-using NAudio.Wave;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,12 +5,19 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Controls;
-using Aurora.Modules.AudioCapture;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules.AudioCapture;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Utils;
 using Common.Utils;
+using NAudio.CoreAudioApi;
+using NAudio.Dsp;
+using NAudio.Wave;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public enum EqualizerType
 {

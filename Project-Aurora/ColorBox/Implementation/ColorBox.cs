@@ -11,17 +11,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Windows;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+using ColorBox.Utils;
 
-namespace ColorBox
+namespace ColorBox.Implementation
 {
     [TemplatePart(Name = PART_CurrentColor, Type = typeof(TextBox))]
     public class ColorBox : Control

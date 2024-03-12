@@ -1,4 +1,4 @@
-namespace Aurora.Modules.Logitech.Enums;
+namespace AuroraRgb.Modules.Logitech.Enums;
 
 public enum LogitechPipeCommand
 {

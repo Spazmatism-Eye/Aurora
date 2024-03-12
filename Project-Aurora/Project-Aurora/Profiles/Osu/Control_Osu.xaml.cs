@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Navigation;
 
-namespace Aurora.Profiles.Osu {
+namespace AuroraRgb.Profiles.Osu {
 
     public partial class Control_Osu : System.Windows.Controls.UserControl {
         public Control_Osu(Application profile) {

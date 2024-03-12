@@ -1,12 +1,14 @@
 ﻿//using Aurora.Profiles.Slime_Rancher.Layers;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
+
 using System.Drawing;
-using Aurora.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings.Overrides.Logic.Number;
 using DK = Common.Devices.DeviceKeys;
 
-namespace Aurora.Profiles.Slime_Rancher
+namespace AuroraRgb.Profiles.Slime_Rancher
 {
 
     public class SlimeRancherProfile : ApplicationProfile

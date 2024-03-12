@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static class TypeExtensions
 {

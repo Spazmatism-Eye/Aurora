@@ -1,9 +1,9 @@
-﻿using Aurora.Profiles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Media;
+using AuroraRgb.Profiles;
 
-namespace Aurora.Settings.Overrides.Logic.Generic {
+namespace AuroraRgb.Settings.Overrides.Logic.Generic {
 
     /// <summary>
     /// Generic evaluatable that delays the source input by a set amount of time.

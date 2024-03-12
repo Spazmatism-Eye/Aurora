@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Discord.GSI.Nodes;
+﻿namespace AuroraRgb.Profiles.Discord.GSI.Nodes;
 
 public enum DiscordStatus
 {

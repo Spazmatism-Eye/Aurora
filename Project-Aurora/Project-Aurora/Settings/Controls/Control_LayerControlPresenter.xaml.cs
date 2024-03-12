@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Effects;
-using Aurora.Settings.Layers;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// Interaction logic for Control_LayerControlPresenter.xaml

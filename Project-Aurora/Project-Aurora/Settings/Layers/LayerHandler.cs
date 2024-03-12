@@ -1,25 +1,25 @@
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
 using System;
-using System.Drawing;
-using System.Windows.Controls;
-using FastMember;
 using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
 using Common.Utils;
+using FastMember;
 using JetBrains.Annotations;
 using Lombok.NET;
-using Application = Aurora.Profiles.Application;
+using Newtonsoft.Json;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Layers
+namespace AuroraRgb.Settings.Layers
 {
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature, ImplicitUseTargetFlags.WithInheritors)]
     [NotifyPropertyChanged]

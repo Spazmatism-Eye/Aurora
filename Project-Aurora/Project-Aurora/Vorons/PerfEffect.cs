@@ -22,21 +22,20 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Scripts.VoronScripts;
-using Aurora.Settings;
-using Aurora.Utils;
-using Aurora.Vorons.Mathos.Parser;
-using Aurora.Vorons.OpenHardwareMonitor.Collections;
-using Aurora.Vorons.OpenHardwareMonitor.Hardware.ATI;
-using Aurora.Vorons.OpenHardwareMonitor.Hardware.Nvidia;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
+using AuroraRgb.Vorons.Mathos.Parser;
+using AuroraRgb.Vorons.OpenHardwareMonitor.Collections;
+using AuroraRgb.Vorons.OpenHardwareMonitor.Hardware.ATI;
+using AuroraRgb.Vorons.OpenHardwareMonitor.Hardware.Nvidia;
 using Common.Devices;
 using CircleGradientStateKey =
-	System.Tuple<Aurora.EffectsEngine.ColorSpectrum, Aurora.Vorons.PerformanceCounterManager.IntervalPerformanceCounter, float, float>;
+	System.Tuple<AuroraRgb.EffectsEngine.ColorSpectrum, AuroraRgb.Vorons.PerformanceCounterManager.IntervalPerformanceCounter, float, float>;
 using CircleGradientState = System.Collections.Generic.KeyValuePair<float, long>;
 
-namespace Aurora.Vorons
+namespace AuroraRgb.Vorons
 {
 	public class PerformanceEffect : IEffectScript
 	{

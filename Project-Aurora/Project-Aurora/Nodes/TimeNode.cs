@@ -1,6 +1,6 @@
-﻿using Aurora.Utils;
+﻿using AuroraRgb.Utils;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 public class TimeNode : Node
 {

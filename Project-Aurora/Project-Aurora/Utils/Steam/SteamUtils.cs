@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Win32;
 using VdfParser;
 
-namespace Aurora.Utils.Steam;
+namespace AuroraRgb.Utils.Steam;
 
 /// <summary>
 /// A class for handling Steam games

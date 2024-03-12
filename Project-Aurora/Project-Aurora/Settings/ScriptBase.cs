@@ -1,7 +1,7 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
 using Common.Devices;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public interface IEffectScript
 {

@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows.Automation;
 using Microsoft.Collections.Extensions;
 
-namespace Aurora.Modules.ProcessMonitor;
+namespace AuroraRgb.Modules.ProcessMonitor;
 
 public class WindowProcess : IEquatable<WindowProcess>
 {

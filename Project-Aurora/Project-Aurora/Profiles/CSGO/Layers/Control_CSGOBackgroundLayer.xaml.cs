@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 /// <summary>
 /// Interaction logic for Control_CSGOBackgroundLayer.xaml

@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExeMover", "ExeMover\ExeMover.csproj", "{41D44E05-290D-4527-AA35-F95019934039}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -65,6 +67,10 @@ Global
 		{743820FF-0E94-4EDC-A75E-BFCD5B2DD9BA}.Debug|x64.Build.0 = Debug|Any CPU
 		{743820FF-0E94-4EDC-A75E-BFCD5B2DD9BA}.Release|x64.ActiveCfg = Release|Any CPU
 		{743820FF-0E94-4EDC-A75E-BFCD5B2DD9BA}.Release|x64.Build.0 = Release|Any CPU
+		{41D44E05-290D-4527-AA35-F95019934039}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{41D44E05-290D-4527-AA35-F95019934039}.Debug|x64.Build.0 = Debug|Any CPU
+		{41D44E05-290D-4527-AA35-F95019934039}.Release|x64.ActiveCfg = Release|Any CPU
+		{41D44E05-290D-4527-AA35-F95019934039}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

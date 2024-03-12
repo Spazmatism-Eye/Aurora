@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
-using Aurora.EffectsEngine;
-using Aurora.Modules;
-using Aurora.Profiles;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
 using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public sealed class ToggleKeyLayerHandlerProperties : LayerHandlerProperties2Color<ToggleKeyLayerHandlerProperties> {
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// Interaction logic for Control_ProfileManager.xaml
@@ -10,17 +11,17 @@ namespace Aurora.Settings.Controls;
 public partial class Control_ScriptManager
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-    public static readonly DependencyProperty ProfileManagerProperty = DependencyProperty.Register(nameof(ProfileManager), typeof(Profiles.Application), typeof(Control_ScriptManager));
+    public static readonly DependencyProperty ProfileManagerProperty = DependencyProperty.Register(nameof(ProfileManager), typeof(Application), typeof(Control_ScriptManager));
 
-    public Profiles.Application ProfileManager
+    public Application ProfileManager
     {
-        get => (Profiles.Application)GetValue(ProfileManagerProperty);
+        get => (Application)GetValue(ProfileManagerProperty);
         set
         {
             SetValue(ProfileManagerProperty, value);
 
             value.ProfileChanged += (sender, e) => {
-                Scripts = (sender as Profiles.Application)?.Profile.ScriptSettings;
+                Scripts = (sender as Application)?.Profile.ScriptSettings;
             };
             Scripts = value.Profile.ScriptSettings;
         }

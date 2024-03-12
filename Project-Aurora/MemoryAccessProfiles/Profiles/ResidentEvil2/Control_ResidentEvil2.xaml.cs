@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI.Nodes;
 using Xceed.Wpf.Toolkit;
-using Application = Aurora.Profiles.Application;
+using Application = AuroraRgb.Profiles.Application;
 
 namespace MemoryAccessProfiles.Profiles.ResidentEvil2;
 

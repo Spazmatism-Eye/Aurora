@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
-using Aurora.Controls;
+using AuroraRgb.Controls;
 
-namespace Aurora.Settings.Layers.Controls {
+namespace AuroraRgb.Settings.Layers.Controls {
 
     public partial class Control_ToggleKeyLayer : UserControl {
 

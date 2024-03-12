@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
 namespace Plugin_Example.Layers;

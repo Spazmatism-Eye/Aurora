@@ -1,4 +1,4 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
 using MemoryAccessProfiles.Profiles.Dishonored.GSI.Nodes;
 
 namespace MemoryAccessProfiles.Profiles.Dishonored.GSI;

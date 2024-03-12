@@ -1,14 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Aurora.Profiles;
-using Aurora.Profiles.CSGO.GSI.Nodes;
+﻿using AuroraRgb.Profiles.CSGO.GSI.Nodes;
 
-namespace Aurora.Profiles.CSGO.GSI
+namespace AuroraRgb.Profiles.CSGO.GSI
 {
     /// <summary>
     /// A class representing various information retaining to Game State Integration of Counter-Strike: Global Offensive

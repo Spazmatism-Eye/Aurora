@@ -1,7 +1,8 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.Magic_Duels_2012;
+namespace AuroraRgb.Profiles.Magic_Duels_2012;
 
 public class MagicDuels2012 : Application
 {

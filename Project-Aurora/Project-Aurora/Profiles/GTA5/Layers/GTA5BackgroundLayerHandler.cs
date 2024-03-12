@@ -1,17 +1,11 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.GTA5.GSI;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.GTA5.GSI;
+using AuroraRgb.Settings.Layers;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.GTA5.Layers
+namespace AuroraRgb.Profiles.GTA5.Layers
 {
     public class GTA5BackgroundLayerHandlerProperties : LayerHandlerProperties2Color<GTA5BackgroundLayerHandlerProperties>
     {

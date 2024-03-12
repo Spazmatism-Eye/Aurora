@@ -6,16 +6,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using AuroraRgb.Devices;
 using Microsoft.Scripting.Utils;
 using Microsoft.Win32;
 
-namespace Aurora.Profiles.Chroma;
+namespace AuroraRgb.Profiles.Chroma;
 
 public partial class Control_Chroma : INotifyPropertyChanged
 {
-    private static HashSet<string> ExcludedApps = new(){ "Aurora.exe", "AuroraDeviceManager.exe" };
+    private static readonly HashSet<string> ExcludedApps = [Global.AuroraExe, DeviceManager.DeviceManagerExe];
     
-    public ObservableCollection<string> EnabledPrograms { get; } = new();
+    public ObservableCollection<string> EnabledPrograms { get; } = [];
     public ObservableCollection<string> ExcludedPrograms => _settings.ExcludedPrograms;
     public string SelectedEnabledProgram { get; set; } = "";
     public string SelectedExcludedProgram { get; set; } = "";

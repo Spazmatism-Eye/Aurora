@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic.Generic {
     /// <summary>
     /// Interaction logic for Control_ConditionNot.xaml
     /// </summary>

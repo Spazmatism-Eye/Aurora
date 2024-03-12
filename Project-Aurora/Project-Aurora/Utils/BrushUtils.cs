@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using ColorStopCollecion = System.Collections.Generic.List<(System.Drawing.Color color, float offset)>;
 using D = System.Drawing;
 using M = System.Windows.Media;
 
-namespace Aurora.Utils
+namespace AuroraRgb.Utils
 {
     public static class BrushUtils
     {

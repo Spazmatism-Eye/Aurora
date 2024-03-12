@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Octokit;
 
-namespace Aurora.Utils
+namespace AuroraRgb.Utils
 {
     /// <summary>
     /// Class to update pointers for applications with memory reading functionality.

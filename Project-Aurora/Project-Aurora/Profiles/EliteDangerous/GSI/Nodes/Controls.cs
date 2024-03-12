@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Aurora.Devices;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 using Common.Devices;
-using Microsoft.Scripting.Utils;
 
-namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
+namespace AuroraRgb.Profiles.EliteDangerous.GSI.Nodes
 {
     public static class Command
     {

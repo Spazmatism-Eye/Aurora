@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Aurora.Settings.Overrides.Logic.Boolean;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     /// <summary>
     /// Interaction logic for Control_SubconditionHolder.xaml

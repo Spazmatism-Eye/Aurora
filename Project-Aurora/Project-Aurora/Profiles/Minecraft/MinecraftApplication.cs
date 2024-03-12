@@ -1,11 +1,6 @@
-﻿using Aurora.Profiles.Minecraft.Layers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuroraRgb.Profiles.Minecraft.Layers;
 
-namespace Aurora.Profiles.Minecraft {
+namespace AuroraRgb.Profiles.Minecraft {
 
     public class Minecraft : Application {
 

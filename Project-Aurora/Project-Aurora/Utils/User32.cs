@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 internal static partial class User32
 {

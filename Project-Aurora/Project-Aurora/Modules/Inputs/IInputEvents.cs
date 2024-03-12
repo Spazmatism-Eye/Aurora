@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Common.Devices;
 using JetBrains.Annotations;
 
-namespace Aurora.Modules.Inputs;
+namespace AuroraRgb.Modules.Inputs;
 
 public abstract class AuroraInputEventArgs : EventArgs
 {

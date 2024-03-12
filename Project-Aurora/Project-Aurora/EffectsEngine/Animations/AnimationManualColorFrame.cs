@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Common.Devices;
 
-namespace Aurora.EffectsEngine.Animations
+namespace AuroraRgb.EffectsEngine.Animations
 {
     public class AnimationManualColorFrame : AnimationFrame
     {

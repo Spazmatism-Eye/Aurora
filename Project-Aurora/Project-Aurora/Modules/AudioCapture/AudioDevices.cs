@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using AuroraRgb.Utils;
 using NAudio.CoreAudioApi;
 
-namespace Aurora.Modules.AudioCapture;
+namespace AuroraRgb.Modules.AudioCapture;
 
 public sealed class AudioDevices : IDisposable, NAudio.CoreAudioApi.Interfaces.IMMNotificationClient
 {

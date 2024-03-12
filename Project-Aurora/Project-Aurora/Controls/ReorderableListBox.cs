@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Controls {
+namespace AuroraRgb.Controls {
 
     /// <summary>
     /// A special ListBox that allows the items that make up the listbox to be dragged up and down.

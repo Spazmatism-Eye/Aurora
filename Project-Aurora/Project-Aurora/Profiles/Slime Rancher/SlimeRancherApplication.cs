@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Slime_Rancher;
+﻿namespace AuroraRgb.Profiles.Slime_Rancher;
 
 public class Slime_Rancher : Application {
 

@@ -1,11 +1,11 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class SolidColorLayerHandler : LayerHandler<LayerHandlerProperties>
 {

@@ -1,8 +1,8 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Utils;
 
-namespace Aurora.Profiles.Logitech;
+namespace AuroraRgb.Profiles.Logitech;
 
 public class LogitechProfile : ApplicationProfile
 {

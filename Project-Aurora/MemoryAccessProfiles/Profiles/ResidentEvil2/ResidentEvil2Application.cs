@@ -1,4 +1,5 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.Layers;
 
@@ -17,7 +18,7 @@ public class ResidentEvil2 : Application
             IconURI = "Resources/re2_256x256.png"
         })
     {
-        Aurora.Utils.PointerUpdateUtils.MarkAppForUpdate("ResidentEvil2");
+        PointerUpdateUtils.MarkAppForUpdate("ResidentEvil2");
         AllowLayer<ResidentEvil2HealthLayerHandler>();
         AllowLayer<ResidentEvil2RankLayerHandler>();
     }

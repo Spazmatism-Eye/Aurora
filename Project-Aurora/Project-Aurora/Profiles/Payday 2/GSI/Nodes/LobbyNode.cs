@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Payday_2.GSI.Nodes
+﻿namespace AuroraRgb.Profiles.Payday_2.GSI.Nodes
 {
     /// <summary>
     /// Information about the game lobby

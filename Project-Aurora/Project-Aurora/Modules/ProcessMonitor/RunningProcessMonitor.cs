@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aurora.Modules.ProcessMonitor;
+namespace AuroraRgb.Modules.ProcessMonitor;
 
 public class ProcessStarted(string processName) : EventArgs
 {

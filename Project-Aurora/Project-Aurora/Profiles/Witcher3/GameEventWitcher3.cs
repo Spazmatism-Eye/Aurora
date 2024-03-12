@@ -1,7 +1,7 @@
-﻿using Aurora.Profiles.Witcher3.GSI;
+﻿using AuroraRgb.Profiles.Witcher3.GSI;
 using Witcher3Gsi;
 
-namespace Aurora.Profiles.Witcher3;
+namespace AuroraRgb.Profiles.Witcher3;
 
 public sealed class GameEventWitcher3 : LightEvent
 {

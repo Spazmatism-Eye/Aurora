@@ -1,11 +1,9 @@
-﻿
-using System;
-using System.Linq;
+﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using Aurora.Controls;
+using AuroraRgb.Controls;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 public partial class Control_BooleanGSIEnum
 {
@@ -18,7 +16,7 @@ public partial class Control_BooleanGSIEnum
     /// <summary>Updates the enum value dropdown with a list of enum values for the current application and selected variable path.</summary>
     private void UpdateEnumDropDown() {
         Type selectedEnumType = null;
-        var application = Utils.AttachedApplication.GetApplication(this);
+        var application = AttachedApplication.GetApplication(this);
         var isValid = ((FrameworkElement)Content).DataContext is BooleanGSIEnum ctx
                       && !string.IsNullOrWhiteSpace(ctx.VariablePath.GsiPath) // If the path to the enum GSI isn't empty
                       && application?.ParameterLookup != null // If the application parameter lookup is ready (and application isn't null)
@@ -26,7 +24,7 @@ public partial class Control_BooleanGSIEnum
                       && (selectedEnumType = application.ParameterLookup[ctx.VariablePath.GsiPath].ClrType).IsEnum; // And the GSI variable is an enum type
 
         EnumVal.IsEnabled = isValid;
-        EnumVal.ItemsSource = isValid ? Utils.EnumUtils.GetEnumItemsSource(selectedEnumType) : null;
+        EnumVal.ItemsSource = isValid ? EnumUtils.GetEnumItemsSource(selectedEnumType) : null;
     }
 
     // We don't do UpdateEnumDropDown in the constructor because it won't have been added to the visual tree at the point and therefore

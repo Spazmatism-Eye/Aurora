@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Amib.Threading;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Utils;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Modules.Razer;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class PerformanceMonitor(Task<RunningProcessMonitor> runningProcessMonitor) : AuroraModule
 {

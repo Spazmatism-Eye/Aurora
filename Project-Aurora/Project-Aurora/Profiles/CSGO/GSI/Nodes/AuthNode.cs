@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.CSGO.GSI.Nodes
+namespace AuroraRgb.Profiles.CSGO.GSI.Nodes
 {
     /// <summary>
     /// A class representing the authentication information for GSI

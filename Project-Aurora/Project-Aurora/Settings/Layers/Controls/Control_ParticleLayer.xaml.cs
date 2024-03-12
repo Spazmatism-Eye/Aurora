@@ -4,9 +4,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Aurora.Utils;
+using AuroraRgb.Utils;
+using ColorBox.Implementation;
 
-namespace Aurora.Settings.Layers.Controls {
+namespace AuroraRgb.Settings.Layers.Controls {
     /// <summary>
     /// Interaction logic for Control_ParticleLayer.xaml
     /// </summary>
@@ -28,7 +29,7 @@ namespace Aurora.Settings.Layers.Controls {
             gradientEditor.Brush = handler.Properties._ParticleColorStops.ToMediaBrush();
         }
 
-        private void GradientEditor_BrushChanged(object? sender, ColorBox.BrushChangedEventArgs e) {
+        private void GradientEditor_BrushChanged(object? sender, BrushChangedEventArgs e) {
             // Set the particle's color stops from the media brush. We cannot pass the media brush directly as it causes issues with UI threading
             handler.Properties._ParticleColorStops = ColorStopCollection.FromMediaBrush(e.Brush);
         }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles.CSGO.GSI.Nodes;
+namespace AuroraRgb.Profiles.CSGO.GSI.Nodes;
 
 /// <summary>
 /// A class representing player information for all players

@@ -1,6 +1,6 @@
-﻿using Aurora.Settings;
+﻿using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.EliteDangerous;
+namespace AuroraRgb.Profiles.EliteDangerous;
 
 public class EliteDangerousSettings : FirstTimeApplicationSettings
 {

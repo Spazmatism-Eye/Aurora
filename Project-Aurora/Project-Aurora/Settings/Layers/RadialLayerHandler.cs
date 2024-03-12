@@ -1,19 +1,20 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers {
+namespace AuroraRgb.Settings.Layers {
 
     public class RadialLayerProperties : LayerHandlerProperties<RadialLayerProperties> {
 
-        private static readonly SegmentedRadialBrushFactory defaultFactory = new(new Utils.ColorStopCollection(
+        private static readonly SegmentedRadialBrushFactory defaultFactory = new(new ColorStopCollection(
             new[] { Color.Red, Color.Orange, Color.Yellow, Color.Lime, Color.Cyan, Color.Blue, Color.Purple, Color.Red }));
 
         public SegmentedRadialBrushFactory _Brush { get; set; }

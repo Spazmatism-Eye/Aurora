@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Aurora.EffectsEngine.Animations
+namespace AuroraRgb.EffectsEngine.Animations
 {
     public class AnimationFilledGradientRectangle : AnimationFilledRectangle
     {

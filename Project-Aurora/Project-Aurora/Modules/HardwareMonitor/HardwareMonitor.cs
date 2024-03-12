@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using LibreHardwareMonitor.Hardware;
 
-namespace Aurora.Modules.HardwareMonitor;
+namespace AuroraRgb.Modules.HardwareMonitor;
 
 public interface IHardwareMonitor : IDisposable
 {

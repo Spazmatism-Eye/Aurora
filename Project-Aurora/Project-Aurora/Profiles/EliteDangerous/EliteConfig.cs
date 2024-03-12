@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Aurora.Profiles.EliteDangerous;
+namespace AuroraRgb.Profiles.EliteDangerous;
 
 public static class EliteConfig
 {

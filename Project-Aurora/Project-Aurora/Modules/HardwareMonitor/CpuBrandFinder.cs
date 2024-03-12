@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management;
 
-namespace Aurora.Modules.HardwareMonitor;
+namespace AuroraRgb.Modules.HardwareMonitor;
 
 public static class CpuBrandFinder
 {

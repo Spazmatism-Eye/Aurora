@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     public static class TextUtils {
 

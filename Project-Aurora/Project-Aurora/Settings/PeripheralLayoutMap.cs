@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public static class PeripheralLayoutMap
 {

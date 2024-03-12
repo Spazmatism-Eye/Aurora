@@ -7,10 +7,11 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using AuroraRgb.EffectsEngine;
 using Color = System.Windows.Media.Color;
 using Image = System.Windows.Controls.Image;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// A window that shows the Bitmap 

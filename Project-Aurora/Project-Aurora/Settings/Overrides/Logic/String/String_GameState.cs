@@ -1,10 +1,10 @@
-﻿using Aurora.Controls;
-using Aurora.Profiles;
-using System.Windows.Data;
+﻿using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Controls;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 [Evaluatable("String State Variable", category: EvaluatableCategory.State)]
 public class StringGSIString : GsiEvaluatable<string>

@@ -1,12 +1,12 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Dota_2.GSI;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Dota_2.GSI;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Dota_2.Layers
+namespace AuroraRgb.Profiles.Dota_2.Layers
 {
     public class Dota2KillstreakLayerHandlerProperties : LayerHandlerProperties2Color<Dota2KillstreakLayerHandlerProperties>
     {
@@ -111,7 +111,7 @@ namespace Aurora.Profiles.Dota_2.Layers
         private bool _empty = true;
         public override EffectLayer Render(IGameState state)
         {
-            if (_isPlayingKillStreakAnimation && Utils.Time.GetMillisecondsSinceEpoch() >= _ksEndTime)
+            if (_isPlayingKillStreakAnimation && Time.GetMillisecondsSinceEpoch() >= _ksEndTime)
             {
                 _isPlayingKillStreakAnimation = false;
             }
@@ -121,7 +121,7 @@ namespace Aurora.Profiles.Dota_2.Layers
             {    //player got a kill
                 _isPlayingKillStreakAnimation = true;
 
-                _ksEndTime = Utils.Time.GetMillisecondsSinceEpoch() + KsDuration;
+                _ksEndTime = Time.GetMillisecondsSinceEpoch() + KsDuration;
             }
             _currentKillCount = dota2State.Player.Kills;
                 

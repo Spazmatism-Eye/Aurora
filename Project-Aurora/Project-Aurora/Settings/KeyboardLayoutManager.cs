@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using Aurora.EffectsEngine;
-using Aurora.Settings.Controls.Keycaps;
-using Aurora.Settings.Layouts;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Settings.Controls.Keycaps;
+using AuroraRgb.Settings.Layouts;
+using AuroraRgb.Utils;
 using Common;
 using Common.Devices;
 using RazerSdkReader;
@@ -23,7 +23,7 @@ using Application = System.Windows.Application;
 using Color = System.Drawing.Color;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 [JsonSerializable(typeof(VirtualGroup))]
 [JsonSerializable(typeof(VirtualGroupConfiguration))]

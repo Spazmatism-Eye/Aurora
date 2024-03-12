@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Common.Devices;
 
-namespace Aurora.Modules.Inputs;
+namespace AuroraRgb.Modules.Inputs;
 
 public sealed class KeyRecorder : IDisposable
 {

@@ -1,10 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Threading.Tasks;
-using Aurora.Modules.Logitech;
-using Aurora.Modules.ProcessMonitor;
+using AuroraRgb.Modules.Logitech;
+using AuroraRgb.Modules.ProcessMonitor;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed class LogitechSdkModule(Task<RunningProcessMonitor> runningProcessMonitor) : AuroraModule
 {

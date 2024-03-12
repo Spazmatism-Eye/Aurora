@@ -1,22 +1,13 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Profiles.CSGO.GSI.Nodes;
-using Aurora.Profiles.Payday_2.GSI;
-using Aurora.Profiles.Payday_2.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Payday_2.GSI;
+using AuroraRgb.Profiles.Payday_2.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Payday_2.Layers
+namespace AuroraRgb.Profiles.Payday_2.Layers
 {
     public class PD2FlashbangLayerHandlerProperties : LayerHandlerProperties2Color<PD2FlashbangLayerHandlerProperties>
     {

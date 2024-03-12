@@ -4,7 +4,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 
-namespace Aurora.Modules.Logitech;
+namespace AuroraRgb.Modules.Logitech;
 
 public sealed class PipeListener : IDisposable
 {

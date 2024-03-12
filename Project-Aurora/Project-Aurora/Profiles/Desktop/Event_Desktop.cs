@@ -1,7 +1,7 @@
-using Aurora.EffectsEngine;
 using System.Linq;
+using AuroraRgb.EffectsEngine;
 
-namespace Aurora.Profiles.Desktop;
+namespace AuroraRgb.Profiles.Desktop;
 
 public class Event_Desktop : LightEvent
 {

@@ -1,7 +1,8 @@
-﻿using Aurora.Profiles;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using AuroraRgb.Settings.Overrides.Logic.Number;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
     /// <summary>
     /// Interaction logic for Control_ConditionGSINumeric.xaml
     /// </summary>
@@ -10,7 +11,7 @@ namespace Aurora.Settings.Overrides.Logic {
         public Control_ConditionGSINumeric(BooleanGSINumeric context) {
             InitializeComponent();
             DataContext = context;
-            OperatorCb.ItemsSource = Utils.EnumUtils.GetEnumItemsSource<ComparisonOperator>();
+            OperatorCb.ItemsSource = EnumUtils.GetEnumItemsSource<ComparisonOperator>();
         }
     }
 }

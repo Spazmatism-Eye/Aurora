@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     /// <summary>
     /// Interaction logic for Control_Ruler.xaml

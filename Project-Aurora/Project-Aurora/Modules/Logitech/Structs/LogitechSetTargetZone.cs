@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using Aurora.Modules.Logitech.Enums;
+using AuroraRgb.Modules.Logitech.Enums;
 
-namespace Aurora.Modules.Logitech.Structs;
+namespace AuroraRgb.Modules.Logitech.Structs;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct LogitechSetTargetZone

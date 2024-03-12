@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
     /// <summary>
     /// Converter that returns a boolean based on whether or not the given value is null or not.

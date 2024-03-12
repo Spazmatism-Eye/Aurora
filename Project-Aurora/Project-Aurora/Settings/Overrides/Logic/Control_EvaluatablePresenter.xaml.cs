@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -7,9 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     /// <summary>
     /// A control that can be used to present the controls of an IEvaluatable to the user, allowing them to edit the parameters.

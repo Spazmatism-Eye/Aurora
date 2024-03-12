@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.EffectsEngine;
 using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using Aurora.Profiles.ETS2.GSI;
+using AuroraRgb.Profiles.ETS2.GSI;
 
-namespace Aurora.Profiles.ETS2 {
+namespace AuroraRgb.Profiles.ETS2 {
     public class GameEvent_ETS2 : LightEvent {
 
         /// <summary>Name of the mapped field that the ETS2 Telemetry Server DLL outputs to.</summary>

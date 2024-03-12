@@ -1,18 +1,13 @@
 ﻿using System.Drawing;
-using Aurora.Profiles;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
 namespace MemoryAccessProfiles.Profiles.Borderlands2;
 
 public class Borderlands2Profile : ApplicationProfile
 {
-    public Borderlands2Profile() : base()
-    {
-            
-    }
-
     public override void Reset()
     {
         base.Reset();

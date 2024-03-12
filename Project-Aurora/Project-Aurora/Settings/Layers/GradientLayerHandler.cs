@@ -1,13 +1,14 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Utils;
 using Common.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class GradientLayerHandlerProperties : LayerHandlerProperties2Color<GradientLayerHandlerProperties>
 {
@@ -70,9 +71,9 @@ public class GradientLayerHandler : LayerHandler<GradientLayerHandlerProperties>
         //If Wave Size 0 Gradiant Stop Moving Animation
         if (Properties.GradientConfig.GradientSize == 0)
         {
-            Properties.GradientConfig.ShiftAmount += (Utils.Time.GetMillisecondsSinceEpoch() - Properties.GradientConfig.LastEffectCall) / 1000.0f * 5.0f * Properties.GradientConfig.Speed;
+            Properties.GradientConfig.ShiftAmount += (Time.GetMillisecondsSinceEpoch() - Properties.GradientConfig.LastEffectCall) / 1000.0f * 5.0f * Properties.GradientConfig.Speed;
             Properties.GradientConfig.ShiftAmount %= Effects.Canvas.BiggestSize;
-            Properties.GradientConfig.LastEffectCall = Utils.Time.GetMillisecondsSinceEpoch();
+            Properties.GradientConfig.LastEffectCall = Time.GetMillisecondsSinceEpoch();
 
             var selectedColor = Properties.GradientConfig.Brush.GetColorSpectrum().GetColorAt(Properties.GradientConfig.ShiftAmount, Effects.Canvas.BiggestSize);
 

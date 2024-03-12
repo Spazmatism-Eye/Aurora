@@ -1,13 +1,13 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.ETS2.GSI;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.ETS2.GSI;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.ETS2.Layers {
+namespace AuroraRgb.Profiles.ETS2.Layers {
     public class ETS2BlinkerLayerHandlerProperties : LayerHandlerProperties2Color<ETS2BlinkerLayerHandlerProperties> {
 
         public Color? _BlinkerOffColor { get; set; }

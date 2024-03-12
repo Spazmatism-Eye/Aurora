@@ -7,7 +7,7 @@ using Common.Devices;
 using Common.Devices.RGBNet;
 using RGB.NET.Core;
 
-namespace Aurora.Devices.RGBNet.Config;
+namespace AuroraRgb.Devices.RGBNet.Config;
 
 /// <summary>
 /// Interaction logic for AsusKeyToDeviceKeyControl.xaml

@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
+using AuroraRgb.Profiles;
 
-namespace Aurora.Settings.Layers.Controls {
+namespace AuroraRgb.Settings.Layers.Controls {
 
     public partial class Control_BinaryCounterLayer : UserControl {
 
@@ -10,7 +11,7 @@ namespace Aurora.Settings.Layers.Controls {
             DataContext = context;
         }
 
-        public void SetApplication(Profiles.Application app) {
+        public void SetApplication(Application app) {
             varPathPicker.Application = app;
         }
     }

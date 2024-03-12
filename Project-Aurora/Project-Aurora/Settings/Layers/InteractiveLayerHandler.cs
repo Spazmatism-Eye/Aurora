@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Modules;
-using Aurora.Modules.Inputs;
-using Aurora.Profiles;
-using Aurora.Profiles.Desktop;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Settings.Overrides;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Profiles;
+using AuroraRgb.Profiles.Desktop;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Common.Utils;
 using Newtonsoft.Json;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class InputItem
 {

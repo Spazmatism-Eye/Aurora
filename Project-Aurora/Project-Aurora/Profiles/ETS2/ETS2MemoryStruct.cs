@@ -3,7 +3,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Aurora.Profiles.ETS2 {
+namespace AuroraRgb.Profiles.ETS2 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal struct ETS2MemoryStruct {
         const int GeneralStringSize = 64;

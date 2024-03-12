@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
     public static class FrameworkElementExtensions {
 
         /// <summary>

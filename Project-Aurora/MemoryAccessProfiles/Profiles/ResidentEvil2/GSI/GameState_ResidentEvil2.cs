@@ -1,4 +1,4 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
 using MemoryAccessProfiles.Profiles.ResidentEvil2.GSI.Nodes;
 
 namespace MemoryAccessProfiles.Profiles.ResidentEvil2.GSI;

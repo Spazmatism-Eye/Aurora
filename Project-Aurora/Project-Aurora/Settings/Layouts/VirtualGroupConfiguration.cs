@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Common.Devices;
 
-namespace Aurora.Settings.Layouts;
+namespace AuroraRgb.Settings.Layouts;
 
 public class VirtualGroupConfiguration
 {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
+namespace AuroraRgb.Profiles.EliteDangerous.GSI.Nodes
 {
     public static class Flag
     {

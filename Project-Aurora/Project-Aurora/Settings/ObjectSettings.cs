@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public class ObjectSettings<T>
 {

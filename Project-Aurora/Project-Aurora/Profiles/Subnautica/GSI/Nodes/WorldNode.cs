@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Nodes;
+using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.Subnautica.GSI.Nodes {
+namespace AuroraRgb.Profiles.Subnautica.GSI.Nodes {
     public class WorldNode : Node {
 
         public float DayScalar;

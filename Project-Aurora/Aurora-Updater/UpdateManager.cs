@@ -202,7 +202,7 @@ public class UpdateManager
             {
                 var auroraProc = new ProcessStartInfo
                 {
-                    FileName = Path.Combine(Program.ExePath, "Aurora.exe")
+                    FileName = Path.Combine(Program.ExePath, "AuroraRgb.exe")
                 };
                 Process.Start(auroraProc);
 

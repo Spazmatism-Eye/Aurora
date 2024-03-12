@@ -1,10 +1,11 @@
-﻿using Aurora.Profiles;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Overrides.Logic.Number;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Condition that accesses a specific game state variable (of boolean type) and returns the state.

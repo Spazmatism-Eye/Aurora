@@ -2,10 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Aurora.Profiles.Dota_2.Layers"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:Controls="clr-namespace:Aurora.Controls" x:Class="Aurora.Profiles.Dota_2.Layers.Control_Dota2RespawnLayer"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
+             x:Class="AuroraRgb.Profiles.Dota_2.Layers.Control_Dota2RespawnLayer"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <Grid>
         <Label HorizontalAlignment="Left" Padding="0" Content="Respawn Background Color:" VerticalAlignment="Top" Margin="0,2,0,0"/>
@@ -14,6 +14,6 @@
         <Label HorizontalAlignment="Left" Margin="0,26,0,0" Padding="0" Content="Respawn Color:" VerticalAlignment="Top"/>
         <xctk:ColorPicker x:Name="ColorPicker_respawning" Margin="177,50,0,0" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" ColorMode="ColorCanvas" UsingAlphaChannel="True" SelectedColorChanged="ColorPicker_respawning_SelectedColorChanged" />
         <Label HorizontalAlignment="Left" Margin="0,51,0,0" Padding="0" Content="Respawning (5 sec or less) Color:" VerticalAlignment="Top"/>
-        <Controls:KeySequence x:Name="KeySequence_sequence" RecordingTag="Dota 2 - Respawn" Title="Respawn Keys" HorizontalAlignment="Left" Margin="0,75,0,0" SequenceUpdated="KeySequence_sequence_SequenceUpdated"/>
+        <controls:KeySequence x:Name="KeySequence_sequence" RecordingTag="Dota 2 - Respawn" Title="Respawn Keys" HorizontalAlignment="Left" Margin="0,75,0,0" SequenceUpdated="KeySequence_sequence_SequenceUpdated"/>
     </Grid>
 </UserControl>

@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="Aurora.Controls.GameStateParameterPicker"
+﻿<UserControl x:Class="AuroraRgb.Controls.GameStateParameterPicker"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:l="clr-namespace:Aurora.Controls" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
              mc:Ignorable="d"
              Height="22" MinWidth="60">
 
@@ -12,42 +13,42 @@
         <DataTemplate x:Key="ListItemTemplate">
             <Grid>
                 <TextBlock Text="{Binding DisplayName}" Padding="4,1" Margin="0,0,16,0" />
-                <Image Source="/Aurora;component/Resources/icons8-folder-30.png" Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsFolder, Converter={StaticResource BoolToVisConv}}" />
+                <Image Source="/AuroraRgb;component/Resources/icons8-folder-30.png" Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="{Binding IsFolder, Converter={StaticResource BoolToVisConv}}" />
             </Grid>
         </DataTemplate>
-        <l:IsStringNotNullOrWhitespaceConverter x:Key="IsStringNotNullConv" />
-        <l:PropertyTypeToGridLengthConverter x:Key="PropTypeToHeightConv" />
+        <controls:IsStringNotNullOrWhitespaceConverter x:Key="IsStringNotNullConv" />
+        <controls:PropertyTypeToGridLengthConverter x:Key="PropTypeToHeightConv" />
     </UserControl.Resources>
 
     <Grid>
         <!-- Main dropdown toggle button -->
-        <ToggleButton HorizontalContentAlignment="Left" Padding="4,1,25,1" Content="{Binding SelectedPath.GsiPath, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}}}"
-                      IsChecked="{Binding IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}}}" />
+        <ToggleButton HorizontalContentAlignment="Left" Padding="4,1,25,1" Content="{Binding SelectedPath.GsiPath, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}}}"
+                      IsChecked="{Binding IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}}}" />
         <Path Width="10" Height="6" HorizontalAlignment="Right" Margin="0,0,9,0" Fill="#FF858585" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z " Stretch="Fill" IsHitTestVisible="False" />
 
         <!-- Dropdown content -->
-        <Popup StaysOpen="False" IsOpen="{Binding IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}}}">
+        <Popup StaysOpen="False" IsOpen="{Binding IsOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}}}">
             <Grid x:Name="popupContent" Background="#1A1A1A" Height="280" Width="200">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="{Binding PropertyType, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}}, Converter={StaticResource PropTypeToHeightConv}}" />
+                    <RowDefinition Height="{Binding PropertyType, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}}, Converter={StaticResource PropTypeToHeightConv}}" />
                 </Grid.RowDefinitions>
 
                 <!-- Up button and current "directory" -->
                 <StackPanel Grid.Row="0" Orientation="Vertical">
-                    <Button Content="⬅ Previous" IsEnabled="{Binding WorkingPath, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}},
+                    <Button Content="⬅ Previous" IsEnabled="{Binding WorkingPath, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}},
                      Converter={StaticResource IsStringNotNullConv}}" Margin="6" Padding="6,2" Click="BackBtn_Click" />
-                    <TextBlock Text="{Binding WorkingPath.GsiPath, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}}}" Margin="6,0,6,6" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding WorkingPath.GsiPath, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}}}" Margin="6,0,6,6" VerticalAlignment="Center" />
                 </StackPanel>
 
                 <!-- List boxes (aux is for animation) -->
                 <ListBox x:Name="mainListBox" Grid.Row="1"
-                         ItemsSource="{Binding CurrentParameterListItems, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type l:GameStateParameterPicker}}}"
+                         ItemsSource="{Binding CurrentParameterListItems, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:GameStateParameterPicker}}}"
                          ItemTemplate="{StaticResource ListItemTemplate}" SelectedValuePath="Path" Width="{Binding ActualWidth, ElementName=popupContent}" HorizontalAlignment="Left"
-                         l:GameStateParameterPicker.TransformRelativeOffset="0" RenderTransform="{l:DoubleToRelativeTransformOffset}" PreviewMouseLeftButtonDown="MainListBox_PreviewMouseLeftButtonDown" />
+                         controls:GameStateParameterPicker.TransformRelativeOffset="0" RenderTransform="{controls:DoubleToRelativeTransformOffset}" PreviewMouseLeftButtonDown="MainListBox_PreviewMouseLeftButtonDown" />
                 <ListBox x:Name="auxillaryListbox" Grid.Row="1" ItemTemplate="{StaticResource ListItemTemplate}" Width="{Binding ActualWidth, ElementName=popupContent}"
-                         SelectedValuePath="Path" HorizontalAlignment="Left" l:GameStateParameterPicker.TransformRelativeOffset="-1" RenderTransform="{l:DoubleToRelativeTransformOffset}" />
+                         SelectedValuePath="Path" HorizontalAlignment="Left" controls:GameStateParameterPicker.TransformRelativeOffset="-1" RenderTransform="{controls:DoubleToRelativeTransformOffset}" />
 
                 <!-- Numeric input for numeric types -->
                 <DockPanel Grid.Row="2" LastChildFill="True">

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Aurora.EffectsEngine;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static partial class Win32Transparency
 {

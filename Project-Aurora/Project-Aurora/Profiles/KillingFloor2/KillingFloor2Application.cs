@@ -1,7 +1,8 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
+﻿using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.KillingFloor2;
+namespace AuroraRgb.Profiles.KillingFloor2;
 
 public class KillingFloor2 : Application
 {

@@ -3,16 +3,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using Aurora.Devices;
-using Aurora.EffectsEngine;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using Aurora.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Settings.Overrides.Logic.Number;
 using Common.Devices;
 using Common.Utils;
 
-namespace Aurora.Profiles.Desktop;
+namespace AuroraRgb.Profiles.Desktop;
 
 public enum InteractiveEffects
 {

@@ -1,11 +1,10 @@
-﻿using Aurora.Profiles;
-using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     /// <summary>
     /// Logic that compares two strings using a selection of operators.

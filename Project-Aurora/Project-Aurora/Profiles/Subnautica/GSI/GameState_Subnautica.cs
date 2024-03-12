@@ -1,13 +1,7 @@
-using Aurora.Profiles.Generic.GSI.Nodes;
-using Aurora.Profiles.Subnautica.GSI.Nodes;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Profiles.Subnautica.GSI.Nodes;
 
-namespace Aurora.Profiles.Subnautica.GSI {
+namespace AuroraRgb.Profiles.Subnautica.GSI {
 
     public class GameState_Subnautica : GameState {
 

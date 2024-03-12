@@ -1,6 +1,4 @@
-﻿using Aurora.Profiles;
-using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -10,10 +8,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Aurora.Utils;
-using Application = Aurora.Profiles.Application;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
+using PropertyChanged;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 [DoNotNotify]
 public partial class GameStateParameterPicker : INotifyPropertyChanged {

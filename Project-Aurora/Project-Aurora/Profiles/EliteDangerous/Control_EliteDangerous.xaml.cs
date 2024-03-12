@@ -1,19 +1,9 @@
-﻿using Aurora.Controls;
-using System;
-using System.IO;
-using System.IO.Compression;
-using System.Timers;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using Aurora.Devices;
-using Aurora.Settings;
-using Xceed.Wpf.Toolkit;
-using Aurora.Profiles.EliteDangerous.GSI;
-using MessageBox = System.Windows.MessageBox;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.EliteDangerous
+namespace AuroraRgb.Profiles.EliteDangerous
 {
     /// <summary>
     /// Interaction logic for Control_EliteDangerous.xaml

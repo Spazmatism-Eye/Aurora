@@ -5,12 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Controls;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides.Logic;
-using Aurora.Utils;
+using AuroraRgb.Controls;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Utils;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Layers.Controls
+namespace AuroraRgb.Settings.Layers.Controls
 {
     /// <summary>
     /// Interaction logic for Control_AnimationLayer.xaml
@@ -20,7 +21,7 @@ namespace Aurora.Settings.Layers.Controls
         private Window windowAnimationEditor = null;
         private static bool windowAnimationEditorOpen;
 
-        private Profiles.Application profile;
+        private Application profile;
         private bool? triggerPathItemsAreBoolean = null;
         private bool settingsset = false;
         private bool profileset = false;
@@ -68,7 +69,7 @@ namespace Aurora.Settings.Layers.Controls
             }
         }
 
-        public void SetProfile(Profiles.Application profile)
+        public void SetProfile(Application profile)
         {
             Dispatcher.Invoke(() =>
             {

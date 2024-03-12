@@ -1,14 +1,15 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.ETS2.Layers;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.ETS2.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
 using Common.Devices;
 
-namespace Aurora.Profiles.ETS2;
+namespace AuroraRgb.Profiles.ETS2;
 
 public enum ETS2_BeaconStyle {
     [Description("Simple Flashing")]

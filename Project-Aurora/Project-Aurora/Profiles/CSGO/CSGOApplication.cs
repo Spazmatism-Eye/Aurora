@@ -1,7 +1,7 @@
-﻿using Aurora.Profiles.CSGO.Layers;
-using Aurora.Settings;
+﻿using AuroraRgb.Profiles.CSGO.Layers;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.CSGO;
+namespace AuroraRgb.Profiles.CSGO;
 
 public class CSGO : Application
 {

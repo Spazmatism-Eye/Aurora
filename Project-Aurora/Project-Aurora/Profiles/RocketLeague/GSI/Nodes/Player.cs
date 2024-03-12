@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.RocketLeague.GSI.Nodes
+﻿namespace AuroraRgb.Profiles.RocketLeague.GSI.Nodes
 {
     /// <summary>
     /// Class representing player information

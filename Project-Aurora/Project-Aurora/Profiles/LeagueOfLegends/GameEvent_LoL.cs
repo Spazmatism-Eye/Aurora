@@ -1,15 +1,14 @@
-﻿using Aurora.Profiles.LeagueOfLegends.GSI;
-using Aurora.Profiles.LeagueOfLegends.GSI.Nodes;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Timers;
-using Aurora.Modules;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Utils;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles.LeagueOfLegends.GSI;
+using AuroraRgb.Profiles.LeagueOfLegends.GSI.Nodes;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.LeagueOfLegends
+namespace AuroraRgb.Profiles.LeagueOfLegends
 {
     public class GameEvent_LoL : LightEvent
     {

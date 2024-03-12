@@ -1,8 +1,8 @@
 ﻿using System;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles.Generic;
 
 public class GameEvent_Generic : LightEvent
 {

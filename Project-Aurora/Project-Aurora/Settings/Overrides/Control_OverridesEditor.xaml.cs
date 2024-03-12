@@ -1,10 +1,5 @@
-﻿using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using FastMember;
-using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,9 +9,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Aurora.Utils;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Utils;
+using PropertyChanged;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Overrides {
+namespace AuroraRgb.Settings.Overrides {
     /// <summary>
     /// Interaction logic for Control_OverridesEditor.xaml
     /// </summary>
@@ -116,7 +115,7 @@ namespace Aurora.Settings.Overrides {
         public System.Windows.Media.Visual SelectedLogicControl => SelectedLogic?.GetControl();
 
         // Application context for logic
-        public Profiles.Application Application => Layer?.AssociatedApplication;
+        public Application Application => Layer?.AssociatedApplication;
         #endregion
 
         #region Dependency Objects
@@ -171,7 +170,7 @@ namespace Aurora.Settings.Overrides {
                 { typeof(Color), "icons8-paint-palette-30.png" },
                 { typeof(KeySequence), "icons8-keyboard-30.png" }
             }.TryGetValue((Type)value, out string val) ? val : "icons8-diamonds-30.png";
-            return new BitmapImage(new Uri($"/Aurora;component/Resources/{imageName}", UriKind.Relative));
+            return new BitmapImage(new Uri($"/AuroraRgb;component/Resources/{imageName}", UriKind.Relative));
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }

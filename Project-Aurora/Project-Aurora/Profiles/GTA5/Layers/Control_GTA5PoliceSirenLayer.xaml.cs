@@ -1,12 +1,11 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Controls;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Profiles.GTA5.Layers
+namespace AuroraRgb.Profiles.GTA5.Layers
 {
     /// <summary>
     /// Interaction logic for Control_GTA5PoliceSirenLayer.xaml
@@ -67,7 +66,7 @@ namespace Aurora.Profiles.GTA5.Layers
                 (DataContext as GTA5PoliceSirenLayerHandler).Properties.PeripheralUse = (sender as CheckBox).IsChecked.Value;
         }
 
-        private void KeySequence_LeftSiren_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<Settings.KeySequence> e)
+        private void KeySequence_LeftSiren_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
         {
             if (IsLoaded && settingsset && DataContext is GTA5PoliceSirenLayerHandler)
             {
@@ -75,7 +74,7 @@ namespace Aurora.Profiles.GTA5.Layers
             }
         }
 
-        private void KeySequence_RightSiren_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<Settings.KeySequence> e)
+        private void KeySequence_RightSiren_SequenceUpdated(object? sender, RoutedPropertyChangedEventArgs<KeySequence> e)
         {
             if (IsLoaded && settingsset && DataContext is GTA5PoliceSirenLayerHandler)
             {

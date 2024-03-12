@@ -8,10 +8,11 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Controls {
+namespace AuroraRgb.Controls {
 
     public partial class Control_FieldPresenter : UserControl {
 
@@ -86,8 +87,8 @@ namespace Aurora.Controls {
             { typeof(RealColor), bind => new ColorPicker{ ColorMode = ColorMode.ColorCanvas }.SetBindingChain(ColorPicker.SelectedColorProperty, bind, new RealColorConverter()) },
 
             // Gradient colour
-            { typeof(Settings.LayerEffectConfig), bind => new Control_GradientEditor((Settings.LayerEffectConfig)((Control_FieldPresenter)bind.Source).Value) },
-            { typeof(EffectsEngine.EffectBrush), bind => new ColorBox.ColorBox().SetBindingChain(ColorBox.ColorBox.BrushProperty, bind, new EffectMediaBrushConverter(), BindingMode.TwoWay) },
+            { typeof(LayerEffectConfig), bind => new Control_GradientEditor((LayerEffectConfig)((Control_FieldPresenter)bind.Source).Value) },
+            { typeof(EffectsEngine.EffectBrush), bind => new ColorBox.Implementation.ColorBox().SetBindingChain(ColorBox.Implementation.ColorBox.BrushProperty, bind, new EffectMediaBrushConverter(), BindingMode.TwoWay) },
 
             // KeySequences
             { typeof(Settings.KeySequence), bind => new KeySequence {

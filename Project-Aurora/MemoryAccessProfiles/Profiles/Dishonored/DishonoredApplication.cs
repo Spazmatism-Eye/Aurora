@@ -1,4 +1,5 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using MemoryAccessProfiles.Profiles.Dishonored.GSI;
 
 namespace MemoryAccessProfiles.Profiles.Dishonored;
@@ -17,6 +18,6 @@ public class Dishonored : Application
             IconURI = "Resources/dh_128x128.png"
         })
     {
-        Aurora.Utils.PointerUpdateUtils.MarkAppForUpdate("Dishonored");
+        PointerUpdateUtils.MarkAppForUpdate("Dishonored");
     }
 }

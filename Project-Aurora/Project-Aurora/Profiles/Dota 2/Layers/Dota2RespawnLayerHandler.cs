@@ -1,15 +1,15 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Dota_2.GSI;
-using Aurora.Profiles.Dota_2.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Dota_2.GSI;
+using AuroraRgb.Profiles.Dota_2.GSI.Nodes;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Dota_2.Layers
+namespace AuroraRgb.Profiles.Dota_2.Layers
 {
     public class Dota2RespawnLayerHandlerProperties : LayerHandlerProperties2Color<Dota2RespawnLayerHandlerProperties>
     {

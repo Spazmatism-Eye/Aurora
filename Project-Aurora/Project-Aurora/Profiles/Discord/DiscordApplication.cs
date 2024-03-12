@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.Discord;
+﻿namespace AuroraRgb.Profiles.Discord;
 
 public class Discord : Application {
 

@@ -2,17 +2,16 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Devices;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Profiles.CSGO.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.CSGO.GSI;
+using AuroraRgb.Profiles.CSGO.GSI.Nodes;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 public class CSGOBombLayerHandlerProperties : LayerHandlerProperties2Color<CSGOBombLayerHandlerProperties>
 {

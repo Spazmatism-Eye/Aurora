@@ -1,5 +1,5 @@
-using Aurora;
-using Aurora.Devices;
+using AuroraRgb;
+using AuroraRgb.Devices;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

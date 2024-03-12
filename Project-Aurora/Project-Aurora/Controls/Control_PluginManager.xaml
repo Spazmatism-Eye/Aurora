@@ -1,19 +1,19 @@
-﻿<UserControl x:Class="Aurora.Controls.Control_PluginManager"
+﻿<UserControl x:Class="AuroraRgb.Controls.Control_PluginManager"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:settings="clr-namespace:Aurora.Settings"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:a="clr-namespace:Aurora"
-             xmlns:utils="clr-namespace:Aurora.Utils"
+             xmlns:settings1="clr-namespace:AuroraRgb.Settings"
+             xmlns:auroraRgb="clr-namespace:AuroraRgb"
+             xmlns:utils1="clr-namespace:AuroraRgb.Utils"
              mc:Ignorable="d" 
              Loaded="Control_PluginManager_OnLoaded"
              Unloaded="Control_PluginManager_OnUnloaded"
              d:DesignHeight="300" d:DesignWidth="1200">
     <UserControl.Resources>
         <ResourceDictionary>
-            <settings:PluginEnabledConverter x:Key="PluginEnabledConverter"/>
+            <settings1:PluginEnabledConverter x:Key="PluginEnabledConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -22,7 +22,7 @@
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <Grid Margin="7,7,7,7" DataContext="{x:Static a:Global.Configuration}">
+        <Grid Margin="7,7,7,7" DataContext="{x:Static auroraRgb:Global.Configuration}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -108,7 +108,7 @@
                         <TextBlock TextWrapping="Wrap" Text="Application Detection Method:" Margin="0,12,0,0"
                                    HorizontalAlignment="Left" VerticalAlignment="Top" />
                         <ComboBox SelectedValue="{Binding DetectionMode}"
-                                  ItemsSource="{utils:EnumToItemsSource {x:Type settings:ApplicationDetectionMode}}"
+                                  ItemsSource="{utils1:EnumToItemsSource {x:Type settings1:ApplicationDetectionMode}}"
                                   DisplayMemberPath="Text" SelectedValuePath="Value" Width="157"
                                   HorizontalAlignment="Left" VerticalAlignment="Top" />
 

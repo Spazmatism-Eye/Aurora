@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Aurora.Profiles.Desktop;
+namespace AuroraRgb.Profiles.Desktop;
 
 /// <summary>
 /// Interaction logic for Control_Desktop.xaml

@@ -1,15 +1,15 @@
-﻿<UserControl x:Class="Aurora.Settings.Controls.Control_ProfileManager"
+﻿<UserControl x:Class="AuroraRgb.Settings.Controls.Control_ProfileManager"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Utils="clr-namespace:Aurora.Utils"
+             xmlns:utils="clr-namespace:AuroraRgb.Utils"
              Loaded="Control_ProfileManager_OnLoaded"
              Unloaded="Control_ProfileManager_OnUnloaded"
              mc:Ignorable="d" d:DesignWidth="200" MinWidth="200" MinHeight="25" KeyDown="lstProfiles_KeyDown" d:DesignHeight="202.667" SizeChanged="UserControl_SizeChanged" >
     <UserControl.Resources>
         <ResourceDictionary>
-            <Utils:TextCharacterLimitConv x:Key="TextCharacterLimitConv" MaxLength="24"/>
+            <utils:TextCharacterLimitConv x:Key="TextCharacterLimitConv" MaxLength="24"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -23,33 +23,33 @@
         <StackPanel Orientation="Horizontal" Margin="0,60" VerticalAlignment="Top" HorizontalAlignment="Right" Height="24">
             <Button x:Name="btnNewProfile" Click="btnNewProfile_Click" ToolTip="Create a new profile" Margin="2,0">
                 <DockPanel Margin="2,0">
-                    <Image Source="/Aurora;component/Resources/AddProfile_Icon.png" Width="18" Height="18"/>
+                    <Image Source="/AuroraRgb;component/Resources/AddProfile_Icon.png" Width="18" Height="18"/>
                     <TextBlock>New</TextBlock>
                 </DockPanel>
             </Button>
             <Button x:Name="btnImportProfile" ToolTip="Import an existing profile from file" Click="btnImportProfile_Click" Margin="2,0">
                 <DockPanel Margin="2,0">
-                    <Image Source="/Aurora;component/Resources/Import_Icon.png" Width="18" Height="18"/>
+                    <Image Source="/AuroraRgb;component/Resources/Import_Icon.png" Width="18" Height="18"/>
                 </DockPanel>
             </Button>
             <Button x:Name="btnExportProfile" ToolTip="Export an existing profile as JSON file" Click="btnExportProfile_Click" Margin="2,0">
                 <DockPanel Margin="2,0">
-                    <Image Source="/Aurora;component/Resources/Export_Icon.png" Width="18" Height="18" />
+                    <Image Source="/AuroraRgb;component/Resources/Export_Icon.png" Width="18" Height="18" />
                 </DockPanel>
             </Button>
             <Button x:Name="btnCopyProfile" ToolTip="Copy the selected profile (Ctrl + C)" Click="btnCopyProfile_Click" Margin="2,0">
                 <DockPanel Margin="2,0">
-                    <Image Source="/Aurora;component/Resources/Layers_Copy.png" Width="18" Height="18"/>
+                    <Image Source="/AuroraRgb;component/Resources/Layers_Copy.png" Width="18" Height="18"/>
                 </DockPanel>
             </Button>
             <Button x:Name="btnPasteProfile" ToolTip="Paste profile from clipboard (Ctrl + V)" Click="btnPasteProfile_Click" Margin="2,0">
                 <DockPanel Margin="2,0">
-                    <Image Source="/Aurora;component/Resources/Layers_Paste.png" Width="18" Height="18"/>
+                    <Image Source="/AuroraRgb;component/Resources/Layers_Paste.png" Width="18" Height="18"/>
                 </DockPanel>
             </Button>
             <Button x:Name="btnDeleteProfile" Click="buttonDeleteProfile_Click" IsEnabled="False" ToolTip="Delete the selected profile (Del)" Margin="4,0">
                 <DockPanel Margin="2,0">
-                    <Image Source="/Aurora;component/Resources/Layers_Remove.png" Width="18" Height="18" />
+                    <Image Source="/AuroraRgb;component/Resources/Layers_Remove.png" Width="18" Height="18" />
                 </DockPanel>
             </Button>
         </StackPanel>

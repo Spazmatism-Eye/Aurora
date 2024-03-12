@@ -1,7 +1,7 @@
-﻿using Aurora.Modules;
-using Aurora.Modules.HardwareMonitor;
+﻿using AuroraRgb.Modules;
+using AuroraRgb.Modules.HardwareMonitor;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 /// <summary>
 /// Class representing local computer information

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using Aurora.Profiles;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
 namespace MemoryAccessProfiles.Profiles.Dishonored;

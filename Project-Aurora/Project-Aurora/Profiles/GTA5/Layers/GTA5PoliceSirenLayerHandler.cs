@@ -1,17 +1,15 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Devices;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.GTA5.GSI;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.GTA5.GSI;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.GTA5.Layers;
+namespace AuroraRgb.Profiles.GTA5.Layers;
 
 public class Gta5PoliceSirenLayerHandlerProperties : LayerHandlerProperties2Color<Gta5PoliceSirenLayerHandlerProperties>
 {

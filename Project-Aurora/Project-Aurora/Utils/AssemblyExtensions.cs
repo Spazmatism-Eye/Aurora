@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public static class AssemblyExtensions
 {

@@ -5,7 +5,7 @@ using System.Drawing;
 using Common.Utils;
 using RGB.NET.Devices.Logitech;
 
-namespace Aurora.Profiles.GTA5.GSI
+namespace AuroraRgb.Profiles.GTA5.GSI
 {
     /// <summary>
     /// Enum of various player states

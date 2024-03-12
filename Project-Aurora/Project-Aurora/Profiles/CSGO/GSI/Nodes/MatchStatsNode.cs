@@ -1,7 +1,6 @@
-﻿using System;
-using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.CSGO.GSI.Nodes
+namespace AuroraRgb.Profiles.CSGO.GSI.Nodes
 {
     /// <summary>
     /// Class representing various player statistics

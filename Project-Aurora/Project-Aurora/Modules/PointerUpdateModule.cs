@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Lombok.NET;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class PointerUpdateModule : AuroraModule
 {

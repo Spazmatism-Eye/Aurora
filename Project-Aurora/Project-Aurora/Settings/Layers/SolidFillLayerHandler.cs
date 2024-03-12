@@ -1,13 +1,13 @@
 ﻿using System;
-using Aurora.EffectsEngine;
-using Aurora.Profiles;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Settings.Layers.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
 using Common.Utils;
 
-namespace Aurora.Settings.Layers;
+namespace AuroraRgb.Settings.Layers;
 
 public class SolidFillLayerHandlerProperties : LayerHandlerProperties<SolidFillLayerHandlerProperties>
 {

@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Modules.AudioCapture;
-using Aurora.Settings;
+using AuroraRgb.Modules.AudioCapture;
+using AuroraRgb.Settings;
 using Lombok.NET;
 using NAudio.CoreAudioApi;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class AudioCaptureModule : AuroraModule
 {

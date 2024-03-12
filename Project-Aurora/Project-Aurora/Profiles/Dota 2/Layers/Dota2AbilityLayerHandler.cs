@@ -2,15 +2,15 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Controls;
-using Aurora.EffectsEngine;
-using Aurora.Profiles.Dota_2.GSI;
-using Aurora.Profiles.Dota_2.GSI.Nodes;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.Dota_2.GSI;
+using AuroraRgb.Profiles.Dota_2.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Dota_2.Layers;
+namespace AuroraRgb.Profiles.Dota_2.Layers;
 
 public class Dota2AbilityLayerHandlerProperties : LayerHandlerProperties2Color<Dota2AbilityLayerHandlerProperties>
 {

@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Aurora.Modules.ProcessMonitor;
+using AuroraRgb.Modules.ProcessMonitor;
 using Lombok.NET;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class ProcessesModule : AuroraModule
 {

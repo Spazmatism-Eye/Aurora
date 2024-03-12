@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Devices;
-using Aurora.Modules.GameStateListen;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules.GameStateListen;
 using Hardcodet.Wpf.TaskbarNotification;
 
-namespace Aurora;
+namespace AuroraRgb;
 
 public sealed class AuroraControlInterface(Task<IpcListener?> listener)
 {
@@ -80,7 +80,7 @@ public sealed class AuroraControlInterface(Task<IpcListener?> listener)
         //so that we don't restart device manager
         DeviceManager?.Detach();
 
-        var auroraPath = Path.Combine(Global.ExecutingDirectory, "Aurora.exe");
+        var auroraPath = Path.Combine(Global.ExecutingDirectory, Global.AuroraExe);
 
         var currentProcess = Environment.ProcessId;
         var minimizedArg = Application.Current?.MainWindow?.Visibility == Visibility.Visible ? "" : " -minimized";

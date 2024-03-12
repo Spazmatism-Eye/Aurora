@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Aurora.Devices;
-using Aurora.Modules.GameStateListen;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Profiles;
-using Aurora.Settings;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
 using Lombok.NET;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class LightingStateManagerModule(
     Task<PluginManager> pluginManager,

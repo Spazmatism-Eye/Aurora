@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using Aurora.Profiles;
-using Aurora.Profiles.Generic_Application;
-using Aurora.Settings;
+﻿using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
 using MemoryAccessProfiles.Profiles.Borderlands2;
 using MemoryAccessProfiles.Profiles.CloneHero;
 using MemoryAccessProfiles.Profiles.Dishonored;

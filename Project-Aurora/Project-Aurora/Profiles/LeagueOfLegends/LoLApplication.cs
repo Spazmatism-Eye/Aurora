@@ -1,7 +1,7 @@
 ﻿using System;
-using Aurora.Profiles.LeagueOfLegends.Layers;
+using AuroraRgb.Profiles.LeagueOfLegends.Layers;
 
-namespace Aurora.Profiles.LeagueOfLegends;
+namespace AuroraRgb.Profiles.LeagueOfLegends;
 
 public class LoL : Application
 {

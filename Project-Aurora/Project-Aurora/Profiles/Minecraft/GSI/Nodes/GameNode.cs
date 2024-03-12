@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aurora.Profiles.Minecraft.GSI.Nodes {
+﻿namespace AuroraRgb.Profiles.Minecraft.GSI.Nodes {
 
     public class GameNode : AutoJsonNode<GameNode> {
 

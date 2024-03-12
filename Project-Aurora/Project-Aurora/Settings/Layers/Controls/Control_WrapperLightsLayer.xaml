@@ -2,8 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Controls="clr-namespace:Aurora.Controls"  x:Class="Aurora.Settings.Layers.Controls.Control_WrapperLightsLayer"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:AuroraRgb.Controls"
+             x:Class="AuroraRgb.Settings.Layers.Controls.Control_WrapperLightsLayer"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <Grid>
         <TextBlock TextWrapping="Wrap" HorizontalAlignment="Left" Width="487" VerticalAlignment="Top" Margin="0,0,0,0"
@@ -47,8 +48,8 @@
 
                 <TextBlock Text="Key cloning allows the wrapper layer to take the value that would be applied to a key (the source key) and apply it to one or more other keys (destination keys) as well." TextWrapping="Wrap" Margin="6,0" Grid.ColumnSpan="3" />
 
-                <Controls:KeySequence x:Name="CloneSourceKS" Grid.Column="0" Margin="0,57,0,0" FreestyleEnabled="False" Title="Source Keys" RecordingTag="WrapperCloneSource" SequenceKeysChange="CloneSourceKS_SequenceKeysChange" SelectionChanged="CloneSourceKS_SelectionChanged" />
-                <Controls:KeySequence x:Name="CloneDestKS" Grid.Column="2" Margin="0,57,0,0" IsEnabled="False" Title="Destination Keys" RecordingTag="WrapperCloneDestination" SequenceKeysChange="CloneDestKS_SequenceKeysChange" />
+                <controls:KeySequence x:Name="CloneSourceKS" Grid.Column="0" Margin="0,57,0,0" FreestyleEnabled="False" Title="Source Keys" RecordingTag="WrapperCloneSource" SequenceKeysChange="CloneSourceKS_SequenceKeysChange" SelectionChanged="CloneSourceKS_SelectionChanged" />
+                <controls:KeySequence x:Name="CloneDestKS" Grid.Column="2" Margin="0,57,0,0" IsEnabled="False" Title="Destination Keys" RecordingTag="WrapperCloneDestination" SequenceKeysChange="CloneDestKS_SequenceKeysChange" />
             </Grid>
         </GroupBox>
     </Grid>

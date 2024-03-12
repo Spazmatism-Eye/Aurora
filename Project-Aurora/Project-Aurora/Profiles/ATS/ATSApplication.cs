@@ -1,10 +1,10 @@
 ﻿using System;
-using Aurora.Profiles.ETS2;
-using Aurora.Profiles.ETS2.GSI;
-using Aurora.Profiles.ETS2.Layers;
-using Aurora.Settings;
+using AuroraRgb.Profiles.ETS2;
+using AuroraRgb.Profiles.ETS2.GSI;
+using AuroraRgb.Profiles.ETS2.Layers;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.ATS;
+namespace AuroraRgb.Profiles.ATS;
 
 public class ATS : Application {
 

@@ -1,11 +1,11 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles.Generic_Application;
+namespace AuroraRgb.Profiles.Generic_Application;
 
 public class GenericApplication : Application
 {

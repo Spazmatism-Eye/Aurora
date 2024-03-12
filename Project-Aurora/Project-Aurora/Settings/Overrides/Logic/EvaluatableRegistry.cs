@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
 
     /// <summary>
     /// Class that handles the dynamic searching of any IEvaluatable classes with the OverrideLogic attribute applied to them.
@@ -11,7 +11,7 @@ namespace Aurora.Settings.Overrides.Logic {
     public static class EvaluatableRegistry {
 
         /// <summary>Cached list of all classes that have the OverrideLogic attribute applied to them.</summary>
-        private static readonly IEnumerable<EvaluatableTypeContainer> allOverrideLogics = Utils.TypeUtils
+        private static readonly IEnumerable<EvaluatableTypeContainer> allOverrideLogics = TypeUtils
             .GetTypesWithCustomAttribute<EvaluatableAttribute>()
             .Where(kvp => typeof(IEvaluatable).IsAssignableFrom(kvp.Key))
             .OrderBy(kvp => kvp.Value.Name, StringComparer.OrdinalIgnoreCase)

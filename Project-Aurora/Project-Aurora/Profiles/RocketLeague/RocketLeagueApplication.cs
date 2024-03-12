@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.RocketLeague;
+﻿namespace AuroraRgb.Profiles.RocketLeague;
 
 public class RocketLeague : Application
 {

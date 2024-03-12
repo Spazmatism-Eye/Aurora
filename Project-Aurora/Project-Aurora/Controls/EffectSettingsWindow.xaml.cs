@@ -2,14 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.EffectsEngine;
-using Aurora.Settings;
-using Aurora.Utils;
-using ColorBox;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
+using ColorBox.Implementation;
 using Xceed.Wpf.Toolkit;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-namespace Aurora.Controls
+namespace AuroraRgb.Controls
 {
     public partial class EffectSettingsWindow : Window
     {

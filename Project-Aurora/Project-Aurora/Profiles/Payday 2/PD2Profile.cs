@@ -1,10 +1,9 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.Payday_2
+namespace AuroraRgb.Profiles.Payday_2
 {
     public class PD2Profile : ApplicationProfile
     {

@@ -6,17 +6,18 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Aurora.Modules.Logitech.Enums;
-using Aurora.Modules.Logitech.Structs;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Utils;
+using AuroraRgb.Devices;
+using AuroraRgb.Modules.Logitech.Enums;
+using AuroraRgb.Modules.Logitech.Structs;
+using AuroraRgb.Modules.ProcessMonitor;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Common.Utils;
 using Microsoft.Win32;
 using RGB.NET.Devices.Logitech;
 using Color = System.Drawing.Color;
 
-namespace Aurora.Modules.Logitech;
+namespace AuroraRgb.Modules.Logitech;
 
 public enum LightsyncSdkState
 {
@@ -58,7 +59,7 @@ public sealed class LogitechSdkListener : IDisposable
     private Dictionary<DeviceKeys, Color> _savedColors = new();
     private Color _savedBackground = Color.Empty;
 
-    private readonly HashSet<string> _blockedApps = ["Aurora.exe", "AuroraCommunity.exe", "AuroraDeviceManager.exe"];
+    private readonly HashSet<string> _blockedApps = [Global.AuroraExe, DeviceManager.DeviceManagerExe];
 
     public async Task Initialize(Task<RunningProcessMonitor> runningProcessMonitor)
     {

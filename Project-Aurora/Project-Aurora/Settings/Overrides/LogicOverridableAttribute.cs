@@ -1,7 +1,7 @@
-﻿using Aurora.Settings.Layers;
-using System;
+﻿using System;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Settings.Overrides {
+namespace AuroraRgb.Settings.Overrides {
 
     /// <summary>
     /// Specifies that the marked property on a layer handler can be used with the overrides system.

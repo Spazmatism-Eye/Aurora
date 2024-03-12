@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using AuroraRgb.Profiles;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 public partial class Control_PercentLayer : IProfileContainingControl {
 
@@ -14,7 +15,7 @@ public partial class Control_PercentLayer : IProfileContainingControl {
         DataContext = context;
     }
 
-    public void SetProfile(Profiles.Application profile) {
+    public void SetProfile(Application profile) {
         variablePicker.Application = maxVariablePicker.Application = profile;
     }
 }

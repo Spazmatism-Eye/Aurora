@@ -1,11 +1,12 @@
 ﻿using System.Drawing;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Profiles;
-using Aurora.Profiles.Desktop;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Profiles;
+using AuroraRgb.Profiles.Desktop;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
 using DK = Common.Devices.DeviceKeys;
 
 namespace MemoryAccessProfiles.Profiles.CloneHero;

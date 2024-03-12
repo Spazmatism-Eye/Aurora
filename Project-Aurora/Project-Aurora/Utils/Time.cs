@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 /// <summary>
 /// A class for various Time Utilities

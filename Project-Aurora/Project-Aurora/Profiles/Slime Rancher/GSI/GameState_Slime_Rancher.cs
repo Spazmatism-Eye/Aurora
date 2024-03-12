@@ -1,13 +1,7 @@
-using Aurora.Profiles.Generic.GSI.Nodes;
-using Aurora.Profiles.Slime_Rancher.GSI.Nodes;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AuroraRgb.Profiles.Generic;
+using AuroraRgb.Profiles.Slime_Rancher.GSI.Nodes;
 
-namespace Aurora.Profiles.Slime_Rancher.GSI {
+namespace AuroraRgb.Profiles.Slime_Rancher.GSI {
 
     public class GameState_Slime_Rancher : GameState {
 

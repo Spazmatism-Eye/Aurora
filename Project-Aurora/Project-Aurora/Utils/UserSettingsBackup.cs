@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using SemanticVersioning;
 
-namespace Aurora.Utils;
+namespace AuroraRgb.Utils;
 
 public class UserSettingsBackup
 {

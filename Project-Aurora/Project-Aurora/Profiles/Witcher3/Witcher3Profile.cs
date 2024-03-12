@@ -1,12 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
-using Aurora.Devices;
-using Aurora.Profiles.Witcher3.Layers;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
+using AuroraRgb.Profiles.Witcher3.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.Witcher3;
+namespace AuroraRgb.Profiles.Witcher3;
 
 public class Witcher3Profile : ApplicationProfile
 {

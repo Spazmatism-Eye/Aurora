@@ -1,12 +1,12 @@
-﻿using Aurora.Profiles.ETS2.GSI;
-using System;
+﻿using System;
 using System.IO;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils.Steam;
+using AuroraRgb.Profiles.ETS2.GSI;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.ATS {
+namespace AuroraRgb.Profiles.ATS {
     /// <summary>
     /// Interaction logic for Control_ATS.xaml
     /// </summary>

@@ -4,12 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Aurora.Modules.GameStateListen;
-using Aurora.Profiles;
+using AuroraRgb.Modules.GameStateListen;
+using AuroraRgb.Profiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// A window that logs the latest new game state recieved via HTTP, regardless of the provider.

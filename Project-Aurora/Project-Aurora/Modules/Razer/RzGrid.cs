@@ -2,7 +2,7 @@
 using RazerSdkReader;
 using RazerSdkReader.Structures;
 
-namespace Aurora.Modules.Razer;
+namespace AuroraRgb.Modules.Razer;
 
 public interface IRzGrid
 {

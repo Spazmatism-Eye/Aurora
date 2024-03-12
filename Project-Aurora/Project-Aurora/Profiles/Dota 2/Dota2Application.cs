@@ -1,7 +1,7 @@
-﻿using Aurora.Profiles.Dota_2.Layers;
-using Aurora.Settings;
+﻿using AuroraRgb.Profiles.Dota_2.Layers;
+using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.Dota_2;
+namespace AuroraRgb.Profiles.Dota_2;
 
 public class Dota2 : Application
 {

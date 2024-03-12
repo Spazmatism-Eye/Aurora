@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Aurora.EffectsEngine;
+namespace AuroraRgb.EffectsEngine;
 
 /// <summary>
 /// A class representative of one frame. Contains a list of EffectLayers as layers and overlay layers.

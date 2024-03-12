@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
-using Aurora.Settings;
+using AuroraRgb.Devices;
+using AuroraRgb.Settings;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.Chroma;
+namespace AuroraRgb.Profiles.Chroma;
 
 [JsonObject]
 public class ChromaApplicationSettings: ApplicationSettings
@@ -13,13 +14,13 @@ public class ChromaApplicationSettings: ApplicationSettings
     [OnDeserialized]
     private void OnDeserialized(StreamingContext context)
     {
-        if (!ExcludedPrograms.Contains("Aurora.exe"))
+        if (!ExcludedPrograms.Contains(Global.AuroraExe))
         {
-            ExcludedPrograms.Add("Aurora.exe");
+            ExcludedPrograms.Add(Global.AuroraExe);
         }
-        if (!ExcludedPrograms.Contains("AuroraDeviceManager.exe"))
+        if (!ExcludedPrograms.Contains(DeviceManager.DeviceManagerExe))
         {
-            ExcludedPrograms.Add("AuroraDeviceManager.exe");
+            ExcludedPrograms.Add(DeviceManager.DeviceManagerExe);
         }
     }
 }

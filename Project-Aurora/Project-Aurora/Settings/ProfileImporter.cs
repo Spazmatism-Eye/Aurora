@@ -8,16 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Newtonsoft.Json;
 using RGB.NET.Devices.CorsairLegacy;
-using Application = Aurora.Profiles.Application;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public static class ProfileImporter
 {

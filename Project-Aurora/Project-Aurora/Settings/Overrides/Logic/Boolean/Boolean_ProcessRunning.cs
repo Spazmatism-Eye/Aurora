@@ -1,14 +1,13 @@
-﻿using Aurora.Profiles;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Modules;
-using Aurora.Modules.ProcessMonitor;
-using Aurora.Settings.Controls;
-using Aurora.Utils;
+using AuroraRgb.Modules;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Controls;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Evaluatable that returns true/false depending on whether the given process name is running.

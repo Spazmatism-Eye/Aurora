@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Aurora.Modules.Razer;
-using Aurora.Profiles;
-using Aurora.Utils;
+using AuroraRgb.Modules.Razer;
+using AuroraRgb.Profiles;
 using Lombok.NET;
 using RazerSdkReader;
 
-namespace Aurora.Modules;
+namespace AuroraRgb.Modules;
 
 public sealed partial class RazerSdkModule(Task<LightingStateManager> lsm) : AuroraModule
 {

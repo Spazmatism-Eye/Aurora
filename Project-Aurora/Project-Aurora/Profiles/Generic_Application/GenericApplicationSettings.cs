@@ -1,11 +1,6 @@
-﻿using Aurora.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AuroraRgb.Settings;
 
-namespace Aurora.Profiles.Generic_Application
+namespace AuroraRgb.Profiles.Generic_Application
 {
     public class GenericApplicationSettings : ApplicationSettings
     {

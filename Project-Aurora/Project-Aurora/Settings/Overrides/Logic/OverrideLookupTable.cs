@@ -1,14 +1,13 @@
-﻿using Aurora.Profiles;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
-using Aurora.Settings.Overrides.Logic.Boolean;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 [JsonObject]
 public class OverrideLookupTable : IOverrideLogic {

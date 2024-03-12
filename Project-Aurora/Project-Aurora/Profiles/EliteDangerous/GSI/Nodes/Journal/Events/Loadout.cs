@@ -1,4 +1,4 @@
-﻿namespace Aurora.Profiles.EliteDangerous.Journal.Events
+﻿namespace AuroraRgb.Profiles.EliteDangerous.Journal.Events
 {
     public class LoadoutModuleEngineeringModifier {
         public string Label;

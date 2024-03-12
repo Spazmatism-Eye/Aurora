@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace Aurora.Utils {
+namespace AuroraRgb.Utils {
 
 	/// <summary>
 	/// Behaviour that can be attached to any <see cref="UIElement"/> to provide an event that fires when the user clicks and drags the element

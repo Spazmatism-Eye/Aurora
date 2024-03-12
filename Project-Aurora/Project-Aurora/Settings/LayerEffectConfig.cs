@@ -1,10 +1,10 @@
-﻿using Aurora.EffectsEngine;
-using Newtonsoft.Json;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
+using AuroraRgb.EffectsEngine;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Aurora.Settings;
+namespace AuroraRgb.Settings;
 
 public enum AnimationType
 {

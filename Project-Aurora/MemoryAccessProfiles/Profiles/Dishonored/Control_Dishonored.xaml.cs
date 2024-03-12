@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using MemoryAccessProfiles.Profiles.Dishonored.GSI;
 using Xceed.Wpf.Toolkit;
-using Application = Aurora.Profiles.Application;
+using Application = AuroraRgb.Profiles.Application;
 
 namespace MemoryAccessProfiles.Profiles.Dishonored;
 

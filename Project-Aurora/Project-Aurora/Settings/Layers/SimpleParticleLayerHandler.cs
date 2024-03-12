@@ -1,17 +1,17 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Controls;
-using Aurora.Settings.Layers.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Layers.Controls;
+using AuroraRgb.Settings.Overrides;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Settings.Layers {
+namespace AuroraRgb.Settings.Layers {
 
     /// <summary>
     /// Properties for the particle layer handler that handles "simple" particles. Simple particles are ones that just support velocity,

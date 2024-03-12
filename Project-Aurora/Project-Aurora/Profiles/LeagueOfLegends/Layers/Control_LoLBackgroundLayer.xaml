@@ -1,12 +1,11 @@
-﻿<UserControl x:Class="Aurora.Profiles.LeagueOfLegends.Layers.LoLBackgroundLayer"
+﻿<UserControl x:Class="AuroraRgb.Profiles.LeagueOfLegends.Layers.LoLBackgroundLayer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:EnumLoL="clr-namespace:Aurora.Profiles.LeagueOfLegends.GSI.Nodes"
-             xmlns:System="clr-namespace:System;assembly=mscorlib" 
-             xmlns:local="clr-namespace:Aurora.Profiles.LeagueOfLegends.Layers"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:EnumLoL="clr-namespace:AuroraRgb.Profiles.LeagueOfLegends.GSI.Nodes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
     <UserControl.Resources>

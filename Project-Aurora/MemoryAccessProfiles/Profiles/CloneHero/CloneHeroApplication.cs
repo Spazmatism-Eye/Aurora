@@ -1,4 +1,5 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using MemoryAccessProfiles.Profiles.CloneHero.GSI;
 
 namespace MemoryAccessProfiles.Profiles.CloneHero;
@@ -16,6 +17,6 @@ public class CloneHero : Application
             IconURI = "Resources/ch_128x128.png"
         })
     {
-        Aurora.Utils.PointerUpdateUtils.MarkAppForUpdate("CloneHero");
+        PointerUpdateUtils.MarkAppForUpdate("CloneHero");
     }
 }

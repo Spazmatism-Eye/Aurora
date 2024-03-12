@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Profiles.GTA5.GSI;
+using AuroraRgb.Profiles.GTA5.GSI;
 using Microsoft.Win32;
 using Xceed.Wpf.Toolkit;
 using MessageBox = System.Windows.Forms.MessageBox;
 
-namespace Aurora.Profiles.GTA5;
+namespace AuroraRgb.Profiles.GTA5;
 
 /// <summary>
 /// Interaction logic for Control_GTA5.xaml

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Data;
 using Common.Devices;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 public partial class Control_RazerLayer
 {

@@ -1,7 +1,7 @@
-﻿using Aurora.Utils;
+﻿using AuroraRgb.Utils;
 using Common.Utils;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 public class DesktopNode : Node
 {

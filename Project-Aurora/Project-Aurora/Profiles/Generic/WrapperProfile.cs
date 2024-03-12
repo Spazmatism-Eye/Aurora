@@ -1,13 +1,9 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 
-namespace Aurora.Profiles
+namespace AuroraRgb.Profiles.Generic
 {
     public class WrapperProfile : ApplicationProfile
     {
@@ -19,8 +15,8 @@ namespace Aurora.Profiles
         [OnDeserialized]
         void OnDeserialized(StreamingContext context)
         {
-            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(Aurora.Settings.Layers.WrapperLightsLayerHandler))))
-                Layers.Add(new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()));
+            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(WrapperLightsLayerHandler))))
+                Layers.Add(new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()));
         }
 
         public override void Reset()
@@ -28,7 +24,7 @@ namespace Aurora.Profiles
             base.Reset();
             Layers = new System.Collections.ObjectModel.ObservableCollection<Layer>()
             {
-                new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()),
+                new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()),
             };
         }
     }

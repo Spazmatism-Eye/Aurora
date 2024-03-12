@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aurora.Modules.Logitech.Enums;
+namespace AuroraRgb.Modules.Logitech.Enums;
 
 [Flags]
 public enum LogiSetTargetDeviceType

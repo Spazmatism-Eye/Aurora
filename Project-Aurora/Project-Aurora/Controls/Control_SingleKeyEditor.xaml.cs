@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
-using Aurora.Modules;
-using Aurora.Modules.Inputs;
+using AuroraRgb.Modules;
+using AuroraRgb.Modules.Inputs;
 using Keys = System.Windows.Forms.Keys;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_SingleKeyEditor.xaml

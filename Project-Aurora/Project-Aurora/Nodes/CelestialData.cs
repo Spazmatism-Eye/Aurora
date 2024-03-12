@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aurora.Settings;
+using AuroraRgb.Settings;
 using CoordinateSharp;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 public class CelestialData : Node
 {

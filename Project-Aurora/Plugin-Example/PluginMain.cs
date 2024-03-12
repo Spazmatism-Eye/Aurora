@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Profiles;
 using Plugin_Example.Layers;
-using Aurora.Settings;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings;
 
 namespace Plugin_Example
 {

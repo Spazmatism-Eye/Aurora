@@ -2,17 +2,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:a="clr-namespace:Aurora"
-             xmlns:utils="clr-namespace:Aurora.Utils"
              xmlns:events="clr-namespace:Serilog.Events;assembly=Serilog"
-             xmlns:controls="clr-namespace:Aurora.Settings.Controls"
-             x:Class="Aurora.Settings.Controls.Control_Settings"
+             xmlns:auroraRgb="clr-namespace:AuroraRgb"
+             xmlns:controls="clr-namespace:AuroraRgb.Settings.Controls"
+             xmlns:utils1="clr-namespace:AuroraRgb.Utils"
+             x:Class="AuroraRgb.Settings.Controls.Control_Settings"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="403.521"
              Height="Auto" Width="Auto"
              MinHeight="300" MinWidth="850">
 
-    <TabControl Margin="0,7,0,0" DataContext="{x:Static a:Global.Configuration}">
+    <TabControl Margin="0,7,0,0" DataContext="{x:Static auroraRgb:Global.Configuration}">
         <TabItem x:Name="DevicesAndWrappersTab" Header="Devices &amp; Wrappers" />
         <TabItem Name="DeviceManagerTab" Header="Device Manager" />
         <TabItem Name="RemapDevicesTab" Header="Remap Devices" />
@@ -59,7 +59,7 @@
                         <Hyperlink x:Name="LnkContributors" NavigateUri="https://github.com/Aurora-RGB/Aurora#contributors-" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="contributors"/></Hyperlink>
                 </TextBlock>
                 <Label x:Name="lblVersion" Content="VERSION PLACEHOLDER" HorizontalAlignment="Left" Margin="198,12,0,0" VerticalAlignment="Top"/>
-                <Image HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Source="/Aurora;component/Resources/aurora_logo.png" Width="128"/>
+                <Image HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Source="/AuroraRgb;component/Resources/aurora_logo.png" Width="128"/>
             </Grid>
         </TabItem>
         <TabItem Header="Debug">
@@ -134,7 +134,7 @@
                     <ComboBox
                         Margin="0,10,0,0"
                         SelectedValue="{Binding LogLevel}"
-                        ItemsSource="{utils:EnumToItemsSource {x:Type events:LogEventLevel}}" DisplayMemberPath="Text"
+                        ItemsSource="{utils1:EnumToItemsSource {x:Type events:LogEventLevel}}" DisplayMemberPath="Text"
                         SelectedValuePath="Value"
                         >
                         

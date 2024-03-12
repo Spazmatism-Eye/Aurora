@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 using Newtonsoft.Json;
 
-namespace Aurora.Profiles.LeagueOfLegends.GSI.Nodes
+namespace AuroraRgb.Profiles.LeagueOfLegends.GSI.Nodes
 {
     public enum Champion
     {

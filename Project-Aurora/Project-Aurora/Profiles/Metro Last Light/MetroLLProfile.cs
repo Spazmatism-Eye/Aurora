@@ -1,12 +1,11 @@
-﻿using Aurora.Settings;
-using Aurora.Settings.Layers;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
 using Common.Devices;
 
-namespace Aurora.Profiles.Metro_Last_Light
+namespace AuroraRgb.Profiles.Metro_Last_Light
 {
     public class MetroLLProfile : ApplicationProfile
     {
@@ -18,8 +17,8 @@ namespace Aurora.Profiles.Metro_Last_Light
         [OnDeserialized]
         void OnDeserialized(StreamingContext context)
         {
-            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(Aurora.Settings.Layers.WrapperLightsLayerHandler))))
-                Layers.Add(new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()));
+            if (!Layers.Any(lyr => lyr.Handler.GetType().Equals(typeof(WrapperLightsLayerHandler))))
+                Layers.Add(new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()));
         }
 
         public override void Reset()
@@ -53,7 +52,7 @@ namespace Aurora.Profiles.Metro_Last_Light
                         _Sequence = new KeySequence(new DeviceKeys[] { DeviceKeys.G, DeviceKeys.T, DeviceKeys.F, DeviceKeys.M, DeviceKeys.Q, DeviceKeys.N })
                     }
                 }),
-                new Layer("Wrapper Lighting", new Aurora.Settings.Layers.WrapperLightsLayerHandler()),
+                new Layer("Wrapper Lighting", new WrapperLightsLayerHandler()),
             };
         }
     }

@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aurora.Profiles.Slime_Rancher.GSI.Nodes
+namespace AuroraRgb.Profiles.Slime_Rancher.GSI.Nodes
 {
     public class VacPackNode : AutoJsonNode<VacPackNode>
     {

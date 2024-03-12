@@ -5,11 +5,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using Aurora.Settings.Layers;
-using Aurora.Utils;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
 using Microsoft.Win32;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// Interaction logic for Control_SubProfileManager.xaml
@@ -23,13 +24,13 @@ public partial class Control_ProfileManager
     public event ProfileSelectedHandler? ProfileSelected;
 
     public static readonly DependencyProperty FocusedApplicationProperty = DependencyProperty.Register(nameof(FocusedApplication),
-        typeof(Profiles.Application), typeof(Control_ProfileManager), new PropertyMetadata(null, FocusedProfileChanged));
+        typeof(Application), typeof(Control_ProfileManager), new PropertyMetadata(null, FocusedProfileChanged));
 
-    private readonly Dictionary<Profiles.Application, ApplicationProfile> _lastSelectedProfile = new();
+    private readonly Dictionary<Application, ApplicationProfile> _lastSelectedProfile = new();
 
-    public Profiles.Application? FocusedApplication
+    public Application? FocusedApplication
     {
-        get => (Profiles.Application)GetValue(FocusedApplicationProperty);
+        get => (Application)GetValue(FocusedApplicationProperty);
         set => SetValue(FocusedApplicationProperty, value);
     }
 
@@ -64,7 +65,7 @@ public partial class Control_ProfileManager
         var self = (Control_ProfileManager)source;
         if (e.OldValue != null)
         {
-            var prof = (Profiles.Application)e.OldValue;
+            var prof = (Application)e.OldValue;
             prof.ProfileChanged -= self.UpdateProfiles;
 
             self._lastSelectedProfile.Remove(prof);
@@ -73,7 +74,7 @@ public partial class Control_ProfileManager
         self.UpdateProfiles();
         if (e.NewValue == null || !self.IsLoaded) return;
         
-        var profile = (Profiles.Application)e.NewValue;
+        var profile = (Application)e.NewValue;
         profile.ProfileChanged += self.UpdateProfiles;
 
         if (self._lastSelectedProfile.TryGetValue(profile, out var selectedProfile))

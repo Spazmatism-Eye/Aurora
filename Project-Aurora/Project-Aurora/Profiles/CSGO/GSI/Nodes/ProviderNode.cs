@@ -1,6 +1,6 @@
-﻿using Aurora.Nodes;
+﻿using AuroraRgb.Nodes;
 
-namespace Aurora.Profiles.CSGO.GSI.Nodes
+namespace AuroraRgb.Profiles.CSGO.GSI.Nodes
 {
     /// <summary>
     /// Information about the provider of this GameState

@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 public partial class Window_Prompt : IDisposable
 {

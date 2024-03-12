@@ -1,12 +1,11 @@
-﻿using Aurora.Controls;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils.Steam;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.ShadowOfMordor
+namespace AuroraRgb.Profiles.ShadowOfMordor
 {
     /// <summary>
     /// Interaction logic for Control_ShadowOfMordor.xaml

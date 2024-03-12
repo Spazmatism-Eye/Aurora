@@ -1,12 +1,11 @@
-﻿using Aurora.Controls;
-using Aurora.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Utils.Steam;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils.Steam;
 
-namespace Aurora.Profiles.XCOM
+namespace AuroraRgb.Profiles.XCOM
 {
     /// <summary>
     /// Interaction logic for Control_XCOM.xaml

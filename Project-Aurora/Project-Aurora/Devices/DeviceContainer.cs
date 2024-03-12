@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Aurora.Devices;
+namespace AuroraRgb.Devices;
 
 public sealed class DeviceContainer(MemorySharedDevice device, DeviceManager deviceManager) : IDisposable
 {

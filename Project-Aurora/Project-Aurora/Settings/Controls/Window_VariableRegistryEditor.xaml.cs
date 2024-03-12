@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Common.Devices;
 
-namespace Aurora.Settings.Controls;
+namespace AuroraRgb.Settings.Controls;
 
 /// <summary>
 /// Interaction logic for Window_VariableRegistryEditor.xaml

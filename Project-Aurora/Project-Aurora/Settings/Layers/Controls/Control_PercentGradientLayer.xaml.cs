@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using ColorBox.Implementation;
+using Application = AuroraRgb.Profiles.Application;
 
-namespace Aurora.Settings.Layers.Controls;
+namespace AuroraRgb.Settings.Layers.Controls;
 
 /// <summary>
 /// Interaction logic for Control_PercentGradientLayer.xaml
@@ -44,7 +46,7 @@ public partial class Control_PercentGradientLayer : IProfileContainingControl
         _settingsSet = true;
     }
 
-    public void SetProfile(Profiles.Application profile)
+    public void SetProfile(Application profile)
     {
         VariablePath.Application = MaxVariablePath.Application = profile;
     }
@@ -62,9 +64,9 @@ public partial class Control_PercentGradientLayer : IProfileContainingControl
         Loaded -= UserControl_Loaded;
     }
 
-    private void Gradient_editor_BrushChanged(object? sender, ColorBox.BrushChangedEventArgs e)
+    private void Gradient_editor_BrushChanged(object? sender, BrushChangedEventArgs e)
     {
-        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler && sender is ColorBox.ColorBox colorBox)
+        if (IsLoaded && _settingsSet && DataContext is PercentGradientLayerHandler && sender is ColorBox.Implementation.ColorBox colorBox)
             ((PercentGradientLayerHandler)DataContext).Properties.Gradient = new EffectsEngine.EffectBrush(colorBox.Brush);
     }
 

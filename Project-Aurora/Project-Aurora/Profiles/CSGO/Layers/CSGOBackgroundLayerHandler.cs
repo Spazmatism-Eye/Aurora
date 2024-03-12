@@ -1,20 +1,14 @@
-﻿
-using Aurora.EffectsEngine;
-using Aurora.Profiles.CSGO.GSI;
-using Aurora.Profiles.CSGO.GSI.Nodes;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.CSGO.GSI;
+using AuroraRgb.Profiles.CSGO.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Utils;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.CSGO.Layers;
+namespace AuroraRgb.Profiles.CSGO.Layers;
 
 public class CSGOBackgroundLayerHandlerProperties : LayerHandlerProperties2Color<CSGOBackgroundLayerHandlerProperties>
 {
@@ -91,7 +85,7 @@ public class CSGOBackgroundLayerHandler : LayerHandler<CSGOBackgroundLayerHandle
         if (csgostate.Player.State.Health == 100 && inGame && csgostate.Provider.SteamID.Equals(csgostate.Player.SteamID))
         {
             _isDimming = false;
-            _dimBgAt = Utils.Time.GetMillisecondsSinceEpoch() +  (long)Properties.DimDelay * 1000;
+            _dimBgAt = Time.GetMillisecondsSinceEpoch() +  (long)Properties.DimDelay * 1000;
             _dimValue = 100.0;
         }
 

@@ -1,16 +1,12 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.LeagueOfLegends.GSI.Nodes;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles.LeagueOfLegends.GSI.Nodes;
+using AuroraRgb.Settings.Layers;
+using Newtonsoft.Json;
 
-namespace Aurora.Profiles.LeagueOfLegends.Layers
+namespace AuroraRgb.Profiles.LeagueOfLegends.Layers
 {
     public class LoLBackgroundLayerHandlerProperties : LayerHandlerProperties<LoLBackgroundLayerHandlerProperties>
     {

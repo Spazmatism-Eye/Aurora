@@ -1,4 +1,4 @@
-﻿using Aurora.Profiles;
+﻿using AuroraRgb.Profiles;
 using MemoryAccessProfiles.Profiles.Borderlands2.GSI.Nodes;
 
 namespace MemoryAccessProfiles.Profiles.Borderlands2.GSI;

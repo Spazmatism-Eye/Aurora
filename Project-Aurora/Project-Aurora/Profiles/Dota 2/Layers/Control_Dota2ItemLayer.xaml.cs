@@ -3,13 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Aurora.Modules.Inputs;
-using Aurora.Utils;
+using AuroraRgb.Modules.Inputs;
+using AuroraRgb.Utils;
 using Common.Devices;
 using Xceed.Wpf.Toolkit;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Aurora.Profiles.Dota_2.Layers;
+namespace AuroraRgb.Profiles.Dota_2.Layers;
 
 /// <summary>
 /// Interaction logic for Control_Dota2ItemLayer.xaml

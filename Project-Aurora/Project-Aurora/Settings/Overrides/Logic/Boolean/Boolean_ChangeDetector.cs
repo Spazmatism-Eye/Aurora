@@ -1,11 +1,11 @@
-﻿using Aurora.Profiles;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Settings.Overrides.Logic;
+namespace AuroraRgb.Settings.Overrides.Logic;
 
 /// <summary>
 /// Evaluatable that detects when the value of the given numeric evaluatable changes by a particular amount.

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Aurora.Profiles.Minecraft.Layers;
-using Aurora.Settings;
-using Aurora.Settings.Layers;
-using Aurora.Settings.Overrides.Logic;
-using Aurora.Utils;
+using AuroraRgb.Profiles.Minecraft.Layers;
+using AuroraRgb.Settings;
+using AuroraRgb.Settings.Layers;
+using AuroraRgb.Settings.Overrides.Logic;
+using AuroraRgb.Settings.Overrides.Logic.Boolean;
+using AuroraRgb.Utils;
 using DK = Common.Devices.DeviceKeys;
 
-namespace Aurora.Profiles.Minecraft;
+namespace AuroraRgb.Profiles.Minecraft;
 
 public class MinecraftProfile : ApplicationProfile
 {

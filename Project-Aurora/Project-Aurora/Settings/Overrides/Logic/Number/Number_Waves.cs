@@ -1,11 +1,10 @@
-﻿using Aurora.Profiles;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Windows.Data;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
     /// <summary>
     /// A special operator that takes the given (x) input (between 0 and 1) and converts it to a waveform (y) between 0 and 1.
     /// </summary>

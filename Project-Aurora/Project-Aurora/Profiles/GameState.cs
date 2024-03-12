@@ -1,11 +1,11 @@
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Aurora.Nodes;
-using Aurora.Utils;
+using AuroraRgb.Nodes;
+using AuroraRgb.Utils;
+using Newtonsoft.Json.Linq;
 
-namespace Aurora.Profiles;
+namespace AuroraRgb.Profiles;
 
 /// <summary>
 /// A class representing various information retaining to the game.

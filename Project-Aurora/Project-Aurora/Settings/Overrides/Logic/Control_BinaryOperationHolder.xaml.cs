@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using Aurora.Profiles;
+using AuroraRgb.Utils;
 
-namespace Aurora.Settings.Overrides.Logic {
+namespace AuroraRgb.Settings.Overrides.Logic {
     /// <summary>
     /// Interaction logic for Control_SubconditionHolder.xaml
     /// </summary>
@@ -25,7 +21,7 @@ namespace Aurora.Settings.Overrides.Logic {
         /// Creates a new numeric binary operation holder control using the values of the specified enum as the operators item source.
         /// </summary>
         public Control_BinaryOperationHolder(Type evalType, Type enumType) : this(evalType) {
-            operatorSelection.ItemsSource = Utils.EnumUtils.GetEnumItemsSource(enumType);
+            operatorSelection.ItemsSource = EnumUtils.GetEnumItemsSource(enumType);
         }
 
         public Type EvalType { get; set; }

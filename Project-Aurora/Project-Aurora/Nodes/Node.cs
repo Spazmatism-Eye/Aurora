@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Aurora.Profiles;
-using Aurora.Utils;
+using AuroraRgb.Profiles;
+using AuroraRgb.Utils;
 using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
 
-namespace Aurora.Nodes;
+namespace AuroraRgb.Nodes;
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.Members)]
 public class Node

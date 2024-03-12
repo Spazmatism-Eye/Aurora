@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using Aurora.EffectsEngine;
-using Aurora.EffectsEngine.Animations;
-using Aurora.Settings;
-using Aurora.Utils;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.EffectsEngine.Animations;
+using AuroraRgb.Settings;
+using AuroraRgb.Utils;
 using Common.Devices;
 
-namespace Aurora.Profiles.Desktop;
+namespace AuroraRgb.Profiles.Desktop;
 
 public sealed class EventIdle : LightEvent
 {

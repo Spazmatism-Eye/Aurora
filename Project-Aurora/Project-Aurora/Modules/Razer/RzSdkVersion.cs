@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Aurora.Modules.Razer;
+namespace AuroraRgb.Modules.Razer;
 
 public readonly struct RzSdkVersion : IComparable<RzSdkVersion>
 {

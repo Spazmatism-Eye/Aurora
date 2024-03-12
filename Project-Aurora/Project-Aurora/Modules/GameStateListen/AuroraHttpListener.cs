@@ -3,9 +3,9 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
-using Aurora.Profiles;
+using AuroraRgb.Profiles;
 
-namespace Aurora.Modules.GameStateListen;
+namespace AuroraRgb.Modules.GameStateListen;
 
 public class AuroraHttpListener
 {

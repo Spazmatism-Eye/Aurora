@@ -8,7 +8,7 @@ using Common.Devices;
 using Common.Devices.RGBNet;
 using RGB.NET.Core;
 
-namespace Aurora.Devices;
+namespace AuroraRgb.Devices;
 
 public sealed class DevicesPipe
 {

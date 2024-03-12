@@ -1,16 +1,16 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles;
-using Aurora.Settings.Overrides;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Controls;
+using AuroraRgb.EffectsEngine;
+using AuroraRgb.Profiles;
+using AuroraRgb.Settings.Overrides;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using static System.Linq.Expressions.Expression;
 
-namespace Aurora.Settings.Layers {
+namespace AuroraRgb.Settings.Layers {
 
     /// <summary>
     /// The base properties for the base particle layer.

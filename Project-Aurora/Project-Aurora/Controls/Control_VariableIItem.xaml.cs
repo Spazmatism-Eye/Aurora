@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Aurora.Utils;
+using AuroraRgb.Utils;
 using Xceed.Wpf.Toolkit;
 
-namespace Aurora.Controls;
+namespace AuroraRgb.Controls;
 
 /// <summary>
 /// Interaction logic for Control_VariableItem.xaml
@@ -182,11 +182,11 @@ public partial class Control_VariableItem
 
                 grd_control.Children.Add(colorPickerMediaControl);
             }
-            else if (varType == typeof(Aurora.Settings.KeySequence))
+            else if (varType == typeof(Settings.KeySequence))
             {
                 var ctrl = new KeySequence
                 {
-                    Sequence = (Aurora.Settings.KeySequence)VariableObject
+                    Sequence = (Settings.KeySequence)VariableObject
                 };
                 ctrl.SequenceUpdated += keySequenceControlValueChanged;
                 ctrl.RecordingTag = VariableTitle;
