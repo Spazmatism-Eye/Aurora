@@ -30,6 +30,7 @@ namespace AuroraRgb.EffectsEngine
 
         private TextureBrush? _textureBrush;
         private bool _needsRender = true;
+        private bool _disposed;
 
         internal Rectangle Dimension;
 
@@ -49,6 +50,10 @@ namespace AuroraRgb.EffectsEngine
                 
                 PerformExclude(_excludeSequence);
 
+                if (_disposed)
+                {
+                    return EmptyLayerFactory.Value.TextureBrush;
+                }
                 _textureBrush = new TextureBrush(_colormap, Dimension, imageAttributes);
                 _needsRender = false;
 
@@ -217,10 +222,11 @@ namespace AuroraRgb.EffectsEngine
 
         public void Dispose()
         {
+            _disposed = true;
             _keyColors.Clear();
-            _excludeSequence = null;
-            _keySequence = null;
-            _lastFreeform = null;
+            _excludeSequence = new KeySequence();
+            _keySequence = new KeySequence();
+            _lastFreeform = new FreeFormObject();
             _colormap?.Dispose();
             _textureBrush?.Dispose();
             _textureBrush = null;
@@ -1060,6 +1066,10 @@ namespace AuroraRgb.EffectsEngine
             switch (sequence.Type)
             {
                 case KeySequenceType.Sequence:
+                    if (sequence.Keys.Count == 0)
+                    {
+                        return;
+                    }
                     foreach (var k in sequence.Keys)
                     {
                         var keyBounds = Effects.Canvas.GetRectangle(k);
@@ -1069,6 +1079,10 @@ namespace AuroraRgb.EffectsEngine
                     break;
                 case KeySequenceType.FreeForm:
                     var freeform = sequence.Freeform;
+                    if (freeform.Height == 0 || freeform.Width == 0)
+                    {
+                        return;
+                    }
                     
                     var xPos = (float)Math.Round((freeform.X + Effects.Canvas.GridBaselineX) * Effects.Canvas.EditorToCanvasWidth);
                     var yPos = (float)Math.Round((freeform.Y + Effects.Canvas.GridBaselineY) * Effects.Canvas.EditorToCanvasHeight);
