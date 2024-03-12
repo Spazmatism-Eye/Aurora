@@ -43,6 +43,7 @@ internal static class MemorySharedEventThread
                 _cancellation = value;
                 _handles[0] = value.Token.WaitHandle;
                 old.Cancel();
+                _threadCreated.Wait();
                 old.Dispose();
             }
         }
@@ -51,6 +52,7 @@ internal static class MemorySharedEventThread
         
         private Action[] _actions = [() => { }];
         private WaitHandle[] _handles;
+        private Task _threadCreated = Task.CompletedTask;
 
         internal HandlesAndThread()
         {
@@ -61,6 +63,7 @@ internal static class MemorySharedEventThread
         private Thread CreateThread()
         {
             var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            _threadCreated = tcs.Task;
             var thread = new Thread(() =>
             {
                 tcs.SetResult();
@@ -91,8 +94,9 @@ internal static class MemorySharedEventThread
                 Priority = ThreadPriority.Highest,
             };
             thread.Start();
-            tcs.Task.Wait(200);
-            Thread.Sleep(2); //a little delay to help WaitHandle.WaitAny(_handles) run before returning
+            _threadCreated.Wait(200);
+            Thread.Yield();
+            Thread.Sleep(1); //wait until WaitHandle.WaitAny(_handles) runs before returning
             return thread;
         }
 
@@ -102,16 +106,14 @@ internal static class MemorySharedEventThread
 
             try
             {
-                _actions = _actions.Concat(new[]
-                {
+                _actions = _actions.Concat([
                     o.OnUpdated,
                     o.OnUpdateRequested
-                }).ToArray();
-                _handles = _handles.Concat(new[]
-                {
+                ]).ToArray();
+                _handles = _handles.Concat([
                     o.ObjectUpdatedHandle,
                     o.UpdateRequestedHandle
-                }).ToArray();
+                ]).ToArray();
 
                 CancelToken = new CancellationTokenSource();
                 _thread = CreateThread();
@@ -128,10 +130,16 @@ internal static class MemorySharedEventThread
 
             try
             {
-                var updatedHandle = _handles.FindIndex(h => o.ObjectUpdatedHandle == h);
-                var requestedHandle = _handles.FindIndex(h => o.UpdateRequestedHandle == h);
-                _actions = _actions.Where((_, i) => i != updatedHandle && i != requestedHandle).ToArray();
-                _handles = _handles.Where((_, i) => i != updatedHandle && i != requestedHandle).ToArray();
+                var updatedHandleIndex = _handles.FindIndex(h => o.ObjectUpdatedHandle == h);
+                var requestedHandleIndex = _handles.FindIndex(h => o.UpdateRequestedHandle == h);
+
+                if (updatedHandleIndex == -1)
+                {
+                    return;
+                }
+                
+                _actions = _actions.Where((_, i) => i != updatedHandleIndex && i != requestedHandleIndex).ToArray();
+                _handles = _handles.Where((_, i) => i != updatedHandleIndex && i != requestedHandleIndex).ToArray();
 
                 CancelToken = new CancellationTokenSource();
                 _thread = CreateThread();
