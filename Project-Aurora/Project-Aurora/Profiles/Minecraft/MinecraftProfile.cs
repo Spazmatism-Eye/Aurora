@@ -1,35 +1,38 @@
-﻿using Aurora.Profiles.Minecraft.Layers;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Aurora.Profiles.Minecraft.Layers;
 using Aurora.Settings;
 using Aurora.Settings.Layers;
 using Aurora.Settings.Overrides.Logic;
-using System.Collections.Generic;
-using System.Drawing;
+using Aurora.Utils;
 using DK = Common.Devices.DeviceKeys;
 
-namespace Aurora.Profiles.Minecraft
+namespace Aurora.Profiles.Minecraft;
+
+public class MinecraftProfile : ApplicationProfile
 {
 
-    public class MinecraftProfile : ApplicationProfile
+    public override void Reset()
     {
+        base.Reset();
 
-        public override void Reset()
-        {
-            base.Reset();
+        // Keys that do something and should be highlighted in a static color
+        DK[] controlKeys = [DK.W, DK.A, DK.S, DK.D, DK.E, DK.SPACE, DK.LEFT_SHIFT, DK.LEFT_CONTROL];
 
-            // Keys that do something and should be highlighted in a static color
-            DK[] controlKeys = new[] { DK.W, DK.A, DK.S, DK.D, DK.E, DK.SPACE, DK.LEFT_SHIFT, DK.LEFT_CONTROL };
+        Layers =
+        [
+            new Layer("Controls Assistant Layer", new MinecraftKeyConflictLayerHandler()),
 
-            Layers = new System.Collections.ObjectModel.ObservableCollection<Layer>() {
-                new Layer("Controls Assistant Layer", new MinecraftKeyConflictLayerHandler()),
-
-                new Layer("Health Bar", new PercentLayerHandler() {
-                    Properties = new PercentLayerHandlerProperties()
+            new Layer("Health Bar", new PercentLayerHandler
+                {
+                    Properties = new PercentLayerHandlerProperties
                     {
                         VariablePath = new VariablePath("Player/Health"),
                         MaxVariablePath = new VariablePath("Player/HealthMax"),
                         _PrimaryColor = Color.Red,
                         _SecondaryColor = Color.Transparent,
-                        _Sequence = new KeySequence(new[] {
+                        _Sequence = new KeySequence(new[]
+                        {
                             DK.Z, DK.X, DK.C, DK.V, DK.B, DK.N, DK.M, DK.COMMA, DK.PERIOD, DK.FORWARD_SLASH
                         })
                     }
@@ -42,79 +45,91 @@ namespace Aurora.Profiles.Minecraft
                         .AddEntry(Color.FromArgb(145, 160, 30), new BooleanGSIBoolean("Player/PlayerEffects/HasPoison"))
                         .AddEntry(Color.FromArgb(70, 5, 5), new BooleanGSIBoolean("Player/PlayerEffects/HasWither"))
                     )
-                ),
+            ),
 
-                new Layer("Experience Bar", new PercentLayerHandler() {
-                    Properties = new PercentLayerHandlerProperties() {
+            new Layer("Experience Bar", new PercentLayerHandler
+                {
+                    Properties = new PercentLayerHandlerProperties
+                    {
                         VariablePath = new VariablePath("Player/Experience"),
                         MaxVariablePath = new VariablePath("Player/ExperienceMax"),
                         _PrimaryColor = Color.FromArgb(255, 255, 0),
                         _SecondaryColor = Color.Transparent,
-                        _Sequence = new KeySequence(new[] {
+                        _Sequence = new KeySequence(new[]
+                        {
                             DK.F1, DK.F2, DK.F3, DK.F4, DK.F5, DK.F6, DK.F7, DK.F8, DK.F9, DK.F10, DK.F11, DK.F12
                         })
                     }
                 },
                 new OverrideLogicBuilder()
                     .SetDynamicBoolean("_Enabled", new BooleanGSIBoolean("Player/InGame"))
-                ),
+            ),
 
-                new Layer("Toolbar", new ToolbarLayerHandler() {
-                    Properties = new ToolbarLayerHandlerProperties() {
+            new Layer("Toolbar", new ToolbarLayerHandler
+                {
+                    Properties = new ToolbarLayerHandlerProperties
+                    {
                         _PrimaryColor = Color.Transparent,
                         _SecondaryColor = Color.White,
                         EnableScroll = true,
                         ScrollLoop = true,
-                        _Sequence = new KeySequence(new[] {
+                        _Sequence = new KeySequence(new[]
+                        {
                             DK.ONE, DK.TWO, DK.THREE, DK.FOUR, DK.FIVE, DK.SIX, DK.SEVEN, DK.EIGHT, DK.NINE
                         })
                     }
                 },
                 new OverrideLogicBuilder()
                     .SetDynamicBoolean("_Enabled", new BooleanGSIBoolean("Player/InGame"))
-                ),
+            ),
 
-                new Layer("Water Controls", new SolidColorLayerHandler() {
-                    Properties = new LayerHandlerProperties()
+            new Layer("Water Controls", new SolidColorLayerHandler
+                {
+                    Properties = new LayerHandlerProperties
                     {
                         _PrimaryColor = Color.Blue,
                         _Sequence = new KeySequence(controlKeys)
                     }
                 },
                 new OverrideLogicBuilder()
-                    .SetDynamicBoolean("_Enabled", new BooleanAnd(new List<BooleanGSIBoolean>(new[] {
-                        new BooleanGSIBoolean("Player/IsInWater"),new BooleanGSIBoolean("Player/InGame") }
-                    )))
-                ),
+                    .SetDynamicBoolean("_Enabled", new BooleanAnd([
+                        new BooleanGSIBoolean("Player/IsInWater"), new BooleanGSIBoolean("Player/InGame")
+                    ]))
+            ),
 
-                new Layer("Sneaking Controls", new SolidColorLayerHandler() {
-                    Properties = new LayerHandlerProperties()
+            new Layer("Sneaking Controls", new SolidColorLayerHandler
+                {
+                    Properties = new LayerHandlerProperties
                     {
                         _PrimaryColor = Color.FromArgb(45, 90, 90),
                         _Sequence = new KeySequence(controlKeys)
                     }
                 },
                 new OverrideLogicBuilder()
-                    .SetDynamicBoolean("_Enabled", new BooleanAnd(new List<BooleanGSIBoolean>(new[] {
-                        new BooleanGSIBoolean("Player/IsSneaking"),new BooleanGSIBoolean("Player/InGame") }
-                    )))
-                ),
+                    .SetDynamicBoolean("_Enabled", new BooleanAnd([
+                        new BooleanGSIBoolean("Player/IsSneaking"), new BooleanGSIBoolean("Player/InGame")
+                    ]))
+            ),
 
-                new Layer("Horse Controls", new SolidColorLayerHandler() {
-                    Properties = new LayerHandlerProperties()
+            new Layer("Horse Controls", new SolidColorLayerHandler
+                {
+                    Properties = new LayerHandlerProperties
                     {
                         _PrimaryColor = Color.Orange,
                         _Sequence = new KeySequence(controlKeys)
                     }
                 },
                 new OverrideLogicBuilder()
-                    .SetDynamicBoolean("_Enabled", new BooleanAnd(new List<BooleanGSIBoolean>(new[] {
-                        new BooleanGSIBoolean("Player/IsRidingHorse"),new BooleanGSIBoolean("Player/InGame") }
+                    .SetDynamicBoolean("_Enabled", new BooleanAnd(new List<BooleanGSIBoolean>(new[]
+                        {
+                            new BooleanGSIBoolean("Player/IsRidingHorse"), new BooleanGSIBoolean("Player/InGame")
+                        }
                     )))
-                ),
+            ),
 
-                new Layer("Player Controls", new SolidColorLayerHandler() {
-                    Properties = new LayerHandlerProperties()
+            new Layer("Player Controls", new SolidColorLayerHandler
+                {
+                    Properties = new LayerHandlerProperties
                     {
                         _PrimaryColor = Color.White,
                         _Sequence = new KeySequence(controlKeys)
@@ -122,17 +137,17 @@ namespace Aurora.Profiles.Minecraft
                 },
                 new OverrideLogicBuilder()
                     .SetDynamicBoolean("_Enabled", new BooleanGSIBoolean("Player/InGame"))
-                ),
+            ),
 
-                new Layer("On Fire", new SimpleParticleLayerHandler()
+            new Layer("On Fire", new SimpleParticleLayerHandler
                 {
-                    Properties = new SimpleParticleLayerProperties()
+                    Properties = new SimpleParticleLayerProperties
                     {
                         _SpawnLocation = ParticleSpawnLocations.BottomEdge,
-                        _ParticleColorStops = new Utils.ColorStopCollection()
+                        _ParticleColorStops = new ColorStopCollection
                         {
                             { 0f, Color.Orange },
-                            { 0.6f , Color.Red },
+                            { 0.6f, Color.Red },
                             { 1f, Color.Black }
                         },
                         _MinSpawnTime = 0.05f,
@@ -154,14 +169,14 @@ namespace Aurora.Profiles.Minecraft
                 },
                 new OverrideLogicBuilder()
                     .SetDynamicBoolean("_SpawningEnabled", new BooleanGSIBoolean("Player/IsBurning"))
-                ),
+            ),
 
-                new Layer("Raining", new SimpleParticleLayerHandler()
+            new Layer("Raining", new SimpleParticleLayerHandler
                 {
-                    Properties = new SimpleParticleLayerProperties()
+                    Properties = new SimpleParticleLayerProperties
                     {
                         _SpawnLocation = ParticleSpawnLocations.TopEdge,
-                        _ParticleColorStops = new Utils.ColorStopCollection
+                        _ParticleColorStops = new ColorStopCollection
                         {
                             { 0f, Color.Cyan },
                             { 1f, Color.Cyan }
@@ -174,7 +189,7 @@ namespace Aurora.Profiles.Minecraft
                         _MaxLifetime = 1,
                         _MinInitialVelocityX = 0,
                         _MaxInitialVelocityX = 0,
-                        _MinInitialVelocityY =3,
+                        _MinInitialVelocityY = 3,
                         _MaxInitialVelocityY = 3,
                         _AccelerationX = 0,
                         _AccelerationY = 0,
@@ -185,10 +200,12 @@ namespace Aurora.Profiles.Minecraft
                 },
                 new OverrideLogicBuilder()
                     .SetDynamicBoolean("_SpawningEnabled", new BooleanGSIBoolean("World/IsRaining"))
-                ),
+            ),
 
-                new Layer("Grass Block Top", new MinecraftBackgroundLayerHandler() {
-                    Properties = new MinecraftBackgroundLayerHandlerProperties() {
+            new Layer("Grass Block Top", new MinecraftBackgroundLayerHandler
+                {
+                    Properties = new MinecraftBackgroundLayerHandlerProperties
+                    {
                         _PrimaryColor = Color.FromArgb(44, 168, 32),
                         _SecondaryColor = Color.FromArgb(30, 80, 25),
                         _Sequence = new KeySequence(new FreeFormObject(0, -60, 900, 128))
@@ -196,56 +213,65 @@ namespace Aurora.Profiles.Minecraft
                 },
                 new OverrideLogicBuilder()
                     .SetLookupTable("_PrimaryColor", new OverrideLookupTableBuilder<Color>()
-                        .AddEntry(Color.FromArgb(125,42,123), new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", 1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The End
-                        .AddEntry(Color.FromArgb(255,183,0), new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", -1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The Nether
+                            .AddEntry(Color.FromArgb(125, 42, 123), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", 1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The End
+                            .AddEntry(Color.FromArgb(255, 183, 0), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", -1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The Nether
                     )
                     .SetLookupTable("_SecondaryColor", new OverrideLookupTableBuilder<Color>()
-                        .AddEntry(Color.FromArgb(49,0,59), new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", 1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The End
-                        .AddEntry(Color.FromArgb(87,83,0), new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", -1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The Nether
+                            .AddEntry(Color.FromArgb(49, 0, 59), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", 1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The End
+                            .AddEntry(Color.FromArgb(87, 83, 0), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", -1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The Nether
                     )
-                ),
+            ),
 
-                new Layer("Grass Block Side", new MinecraftBackgroundLayerHandler() {
-                    Properties = new MinecraftBackgroundLayerHandlerProperties() {
-                        _PrimaryColor = Color.FromArgb(125, 70, 15),//(102, 59, 20),
+            new Layer("Grass Block Side", new MinecraftBackgroundLayerHandler
+                {
+                    Properties = new MinecraftBackgroundLayerHandlerProperties
+                    {
+                        _PrimaryColor = Color.FromArgb(125, 70, 15), //(102, 59, 20),
                         _SecondaryColor = Color.FromArgb(80, 50, 25)
                     }
                 },
                 new OverrideLogicBuilder()
                     .SetLookupTable("_PrimaryColor", new OverrideLookupTableBuilder<Color>()
-                        .AddEntry(Color.FromArgb(209,232,80), new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", 1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The End
-                        .AddEntry(Color.FromArgb(184,26,0), new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", -1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The Nether
+                            .AddEntry(Color.FromArgb(209, 232, 80), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", 1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The End
+                            .AddEntry(Color.FromArgb(184, 26, 0), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", -1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The Nether
                     )
                     .SetLookupTable("_SecondaryColor", new OverrideLookupTableBuilder<Color>()
-                        .AddEntry(Color.FromArgb(107,102,49),new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", 1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The End
-                        .AddEntry(Color.FromArgb(59,8,0),  new BooleanAnd(new Evaluatable<bool>[] {
-                            new BooleanGSINumeric("World/DimensionID", -1),
-                            new BooleanGSIBoolean("Player/InGame")
-                        }))//The Nether
+                            .AddEntry(Color.FromArgb(107, 102, 49), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", 1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The End
+                            .AddEntry(Color.FromArgb(59, 8, 0), new BooleanAnd(new Evaluatable<bool>[]
+                            {
+                                new BooleanGSINumeric("World/DimensionID", -1),
+                                new BooleanGSIBoolean("Player/InGame")
+                            })) //The Nether
                     )
-                ),
-            };
-        }
+            )
+        ];
     }
 }

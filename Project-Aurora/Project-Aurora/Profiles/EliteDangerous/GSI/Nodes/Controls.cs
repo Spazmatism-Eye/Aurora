@@ -443,7 +443,7 @@ namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
         public class Mapping
         {
             public DeviceKeys key = DeviceKeys.NONE;
-            public List<DeviceKeys> modifiers = new List<DeviceKeys>();
+            public List<DeviceKeys> modifiers = [];
 
             public void SetKey(string eliteKey)
             {
@@ -488,7 +488,7 @@ namespace Aurora.Profiles.EliteDangerous.GSI.Nodes
         public ControlGroupSet(ControlGroupSet copyFromSet, ControlGroup[] controlGroups,
             GameStateCondition neededGameStateCondition = null)
         {
-            List<ControlGroup> controlGroupList = new List<ControlGroup>();
+            List<ControlGroup> controlGroupList = [];
             controlGroupList.AddRange(copyFromSet.controlGroups);
             controlGroupList.AddRange(controlGroups);
 

@@ -49,7 +49,7 @@ public class Dota2AbilityLayerHandlerProperties : LayerHandlerProperties2Color<D
 
         _canCastAbilityColor = Color.FromArgb(0, 255, 0);
         _canNotCastAbilityColor = Color.FromArgb(255, 0, 0);
-        _abilityKeys = new List<DeviceKeys> { DeviceKeys.Q, DeviceKeys.W, DeviceKeys.E, DeviceKeys.D, DeviceKeys.F, DeviceKeys.R };
+        _abilityKeys = [ DeviceKeys.Q, DeviceKeys.W, DeviceKeys.E, DeviceKeys.D, DeviceKeys.F, DeviceKeys.R ];
     }
 }
 

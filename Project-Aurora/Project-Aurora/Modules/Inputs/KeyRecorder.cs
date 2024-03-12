@@ -103,7 +103,7 @@ public sealed class KeyRecorder : IDisposable
     {
         _recordingType = "";
         _isSingleKey = false;
-        _recordedKeys = new List<DeviceKeys>();
+        _recordedKeys = [];
     }
 
     private bool _disposed;

@@ -25,7 +25,7 @@ public class GameEvent_EliteDangerous : GameEvent_Generic
 
     private readonly JsonSerializerSettings _journalSerializerSettings = new()
     {
-        Converters = new List<JsonConverter> {new JournalEventJsonConverter()}
+        Converters = [new JournalEventJsonConverter()]
     };
 
     public GameEvent_EliteDangerous()

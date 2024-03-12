@@ -1,40 +1,37 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Aurora.Nodes;
 
-namespace Aurora.Profiles.Payday_2.GSI.Nodes
+namespace Aurora.Profiles.Payday_2.GSI.Nodes;
+
+public class ItemsNode : Node
 {
-    public class ItemsNode : Node
+    private readonly List<ItemNode> _items = [];
+
+    public int Count => _items.Count;
+
+    internal ItemsNode(string json) : base(json)
     {
-        private List<ItemNode> _Items = new List<ItemNode>();
-
-        public int Count { get { return _Items.Count; } }
-
-        internal ItemsNode(string JSON) : base(JSON)
+        foreach (var jt in _ParsedData.Children())
         {
-            foreach (JToken jt in _ParsedData.Children())
-            {
-                _Items.Add(new ItemNode(jt.First.ToString()));
-            }
+            _items.Add(new ItemNode(jt.First.ToString()));
         }
+    }
 
-        /// <summary>
-        /// Gets the weapon with index &lt;index&gt;
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public ItemNode this[int index]
+    /// <summary>
+    /// Gets the weapon with index &lt;index&gt;
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public ItemNode this[int index]
+    {
+        get
         {
-            get
+            if (index > _items.Count - 1)
             {
-                if (index > _Items.Count - 1)
-                {
-                    return new ItemNode("");
-                }
-
-                return _Items[index];
+                return new ItemNode(string.Empty);
             }
+
+            return _items[index];
         }
     }
 }

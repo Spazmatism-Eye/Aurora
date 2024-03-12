@@ -79,19 +79,19 @@ namespace Aurora.Profiles.RocketLeague
                     }
                 },
                 new OverrideLogicBuilder()
-                    .SetDynamicDouble("_Value", new IfElseNumeric( new BooleanAnd( new List<Evaluatable<bool>>{//if match is tied 0 - 0
+                    .SetDynamicDouble("_Value", new IfElseNumeric( new BooleanAnd( [//if match is tied 0 - 0
                                                                                     new BooleanMathsComparison(new NumberGSINumeric("YourTeam/Goals"), new NumberConstant(0)),
                                                                                     new BooleanMathsComparison(new NumberGSINumeric("OpponentTeam/Goals"), new NumberConstant(0))
-                                                                                }
+                                                                                ]
                                                                 ),
                                                                 new NumberConstant(1),//then set the value to 1, so it is split 50-50
                                                                 new NumberGSINumeric("YourTeam/Goals")//otherwise set to our goals
                                                 )
                     )
-                    .SetDynamicDouble("_MaxValue", new IfElseNumeric( new BooleanAnd( new List<Evaluatable<bool>>{//if match is tied 0 - 0
+                    .SetDynamicDouble("_MaxValue", new IfElseNumeric( new BooleanAnd( [//if match is tied 0 - 0
                                                                                     new BooleanMathsComparison(new NumberGSINumeric("YourTeam/Goals"), new NumberConstant(0)),
                                                                                     new BooleanMathsComparison(new NumberGSINumeric("OpponentTeam/Goals"), new NumberConstant(0))
-                                                                                }
+                                                                                ]
                                                                 ),
                                                                 new NumberConstant(2),//then set the max to 2, so it is split 50-50
                                                                 new NumberGSINumeric("Match/TotalGoals")//otherwise set to total goals

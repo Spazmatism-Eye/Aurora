@@ -17,10 +17,10 @@ public interface IHardwareMonitor : IDisposable
 
 public sealed class NoopHardwareMonitor : IHardwareMonitor
 {
-    private readonly Lazy<HardwareMonitor.GpuUpdater> _gpu = new(() => new (new List<IHardware>()));
-    private readonly Lazy<HardwareMonitor.CpuUpdater> _cpu = new(() => new (new List<IHardware>()));
-    private readonly Lazy<HardwareMonitor.NetUpdater> _net = new(() => new (new List<IHardware>()));
-    private readonly Lazy<HardwareMonitor.RamUpdater> _ram = new(() => new (new List<IHardware>()));
+    private readonly Lazy<HardwareMonitor.GpuUpdater> _gpu = new(() => new ([]));
+    private readonly Lazy<HardwareMonitor.CpuUpdater> _cpu = new(() => new ([]));
+    private readonly Lazy<HardwareMonitor.NetUpdater> _net = new(() => new ([]));
+    private readonly Lazy<HardwareMonitor.RamUpdater> _ram = new(() => new ([]));
 
     public HardwareMonitor.GpuUpdater Gpu => _gpu.Value;
 

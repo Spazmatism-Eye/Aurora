@@ -1,14 +1,14 @@
-﻿using Aurora.EffectsEngine;
-using Aurora.Profiles.Dota_2.GSI;
-using Aurora.Profiles.Dota_2.GSI.Nodes;
-using Aurora.Settings.Layers;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
+using Aurora.EffectsEngine;
+using Aurora.Profiles.Dota_2.GSI;
+using Aurora.Profiles.Dota_2.GSI.Nodes;
+using Aurora.Settings.Layers;
 using Aurora.Utils;
 using Common.Devices;
+using Newtonsoft.Json;
 
 namespace Aurora.Profiles.Dota_2.Layers
 {
@@ -43,22 +43,28 @@ namespace Aurora.Profiles.Dota_2.Layers
         public List<DeviceKeys> _ItemKeys { get; set; }
 
         [JsonIgnore]
-        public List<DeviceKeys> ItemKeys { get { return Logic._ItemKeys ?? _ItemKeys ?? new List<DeviceKeys>(); } }
+        public List<DeviceKeys> ItemKeys => Logic._ItemKeys ?? _ItemKeys ?? new List<DeviceKeys>();
 
-        public Dota2ItemLayerHandlerProperties() : base() { }
+        public Dota2ItemLayerHandlerProperties()
+        { }
 
-        public Dota2ItemLayerHandlerProperties(bool assign_default = false) : base(assign_default) { }
+        public Dota2ItemLayerHandlerProperties(bool assignDefault = false) : base(assignDefault) { }
 
         public override void Default()
         {
             base.Default();
 
-            this._EmptyItemColor = Color.FromArgb(0, 0, 0);
-            this._ItemsColor = Color.FromArgb(255, 255, 255);
-            this._ItemCooldownColor = Color.FromArgb(0, 0, 0);
-            this._ItemNoChargersColor = Color.FromArgb(150, 150, 150);
-            this._UseItemColors = true;
-            this._ItemKeys = new List<DeviceKeys>() { DeviceKeys.Z, DeviceKeys.X, DeviceKeys.C, DeviceKeys.V, DeviceKeys.B, DeviceKeys.N, DeviceKeys.INSERT, DeviceKeys.HOME, DeviceKeys.PAGE_UP, DeviceKeys.NUM_ONE, DeviceKeys.NUM_TWO, DeviceKeys.NUM_THREE, DeviceKeys.NUM_FOUR, DeviceKeys.NUM_FIVE , DeviceKeys.NUM_SIX };
+            _EmptyItemColor = Color.FromArgb(0, 0, 0);
+            _ItemsColor = Color.FromArgb(255, 255, 255);
+            _ItemCooldownColor = Color.FromArgb(0, 0, 0);
+            _ItemNoChargersColor = Color.FromArgb(150, 150, 150);
+            _UseItemColors = true;
+            _ItemKeys =
+            [
+                DeviceKeys.Z, DeviceKeys.X, DeviceKeys.C, DeviceKeys.V, DeviceKeys.B, DeviceKeys.N, DeviceKeys.INSERT, DeviceKeys.HOME,
+                DeviceKeys.PAGE_UP, DeviceKeys.NUM_ONE, DeviceKeys.NUM_TWO, DeviceKeys.NUM_THREE, DeviceKeys.NUM_FOUR, DeviceKeys.NUM_FIVE,
+                DeviceKeys.NUM_SIX
+            ];
         }
 
     }

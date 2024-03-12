@@ -92,10 +92,10 @@ public class DesktopProfile : ApplicationProfile
                 }),
             },
         }, new OverrideLogicBuilder().SetDynamicBoolean("_Enabled",
-            new BooleanAnd(new List<Evaluatable<bool>>
-            {
+            new BooleanAnd(
+            [
                 new BooleanGSIBoolean("LocalPCInfo/Media/HasMedia"), new BooleanNot(new BooleanGSIBoolean("LocalPCInfo/Media/MediaPlaying"))
-            })
+            ])
         )));
     }
 
