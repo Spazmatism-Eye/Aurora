@@ -22,7 +22,7 @@ OutputDir=..\
 OutputBaseFilename=Aurora-setup-v{#Version}
 Compression=lzma
 SolidCompression=yes
-UninstallDisplayIcon={app}\Aurora.exe
+UninstallDisplayIcon={app}\AuroraRgb.exe
 SetupIconFile=Aurora_updater.ico
 WizardImageFile=Aurora-wizard.bmp
 CloseApplications=no 
@@ -47,8 +47,8 @@ Source: "vcredist_x86.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
-Name: "{commonprograms}\Aurora"; Filename: "{app}\Aurora.exe"
-Name: "{commondesktop}\Aurora"; Filename: "{app}\Aurora.exe"; Tasks: desktopicon
+Name: "{commonprograms}\Aurora"; Filename: "{app}\AuroraRgb.exe"
+Name: "{commondesktop}\Aurora"; Filename: "{app}\AuroraRgb.exe"; Tasks: desktopicon
   
 [Code]
 //procedure unzip(src, target: AnsiString);
@@ -126,7 +126,7 @@ begin
           begin
             MsgBox(ExpandConstant('The installer will now try to close running instances of {#SetupSetting("AppName")} and uninstall them. Please save your work.'), mbConfirmation, MB_OK or MB_DEFBUTTON2);
           end;
-        TaskKill('Aurora.exe');
+        TaskKill('AuroraRgb.exe');
         TaskKill('Aurora-Updater.exe');
         
         sUnInstallString := GetUninstallString();
@@ -148,7 +148,7 @@ begin
         if (not UninstallSilent()) then
           begin
             MsgBox(ExpandConstant('The uninstaller will now try to close running instances of {#SetupSetting("AppName")} if there are any. Please save your work.'), mbConfirmation, MB_OK or MB_DEFBUTTON2);
-            TaskKill('Aurora.exe');
+            TaskKill('AuroraRgb.exe');
             TaskKill('Aurora-Updater.exe');
 
             if ((not KeepSettings()) and (MsgBox(ExpandConstant('Do you want to remove all the settings and user data?'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES)) then
@@ -162,7 +162,7 @@ begin
           end
         else
           begin
-            TaskKill('Aurora.exe');
+            TaskKill('AuroraRgb.exe');
             TaskKill('Aurora-Updater.exe');
 
             if (not KeepSettings()) then
@@ -196,7 +196,7 @@ begin
 end;
 
 [Run]
-Filename: "{app}\Aurora.exe"; Flags: nowait postinstall skipifsilent runascurrentuser; Description: "{cm:LaunchProgram,Aurora}"
+Filename: "{app}\AuroraRgb.exe"; Flags: nowait postinstall skipifsilent runascurrentuser; Description: "{cm:LaunchProgram,Aurora}"
 Filename: "{tmp}\vcredist_x86.exe"; Check: VCRedistX86NeedsInstall
 Filename: "{tmp}\vcredist_x64.exe"; Check: VCRedistX64NeedsInstall and IsWin64
 

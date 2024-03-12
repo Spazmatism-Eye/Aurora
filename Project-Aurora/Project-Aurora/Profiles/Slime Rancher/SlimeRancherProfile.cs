@@ -1,11 +1,7 @@
-﻿//using Aurora.Profiles.Slime_Rancher.Layers;
-
-using System.Drawing;
+﻿using System.Drawing;
 using AuroraRgb.Settings;
 using AuroraRgb.Settings.Layers;
 using AuroraRgb.Settings.Overrides.Logic;
-using AuroraRgb.Settings.Overrides.Logic.Boolean;
-using AuroraRgb.Settings.Overrides.Logic.Number;
 using DK = Common.Devices.DeviceKeys;
 
 namespace AuroraRgb.Profiles.Slime_Rancher

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using Aurora;
 using AuroraRgb;
 using AuroraRgb.Profiles;
 using Newtonsoft.Json;

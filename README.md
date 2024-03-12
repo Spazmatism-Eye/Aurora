@@ -51,7 +51,7 @@ Having issues? Want to discuss changes or talk about possible features? Want to 
 
 1. Download the latest release from above
 2. Extract the archive anywhere on your computer. Preferably keep it in a location you can easily access.
-3. Run "Aurora.exe", from that point, Aurora should provide you with further instructions and options.
+3. Run "AuroraRgb.exe", from that point, Aurora should provide you with further instructions and options.
 
 ## Contributors ✨
 

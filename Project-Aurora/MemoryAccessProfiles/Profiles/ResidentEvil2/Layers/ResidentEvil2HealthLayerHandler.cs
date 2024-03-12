@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Windows.Controls;
-using Aurora;
 using AuroraRgb.EffectsEngine;
 using AuroraRgb.EffectsEngine.Animations;
 using AuroraRgb.Profiles;
