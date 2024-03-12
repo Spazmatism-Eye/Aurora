@@ -35,8 +35,8 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
     {
         NAudioThread.Start();
     }
-    
-    public static List<AudioDeviceProxy> Instances { get; } = [];
+
+    private static List<AudioDeviceProxy> Instances { get; } = [];
     private readonly MMDeviceEnumerator _deviceEnumerator = new();
 
     public event EventHandler<EventArgs>? DeviceChanged;
@@ -308,6 +308,15 @@ public sealed class AudioDeviceProxy : IDisposable, NAudio.CoreAudioApi.Interfac
     public void OnPropertyValueChanged(string pwstrDeviceId, PropertyKey key)
     {
         //unused
+    }
+
+    public static void DisposeStatic()
+    {
+        foreach (var audioDeviceProxy in Instances)
+        {
+            audioDeviceProxy.Dispose();
+        }
+        Instances.Clear();
     }
 
     #region IDisposable Implementation

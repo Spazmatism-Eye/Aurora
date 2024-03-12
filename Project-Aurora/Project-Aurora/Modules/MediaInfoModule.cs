@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using Aurora.Modules.Media;
@@ -12,6 +13,8 @@ public sealed partial class MediaInfoModule : AuroraModule
 
     protected override async Task Initialize()
     {
+        Global.Configuration.PropertyChanged += ConfigurationOnPropertyChanged;
+        
         if (!Global.Configuration.EnableMediaInfo)
         {
             return;
@@ -24,7 +27,25 @@ public sealed partial class MediaInfoModule : AuroraModule
         {
             MessageBox.Show("Media Info module could not be loaded.\nMedia playback data will not be detected.",
                 "Aurora - Warning");
-            Global.logger.Error("MediaInfo error", e);
+            Global.logger.Error(e, "MediaInfo error");
+        }
+    }
+
+    private void ConfigurationOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(Global.Configuration.EnableMediaInfo))
+        {
+            return;
+        }
+
+        if (Global.Configuration.EnableMediaInfo)
+        {
+            _mediaMonitor ??= new MediaMonitor();
+        }
+        else
+        {
+            _mediaMonitor?.Dispose();
+            _mediaMonitor = null;
         }
     }
 
