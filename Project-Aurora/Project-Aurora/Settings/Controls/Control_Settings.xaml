@@ -3,7 +3,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:a="clr-namespace:Aurora"
-             xmlns:Controls="clr-namespace:Aurora.Controls"
              xmlns:utils="clr-namespace:Aurora.Utils"
              xmlns:events="clr-namespace:Serilog.Events;assembly=Serilog"
              xmlns:controls="clr-namespace:Aurora.Settings.Controls"
@@ -11,25 +10,16 @@
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="403.521"
              Height="Auto" Width="Auto"
-             MinHeight="300" MinWidth="850"
-             Loaded="UserControl_Loaded">
+             MinHeight="300" MinWidth="850">
 
     <TabControl Margin="0,7,0,0" DataContext="{x:Static a:Global.Configuration}">
-        <TabItem x:Name="DevicesAndWrappersTab" Header="Devices &amp; Wrappers">
-            <!-- <Controls:Control_SettingsDevicesAndWrappers Margin="10"/> Added by constructor -->
-        </TabItem>
-        <TabItem Name="DeviceManagerTab" Header="Device Manager">
-            <!-- <Controls:Control_DeviceManager Margin="10"/> Added by constructor -->
-        </TabItem>
-        <TabItem Name="RemapDevicesTab" Header="Remap Devices">
-            <!--  <config:DeviceMapping /> Added by constructor -->
-        </TabItem>
+        <TabItem x:Name="DevicesAndWrappersTab" Header="Devices &amp; Wrappers" />
+        <TabItem Name="DeviceManagerTab" Header="Device Manager" />
+        <TabItem Name="RemapDevicesTab" Header="Remap Devices" />
         <TabItem Header="General Settings">
             <controls:Control_SettingsGeneral />
         </TabItem>
-        <TabItem Header="Plugin Management">
-            <Controls:Control_PluginManager x:Name="ctrlPluginManager" Margin="10"/>
-        </TabItem>
+        <TabItem Name="PluginsTab" Header="Plugin Management" />
         <TabItem Header="Updates">
             <Grid>
                 <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="You can view all changelogs on Github "/>

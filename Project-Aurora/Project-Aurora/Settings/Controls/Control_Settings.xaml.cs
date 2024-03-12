@@ -22,12 +22,10 @@ namespace Aurora.Settings.Controls;
 /// </summary>
 public partial class Control_Settings
 {
-    private readonly Task<PluginManager> _pluginManager;
     private readonly Task<AuroraHttpListener?> _httpListener;
 
     public Control_Settings(Task<ChromaReader?> rzSdkManager, Task<PluginManager> pluginManager, Task<AuroraHttpListener?> httpListener, Task<DeviceManager> deviceManager, Task<IpcListener?> ipcListener)
     {
-        _pluginManager = pluginManager;
         _httpListener = httpListener;
         InitializeComponent();
 
@@ -43,15 +41,12 @@ public partial class Control_Settings
         var devicesAndWrappers = new Control_SettingsDevicesAndWrappers(rzSdkManager, deviceManager);
         var controlDeviceManager = new Control_DeviceManager(deviceManager, ipcListener);
         var deviceMapping = new DeviceMapping(deviceManager, ipcListener);
+        var plugins = new Control_PluginManager(pluginManager);
         
         DevicesAndWrappersTab.Content = devicesAndWrappers;
         DeviceManagerTab.Content = controlDeviceManager;
         RemapDevicesTab.Content = deviceMapping;
-    }
-
-    private async void UserControl_Loaded(object? sender, RoutedEventArgs e)
-    {
-        ctrlPluginManager.Host = await _pluginManager;
+        PluginsTab.Content = plugins;
     }
 
     private void Hyperlink_RequestNavigate(object? sender, RequestNavigateEventArgs e)
