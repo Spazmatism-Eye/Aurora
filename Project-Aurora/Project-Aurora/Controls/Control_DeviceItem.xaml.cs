@@ -32,8 +32,6 @@ public partial class Control_DeviceItem
         _device = device;
 
         InitializeComponent();
-
-        _updateControlsTimer.Elapsed += Update_controls_timer_Elapsed;
     }
 
     private void Update_controls_timer_Elapsed(object? sender, EventArgs e)
@@ -112,11 +110,16 @@ public partial class Control_DeviceItem
 
     private void UserControl_Loaded(object? sender, EventArgs e)
     {
+        if (!IsVisible)
+        {
+            return;
+        }
         _device.Device.Updated += OnDeviceOnUpdated;
         
         Dispatcher.BeginInvoke(UpdateStatic, DispatcherPriority.Loaded);
         Dispatcher.BeginInvoke(UpdateDynamic, DispatcherPriority.DataBind);
 
+        _updateControlsTimer.Elapsed += Update_controls_timer_Elapsed;
         _updateControlsTimer.Start();
     }
 
@@ -125,6 +128,7 @@ public partial class Control_DeviceItem
         _device.Device.Updated -= OnDeviceOnUpdated;
 
         _updateControlsTimer.Stop();
+        _updateControlsTimer.Elapsed -= Update_controls_timer_Elapsed;
     }
 
     private void OnDeviceOnUpdated(object? o, EventArgs eventArgs)
