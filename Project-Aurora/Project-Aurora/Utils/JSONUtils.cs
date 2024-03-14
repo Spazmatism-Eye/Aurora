@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using AuroraRgb.Profiles.Chroma;
 using AuroraRgb.Profiles.Dota_2.Layers;
 using AuroraRgb.Profiles.Generic;
 using AuroraRgb.Profiles.GTA5.Layers;
@@ -51,6 +52,12 @@ public partial class AuroraSerializationBinder : DefaultSerializationBinder
 
         // Use the Regex.Replace method with a MatchEvaluator delegate
         var convertedTypeName = TypeAndAssemblyRegex().Replace(typeName, ReplaceGroups);
+        if (convertedTypeName.Contains("Aurora]"))
+        {
+            convertedTypeName = convertedTypeName
+                .Replace("Aurora]", "AuroraRgb]")
+                .Replace("[Aurora.", "[AuroraRgb.");
+        }
 
         var boundType = convertedTypeName switch
         {
@@ -107,6 +114,10 @@ public partial class AuroraSerializationBinder : DefaultSerializationBinder
                 typeof(VariableRegistry),
             "Aurora.Settings.VariableRegistryItem" =>
                 typeof(VariableRegistryItem),
+            "Aurora.Profiles.RazerChromaProfile" =>
+                typeof(RazerChromaProfile),
+            "Aurora.Profiles.WrapperProfile" =>
+                typeof(WrapperProfile),
             _ => base.BindToType(assemblyName, ConvertedTypeName(convertedTypeName)),
         };
         typeMap[typeName] = boundType;
@@ -129,7 +140,7 @@ public partial class AuroraSerializationBinder : DefaultSerializationBinder
     {
         if (!convertedTypeName.StartsWith("Aurora.")) return convertedTypeName;
 
-        var regex = new Regex(Regex.Escape("Aurora."));
+        var regex = OldAuroraNamespace();
         return regex.Replace(convertedTypeName, "AuroraRgb.", 1);
     }
 
@@ -146,6 +157,10 @@ public partial class AuroraSerializationBinder : DefaultSerializationBinder
 
     [GeneratedRegex(@"\[([^\s,^\[]*), ([^\s,^\]]*)]")]
     private static partial Regex TypeAndAssemblyRegex();
+    [GeneratedRegex(@"Aurora\.")]
+    private static partial Regex OldAuroraNamespace();
+    [GeneratedRegex(@", Aurora$")]
+    private static partial Regex EndsWithAurora();
 }
 
 public class EnumConverter : JsonConverter

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace AuroraRgb.Settings;
 
+[JsonObject(ItemTypeNameHandling = TypeNameHandling.None)]
 public class ObjectSettings<T>
 {
     protected string SettingsSavePath { get; set; }
@@ -42,7 +43,7 @@ public class ObjectSettings<T>
         {
             try
             {
-                Settings = (T)JsonConvert.DeserializeObject(File.ReadAllText(SettingsSavePath), settingsType, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                Settings = (T)JsonConvert.DeserializeObject(File.ReadAllText(SettingsSavePath), settingsType, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None });
                 if (Settings == null)
                 {
                     SaveSettings(settingsType);

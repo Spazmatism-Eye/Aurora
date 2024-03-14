@@ -4,9 +4,11 @@ using System.Runtime.Serialization;
 using AuroraRgb.Settings;
 using AuroraRgb.Settings.Layers;
 using Common.Utils;
+using Newtonsoft.Json;
 
 namespace AuroraRgb.Profiles.Chroma;
 
+[JsonObject(ItemTypeNameHandling = TypeNameHandling.None)]
 public class RazerChromaProfile : ApplicationProfile
 {
     [OnDeserialized]

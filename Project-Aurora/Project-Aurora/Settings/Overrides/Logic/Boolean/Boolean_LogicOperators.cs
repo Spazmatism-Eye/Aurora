@@ -24,8 +24,8 @@ public class BooleanOr : Evaluatable<bool>, IHasSubConditons {
         SubConditions = new ObservableCollection<Evaluatable<bool>>(subconditions);
     }
 
-    [JsonProperty]
-    public ObservableCollection<Evaluatable<bool>> SubConditions { get; set; } = new ObservableCollection<Evaluatable<bool>>();
+    [JsonProperty(TypeNameHandling = TypeNameHandling.None)]
+    public ObservableCollection<Evaluatable<bool>> SubConditions { get; set; } = [];
 
     public override Visual GetControl() => new Control_SubconditionHolder(this, "Or");
 
@@ -47,9 +47,8 @@ public class BooleanAnd : Evaluatable<bool>, IHasSubConditons {
     public BooleanAnd(IEnumerable<Evaluatable<bool>> subconditions) {
         SubConditions = new ObservableCollection<Evaluatable<bool>>(subconditions);
     }
-
-    [JsonProperty]
-    public ObservableCollection<Evaluatable<bool>> SubConditions { get; set; } = new ObservableCollection<Evaluatable<bool>>();
+    [JsonProperty(TypeNameHandling = TypeNameHandling.None)]
+    public ObservableCollection<Evaluatable<bool>> SubConditions { get; set; } = [];
 
     public override Visual GetControl() => new Control_SubconditionHolder(this, "And");
 
