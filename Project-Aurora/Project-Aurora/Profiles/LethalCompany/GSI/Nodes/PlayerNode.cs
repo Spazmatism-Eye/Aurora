@@ -1,4 +1,4 @@
-﻿using AuroraRgb.Nodes;
+﻿using Aurora.Nodes;
 
 namespace AuroraRgb.Profiles.LethalComapny.GSI.Nodes {
     public class PlayerNode : Node {

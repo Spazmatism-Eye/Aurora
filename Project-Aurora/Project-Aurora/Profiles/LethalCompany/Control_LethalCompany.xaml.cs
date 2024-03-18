@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using AuroraRgb.Profiles.LethalCompany.GSI;
-using Xceed.Wpf.Toolkit;
+using Aurora.Profiles.LethalCompany.GSI;
+using Application = Aurora.Profiles.Application;
 
 namespace AuroraRgb.Profiles.LethalCompany {
     /// <summary>

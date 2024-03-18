@@ -1,12 +1,13 @@
 ﻿using System.Drawing;
-using AuroraRgb.Settings;
-using AuroraRgb.Settings.Layers;
-using AuroraRgb.Settings.Overrides.Logic;
+using Aurora.Settings.Layers;
+using Aurora.Settings;
+using Aurora.Settings.Overrides.Logic;
 using DK = Common.Devices.DeviceKeys;
+using Aurora.Profiles;
 
 namespace AuroraRgb.Profiles.LethalCompany;
 
-public class LethalCompanyProfile : ApplicationProfile
+public class LethalCompanyProfile : Aurora.Settings.ApplicationProfile
 {
     public override void Reset()
     {

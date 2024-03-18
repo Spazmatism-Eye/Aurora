@@ -1,8 +1,10 @@
-using AuroraRgb.Profiles.Generic;
+using Aurora.Profiles;
+using Aurora.Profiles.Generic.GSI.Nodes;
+using Aurora.Profiles.LethalCompany.GSI.Nodes;
 using AuroraRgb.Profiles.LethalComapny.GSI.Nodes;
 using AuroraRgb.Profiles.LethalCompany.GSI.Nodes;
 
-namespace AuroraRgb.Profiles.LethalCompany.GSI
+namespace Aurora.Profiles.LethalCompany.GSI
 {
 
     public class GameState_LethalCompany : GameState

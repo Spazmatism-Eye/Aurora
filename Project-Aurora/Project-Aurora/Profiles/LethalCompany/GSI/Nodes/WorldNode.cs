@@ -1,6 +1,6 @@
-using AuroraRgb.Nodes;
+using Aurora.Nodes;
 
-namespace AuroraRgb.Profiles.LethalCompany.GSI.Nodes {
+namespace Aurora.Profiles.LethalCompany.GSI.Nodes {
     public class WorldNode : Node {
 
         public float DayScalar;
