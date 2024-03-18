@@ -7,7 +7,7 @@ using Aurora.Profiles;
 
 namespace AuroraRgb.Profiles.LethalCompany;
 
-public class LethalCompanyProfile : Aurora.Settings.ApplicationProfile
+public class LethalCompanyProfile : ApplicationProfile
 {
     public override void Reset()
     {
@@ -52,17 +52,20 @@ public class LethalCompanyProfile : Aurora.Settings.ApplicationProfile
                 Properties = new BreathingLayerHandlerProperties
                 {
                     _EffectSpeed = 5,
-                    _SecondaryColor = Color.FromArgb(20, 0, 0),
-                    _PrimaryColor = Color.FromArgb(40, 0, 0),
+                    _SecondaryColor = Color.Transparent,
+                    _PrimaryColor = Color.FromArgb(50, 0, 0),
                     _Sequence = new KeySequence(new FreeFormObject(-112, -75, 1116, 345)),
-                    _Exclusion = new KeySequence(new[]
-                    {
-                        DK.ESC, DK.F1, DK.F2, DK.F3, DK.F4, DK.F5, DK.F6, DK.F7, DK.F8, DK.F9, DK.F10, DK.F11, DK.F12, DK.TILDE, DK.ONE, DK.TWO, DK.THREE, DK.FOUR, DK.FIVE, DK.SIX, DK.SEVEN, DK.EIGHT, DK.NINE, DK.ZERO, DK.MINUS, DK.EQUALS, DK.BACKSPACE
-                    }),
                 }
             },
             new OverrideLogicBuilder().SetDynamicFloat(nameof(BreathingLayerHandlerProperties._EffectSpeed), new NumberMap(new NumberGSINumeric("Player/Health"), 0, 19, 15, 5)).SetDynamicBoolean(nameof(BreathingLayerHandlerProperties._Enabled), new BooleanMathsComparison(new NumberGSINumeric("Player/Health"), ComparisonOperator.LT, 20))
-            )
+            ),
+            new Layer("Background", new SolidFillLayerHandler
+            {
+                Properties = new SolidFillLayerHandlerProperties
+                {
+                    _PrimaryColor = Color.FromArgb(20,0,0),
+                }
+            })
         ];
     }
 }
