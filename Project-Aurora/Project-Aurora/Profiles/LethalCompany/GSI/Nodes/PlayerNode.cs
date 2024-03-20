@@ -1,6 +1,6 @@
 ﻿using Aurora.Nodes;
 
-namespace AuroraRgb.Profiles.LethalComapny.GSI.Nodes {
+namespace Aurora.Profiles.LethalCompany.GSI.Nodes {
     public class PlayerNode : Node {
 
         public int Health;

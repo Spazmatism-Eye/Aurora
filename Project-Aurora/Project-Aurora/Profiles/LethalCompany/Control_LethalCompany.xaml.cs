@@ -1,10 +1,12 @@
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Aurora.Profiles.LethalCompany.GSI;
-using Application = Aurora.Profiles.Application;
+using Aurora.Utils;
+using GameStateEnum = Aurora.Profiles.LethalCompany.GSI.Nodes.GameStateEnum;
 
-namespace AuroraRgb.Profiles.LethalCompany {
+namespace Aurora.Profiles.LethalCompany {
     /// <summary>
     /// Interaction logic for Control_LethalCompany.xaml
     /// </summary>
@@ -20,7 +22,18 @@ namespace AuroraRgb.Profiles.LethalCompany {
             InitializeComponent();
             SetSettings();
 
+            PopulateComboBoxes();
+
             profile.ProfileChanged += (sender, e) => SetSettings();
+        }
+
+        private void PopulateComboBoxes()
+        {
+            foreach (GameStateEnum i in Enum.GetValues(typeof(GameStateEnum)))
+            {
+                this.gameStateCb.Items.Add(i);
+            }
+            this.gameStateCb.SelectedIndex = 2;
         }
 
         private void SetSettings()
@@ -53,18 +66,9 @@ namespace AuroraRgb.Profiles.LethalCompany {
         #region Preview Handlers
         private GameState_LethalCompany State => profile.Config.Event._game_state as GameState_LethalCompany;
 
-        private void InGameCh_Checked(object? sender, RoutedEventArgs e)
+        private void GameStateCb_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if ((sender as CheckBox).IsChecked == true)
-            {
-                State.GameState.GameState = 2;
-                State.GameState.InGame = true;
-            }
-            else
-            {
-                State.GameState.GameState = 0;
-                State.GameState.InGame = false;
-            }
+            State.GameState.GameState = (GameStateEnum)(sender as ComboBox).SelectedValue;
         }
 
         private void HealthSlider_ValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)

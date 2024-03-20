@@ -1,8 +1,6 @@
 using Aurora.Profiles;
 using Aurora.Profiles.Generic.GSI.Nodes;
 using Aurora.Profiles.LethalCompany.GSI.Nodes;
-using AuroraRgb.Profiles.LethalComapny.GSI.Nodes;
-using AuroraRgb.Profiles.LethalCompany.GSI.Nodes;
 
 namespace Aurora.Profiles.LethalCompany.GSI
 {

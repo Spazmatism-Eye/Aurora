@@ -1,7 +1,4 @@
-﻿using Aurora.Profiles;
-using AuroraRgb.Profiles.LethalCompany;
-
-namespace Aurora.Profiles.LethalCompany;
+﻿namespace Aurora.Profiles.LethalCompany;
 
 public class LethalCompany : Application {
 

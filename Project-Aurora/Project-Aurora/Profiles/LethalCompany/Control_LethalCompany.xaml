@@ -1,10 +1,8 @@
-<UserControl x:Class="AuroraRgb.Profiles.LethalCompany.Control_LethalCompany"
+<UserControl x:Class="Aurora.Profiles.LethalCompany.Control_LethalCompany"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:System="clr-namespace:System;assembly=mscorlib"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="850" Height="Auto" Width="Auto">
 
@@ -54,14 +52,14 @@
                     <!-- Player-based variables -->
                     <Label Content="Player" FontWeight="SemiBold" HorizontalAlignment="Center" Grid.ColumnSpan="2" />
 
-                    <Label Content="In Game:" Grid.Row="1" HorizontalAlignment="Right" Margin="8,0" />
-                    <CheckBox Content="Yes" Grid.Row="1" Grid.Column="1" Margin="0,4" Checked="InGameCh_Checked" Unchecked="InGameCh_Checked" />
+                    <Label Content="Game State:" Grid.Row="1" HorizontalAlignment="Right" Margin="8,0" />
+                    <ComboBox x:Name="gameStateCb" Grid.Row="1" Grid.Column="1" Margin="0,4" SelectionChanged="GameStateCb_SelectionChanged" />
 
                     <Label Content="Health:" Grid.Row="2" HorizontalAlignment="Right" Margin="8,0" />
-                    <Slider Grid.Row="2" Grid.Column="1" Margin="0,4" ValueChanged="HealthSlider_ValueChanged" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" />
+                    <Slider Grid.Row="2" Grid.Column="1" Margin="0,4" ValueChanged="HealthSlider_ValueChanged" Minimum="0" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" />
 
                     <Label Content="Stamina:" Grid.Row="3" HorizontalAlignment="Right" Margin="8,0" />
-                    <Slider Grid.Row="3" Grid.Column="1" Margin="0,4" ValueChanged="StaminaSlider_ValueChanged" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" />
+                    <Slider Grid.Row="3" Grid.Column="1" Margin="0,4" ValueChanged="StaminaSlider_ValueChanged" Minimum="0" Maximum="100" Value="100" TickFrequency="1" IsSnapToTickEnabled="True" />
                     <!--<Slider Grid.Row="6" Grid.Column="1" Margin="0,4" ValueChanged="DepthLevelSlider_ValueChanged" Minimum="-30" Maximum="10" /> -->
                     <Grid Grid.Row="7" Grid.Column="1">
                         <Grid.ColumnDefinitions>
